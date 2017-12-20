@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Code written by Shangzhen Yang -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
+		<meta name="theme-color" content="#0066cc" />
+		<title>RTH Toolbox</title>
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/general.css" rel="stylesheet" />
+		<link href="css/calculator.css" rel="stylesheet" />
+		<link href="css/quadraticfunction.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+		</header>
+		<div class="mui-content">
+			<div style="line-height: 30px;">
+				y = <label id="aLabel">a</label>x<sup>2</sup> + <label id="bLabel">b</label>x + <label id="cLabel">c</label> &#40;a ≠ 0&#41;
+			</div>
+			<hr />
+			<div class="mui-input-row">
+			    <label>a =</label>
+			    <input id="aInput" type="number" onclick="InputId=1;" oninput="AOnInput();" />
+			</div>
+			<div class="mui-input-row">
+			    <label>b =</label>
+			    <input id="bInput" type="number" onclick="InputId=2;" oninput="BOnInput();" />
+			</div>
+			<div class="mui-input-row">
+			    <label>c =</label>
+			    <input id="cInput" type="number" onclick="InputId=3;" oninput="COnInput();" />
+			</div>
+			<hr />
+			<div class="result">
+				<label id="VertexForm1"></label>y = <label id="VertexForm2">a</label> &#40;x - <label id="VertexForm3">h</label>&#41;<sup>2</sup> + <label id="VertexForm4">k</label><br />
+				<label id="AxisSymmetry1"></label> x = <label id="AxisSymmetry2">?</label><br />
+				<label id="VertexPointCoordinates1"></label> &#40;<label id="VertexPointCoordinates2">h</label>, <label id="VertexPointCoordinates3">k</label>&#41;<br />
+				<label id="ParabolaOpens1"></label><label id="ParabolaOpens2"></label><br />
+				<label id="xGreater1"></label> x &#62; <label id="xGreater2">?</label><label id="xGreater3"></label>y <label id="xGreater4"></label><label id="xGreater5"></label><label id="xGreater6"></label><br />
+				<label id="xLess1"></label> x &#60; <label id="xLess2">?</label><label id="xLess3"></label>y <label id="xLess4"></label><label id="xLess5"></label><label id="xLess6"></label><br />
+				<label id="MinimumMaximum1"></label>y = <label id="MinimumMaximum2">?</label><br />
+				<label id="xIntercept1"></label><label id="xIntercept2">?</label><br />
+				<label id="yIntercept1"></label>&#40;0, <label id="yIntercept2">c</label><label>&#41;</label>
+			</div>
+			<fieldset style="margin-top: 20px;">
+				<div class="mui-input-row">
+				    <label>x =</label>
+				    <input id="xInput" type="text" oninput="CalculateY();" />
+				</div>
+				<div class="mui-input-row">
+				    <label>y =</label>
+				    <input id="yInput" type="text" />
+				</div>
+			</fieldset>
+		</div>
+		<button type="button" class="mui-btn mui-btn-blue sign">+/-</button>
+		<script type="text/javascript">
+			var Language=localStorage.getItem("Language"),
+			EnterNum,
+			upwards,
+			downwards,
+			NotExist,
+			increases,
+			decreases,
+			Minimum,
+			Maximum,
+			MinimumMaximum,
+			and,
+			None,
+			InputId=1;
+			if(Language=="SimplifiedChinese"){
+				document.getElementById("ToolboxTitle").innerText="计算器";
+				EnterNum="输入数字";
+				document.getElementById("VertexForm1").innerText="顶点式：";
+				document.getElementById("AxisSymmetry1").innerText="对称轴：直线";
+				document.getElementById("VertexPointCoordinates1").innerText="顶点坐标：";
+				document.getElementById("ParabolaOpens1").innerText="抛物线";
+				upwards="开口向上。";
+				downwards="开口向下。";
+				NotExist="不存在。";
+				document.getElementById("xGreater1").innerText="当";
+				document.getElementById("xGreater3").innerText=" 时，";
+				document.getElementById("xGreater4").innerText="随 x 的增大而";
+				increases="增大";
+				decreases="减小";
+				document.getElementById("xGreater6").innerText="。";
+				document.getElementById("xLess1").innerText="当";
+				document.getElementById("xLess3").innerText=" 时，";
+				document.getElementById("xLess4").innerText="随 x 的增大而";
+				document.getElementById("xLess6").innerText="。";
+				Minimum="最小值：";
+				Maximum="最大值：";
+				MinimumMaximum="最小值 / 最大值："
+				document.getElementById("xIntercept1").innerText="与 x 轴的交点：";
+				and="和";
+				document.getElementById("yIntercept1").innerText="与 y 轴的交点：";
+				None="无";
+			}else{
+				document.getElementById("ToolboxTitle").innerText="Calculator";
+				EnterNum="Enter the number";
+				document.getElementById("VertexForm1").innerText="Vertex Form: ";
+				document.getElementById("AxisSymmetry1").innerText="Axis of Symmetry: Line";
+				document.getElementById("VertexPointCoordinates1").innerText="Vertex Point Coordinates: ";
+				document.getElementById("ParabolaOpens1").innerText="The parabola ";
+				upwards="opens upwards.";
+				downwards="opens downwards.";
+				NotExist="does not exist.";
+				document.getElementById("xGreater1").innerText="When";
+				document.getElementById("xGreater3").innerText=", ";
+				increases="increases";
+				decreases="decreases";
+				document.getElementById("xGreater6").innerText=" with the increase of x.";
+				document.getElementById("xLess1").innerText="When";
+				document.getElementById("xLess3").innerText=", ";
+				document.getElementById("xLess6").innerText=" with the increase of x.";
+				Minimum="Minimum: ";
+				Maximum="Maximum: ";
+				MinimumMaximum="Minimum / Maximum: "
+				document.getElementById("xIntercept1").innerText="x-Intercept: ";
+				and="and";
+				document.getElementById("yIntercept1").innerText="y-Intercept: ";
+				None="None";
+			}
+			document.getElementById("aInput").placeholder=EnterNum;
+			document.getElementById("bInput").placeholder=EnterNum;
+			document.getElementById("cInput").placeholder=EnterNum;
+			document.getElementById("ParabolaOpens2").innerText=NotExist;
+			document.getElementById("xGreater5").innerText=increases+" / "+decreases;
+			document.getElementById("xLess5").innerText=decreases+" / "+increases;
+			document.getElementById("MinimumMaximum1").innerText=MinimumMaximum;
+		</script>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
+			else{mui.init({swipeBack:false});}
+			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			function Calculate(){
+				var a=document.getElementById("aInput").value*1,
+				b=document.getElementById("bInput").value*1,
+				c=document.getElementById("cInput").value*1;
+				var h=-b/(2*a),
+				k=(4*a*c-Math.pow(b,2))/(4*a),
+				Delta=Math.pow(b,2)-4*a*c;
+				document.getElementById("xInput").value=h;
+				CalculateY();
+				document.getElementById("VertexForm2").innerText=a;
+				document.getElementById("VertexForm3").innerText=h;
+				document.getElementById("VertexForm4").innerText=k;
+				document.getElementById("AxisSymmetry2").innerText=h;
+				document.getElementById("VertexPointCoordinates2").innerText=h;
+				document.getElementById("VertexPointCoordinates3").innerText=k;
+				document.getElementById("xGreater2").innerText=h;
+				document.getElementById("xLess2").innerText=h;
+				if(a>0){
+					document.getElementById("ParabolaOpens2").innerText=upwards;
+					document.getElementById("xGreater5").innerText=increases;
+					document.getElementById("xLess5").innerText=decreases;
+					document.getElementById("MinimumMaximum1").innerText=Minimum;
+				}else if(a<0){
+					document.getElementById("ParabolaOpens2").innerText=downwards;
+					document.getElementById("xGreater5").innerText=decreases;
+					document.getElementById("xLess5").innerText=increases;
+					document.getElementById("MinimumMaximum1").innerText=Maximum;
+				}else{
+					document.getElementById("ParabolaOpens2").innerText=NotExist;
+					document.getElementById("xGreater5").innerText=increases+" / "+decreases;
+					document.getElementById("xLess5").innerText=decreases+" / "+increases;
+					document.getElementById("MinimumMaximum1").innerText=MinimumMaximum;
+				}
+				document.getElementById("MinimumMaximum2").innerText=k;
+				if(Delta>0){
+					var x1=(-b+Math.sqrt(Delta))/(2*a),
+					x2=(-b-Math.sqrt(Delta))/(2*a);
+					document.getElementById("xIntercept2").innerText="("+x1+", 0) "+and+" ("+x2+", 0)";
+				}else if(Delta==0){document.getElementById("xIntercept2").innerText="("+h+", 0)"}
+				else{document.getElementById("xIntercept2").innerText=None;}
+				document.getElementById("yIntercept2").innerText=c;
+			}
+			function AOnInput(){
+				var a=document.getElementById("aInput").value;
+				if(a==""||a=="0"){document.getElementById("aLabel").innerText="a";}
+				else{document.getElementById("aLabel").innerText=a;}
+				Calculate();
+			}
+			function BOnInput(){
+				var b=document.getElementById("bInput").value;
+				if(b==""){document.getElementById("bLabel").innerText="b";}
+				else{document.getElementById("bLabel").innerText=b;}
+				Calculate();
+			}
+			function COnInput(){
+				var c=document.getElementById("cInput").value;
+				if(c==""){document.getElementById("cLabel").innerText="c";}
+				else{document.getElementById("cLabel").innerText=c;}
+				Calculate();
+			}
+			function CalculateY(){
+				var a=document.getElementById("aInput").value*1,
+				b=document.getElementById("bInput").value*1,
+				c=document.getElementById("cInput").value*1,
+				x=document.getElementById("xInput").value*1;
+				document.getElementById("yInput").value=a*Math.pow(x,2)+b*x+c;
+			}
+			document.getElementById("yInput").oninput=function(){
+				var a=document.getElementById("aInput").value*1,
+				b=document.getElementById("bInput").value*1,
+				c=document.getElementById("cInput").value*1,
+				y=document.getElementById("yInput").value*1,
+				x1,
+				x2;
+				c=c-y;
+				var Delta=Math.pow(b,2)-4*a*c;
+				x1=(-b+Math.sqrt(Delta))/(2*a);
+				if(Delta>0){
+					x2=(-b-Math.sqrt(Delta))/(2*a);
+					document.getElementById("xInput").value=x1+" "+and+" "+x2;
+				}
+				else if(Delta==0){document.getElementById("xInput").value=x1;}
+				else if(Delta<0){document.getElementById("xInput").value="Δ < 0";}
+			}
+			document.getElementsByClassName("sign")[0].onclick=function(){
+				var Value;
+				switch (InputId){
+					case 1:Value=document.getElementById("aInput").value;break;
+					case 2:Value=document.getElementById("bInput").value;break;
+					case 3:Value=document.getElementById("cInput").value;break;
+					default:break;
+				}
+				if(Value!=""&&Value!=null){
+					if(Value.indexOf("-")!=-1){Value=Value.replace("-","");}
+					else{Value="-"+Value;}
+				}else{Value="-0";}
+				switch (InputId){
+					case 1:
+						document.getElementById("aInput").value=Value;
+						AOnInput();
+						break;
+					case 2:
+						document.getElementById("bInput").value=Value;
+						BOnInput();
+						break;
+					case 3:
+						document.getElementById("cInput").value=Value;
+						COnInput();
+						break;
+					default:break;
+				}
+				Calculate();
+			}
+		</script>
+	</body>
+</html>

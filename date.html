@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Code written by Shangzhen Yang -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
+		<meta name="theme-color" content="#0066cc" />
+		<title>RTH Toolbox</title>
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/general.css" rel="stylesheet" />
+		<style>
+			.result{
+				text-align: center;
+				font-size: 16.0pt;
+				margin-top: 20px;
+				-webkit-user-select: text;
+				user-select: text;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+		</header>
+		<div class="mui-content">
+			<fieldset>
+				<legend id="DateDiffLegend"></legend>
+				<div class="mui-input-row">
+			    	<label id="StartDateLabel"></label>
+			    	<input id="StartDate" type="date" oninput="Calculate();" />
+				</div>
+				<div class="mui-input-row">
+				    <label id="EndDateLabel"></label>
+				    <input id="EndDate" type="date" oninput="Calculate();" />
+				</div>
+				<div class="result"></div>
+			</fieldset>
+		</div>
+		<script type="text/javascript">
+			var Language=localStorage.getItem("Language"),DateValue=new Date();
+			if(Language=="SimplifiedChinese"){
+				document.getElementById("ToolboxTitle").innerText="计算器";
+				document.getElementById("DateDiffLegend").innerText="日期之间的差异";
+				document.getElementById("StartDateLabel").innerText="起始日期";
+				document.getElementById("EndDateLabel").innerText="结束日期";
+				document.getElementsByClassName("result")[0].innerText="距离 0 天";
+			}else{
+				document.getElementById("ToolboxTitle").innerText="Calculator";
+				document.getElementById("DateDiffLegend").innerText="Date Diff";
+				document.getElementById("StartDateLabel").innerText="Start Date";
+				document.getElementById("EndDateLabel").innerText="End Date";
+				document.getElementsByClassName("result")[0].innerText="0 Day";
+			}
+		</script>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
+			else{mui.init({swipeBack:false});}
+			if(window.location.href.indexOf("rths.tk")!=-1){document.write("<script async src='\/\/pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'><\/script><ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3063060312105983' data-ad-slot='4806317432' data-ad-format='auto'><\/ins><script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script><script async src='https://www.googletagmanager.com/gtag/js?id=UA-109975281-1'><\/script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-109975281-1');<\/script>");}
+			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			function Calculate(){
+				var StartDateValue=new Date(document.getElementById("StartDate").value),
+				EndDateValue=new Date(document.getElementById("EndDate").value);
+				var DateDiff=parseInt(Math.abs(EndDateValue-StartDateValue)/1000/60/60/24);
+				if(Language=="SimplifiedChinese"){document.getElementsByClassName("result")[0].innerText="距离 "+DateDiff+" 天";}
+				else{
+					if(Math.abs(DateDiff>1)){document.getElementsByClassName("result")[0].innerText=DateDiff+" Days";}
+					else{document.getElementsByClassName("result")[0].innerText=DateDiff+" Day";}
+				}
+			}
+		</script>
+	</body>
+</html>

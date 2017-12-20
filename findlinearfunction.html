@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Code written by Shangzhen Yang -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
+		<meta name="theme-color" content="#0066cc" />
+		<title>RTH Toolbox</title>
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/general.css" rel="stylesheet" />
+		<link href="css/calculator.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+		</header>
+		<div class="mui-content">
+			<div style="line-height: 30px;">
+				a &#40;<label id="x1Label1">x</label><sub><label id="x1Label2">1</label></sub>&#44; <label id="y1Label1">y</label><sub><label id="y1Label2">1</label></sub>&#41;<br />
+				b &#40;<label id="x2Label1">x</label><sub><label id="x2Label2">2</label></sub>&#44; <label id="y2Label1">y</label><sub><label id="y2Label2">2</label></sub>&#41;
+			</div>
+			<hr />
+			<div class="mui-input-row">
+			    <label>x<sub>1</sub>=</label>
+			    <input id="x1Input" type="number" onclick="InputId=1;" oninput="X1OnInput();" />
+			</div>
+			<div class="mui-input-row">
+			    <label>y<sub>1</sub>=</label>
+			    <input id="y1Input" type="number" onclick="InputId=2;" oninput="Y1OnInput();" />
+			</div>
+			<div class="mui-input-row">
+			    <label>x<sub>2</sub>=</label>
+			    <input id="x2Input" type="number" onclick="InputId=3;" oninput="X2OnInput();" />
+			</div>
+			<div class="mui-input-row">
+			    <label>y<sub>2</sub>=</label>
+			    <input id="y2Input" type="number" onclick="InputId=4;" oninput="Y2OnInput();" />
+			</div>
+			<hr />
+			<div style="line-height: 30px; text-align: center; font-size: 16.0pt; -webkit-user-select: text;">y = <label id="kLabel" style="-webkit-user-select: text;">k</label>x + <label id="bLabel" style="-webkit-user-select: text;">b</label></div>
+			<hr />
+		</div>
+		<button type="button" class="mui-btn mui-btn-blue sign">+/-</button>
+		<script type="text/javascript">
+			var Language=localStorage.getItem("Language"),EnterNum,InputId=1;
+			if(Language=="SimplifiedChinese"){
+				document.getElementById("ToolboxTitle").innerText="计算器";
+				EnterNum="输入数字";
+			}else{
+				document.getElementById("ToolboxTitle").innerText="Calculator";
+				EnterNum="Enter the number";
+			}
+			document.getElementById("x1Input").placeholder=EnterNum;
+			document.getElementById("y1Input").placeholder=EnterNum;
+			document.getElementById("x2Input").placeholder=EnterNum;
+			document.getElementById("y2Input").placeholder=EnterNum;
+		</script>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
+			else{mui.init({swipeBack:false});}
+			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			function Calculate(){
+				var a=document.getElementById("x1Input").value*1,
+				c=document.getElementById("y1Input").value*(-1),
+				d=document.getElementById("x2Input").value*1,
+				f=document.getElementById("y2Input").value*(-1);
+				if(a!=d){
+					var k=(f-c)/(a-d),
+					b=(a*f-d*c)/(d-a);
+					document.getElementById("kLabel").innerText=k;
+					document.getElementById("bLabel").innerText=b;
+				}else{
+					document.getElementById("kLabel").innerText="k";
+					document.getElementById("bLabel").innerText="b";
+				}
+			}
+			function X1OnInput(){
+				var x1=document.getElementById("x1Input").value;
+				if(x1==""){
+					document.getElementById("x1Label1").innerText="x";
+					document.getElementById("x1Label2").innerText="1";
+				}else{
+					document.getElementById("x1Label1").innerText=x1;
+					document.getElementById("x1Label2").innerText="";
+				}
+				Calculate();
+			}
+			function Y1OnInput(){
+				var y1=document.getElementById("y1Input").value;
+				if(y1==""){
+					document.getElementById("y1Label1").innerText="y";
+					document.getElementById("y1Label2").innerText="1";
+				}else{
+					document.getElementById("y1Label1").innerText=y1;
+					document.getElementById("y1Label2").innerText="";
+				}
+				Calculate();
+			}
+			function X2OnInput(){
+				var x2=document.getElementById("x2Input").value;
+				if(x2==""){
+					document.getElementById("x2Label1").innerText="x";
+					document.getElementById("x2Label2").innerText="2";
+				}else{
+					document.getElementById("x2Label1").innerText=x2;
+					document.getElementById("x2Label2").innerText="";
+				}
+				Calculate();
+			}
+			function Y2OnInput(){
+				var y2=document.getElementById("y2Input").value;
+				if(y2==""){
+					document.getElementById("y2Label1").innerText="y";
+					document.getElementById("y2Label2").innerText="2";
+				}else{
+					document.getElementById("y2Label1").innerText=y2;
+					document.getElementById("y2Label2").innerText="";
+				}
+				Calculate();
+			}
+			document.getElementsByClassName("sign")[0].onclick=function(){
+				var Value;
+				switch (InputId){
+					case 1:Value=document.getElementById("x1Input").value;break;
+					case 2:Value=document.getElementById("y1Input").value;break;
+					case 3:Value=document.getElementById("x2Input").value;break;
+					case 4:Value=document.getElementById("y2Input").value;break;
+					default:break;
+				}
+				if(Value!=""&&Value!=null){
+					if(Value.indexOf("-")!=-1){Value=Value.replace("-","");}
+					else{Value="-"+Value;}
+				}else{Value="-0";}
+				switch (InputId){
+					case 1:
+						document.getElementById("x1Input").value=Value;
+						X1OnInput();
+						break;
+					case 2:
+						document.getElementById("y1Input").value=Value;
+						Y1OnInput();
+						break;
+					case 3:
+						document.getElementById("x2Input").value=Value;
+						X2OnInput();
+						break;
+					case 4:
+						document.getElementById("y2Input").value=Value;
+						Y2OnInput();
+						break;
+					default:break;
+				}
+				Calculate();
+			}
+		</script>
+	</body>
+</html>

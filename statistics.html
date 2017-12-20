@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Code written by Shangzhen Yang -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
+		<meta name="theme-color" content="#0066cc" />
+		<title>RTH Toolbox</title>
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/general.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+		</header>
+		<div class="mui-content">
+			<textarea id="StatisticsBox" rows="10"></textarea>
+			<button id="CalculateButton" type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="Calculate();"></button>
+			<ul class="mui-table-view" style="margin-top: 20px;">
+				<li class="mui-table-view-cell">
+					<a id="Add" href="javascript:Add();" class="mui-navigate-right"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="Clear" href="javascript:Clear();" class="mui-navigate-right"></a>
+				</li>
+			</ul>
+			<fieldset style="margin-top: 20px;">
+				<div class="mui-input-row">
+				    <label id="CountLabel"></label>
+				    <input id="Count" type="text" oninput="ResultOnInput();" />
+				</div>
+				<div class="mui-input-row">
+				    <label id="AverageLabel"></label>
+				    <input id="Average" type="text" oninput="ResultOnInput();" />
+				</div>
+				<div class="mui-input-row">
+				    <label id="SumLabel"></label>
+				    <input id="Sum" type="text" oninput="ResultOnInput();" />
+				</div>
+			</fieldset>
+		</div>
+		<script type="text/javascript">
+			var Language=localStorage.getItem("Language");
+			if(Language=="SimplifiedChinese"){
+				document.getElementById("ToolboxTitle").innerText="计算器";
+				document.getElementById("StatisticsBox").placeholder="输入数字";
+				document.getElementById("CalculateButton").innerText="计算";
+				document.getElementById("Add").innerText="添加";
+				document.getElementById("Clear").innerText="清空";
+				document.getElementById("CountLabel").innerText="计数";
+				document.getElementById("AverageLabel").innerText="平均值";
+				document.getElementById("SumLabel").innerText="求和";
+			}else{
+				document.getElementById("ToolboxTitle").innerText="Calculator";
+				document.getElementById("StatisticsBox").placeholder="Enter numbers";
+				document.getElementById("CalculateButton").innerText="Calculate";
+				document.getElementById("Add").innerText="Add";
+				document.getElementById("Clear").innerText="Clear";
+				document.getElementById("CountLabel").innerText="Count";
+				document.getElementById("AverageLabel").innerText="Average";
+				document.getElementById("SumLabel").innerText="Sum";
+			}
+		</script>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
+			else{mui.init({swipeBack:false});}
+			if(window.location.href.indexOf("rths.tk")!=-1){document.write("<script async src='\/\/pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'><\/script><ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3063060312105983' data-ad-slot='4806317432' data-ad-format='auto'><\/ins><script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script><script async src='https://www.googletagmanager.com/gtag/js?id=UA-109975281-1'><\/script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-109975281-1');<\/script>");}
+			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			function Calculate(){
+				var Num=document.getElementById("StatisticsBox").value;
+				if(Num!=""&&Num!=null){
+					var NumSplit=Num.split("\n"),SumValue=0;
+					document.getElementById("Count").value=NumSplit.length;
+					for (i=0;i<NumSplit.length;i++){
+						var CurrentNum=NumSplit[i]*1;
+						SumValue+=CurrentNum;
+					}
+					document.getElementById("Average").value=SumValue/NumSplit.length;
+					document.getElementById("Sum").value=SumValue;
+				}else{StatisticsAdd();}
+			}
+			function Add(){
+				if(Language=="SimplifiedChinese"){mui.prompt("输入一个数字","","添加",function(e){if(e.index==1){AddTrue(e)}});}
+				else{mui.prompt("Enter a number","","Add",["Cancel","OK"],function(e){if(e.index==1){AddTrue(e)}});}
+				function AddTrue(e){
+					var NumSplit=document.getElementById("StatisticsBox").value.split("\n");
+					if(NumSplit[NumSplit.length-1]!=""){document.getElementById("StatisticsBox").value+="\n";}
+					document.getElementById("StatisticsBox").value+=e.value;
+				}
+			}
+			function Clear(){
+				document.getElementById("StatisticsBox").value="";
+				document.getElementById("Count").value="";
+				document.getElementById("Average").value="";
+				document.getElementById("Sum").value="";
+			}
+			function ResultOnInput(){
+				if(document.getElementById("StatisticsBox").value==""){StatisticsClear();}
+				else{Calculate();}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Code written by Shangzhen Yang -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
+		<meta name="theme-color" content="#0066cc" />
+		<title>RTH Toolbox</title>
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/general.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+		</header>
+		<div class="mui-content">
+			<select id="LanguageSelect" onchange="LanguageChanged();">
+				<option value="SimplifiedChinese">简体中文</option>
+				<option value="English">English</option>
+			</select>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a id="About" class="mui-navigate-right" href="javascript:About();"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="ClearData" class="mui-navigate-right" href="javascript:ClearData();"></a>
+				</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			LanguageSelect.value=localStorage.getItem("Language");
+			LanguageChanged();
+			function LanguageChanged(){
+				if(LanguageSelect.value=="SimplifiedChinese"){
+					document.getElementById("ToolboxTitle").innerText="设置";
+					document.getElementById("About").innerText="关于 RTH 工具箱";
+					document.getElementById("ClearData").innerText="清除数据";
+				}else{
+					document.getElementById("ToolboxTitle").innerText="Settings";
+					document.getElementById("About").innerText="About RTH Toolbox";
+					document.getElementById("ClearData").innerText="Clear Data";
+				}
+				if(window.localStorage&&LanguageSelect.value!=localStorage.getItem("Language")){
+					localStorage.setItem("Language",document.getElementById("LanguageSelect").value);
+					if(LanguageSelect.value=="SimplifiedChinese"){mui.alert("需要重新启动 RTH 工具箱","已应用",function(e){Restart();});}
+					else{mui.alert("RTH Toolbox needs to be restarted","Applied","OK",function(e){Restart();});}
+				}
+			}
+		</script>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
+			else{mui.init({swipeBack:false});}
+			if(window.location.href.indexOf("rths.tk")!=-1){document.write("<script async src='\/\/pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'><\/script><ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3063060312105983' data-ad-slot='4806317432' data-ad-format='auto'><\/ins><script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script><script async src='https://www.googletagmanager.com/gtag/js?id=UA-109975281-1'><\/script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-109975281-1');<\/script>");}
+			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			function Restart(){
+				if(navigator.userAgent.indexOf("Html5Plus")!=-1){plus.runtime.restart();}
+				else{window.location.href="index.html";}
+			}
+			function About(){
+				if(navigator.userAgent.indexOf("Html5Plus")!=-1){
+					plus.webview.create("about.html","about",{"popGesture":"hide"});
+					plus.webview.show("about","pop-in");
+				}else{window.location.href="about.html";}
+				if(window.localStorage){localStorage.setItem("Recent","about");}
+			}
+			function ClearData(){
+				if(navigator.userAgent.indexOf("Html5Plus")!=-1){
+					plus.cache.clear();
+					plus.navigator.removeAllCookie();
+				}
+				if(window.localStorage){
+					if(LanguageSelect.value=="SimplifiedChinese"){mui.confirm("您想要清除应用数据吗？","清除",["否","是"],function(e){if(e.index==1){ClearDataTrue();}});}
+					else{mui.confirm("Do you want to clear the app data?","Clear",["No","Yes"],function(e){if(e.index==1){ClearDataTrue();}});}
+					function ClearDataTrue(){
+						localStorage.clear();
+						var Num=10000+Math.round(Math.random()*89999);
+						if(LanguageSelect.value=="SimplifiedChinese"){mui.alert("需要重新启动 RTH 工具箱 ["+Num+"]","已清除",function(e){Restart();});}
+						else{mui.alert("RTH Toolbox needs to be restarted ["+Num+"]","Cleared","OK",function(e){Restart();});}
+					}
+				}
+			}
+	  	</script>
+	</body>
+</html>

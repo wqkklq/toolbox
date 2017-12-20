@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Code written by Shangzhen Yang -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
+		<meta name="theme-color" content="#0066cc" />
+		<title>RTH Toolbox</title>
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/general.css" rel="stylesheet" />
+		<style>
+			#popover{
+				height: 145px;
+				width: 200px;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+		</header>
+		<div class="mui-content">
+			<ul id="SavedTextUl" class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<a id="NewTextDoc" href="javascript:Edit();" class="mui-navigate-right"></a>
+				</li>
+			</ul>
+			<div class="mui-input-row">
+		    	<input id="TitleBox" type="text" class="mui-input-clear" style="display: none;"/>
+			</div>
+			<textarea id="TextEditorBox" rows="10" style="display: none;" oninput="Count();"></textarea>
+			<ul id="OptionUl" class="mui-table-view" style="display: none;">
+				<li class="mui-table-view-cell">
+		            <a id="Save" href="javascript:Save();" class="mui-navigate-right"></a>
+				</li>
+				<li class="mui-table-view-cell">
+		            <a id="CreateMessageBox" href="#popover" class="mui-navigate-right"></a>
+				</li>
+				<li class="mui-table-view-cell">
+		            <a id="TranslateFullText" href="javascript:TranslateFullText();" class="mui-navigate-right"></a>
+		        </li>
+		        <li id="CloseLi" class="mui-table-view-cell">
+		            <a id="Close" href="javascript:Close();" class="mui-navigate-right"></a>
+		        </li>
+		        <li id="SpeakLi" class="mui-table-view-cell">
+		            <a id="Speak" href="javascript:if(window.speechSynthesis){window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementById('TextEditorBox').value));}" class="mui-navigate-right"></a>
+		        </li>
+		        <li id="DeleteLi" class="mui-table-view-cell">
+					<a id="Delete" href="javascript:Delete();" class="mui-navigate-right"></a>
+				</li>
+		        <li class="mui-table-view-cell">
+		            <a id="RunHTMLCode" href="javascript:RunHTMLCode();" class="mui-navigate-right"></a>
+		        </li>
+			</ul>
+			<iframe id="Runner" frameborder="0" style="width: 100%; margin-top: 20px; display: none;"></iframe>
+			<div id="popover" class="mui-popover">
+				<div class="mui-scroll-wrapper">
+					<div class="mui-scroll">
+						<ul class="mui-table-view">
+							<li id="Warning" class="mui-table-view-cell"></li>
+							<li id="Confirm" class="mui-table-view-cell"></li>
+							<li id="Prompt" class="mui-table-view-cell"></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			var Language=localStorage.getItem("Language"),CurrentItem;
+			if(Language=="SimplifiedChinese"){
+				document.getElementById("ToolboxTitle").innerText="文本编辑器";
+				document.getElementById("NewTextDoc").innerText="新文本文档";
+				document.getElementById("TitleBox").placeholder="标题";
+				document.getElementById("TextEditorBox").placeholder="正文";
+				document.getElementById("Save").innerText="保存";
+				document.getElementById("CreateMessageBox").innerText="创建消息框";
+				document.getElementById("Warning").innerText="警告";
+				document.getElementById("Confirm").innerText="确认";
+				document.getElementById("Prompt").innerText="输入";
+				document.getElementById("TranslateFullText").innerText="翻译全文";
+				document.getElementById("Close").innerText="关闭文档";
+				document.getElementById("Speak").innerText="朗读";
+				document.getElementById("Delete").innerText="删除";
+				document.getElementById("RunHTMLCode").innerText="作为 HTML 代码运行";
+			}else{
+				document.getElementById("ToolboxTitle").innerText="Text Editor";
+				document.getElementById("NewTextDoc").innerText="New Text Document";
+				document.getElementById("TitleBox").placeholder="Title";
+				document.getElementById("TextEditorBox").placeholder="Text";
+				document.getElementById("Save").innerText="Save";
+				document.getElementById("CreateMessageBox").innerText="Create Message Box";
+				document.getElementById("Warning").innerText="Warning";
+				document.getElementById("Confirm").innerText="Confirm";
+				document.getElementById("Prompt").innerText="Prompt";
+				document.getElementById("TranslateFullText").innerText="Translate Full Text";
+				document.getElementById("Close").innerText="Close Document";
+				document.getElementById("Speak").innerText="Speak";
+				document.getElementById("Delete").innerText="Delete";
+				document.getElementById("RunHTMLCode").innerText="Run as HTML Code";
+			}
+			if(!window.speechSynthesis){document.getElementById("SpeakLi").style.display="none";}
+			var SavedTextList=document.getElementById("SavedTextUl").innerHTML;
+			Load();
+			function Load(){
+				CurrentItem=localStorage.getItem("TextEditorCurrentItem");
+				if(localStorage.getItem("Text")!=null){
+					document.getElementById("TextEditorBox").value=localStorage.getItem("Text");
+					Count();
+				}
+				if(localStorage.getItem("Title")!=null){document.getElementById("TitleBox").value=localStorage.getItem("Title");}
+				if(document.getElementById("TextEditorBox").value!=""){Edit();}
+				else{
+					var DocumentsCount=0;
+					for (i=9999;i>0;i-=1){
+					    var SavedText=localStorage.getItem("Text"+i);
+					    if(SavedText!=null&&SavedText!=""){
+					    		DocumentsCount+=1;
+					        var NewA=document.createElement("a");
+					        NewA.setAttribute("class","mui-navigate-right");
+					        if(localStorage.getItem("Text"+i+"Title")!=null&&localStorage.getItem("Text"+i+"Title")!=""){NewA.innerText=localStorage.getItem("Text"+i+"Title");}
+					        else{NewA.innerText=SavedText;}
+					        NewA.href="javascript:OpenText("+i+")";
+					        var NewLi=document.createElement("li");
+					        NewLi.setAttribute("class","mui-table-view-cell");
+					        NewLi.appendChild(NewA);
+					        document.getElementById("SavedTextUl").appendChild(NewLi);
+					    }
+					}
+					if(DocumentsCount==0){
+						Edit();
+						document.getElementById("CloseLi").style.display="none";
+					}
+				}
+				if(CurrentItem==null||CurrentItem=="Text"){document.getElementById("DeleteLi").style.display="none";}
+				else{document.getElementById("DeleteLi").style.display="";}
+			}
+			function Edit(){
+				document.getElementById("SavedTextUl").style.display="none";
+				document.getElementById("TitleBox").style.display="";
+				document.getElementById("TextEditorBox").style.display="";
+				document.getElementById("OptionUl").style.display="";
+			}
+			function Count(){
+				var Value=document.getElementById("TextEditorBox").value;
+				var WordCount=(Value.match(/[a-z]+|[\u4E00-\uFA29]/ig)||[]).length;
+				if(Value.length==0){
+					if(Language=="SimplifiedChinese"){document.getElementById("TitleBox").placeholder="标题";}
+					else{document.getElementById("TitleBox").placeholder="Title";}
+				}else{
+					if(Language=="SimplifiedChinese"){document.getElementById("TitleBox").placeholder="字数："+WordCount;}
+					else{document.getElementById("TitleBox").placeholder="Word Count: "+WordCount;}
+				}
+			}
+		</script>
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/api.js"></script>
+		<script type="text/javascript">
+			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
+			else{mui.init({swipeBack:false});}
+			if(window.location.href.indexOf("rths.tk")!=-1){document.write("<script async src='\/\/pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'><\/script><ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3063060312105983' data-ad-slot='4806317432' data-ad-format='auto'><\/ins><script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script><script async src='https://www.googletagmanager.com/gtag/js?id=UA-109975281-1'><\/script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-109975281-1');<\/script>");}
+			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			function Reload(){
+				document.getElementById("SavedTextUl").style.display="";
+				document.getElementById("SavedTextUl").innerHTML=SavedTextList;
+				document.getElementById("TitleBox").style.display="none";
+				document.getElementById("TitleBox").value="";
+				document.getElementById("TextEditorBox").style.display="none";
+				document.getElementById("TextEditorBox"). value="";
+				document.getElementById("OptionUl").style.display="none";
+				document.getElementById("CloseLi").style.display="";
+				Count();
+				Load();
+			}
+			function Apply(SerialNumber){
+				var CurrentItem;
+				if(SerialNumber==0){CurrentItem="Text";}
+				else{CurrentItem="Text"+SerialNumber;}
+				if(window.localStorage){
+					localStorage.setItem("Text",document.getElementById("TextEditorBox").value);
+					localStorage.setItem("Title",document.getElementById("TitleBox").value);
+					localStorage.setItem("TextEditorCurrentItem",CurrentItem);
+					window.scrollTo(0,0);
+					Reload();
+				}
+			}
+			function OpenText(SerialNumber){
+				document.getElementById("TextEditorBox").value=localStorage.getItem("Text"+SerialNumber);
+				Count();
+				document.getElementById("TitleBox").value=localStorage.getItem("Text"+SerialNumber+"Title");
+				Apply(SerialNumber);
+			}
+			function Save(){
+				if(window.localStorage){
+					if(CurrentItem==null||CurrentItem=="Text"){
+						for (i=1;i<10000;i++){if(localStorage.getItem("Text"+i)==null||localStorage.getItem("Text"+i)==""){CurrentItem="Text"+i;i=10000;}}
+						if(CurrentItem==null){return false;}
+					}
+					localStorage.setItem(CurrentItem,document.getElementById("TextEditorBox").value);
+					localStorage.setItem(CurrentItem+"Title",document.getElementById("TitleBox").value);
+					if(Language=="SimplifiedChinese"){mui.toast("已保存文本");}
+					else{mui.toast("The text has been saved");}
+				}
+				Apply(CurrentItem.replace("Text",""));
+			}
+			function Close(){
+				if(Language=="SimplifiedChinese"){mui.confirm("您想要关闭文档吗？","关闭",["否","是"],function(e){if(e.index==1){CloseTrue();}});}
+				else{mui.confirm("Do you want to close the document?","Close",["No","Yes"],function(e){if(e.index==1){CloseTrue();}});}
+			}
+			function CloseTrue(){
+				document.getElementById("TextEditorBox").value="";
+				document.getElementById("TitleBox").value="";
+				Count();
+				if(window.localStorage){
+					localStorage.setItem("Text","");
+					localStorage.setItem("Title","");
+					localStorage.setItem("TextEditorCurrentItem","Text");
+				}
+				window.scrollTo(0,0);
+				Reload();
+			}
+			document.getElementById("Warning").onclick=function(){
+				mui("#popover").popover("hide");
+				var TESplit=document.getElementById("TextEditorBox").value.split("\n");
+				if(TESplit.length<2){
+					if(Language=="SimplifiedChinese"){
+						document.getElementById("TitleBox").value="标题";
+						document.getElementById("TextEditorBox").value="内容\n确定";
+					}else{
+						document.getElementById("TitleBox").value="Title";
+						document.getElementById("TextEditorBox").value="Contents\nOK";
+					}
+					Count();
+				}
+				TESplit=document.getElementById("TextEditorBox").value.split("\n");
+				mui.alert(TESplit[0],document.getElementById("TitleBox").value,TESplit[1]);
+			}
+			document.getElementById("Confirm").onclick=function(){
+				mui("#popover").popover("hide");
+				var TESplit=document.getElementById("TextEditorBox").value.split("\n");
+				if(TESplit.length<3){
+					if(Language=="SimplifiedChinese"){
+						document.getElementById("TitleBox").value="标题";
+						document.getElementById("TextEditorBox").value="内容\n确定\n取消";
+					}else{
+						document.getElementById("TitleBox").value="Title";
+						document.getElementById("TextEditorBox").value="Contents\nOK\nCancel";
+					}
+					Count();
+				}
+				TESplit=document.getElementById("TextEditorBox").value.split("\n");
+				mui.confirm(TESplit[0],document.getElementById("TitleBox").value,[TESplit[2],TESplit[1]]);
+			}
+			document.getElementById("Prompt").onclick=function(){
+				mui("#popover").popover("hide");
+				var TESplit=document.getElementById("TextEditorBox").value.split("\n");
+				if(TESplit.length<4){
+					if(Language=="SimplifiedChinese"){
+						document.getElementById("TitleBox").value="标题";
+						document.getElementById("TextEditorBox").value="内容\n确定\n取消\n默认文本";
+					}else{
+						document.getElementById("TitleBox").value="Title";
+						document.getElementById("TextEditorBox").value="Contents\nOK\nCancel\nDefault Text";
+					}
+					Count();
+				}
+				TESplit=document.getElementById("TextEditorBox").value.split("\n");
+				mui.prompt(TESplit[0],TESplit[3],document.getElementById("TitleBox").value,[TESplit[2],TESplit[1]]);
+			}
+			function TranslateFullText(){
+				var salt=(new Date).getTime(),query=document.getElementById("TextEditorBox").value,from="auto",to,pattern=new RegExp("[A-Za-z]+");
+				if(pattern.test(query)){to="zh";}
+				else{to="en";}
+				var str1=appid+query+salt+key;
+				var sign=MD5(str1);
+				$.ajax({
+				    url: "http://api.fanyi.baidu.com/api/trans/vip/translate",
+				    type: "get",
+				    dataType: "jsonp",
+				    data: {
+				        q: query,
+				        appid: appid,
+				        salt: salt,
+				        from: from,
+				        to: to,
+				        sign: sign
+				    },
+				    success: function(data){
+						document.getElementById("TextEditorBox").value+="\n"+data.trans_result[0].dst;
+						Count();
+				    }
+				});
+			}
+			function Delete(){
+				if(Language=="SimplifiedChinese"){mui.confirm("您想要删除此文本文档吗？","删除",["否","是"],function(e){if(e.index==1){DeleteTrue();}});}
+				else{mui.confirm("Do you want to delete the text document?","Delete",["No","Yes"],function(e){if(e.index==1){DeleteTrue();}});}
+				function DeleteTrue(){
+					if(window.localStorage){
+						localStorage.setItem(CurrentItem,"");
+						CloseTrue();
+					}
+				}
+			}
+			function RunHTMLCode(){
+				var Code=document.getElementById("TextEditorBox").value;
+				if(Code==""){
+					if(Language=="SimplifiedChinese"){mui.alert("请输入代码","文本编辑器");}
+					else{mui.alert("Please enter the code","Text Editor","OK");}
+				}else{
+					document.getElementById("Runner").contentDocument.open();
+          			var Title=document.getElementById("TitleBox").value;
+          			if(Title==""){Title="";}
+      				else{Title="<title>"+Title+"</title>";}
+          			document.getElementById("Runner").contentDocument.write("<head>"+Title+"<\/head><body>"+Code+"<\/body>");
+          			document.getElementById("Runner").contentDocument.close();
+          			document.getElementById("Runner").style.display="";
+				}
+			}
+		</script>
+	</body>
+</html>

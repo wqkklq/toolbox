@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Code written by Shangzhen Yang -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
+		<meta name="theme-color" content="#0066cc" />
+		<title>RTH Toolbox</title>
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/general.css" rel="stylesheet" />
+		<link href="css/chatbot.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+		</header>
+		<div class="mui-content">
+			<div id="ChatbotDiv" style="padding-bottom: 87px;">
+				<div id="Welcome" class="msg msg-bot"></div>
+				<div id="Hitokoto" class="msg msg-bot" style="display: none;" onclick="Hitokoto();"></div>
+			</div>
+		</div>
+		<div class="new-msg">
+			<div class="send">
+				<input id="SendBox" type="text" onkeydown="if(event.keyCode==13){Send();}" />
+			</div>
+			<div class="send-right">
+				<button id="SendButton" type="button" class="mui-btn mui-btn-blue" onclick="Send();"></button>
+			</div>
+		</footer>
+		<script type="text/javascript">
+			var Language=localStorage.getItem("Language");
+			if(Language=="SimplifiedChinese"){
+				document.getElementById("ToolboxTitle").innerText="康康";
+				document.getElementById("Welcome").innerText="我们已经是好友啦，一起来聊天吧！";
+				document.getElementById("SendButton").innerText="发送";
+				Hitokoto();
+			}else{
+				document.getElementById("ToolboxTitle").innerText="Kangkang";
+				document.getElementById("Welcome").innerText="You are now connected on RTH Toolbox.";
+				document.getElementById("SendButton").innerText="Send";
+			}
+			function Hitokoto(){
+				var xhr=new XMLHttpRequest();
+				xhr.onreadystatechange=function(){
+					switch(xhr.readyState){
+						case 4:
+							if(xhr.status==200){
+								var Json=JSON.parse(xhr.responseText);
+								document.getElementById("Hitokoto").innerText=Json.hitokoto;
+								document.getElementById("Hitokoto").style.display="";
+							}
+							break;
+						default:break;
+					}
+				}
+				xhr.open("GET","https://sslapi.hitokoto.cn/");
+				xhr.send();
+			}
+		</script>
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/api.js"></script>
+		<script type="text/javascript">
+			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
+			else{mui.init({swipeBack:false});}
+			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			function Send(){
+				if(document.getElementById("SendBox").value!=""){
+					var NewDiv=document.createElement("div");
+					NewDiv.setAttribute("class","msg msg-me");
+					NewDiv.innerText=document.getElementById("SendBox").value;
+					document.getElementById("ChatbotDiv").appendChild(NewDiv);
+					if(navigator.onLine){
+						if(Language=="SimplifiedChinese"){
+							document.getElementById("ToolboxTitle").innerText="对方正在输入";
+							ChatbotReply(document.getElementById("SendBox").value);
+						}else{
+							document.getElementById("ToolboxTitle").innerText="Typing";
+							Translate(document.getElementById("SendBox").value);
+						}
+					}else{
+						var NewDiv=document.createElement("div");
+						NewDiv.setAttribute("class","msg msg-bot");
+						if(Language=="SimplifiedChinese"){NewDiv.innerText="我需要连接到互联网才能和你聊天。";}
+						else{NewDiv.innerText="I cannot chat with you without connecting to the Internet.";}
+						document.getElementById("ChatbotDiv").appendChild(NewDiv);
+					}
+					document.getElementById("SendBox").value="";
+				}
+			}
+			function ChatbotReply(BotInfo){
+				var xhr=new XMLHttpRequest();
+				xhr.onreadystatechange=function(){
+					switch(xhr.readyState){
+						case 4:
+							var BotText;
+							if(xhr.status==200){
+								var Json=JSON.parse(xhr.responseText);
+								BotText=Json.text;
+							}
+							var NewDiv=document.createElement("div");
+							NewDiv.setAttribute("class","msg msg-bot");
+							if(Language=="SimplifiedChinese"){
+								NewDiv.innerText=BotText;
+								document.getElementById("ChatbotDiv").appendChild(NewDiv);
+								document.getElementById("ToolboxTitle").innerText="康康";
+							}else{
+								var salt=(new Date).getTime(),query=BotText,from="zh",to="en";
+								var str1=appid+query+salt+key;
+								var sign=MD5(str1);
+								$.ajax({
+								    url: "http://api.fanyi.baidu.com/api/trans/vip/translate",
+								    type: "get",
+								    dataType: "jsonp",
+								    data: {
+								        q: query,
+								        appid: appid,
+								        salt: salt,
+								        from: from,
+								        to: to,
+								        sign: sign
+								    },
+								    success: function(data){
+								    		NewDiv.innerText=data.trans_result[0].dst;
+								    		document.getElementById("ChatbotDiv").appendChild(NewDiv);
+										document.getElementById("ToolboxTitle").innerText="Kangkang";
+								    }
+								});
+							}
+							break;
+						default:break;
+					}
+				}
+				xhr.open("GET","http://www.tuling123.com/openapi/api?key="+cbk+"&info="+BotInfo);
+				xhr.send();
+			}
+			function Translate(query){
+				var salt=(new Date).getTime(),from="auto",to="zh";
+				var str1=appid+query+salt+key;
+				var sign=MD5(str1);
+				$.ajax({
+				    url: "http://api.fanyi.baidu.com/api/trans/vip/translate",
+				    type: "get",
+				    dataType: "jsonp",
+				    data: {
+				        q: query,
+				        appid: appid,
+				        salt: salt,
+				        from: from,
+				        to: to,
+				        sign: sign
+				    },
+				    success: function(data){ChatbotReply(data.trans_result[0].dst);}
+				});
+			}
+		</script>
+	</body>
+</html>

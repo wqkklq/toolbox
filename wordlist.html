@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Code written by Shangzhen Yang -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
+		<meta name="theme-color" content="#0066cc" />
+		<title>RTH Toolbox</title>
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/general.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+		</header>
+		<div class="mui-content">
+			<div class="mui-input-row">
+			    <input id="LookUpBox" type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13){LookUp('');}" />
+			</div>
+			<button id="LookUpButton" type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="LookUp('');"></button>
+			<ul id="OWLUl" class="mui-table-view" style="margin-top: 20px;">
+				<li class="mui-table-view-cell">
+		            <a id="NewWL" href="javascript:Edit();" class="mui-navigate-right"></a>
+		        </li>
+			</ul>
+			<ul id="OptionUl1" class="mui-table-view" style="margin-top: 20px; display: none;">
+				<li class="mui-table-view-cell">
+					<a id="Quiz" href="javascript:Arrange('quiz');" class="mui-navigate-right"></a>
+				</li>
+				<li id="CloseLi" class="mui-table-view-cell">
+		            <a id="Close" href="javascript:Close();" class="mui-navigate-right"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="FlashCard" href="javascript:Arrange('flashcard');" class="mui-navigate-right"></a>
+				</li>
+			</ul>
+			<ul id="WordListUl" class="mui-table-view" style="margin-top: 20px; display: none;"></ul>
+			<textarea id="WordListBox" style="margin-top: 20px; display: none;" rows="10"></textarea>
+			<ul id="OptionUl2" class="mui-table-view" style="display: none;">
+				<li class="mui-table-view-cell">
+					<a id="Save" href="javascript:Save();" class="mui-navigate-right"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="AddWord" href="javascript:AddWord();" class="mui-navigate-right"></a>
+				</li>
+				<li id="DeleteLi" class="mui-table-view-cell">
+					<a id="Delete" href="javascript:Delete();" class="mui-navigate-right"></a>
+				</li>
+			</ul>
+		</div>
+		<script type="text/javascript">
+			var Language=localStorage.getItem("Language"),CurrentItem,DocumentsCount;
+			if(Language=="SimplifiedChinese"){
+				document.getElementById("ToolboxTitle").innerText="单词表";
+				document.getElementById("LookUpBox").placeholder="输入要查询的单词";
+				document.getElementById("LookUpButton").innerText="查询";
+				document.getElementById("NewWL").innerText="新单词表";
+				document.getElementById("Quiz").innerText="测验";
+				document.getElementById("Close").innerText="关闭文档";
+				document.getElementById("FlashCard").innerText="学习卡";
+				document.getElementById("WordListBox").placeholder="单词表为空";
+				document.getElementById("Save").innerText="保存";
+				document.getElementById("AddWord").innerText="添加单词";
+				document.getElementById("Delete").innerText="删除";
+			}else{
+				document.getElementById("ToolboxTitle").innerText="Word List";
+				document.getElementById("LookUpBox").placeholder="Enter the word you want to look up";
+				document.getElementById("LookUpButton").innerText="Look Up";
+				document.getElementById("NewWL").innerText="New Word List";
+				document.getElementById("Quiz").innerText="Quiz";
+				document.getElementById("Close").innerText="Close Document";
+				document.getElementById("FlashCard").innerText="Flash Card";
+				document.getElementById("WordListBox").placeholder="The word list is empty";
+				document.getElementById("Save").innerText="Save";
+				document.getElementById("AddWord").innerText="Add Word";
+				document.getElementById("Delete").innerText="Delete";
+			}
+			var OWList=document.getElementById("OWLUl").innerHTML;
+			Load();
+			function Load(){
+				CurrentItem=localStorage.getItem("WordListCurrentItem");
+				DocumentsCount=0;
+				if(localStorage.getItem("WordList")!=null){document.getElementById("WordListBox").value=localStorage.getItem("WordList");}
+				if(document.getElementById("WordListBox").value!=""){
+					var WLTSplit=document.getElementById("WordListBox").value.split("\n");
+					if(WLTSplit[0]!="RTH 1"){
+						document.getElementById("WordListBox").value="RTH 1\n"+document.getElementById("WordListBox").value;
+						WLTSplit=document.getElementById("WordListBox").value.split("\n");
+					}
+					for(i=1;i<WLTSplit.length-1;i+=2){
+						var NewA=document.createElement("a"),
+						NewWord=WLTSplit[i],
+						NewDefinition=WLTSplit[i+1],
+						NewWordStr=NewWord.replace(" ","_").replace("-","_"),
+						NewLabel=document.createElement("label"),
+						NewP=document.createElement("p"),
+						NewDiv=document.createElement("div"),
+						NewLi=document.createElement("li");
+						NewA.setAttribute("class","mui-navigate-right");
+						NewA.setAttribute("id",NewWordStr);
+						NewA.href="javascript:LookUp("+NewWordStr+")";
+						NewLabel.innerText=NewWord;
+						NewP.innerText=NewDefinition;
+						NewDiv.appendChild(NewLabel);
+						NewDiv.appendChild(NewP);
+						NewA.appendChild(NewDiv);
+						NewLi.setAttribute("class","mui-table-view-cell");
+						NewLi.appendChild(NewA);
+						document.getElementById("WordListUl").appendChild(NewLi);
+					}
+					Edit();
+				}else{
+					for (i=9999;i>0;i-=1){
+					    var SavedWL=localStorage.getItem("WordList"+i);
+					    if(SavedWL!=null&&SavedWL!=""){
+					    		DocumentsCount+=1;
+					        var Item,NewA=document.createElement("a"),NewLi=document.createElement("li");
+					        NewA.setAttribute("class","mui-navigate-right");
+					        if(Language=="SimplifiedChinese"){Item="\""+SavedWL.split("\n")[1]+"\" 和另外"+((SavedWL.split("\n").length-2)/2-1)+"个单词";}
+					        else{Item="\""+SavedWL.split("\n")[1]+"\" and other "+(SavedWL.split("\n").length-2)/2+" words";}
+					        NewA.innerText=Item;
+					        NewA.href="javascript:OpenWL("+i+")";
+					        NewLi.setAttribute("class","mui-table-view-cell");
+					        NewLi.appendChild(NewA);
+					        document.getElementById("OWLUl").appendChild(NewLi);
+					    }
+					}
+					var OWLText;
+					var xhr=new XMLHttpRequest();
+					xhr.onreadystatechange=function(){
+						switch(xhr.readyState){
+							case 4:
+								if(xhr.status==200){
+									OWLText=xhr.responseText.replace(/<br \/>/g,"");
+									OWLTSplit=OWLText.split("\n");
+									for(i=OWLTSplit.length-1;i>=0;i-=1){
+										var Item=OWLTSplit[i],NewA=document.createElement("a"),NewLi=document.createElement("li");
+										NewA.setAttribute("class","mui-navigate-right");
+										NewA.innerText=Item;
+										NewA.href="javascript:OpenOWL("+(i+1)+")";
+										NewLi.setAttribute("class","mui-table-view-cell");
+										NewLi.appendChild(NewA);
+										document.getElementById("OWLUl").appendChild(NewLi);
+									}
+								}else{
+									if(DocumentsCount==0){Edit();}
+									if(document.getElementById("WordListBox").value==""&&DocumentsCount==0){document.getElementById("CloseLi").style.display="none";}
+								}
+								break;
+							default:break;
+						}
+					}
+					xhr.open("GET","http://t.rths.tk/wordlist/index.html");
+					xhr.send();
+				}
+				if(CurrentItem==null||CurrentItem=="WordList"){document.getElementById("DeleteLi").style.display="none";}
+				else{document.getElementById("DeleteLi").style.display="";}
+			}
+			function Edit(){
+				document.getElementById("OWLUl").style.display="none";
+				document.getElementById("OptionUl1").style.display="";
+				document.getElementById("WordListUl").style.display="";
+				document.getElementById("WordListBox").style.display="";
+				document.getElementById("OptionUl2").style.display="";
+			}
+		</script>
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/api.js"></script>
+		<script type="text/javascript">
+			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
+			else{mui.init({swipeBack:false});}
+			if(window.location.href.indexOf("rths.tk")!=-1){document.write("<script async src='\/\/pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'><\/script><ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3063060312105983' data-ad-slot='4806317432' data-ad-format='auto'><\/ins><script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script><script async src='https://www.googletagmanager.com/gtag/js?id=UA-109975281-1'><\/script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-109975281-1');<\/script>");}
+			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			function Reload(){
+				document.getElementById("OWLUl").style.display="";
+				document.getElementById("OWLUl").innerHTML=OWList;
+				document.getElementById("OptionUl1").style.display="none";
+				document.getElementById("CloseLi").style.display="";
+				document.getElementById("WordListUl").style.display="none";
+				document.getElementById("WordListUl").innerHTML="";
+				document.getElementById("WordListBox").style.display="none";
+				document.getElementById("WordListBox").value="";
+				document.getElementById("OptionUl2").style.display="none";
+				Load();
+			}
+			function AddZero(num,length){return (Array(length).join("0")+num).slice(-length);}
+			function OpenOWL(SerialNumber){
+				var xhr=new XMLHttpRequest();
+				xhr.onreadystatechange=function(){
+					switch(xhr.readyState){
+						case 4:
+							if(xhr.status==200){
+								document.getElementById("WordListBox").value=xhr.responseText.replace(/<br \/>/g,"");
+								Apply(0);
+							}
+							break;
+						default:break;
+					}
+				}
+				xhr.open("GET","http://t.rths.tk/wordlist/"+AddZero(SerialNumber,3)+".html");
+				xhr.send();
+			}
+			function OpenWL(SerialNumber){
+				document.getElementById("WordListBox").value=localStorage.getItem("WordList"+SerialNumber);
+				Apply(SerialNumber);
+			}
+			function LookUp(Word){
+				var WordStr=Word+"";
+				if(WordStr!=""){WordStr=WordStr.split("(")[1].replace(")","").replace("_","%20");}
+				else{
+					if(document.getElementById("LookUpBox").value==""){
+						if(Language=="SimplifiedChinese"){mui.alert("请输入要查询的单词","词典");}
+						else{mui.alert("Please enter the word you want to look up","Dictionary","OK");}
+						return false;
+					}else{WordStr=escape(document.getElementById("LookUpBox").value).replace(/%/g,"_");}
+				}
+				var WordWithoutSpace=WordStr.replace("_20","").toLowerCase();
+				if(navigator.onLine||localStorage.getItem(WordWithoutSpace+"_CNDef")!=null){
+					if(navigator.userAgent.indexOf("Html5Plus")!=-1){plus.webview.open("flashcard.html?word="+WordStr,"flashcard",{"popGesture":"close"},"slide-in-bottom");}
+					else{window.location.href="flashcard.html?word="+WordStr;}
+				}else{
+					if(Language=="SimplifiedChinese"){mui.alert("没有互联网连接","词典");}
+					else{mui.alert("No Internet connection","Dictionary","OK");}
+				}
+			}
+			function Save(){
+				var WLSplitFS=document.getElementById("WordListBox").value.split("\n");
+				if(WLSplitFS[0]!="RTH 1"){document.getElementById("WordListBox").value="RTH 1\n"+document.getElementById("WordListBox").value;}
+				if(WLSplitFS[WLSplitFS.length-1]!=""){document.getElementById("WordListBox").value+="\n";}
+				if(window.localStorage){
+					if(CurrentItem==null||CurrentItem=="WordList"){
+						for (i=1;i<10000;i++){if(localStorage.getItem("WordList"+i)==null||localStorage.getItem("WordList"+i)==""){CurrentItem="WordList"+i;i=10000;}}
+						if(CurrentItem==null){return false;}
+					}
+					localStorage.setItem(CurrentItem,document.getElementById("WordListBox").value);
+					if(Language=="SimplifiedChinese"){mui.toast("已保存单词表");}
+					else{mui.toast("The word list has been saved");}
+				}
+				Apply(CurrentItem.replace("WordList",""));
+			}
+			function Close(){
+				if(Language=="SimplifiedChinese"){mui.confirm("您想要关闭文档吗？","关闭",["否","是"],function(e){if(e.index==1){CloseTrue();}});}
+				else{mui.confirm("Do you want to close the document?","Close",["No","Yes"],function(e){if(e.index==1){CloseTrue();}});}
+			}
+			function CloseTrue(){
+				document.getElementById("WordListBox").value="";
+				if(window.localStorage){
+					localStorage.setItem("WordList","");
+					localStorage.setItem("WordListCurrentItem","WordList");
+				}
+				Reload();
+			}
+			function Delete(){
+				if(Language=="SimplifiedChinese"){mui.confirm("您想要删除此单词表吗？","删除",["否","是"],function(e){if(e.index==1){DeleteTrue();}});}
+				else{mui.confirm("Do you want to delete the word list?","Delete",["No","Yes"],function(e){if(e.index==1){DeleteTrue();}});}
+				function DeleteTrue(){
+					if(window.localStorage){
+						localStorage.setItem(CurrentItem,"");
+						CloseTrue();
+					}
+				}
+			}
+			function AddWord(){
+				var WLTSplit=document.getElementById("WordListBox").value.split("\n");
+				if(WLTSplit[WLTSplit.length-1]!=""){document.getElementById("WordListBox").value+="\n";}
+				if(Language=="SimplifiedChinese"){mui.prompt("输入新单词","","添加",function(e){if(e.index==1){GetDefinition(e.value);}});}
+				else{mui.prompt("Enter a new word","","Add",["Cancel","OK"],function(e){if(e.index==1){GetDefinition(e.value);}});}
+				function GetDefinition(NewWord){
+					if(NewWord==""){return false;}
+					var WordWithoutSpace=NewWord.replace(/^\s+|\s+$/g,"").toLowerCase();
+					if(localStorage.getItem(WordWithoutSpace+"_CNDef")!=null){
+						var CNDef=localStorage.getItem(WordWithoutSpace+"_CNDef"),
+						ENDef=localStorage.getItem(WordWithoutSpace+"_ENDef");
+						if(Language=="SimplifiedChinese"&&CNDef!=null){document.getElementById("WordListBox").value+=NewWord+"\n"+CNDef.replace(/\n/g,"; ");}
+						else if(ENDef!=null){document.getElementById("WordListBox").value+=NewWord+"\n"+ENDef.replace(/\n/g,"; ");}
+						else{AskForDefinition(NewWord);}
+					}else if(navigator.onLine){
+						var xhr=new XMLHttpRequest();
+						xhr.onreadystatechange=function(){
+							switch(xhr.readyState){
+								case 4:
+									if(xhr.status==200){
+										var Json=JSON.parse(xhr.responseText);
+										if(Json.msg=="SUCCESS"){
+											if(Language=="SimplifiedChinese"&&Json.data.cn_definition.defn!=null){document.getElementById("WordListBox").value+=NewWord+"\n"+Json.data.cn_definition.defn.replace(/\n/g,"; ");}
+											else if(Json.data.en_definition.defn!=null){document.getElementById("WordListBox").value+=NewWord+"\n"+Json.data.en_definition.defn.replace(/\n/g,"; ");}
+											else{AskForDefinition(NewWord);}
+											if(WordWithoutSpace.indexOf(" ")==-1&&window.localStorage){
+												localStorage.setItem(WordWithoutSpace+"_Pronunciation",Json.data.pronunciation);
+												localStorage.setItem(WordWithoutSpace+"_Audio",Json.data.audio);
+												localStorage.setItem(WordWithoutSpace+"_CNDef",Json.data.cn_definition.defn);
+												localStorage.setItem(WordWithoutSpace+"_ENDef",Json.data.en_definition.defn);
+											}
+										}else{Translate(NewWord);}
+									}else{Translate(NewWord);}
+									break;
+								default:break;
+							}
+						}
+						xhr.open("GET","https://api.shanbay.com/bdc/search/?word="+NewWord);
+						xhr.send();
+					}else{AskForDefinition(NewWord);}
+				}
+				function AskForDefinition(NewWord){
+					if(Language=="SimplifiedChinese"){mui.prompt("输入新单词的释义","","添加",function(e){if(e.index==1&&e.value!=""){document.getElementById("WordListBox").value+=NewWord+"\n"+e.value;}});}
+					else{mui.prompt("Enter the definition of the new word","","Add",["Cancel","OK"],function(e){if(e.index==1&&e.value!=""){document.getElementById("WordListBox").value+=NewWord+"\n"+e.value;}});}
+				}
+			}
+			function Translate(NewWord){
+				var salt=(new Date).getTime(),query=NewWord,from="auto",to;
+				if(Language=="SimplifiedChinese"){to="zh";}
+				else{to="en";}
+				var str1=appid+query+salt+key;
+				var sign=MD5(str1);
+				$.ajax({
+				    url: "http://api.fanyi.baidu.com/api/trans/vip/translate",
+				    type: "get",
+				    dataType: "jsonp",
+				    data: {
+				        q: query,
+				        appid: appid,
+				        salt: salt,
+				        from: from,
+				        to: to,
+				        sign: sign
+				    },
+				    success: function(data){document.getElementById("WordListBox").value+=NewWord+"\n"+data.trans_result[0].dst;}
+				});
+			}
+			function Arrange(Window){
+				var WLSplitFS=document.getElementById("WordListBox").value.split("\n");
+				if(WLSplitFS[0]!="RTH 1"){document.getElementById("WordListBox").value="RTH 1\n"+document.getElementById("WordListBox").value;}
+				if(WLSplitFS[WLSplitFS.length-1]!=""){document.getElementById("WordListBox").value+="\n";}
+				if(Window=="quiz"&&(WLSplitFS.length-2)/2<4||Window=="flashcard"&&(WLSplitFS.length-2)/2<1){
+					if(Language=="SimplifiedChinese"){mui.alert("单词太少","单词表");}
+					else{mui.alert("Too few words","Word List","OK");}
+				}else if(window.localStorage){
+					localStorage.setItem("WordList",document.getElementById("WordListBox").value);
+					if(navigator.userAgent.indexOf("Html5Plus")!=-1){plus.webview.open(Window+".html",Window,{"popGesture":"close"},"slide-in-bottom");}
+					else{window.location.href=Window+".html";}
+				}
+			}
+			function Apply(SerialNumber){
+				var CurrentItem;
+				if(SerialNumber==0){CurrentItem="WordList";}
+				else{CurrentItem="WordList"+SerialNumber;}
+				if(window.localStorage){
+					localStorage.setItem("WordList",document.getElementById("WordListBox").value);
+					localStorage.setItem("WordListCurrentItem",CurrentItem);
+					Reload();
+				}
+			}
+		</script>
+	</body>
+</html>

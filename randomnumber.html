@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Code written by Shangzhen Yang -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
+		<meta name="theme-color" content="#0066cc" />
+		<title>RTH Toolbox</title>
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/general.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+		</header>
+		<div class="mui-content">
+			<div id="Number" style="font-size: 45px; text-align: center; line-height: 60px; height: 60px; -webkit-user-select: text;">0</div>
+			<button id="SelectButton" type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top: 20px;"></button>
+			<fieldset style="margin-top: 20px;">
+				<legend id="Settings"></legend>
+				<div class="mui-input-row">
+				    <label id="MinimumLabel"></label>
+				    <input id="Minimum" type="text" value="1">
+				</div>
+				<div class="mui-input-row">
+				    <label id="MaximumLabel"></label>
+				    <input id="Maximum" type="text" value="60">
+				</div>
+				<div class="mui-input-row mui-checkbox ">
+				    <label id="ScrollLabel"></label>
+				    <input id="ScrollCheck" name="Checkbox" type="checkbox" checked="checked" onchange="ScrollChanged();">
+				</div>
+				<div class="mui-input-row mui-checkbox ">
+				    <label id="OddNumberOnlyLabel"></label>
+				    <input id="OddNumberOnlyCheck" name="Checkbox" type="checkbox" onchange="document.getElementById('EvenNumberOnlyCheck').checked=false;">
+				</div>
+				<div class="mui-input-row mui-checkbox ">
+				    <label id="EvenNumberOnlyLabel"></label>
+				    <input id="EvenNumberOnlyCheck" name="Checkbox" type="checkbox" onchange="document.getElementById('OddNumberOnlyCheck').checked=false;">
+				</div>
+			</fieldset>
+			<fieldset style="margin-top: 20px;">
+				<legend id="History"></legend>
+				<textarea id="HistoryText" rows="5"></textarea>
+				<ul class="mui-table-view">
+			        <li class="mui-table-view-cell">
+			            <a id="Add" href="javascript:Add();" class="mui-navigate-right"></a>
+			        </li>
+			        <li class="mui-table-view-cell">
+			            <a id="Clear" href="javascript:document.getElementById('HistoryText').value='';" class="mui-navigate-right"></a>
+			        </li>
+			    </ul>
+			</fieldset>
+			<fieldset style="margin-top: 20px;">
+				<legend id="Names"></legend>
+				<textarea id="NamesText" rows="5"></textarea>
+				<ul class="mui-table-view">
+			        <li class="mui-table-view-cell">
+			            <a id="NamesSave" href="javascript:NamesSave();" class="mui-navigate-right"></a>
+			        </li>
+			        <li class="mui-table-view-cell">
+			            <a id="NamesAdd" href="javascript:NamesAdd();" class="mui-navigate-right"></a>
+			        </li>
+			        <li class="mui-table-view-cell">
+			            <a id="NamesClear" href="javascript:NamesClear();" class="mui-navigate-right"></a>
+			        </li>
+			   </ul>
+			</fieldset>
+		</div>
+		<script type="text/javascript">
+			var Language=localStorage.getItem("Language"),NamesValue=localStorage.getItem("Names"),Scrolling=true,MultipleTimes=true,TimeOut;
+			if(Language=="SimplifiedChinese"){
+				document.getElementById("ToolboxTitle").innerText="随机抽号";
+				document.getElementById("SelectButton").innerText="立即抽号";
+				document.getElementById("Settings").innerText="设置";
+				document.getElementById("MinimumLabel").innerText="最小值";
+				document.getElementById("MaximumLabel").innerText="最大值";
+				document.getElementById("ScrollLabel").innerText="滚动";
+				document.getElementById("OddNumberOnlyLabel").innerText="仅奇数";
+				document.getElementById("EvenNumberOnlyLabel").innerText="仅偶数";
+				document.getElementById("History").innerText="历史记录";
+				document.getElementById("HistoryText").placeholder="还没有历史记录";
+				document.getElementById("Add").innerText="添加";
+				document.getElementById("Clear").innerText="清空";
+				document.getElementById("Names").innerText="名字";
+				document.getElementById("NamesText").placeholder="输入每个人的名字";
+				document.getElementById("NamesSave").innerText="保存";
+				document.getElementById("NamesAdd").innerText="添加";
+				document.getElementById("NamesClear").innerText="清空";
+			}else{
+				document.getElementById("ToolboxTitle").innerText="Random Number";
+				document.getElementById("SelectButton").innerText="Select Randomly";
+				document.getElementById("Settings").innerText="Settings";
+				document.getElementById("MinimumLabel").innerText="Minimum";
+				document.getElementById("MaximumLabel").innerText="Maximum";
+				document.getElementById("ScrollLabel").innerText="Scroll";
+				document.getElementById("OddNumberOnlyLabel").innerText="Odd Number Only";
+				document.getElementById("EvenNumberOnlyLabel").innerText="Even Number Only";
+				document.getElementById("History").innerText="History";
+				document.getElementById("HistoryText").placeholder="The history is empty";
+				document.getElementById("Add").innerText="Add";
+				document.getElementById("Clear").innerText="Clear";
+				document.getElementById("Names").innerText="Names";
+				document.getElementById("NamesText").placeholder="Enter everyone's name";
+				document.getElementById("NamesSave").innerText="Save";
+				document.getElementById("NamesAdd").innerText="Add";
+				document.getElementById("NamesClear").innerText="Clear";
+			}
+			document.getElementById("NamesText").value=NamesValue;
+			Count();
+			RScrolling();
+			function Count(){
+				if(NamesValue==""||NamesValue==null){
+					document.getElementById("Minimum").value="1";
+					document.getElementById("Maximum").value="60";
+				}else{
+					document.getElementById("Minimum").value="0";
+					document.getElementById("Maximum").value=NamesValue.split("\n").length-2;
+				}
+			}
+			function Random(){
+				var Min=parseInt(document.getElementById("Minimum").value),
+				Max=parseInt(document.getElementById("Maximum").value);
+				var Range=Max-Min,
+      			Rand=Math.random();
+      			var RandomNumberValue=Min+Math.round(Rand*Range);
+      			if(document.getElementById("OddNumberOnlyCheck").checked==true&&RandomNumberValue%2==0||document.getElementById("EvenNumberOnlyCheck").checked==true&&RandomNumberValue%2!=0){
+      				Random();
+      				return false;
+      			}
+      			if(NamesValue!=""&&NamesValue!=null){
+      				var NamesSplit;
+      				NamesSplit=NamesValue.split("\n");
+      				document.getElementById("Number").innerText=NamesSplit[RandomNumberValue];
+      			}else{document.getElementById("Number").innerText=RandomNumberValue;}
+			}
+			function RScrolling(){
+				var Min=parseInt(document.getElementById("Minimum").value),
+				Max=parseInt(document.getElementById("Maximum").value);
+				if(Min==Max){document.getElementById("Number").innerText="?";}
+				else{Random();}
+				TimeOut=setTimeout("RScrolling()",10);
+				Scrolling=true;
+			}
+		</script>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
+			else{mui.init({swipeBack:false});}
+			if(window.location.href.indexOf("rths.tk")!=-1){document.write("<script async src='\/\/pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'><\/script><ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3063060312105983' data-ad-slot='4806317432' data-ad-format='auto'><\/ins><script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script><script async src='https://www.googletagmanager.com/gtag/js?id=UA-109975281-1'><\/script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-109975281-1');<\/script>");}
+			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			document.getElementById("SelectButton").onclick=function(){
+				if(document.getElementById("ScrollCheck").checked==true){
+					if(Scrolling==false){
+						TimeOut=setTimeout("RScrolling()",10);
+						Scrolling=true;
+					}else{
+						clearTimeout(TimeOut);
+						Scrolling=false;
+						if(document.getElementById("Number").innerText=="?"){Random();}
+						Selected();
+					}
+				}else{
+					Random();
+					Selected();
+				}
+				function Selected(){
+					if(MultipleTimes==false){
+						var SelectedName=document.getElementById("Number").innerText;
+						NamesValue=NamesValue.replace(SelectedName+"\n","");
+						Count();
+					}
+				}
+			}
+			function ScrollChanged(){
+				if(document.getElementById("ScrollCheck").checked==true){
+					TimeOut=setTimeout("RScrolling()",10);
+					Scrolling=true;
+				}else{
+					clearTimeout(TimeOut);
+					Scrolling=false;
+				}
+			}
+			function Add(){
+				var HistoryValue=document.getElementById("HistoryText").value;
+				if(HistoryValue==""){document.getElementById("HistoryText").value=document.getElementById("Number").innerText;}
+				else{document.getElementById("HistoryText").value=document.getElementById("Number").innerText+"\n"+HistoryValue;}
+			}
+			function NamesSave(){
+				MultipleTimes=true;
+				document.getElementById("NamesText").style.display="";
+				if(window.localStorage){
+					NamesValue=document.getElementById("NamesText").value;
+					var NamesSplit=NamesValue.split("\n");
+					if(NamesSplit[NamesSplit.length-1]!=""){NamesValue+="\n";}
+					localStorage.setItem("Names",NamesValue);
+					Count();
+					window.scrollTo(0,0);
+					if(Language=="SimplifiedChinese"){mui.confirm("一个名字能被抽到多次吗？","随机抽号",["否","是"],function(e){if(e.index==0){NoMultipleTimes();}});}
+					else{mui.confirm("Can a name be selected multiple times?","Random Number",["No","Yes"],function(e){if(e.index==0){NoMultipleTimes();}});}
+					function NoMultipleTimes(){
+						MultipleTimes=false;
+						document.getElementById("NamesText").style.display="none";
+					}
+				}
+			}
+			function NamesAdd(){
+				MultipleTimes=true;
+				document.getElementById("NamesText").style.display="";
+				if(Language=="SimplifiedChinese"){mui.prompt("输入一个人的名字","","添加",function(e){if(e.index==1){AddTrue(e)}});}
+				else{mui.prompt("Enter a person's name","","Add",["Cancel","OK"],function(e){if(e.index==1){AddTrue(e)}});}
+				function AddTrue(e){
+					var NamesSplit=document.getElementById("NamesText").value.split("\n");
+					if(NamesSplit[NamesSplit.length-1]!=""){document.getElementById("NamesText").value+="\n";}
+					document.getElementById("NamesText").value+=e.value;
+				}
+			}
+			function NamesClear(){
+				if(window.localStorage){
+					document.getElementById("NamesText").value="";
+					localStorage.setItem("Names","");
+					NamesValue="";
+					MultipleTimes=true;
+					document.getElementById("NamesText").style.display="";
+					Count();
+				}
+			}
+		</script>
+	</body>
+</html>

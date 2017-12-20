@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Code written by Shangzhen Yang -->
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
+		<meta name="theme-color" content="#0066cc" />
+		<title>RTH Toolbox</title>
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/general.css" rel="stylesheet" />
+		<link href="css/calculator.css" rel="stylesheet" />
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+		</header>
+		<div class="mui-content">
+			<div style="line-height: 30px;">
+				&#123;<label id="aLabel">a</label>x + <label id="bLabel">b</label>y = <label id="cLabel">c</label><br />
+				&#123;<label id="dLabel">d</label>x + <label id="eLabel">e</label>y = <label id="fLabel">f</label>
+			</div>
+			<hr />
+			<div class="mui-input-row">
+			    <label>a =</label>
+			    <input id="aInput" type="number" onclick="InputId=1;" oninput="AOnInput();" />
+			</div>
+			<div class="mui-input-row">
+			    <label>b =</label>
+			    <input id="bInput" type="number" onclick="InputId=2;" oninput="BOnInput();" />
+			</div>
+			<div class="mui-input-row">
+			    <label>c =</label>
+			    <input id="cInput" type="number" onclick="InputId=3;" oninput="COnInput();" />
+			</div>
+			<div class="mui-input-row">
+			    <label>d =</label>
+			    <input id="dInput" type="number" onclick="InputId=4;" oninput="DOnInput();" />
+			</div>
+			<div class="mui-input-row">
+			    <label>e =</label>
+			    <input id="eInput" type="number" onclick="InputId=5;" oninput="EOnInput();" />
+			</div>
+			<div class="mui-input-row">
+			    <label>f =</label>
+			    <input id="fInput" type="number" onclick="InputId=6;" oninput="FOnInput();" />
+			</div>
+			<hr />
+			<div class="mui-input-row">
+			    <label>x =</label>
+			    <input id="xInput" type="text" oninput="Calculate();" />
+			</div>
+			<div class="mui-input-row">
+			    <label>y =</label>
+			    <input id="yInput" type="text" oninput="Calculate();" />
+			</div>
+			<hr />
+		</div>
+		<button type="button" class="mui-btn mui-btn-blue sign">+/-</button>
+		<script type="text/javascript">
+			var Language=localStorage.getItem("Language"),EnterNum,InputId=1;
+			if(Language=="SimplifiedChinese"){
+				document.getElementById("ToolboxTitle").innerText="计算器";
+				EnterNum="输入数字";
+			}else{
+				document.getElementById("ToolboxTitle").innerText="Calculator";
+				EnterNum="Enter the number";
+			}
+			document.getElementById("aInput").placeholder=EnterNum;
+			document.getElementById("bInput").placeholder=EnterNum;
+			document.getElementById("cInput").placeholder=EnterNum;
+			document.getElementById("dInput").placeholder=EnterNum;
+			document.getElementById("eInput").placeholder=EnterNum;
+			document.getElementById("fInput").placeholder=EnterNum;
+		</script>
+		<script src="js/mui.min.js"></script>
+		<script type="text/javascript">
+			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
+			else{mui.init({swipeBack:false});}
+			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			function Calculate(){
+				var a=document.getElementById("aInput").value*1,
+				b=document.getElementById("bInput").value*1,
+				c=document.getElementById("cInput").value*(-1),
+				d=document.getElementById("dInput").value*1,
+				e=document.getElementById("eInput").value*1,
+				f=document.getElementById("fInput").value*(-1);
+				if(a*e!=b*d){
+					document.getElementById("xInput").value=(b*f-e*c)/(a*e-b*d);
+					document.getElementById("yInput").value=(a*f-d*c)/(b*d-a*e);
+				}else{
+					document.getElementById("xInput").value="";
+					document.getElementById("yInput").value="";
+				}
+			}
+			function AOnInput(){
+				var a=document.getElementById("aInput").value;
+				if(a==""){document.getElementById("aLabel").innerText="a";}
+				else{document.getElementById("aLabel").innerText=a;}
+				Calculate();
+			}
+			function BOnInput(){
+				var b=document.getElementById("bInput").value;
+				if(b==""){document.getElementById("bLabel").innerText="b";}
+				else{document.getElementById("bLabel").innerText=b;}
+				Calculate();
+			}
+			function COnInput(){
+				var c=document.getElementById("cInput").value;
+				if(c==""){document.getElementById("cLabel").innerText="c";}
+				else{document.getElementById("cLabel").innerText=c;}
+				Calculate();
+			}
+			function DOnInput(){
+				var d=document.getElementById("dInput").value;
+				if(d==""){document.getElementById("dLabel").innerText="d";}
+				else{document.getElementById("dLabel").innerText=d;}
+				Calculate();
+			}
+			function EOnInput(){
+				var e=document.getElementById("eInput").value;
+				if(e==""){document.getElementById("eLabel").innerText="e";}
+				else{document.getElementById("eLabel").innerText=e;}
+				Calculate();
+			}
+			function FOnInput(){
+				var f=document.getElementById("fInput").value;
+				if(f==""){document.getElementById("fLabel").innerText="f";}
+				else{document.getElementById("fLabel").innerText=f;}
+				Calculate();
+			}
+			document.getElementsByClassName("sign")[0].onclick=function(){
+				var Value;
+				switch (InputId){
+					case 1:Value=document.getElementById("aInput").value;break;
+					case 2:Value=document.getElementById("bInput").value;break;
+					case 3:Value=document.getElementById("cInput").value;break;
+					case 4:Value=document.getElementById("dInput").value;break;
+					case 5:Value=document.getElementById("eInput").value;break;
+					case 6:Value=document.getElementById("fInput").value;break;
+					default:break;
+				}
+				if(Value!=""&&Value!=null){
+					if(Value.indexOf("-")!=-1){Value=Value.replace("-","");}
+					else{Value="-"+Value;}
+				}else{Value="-0";}
+				switch (InputId){
+					case 1:
+						document.getElementById("aInput").value=Value;
+						AOnInput();
+						break;
+					case 2:
+						document.getElementById("bInput").value=Value;
+						BOnInput();
+						break;
+					case 3:
+						document.getElementById("cInput").value=Value;
+						COnInput();
+						break;
+					case 4:
+						document.getElementById("dInput").value=Value;
+						DOnInput();
+						break;
+					case 5:
+						document.getElementById("eInput").value=Value;
+						EOnInput();
+						break;
+					case 6:
+						document.getElementById("fInput").value=Value;
+						FOnInput();
+						break;
+					default:break;
+				}
+				Calculate();
+			}
+		</script>
+	</body>
+</html>
