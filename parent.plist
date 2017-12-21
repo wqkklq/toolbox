@@ -6,7 +6,5 @@
     <true/>
     <key>com.apple.security.application-groups</key>
     <string>7564J9XM8X.tk.rthsoftware.rthtoolbox.mac</string>
-    <key>com.apple.security.files.user-selected.read-write</key>
-    <true/>
   </dict>
 </plist>
