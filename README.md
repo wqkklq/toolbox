@@ -11,7 +11,7 @@ The main features of RTH Toolbox:
 - Using different search engines to search for the same content
 - Speaking the text you entered
 
-You can get RTH Toolbox on App Store, Google Play or Coolapk.
+You can get RTH Toolbox on App Store, Google Play and Coolapk.
 
 For more details: <a href="http://rths.tk/">http://rths.tk/</a>
 
