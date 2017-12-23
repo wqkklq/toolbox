@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!-- Code written by Shangzhen Yang -->
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
-		<meta name="theme-color" content="#0066cc" />
+		<!--Code written by Shangzhen Yang-->
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover"/>
+		<meta name="theme-color" content="#0066cc"/>
 		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
-		<link href="css/mui.min.css" rel="stylesheet" />
-		<link href="css/general.css" rel="stylesheet" />
-		<link href="css/flashcard.css" rel="stylesheet" />
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon"/>
+		<link href="css/mui.min.css" rel="stylesheet"/>
+		<link href="css/general.css" rel="stylesheet"/>
+		<link href="css/flashcard.css" rel="stylesheet"/>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
 			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
 		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
 		</header>
-		<div class="mui-content" style="margin: 0px 15px; text-align: center;">
-			<div id="Word" class="dict" style="line-height: 40px; font-size: 30px; color: #0066CC;"></div>
-			<div id="Pronunciation" class="dict" style="line-height: 35px; font-size: 20px; color: #0066CC;" onclick="new Audio(AudioURL).play();"></div>
-			<div id="CNDefinition" class="dict" style="line-height: 35px; font-size: 20px; display: none;"></div>
-			<div id="ENDefinition" class="dict" style="line-height: 30px; font-size: 15px; display: none;"></div>
+		<div class="mui-content" style="margin:0px 15px;text-align:center;">
+			<div id="Word" class="dict" style="line-height:40px;font-size:30px;color:#0066CC;"></div>
+			<div id="Pronunciation" class="dict" style="line-height:35px;font-size:20px;color:#0066CC;" onclick="new Audio(AudioURL).play();"></div>
+			<div id="CNDefinition" class="dict" style="line-height:35px;font-size:20px;display:none;"></div>
+			<div id="ENDefinition" class="dict" style="line-height:30px;font-size:15px;display:none;"></div>
 		</div>
-		<div style="position: fixed; width: 100%; bottom: 45px;">
+		<div style="position:fixed;width:100%;bottom:45px;">
 			<button id="ShowDefinition" type="button" class="mui-btn mui-btn-link mui-btn-block"></button>
 		</div>
 		<footer>
@@ -30,7 +30,7 @@
 			<div id="Next" onclick="Next();"></div>
 		</footer>
 		<script src="js/jquery.min.js"></script>
-		<script src="js/api.js"></script>
+		<script src="js/md5.min.js"></script>
 		<script type="text/javascript">
 			var Language=localStorage.getItem("Language"),
 			AudioURL,
@@ -113,24 +113,24 @@
 				}
 			}
 			function Translate(){
-				var salt=(new Date).getTime(),query=Word,from="auto",to,pattern=new RegExp("[A-Za-z]+");
-				if(pattern.test(query)){to="zh";}
+				var salt=(new Date).getTime(),to,pattern=new RegExp("[A-Za-z]+");
+				if(pattern.test(Word)){to="zh";}
 				else{to="en";}
-				var str1=appid+query+salt+key;
+				var str1=appid+Word+salt+key;
 				var sign=MD5(str1);
 				$.ajax({
-				    url: "http://api.fanyi.baidu.com/api/trans/vip/translate",
-				    type: "get",
-				    dataType: "jsonp",
-				    data: {
-				        q: query,
-				        appid: appid,
-				        salt: salt,
-				        from: from,
-				        to: to,
-				        sign: sign
+				    url:"http://api.fanyi.baidu.com/api/trans/vip/translate",
+				    type:"get",
+				    dataType:"jsonp",
+				    data:{
+				        q:Word,
+				        appid:appid,
+				        salt:salt,
+				        from:"auto",
+				        to:to,
+				        sign:sign
 				    },
-				    success: function(data){
+				    success:function(data){
 						LoadTitle();
 						document.getElementById("CNDefinition").innerText=data.trans_result[0].dst;
 				    }
@@ -184,10 +184,9 @@
 			}
 		</script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
-			else{mui.init({swipeBack:false});}
-			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			Init(false);
 			document.getElementById("Word").onclick=function(){
 				if(navigator.userAgent.indexOf("Html5Plus")!=-1){
 					var SearchURL=encodeURI("http://fanyi.baidu.com/#en/zh/"+document.getElementById("Word").innerText);
@@ -198,22 +197,22 @@
 			document.getElementById("ENDefinition").onclick=function(){
 				var query=document.getElementById("ENDefinition").innerText,pattern=new RegExp("[A-Za-z]+");
 				if(pattern.test(query)){
-					var salt=(new Date).getTime(),from="en",to="zh";
+					var salt=(new Date).getTime();
 					var str1=appid+query+salt+key;
 					var sign=MD5(str1);
 					$.ajax({
-					    url: "http://api.fanyi.baidu.com/api/trans/vip/translate",
-					    type: "get",
-					    dataType: "jsonp",
-					    data: {
-					        q: query,
-					        appid: appid,
-					        salt: salt,
-					        from: from,
-					        to: to,
-					        sign: sign
+					    url:"http://api.fanyi.baidu.com/api/trans/vip/translate",
+					    type:"get",
+					    dataType:"jsonp",
+					    data:{
+					        q:query,
+					        appid:appid,
+					        salt:salt,
+					        from:"en",
+					        to:"zh",
+					        sign:sign
 					    },
-					    success: function(data){document.getElementById("ENDefinition").innerText=data.trans_result[0].dst;}
+					    success:function(data){document.getElementById("ENDefinition").innerText=data.trans_result[0].dst;}
 					});
 				}else{
 					var WordWithoutSpace=document.getElementById("Word").innerText.replace(/^\s+|\s+$/g,"").toLowerCase();

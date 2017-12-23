@@ -1,6 +1,19 @@
-/* Code written by Shangzhen Yang */
+/*Code written by Shangzhen Yang*/
 .sign{
-    position: fixed;
-    bottom: 15px;
-    right: 15px;
+    position:fixed;
+    bottom:15px;
+    right:15px;
+}
+.result{
+    line-height:30px;
+    -webkit-user-select:text;
+    user-select:text;
+}
+.result label{
+    -webkit-user-select:text;
+    user-select:text;
+}
+.result sup{
+    -webkit-user-select:text;
+    user-select:text;
 }

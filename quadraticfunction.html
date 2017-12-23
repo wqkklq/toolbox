@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!-- Code written by Shangzhen Yang -->
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
-		<meta name="theme-color" content="#0066cc" />
+		<!--Code written by Shangzhen Yang-->
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover"/>
+		<meta name="theme-color" content="#0066cc"/>
 		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
-		<link href="css/mui.min.css" rel="stylesheet" />
-		<link href="css/general.css" rel="stylesheet" />
-		<link href="css/calculator.css" rel="stylesheet" />
-		<link href="css/quadraticfunction.css" rel="stylesheet" />
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon"/>
+		<link href="css/mui.min.css" rel="stylesheet"/>
+		<link href="css/general.css" rel="stylesheet"/>
+		<link href="css/calculator.css" rel="stylesheet"/>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
@@ -18,21 +17,21 @@
 		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
-			<div style="line-height: 30px;">
+			<div style="line-height:30px;">
 				y = <label id="aLabel">a</label>x<sup>2</sup> + <label id="bLabel">b</label>x + <label id="cLabel">c</label> &#40;a ≠ 0&#41;
 			</div>
 			<hr />
 			<div class="mui-input-row">
 			    <label>a =</label>
-			    <input id="aInput" type="number" onclick="InputId=1;" oninput="AOnInput();" />
+			    <input id="aInput" type="number" onclick="InputId=1;" oninput="AOnInput();"/>
 			</div>
 			<div class="mui-input-row">
 			    <label>b =</label>
-			    <input id="bInput" type="number" onclick="InputId=2;" oninput="BOnInput();" />
+			    <input id="bInput" type="number" onclick="InputId=2;" oninput="BOnInput();"/>
 			</div>
 			<div class="mui-input-row">
 			    <label>c =</label>
-			    <input id="cInput" type="number" onclick="InputId=3;" oninput="COnInput();" />
+			    <input id="cInput" type="number" onclick="InputId=3;" oninput="COnInput();"/>
 			</div>
 			<hr />
 			<div class="result">
@@ -46,14 +45,14 @@
 				<label id="xIntercept1"></label><label id="xIntercept2">?</label><br />
 				<label id="yIntercept1"></label>&#40;0, <label id="yIntercept2">c</label><label>&#41;</label>
 			</div>
-			<fieldset style="margin-top: 20px;">
+			<fieldset style="margin-top:20px;">
 				<div class="mui-input-row">
 				    <label>x =</label>
-				    <input id="xInput" type="text" oninput="CalculateY();" />
+				    <input id="xInput" type="text" oninput="CalculateY();"/>
 				</div>
 				<div class="mui-input-row">
 				    <label>y =</label>
-				    <input id="yInput" type="text" />
+				    <input id="yInput" type="text"/>
 				</div>
 			</fieldset>
 		</div>
@@ -134,10 +133,9 @@
 			document.getElementById("MinimumMaximum1").innerText=MinimumMaximum;
 		</script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
-			else{mui.init({swipeBack:false});}
-			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			Init(false);
 			function Calculate(){
 				var a=document.getElementById("aInput").value*1,
 				b=document.getElementById("bInput").value*1,

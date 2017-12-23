@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!-- Code written by Shangzhen Yang -->
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
-		<meta name="theme-color" content="#0066cc" />
+		<!--Code written by Shangzhen Yang-->
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover"/>
+		<meta name="theme-color" content="#0066cc"/>
 		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
-		<link href="css/mui.min.css" rel="stylesheet" />
-		<link href="css/general.css" rel="stylesheet" />
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon"/>
+		<link href="css/mui.min.css" rel="stylesheet"/>
+		<link href="css/general.css" rel="stylesheet"/>
+		<style>
+			.number{
+				font-size:45px;
+				text-align:center;
+				line-height:60px;
+				height:60px;
+				-webkit-user-select:text;
+				user-select:text;
+			}
+		</style>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
@@ -16,9 +26,9 @@
 		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
-			<div id="Number" style="font-size: 45px; text-align: center; line-height: 60px; height: 60px; -webkit-user-select: text;">0</div>
-			<button id="SelectButton" type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top: 20px;"></button>
-			<fieldset style="margin-top: 20px;">
+			<div class="number">0</div>
+			<button id="SelectButton" type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:20px;"></button>
+			<fieldset style="margin-top:20px;">
 				<legend id="Settings"></legend>
 				<div class="mui-input-row">
 				    <label id="MinimumLabel"></label>
@@ -41,7 +51,7 @@
 				    <input id="EvenNumberOnlyCheck" name="Checkbox" type="checkbox" onchange="document.getElementById('OddNumberOnlyCheck').checked=false;">
 				</div>
 			</fieldset>
-			<fieldset style="margin-top: 20px;">
+			<fieldset style="margin-top:20px;">
 				<legend id="History"></legend>
 				<textarea id="HistoryText" rows="5"></textarea>
 				<ul class="mui-table-view">
@@ -53,7 +63,7 @@
 			        </li>
 			    </ul>
 			</fieldset>
-			<fieldset style="margin-top: 20px;">
+			<fieldset style="margin-top:20px;">
 				<legend id="Names"></legend>
 				<textarea id="NamesText" rows="5"></textarea>
 				<ul class="mui-table-view">
@@ -133,24 +143,22 @@
       			if(NamesValue!=""&&NamesValue!=null){
       				var NamesSplit;
       				NamesSplit=NamesValue.split("\n");
-      				document.getElementById("Number").innerText=NamesSplit[RandomNumberValue];
-      			}else{document.getElementById("Number").innerText=RandomNumberValue;}
+      				document.getElementsByClassName("number")[0].innerText=NamesSplit[RandomNumberValue];
+      			}else{document.getElementsByClassName("number")[0].innerText=RandomNumberValue;}
 			}
 			function RScrolling(){
 				var Min=parseInt(document.getElementById("Minimum").value),
 				Max=parseInt(document.getElementById("Maximum").value);
-				if(Min==Max){document.getElementById("Number").innerText="?";}
+				if(Min==Max){document.getElementsByClassName("number")[0].innerText="?";}
 				else{Random();}
 				TimeOut=setTimeout("RScrolling()",10);
 				Scrolling=true;
 			}
 		</script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
-			else{mui.init({swipeBack:false});}
-			if(window.location.href.indexOf("rths.tk")!=-1){document.write("<script async src='\/\/pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'><\/script><ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3063060312105983' data-ad-slot='4806317432' data-ad-format='auto'><\/ins><script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script><script async src='https://www.googletagmanager.com/gtag/js?id=UA-109975281-1'><\/script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-109975281-1');<\/script>");}
-			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			Init(true);
 			document.getElementById("SelectButton").onclick=function(){
 				if(document.getElementById("ScrollCheck").checked==true){
 					if(Scrolling==false){
@@ -159,7 +167,7 @@
 					}else{
 						clearTimeout(TimeOut);
 						Scrolling=false;
-						if(document.getElementById("Number").innerText=="?"){Random();}
+						if(document.getElementsByClassName("number")[0].innerText=="?"){Random();}
 						Selected();
 					}
 				}else{
@@ -168,7 +176,7 @@
 				}
 				function Selected(){
 					if(MultipleTimes==false){
-						var SelectedName=document.getElementById("Number").innerText;
+						var SelectedName=document.getElementsByClassName("number")[0].innerText;
 						NamesValue=NamesValue.replace(SelectedName+"\n","");
 						Count();
 					}
@@ -185,8 +193,8 @@
 			}
 			function Add(){
 				var HistoryValue=document.getElementById("HistoryText").value;
-				if(HistoryValue==""){document.getElementById("HistoryText").value=document.getElementById("Number").innerText;}
-				else{document.getElementById("HistoryText").value=document.getElementById("Number").innerText+"\n"+HistoryValue;}
+				if(HistoryValue==""){document.getElementById("HistoryText").value=document.getElementsByClassName("number")[0].innerText;}
+				else{document.getElementById("HistoryText").value=document.getElementsByClassName("number")[0].innerText+"\n"+HistoryValue;}
 			}
 			function NamesSave(){
 				MultipleTimes=true;

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!-- Code written by Shangzhen Yang -->
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
-		<meta name="theme-color" content="#0066cc" />
+		<!--Code written by Shangzhen Yang-->
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover"/>
+		<meta name="theme-color" content="#0066cc"/>
 		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
-		<link href="css/mui.min.css" rel="stylesheet" />
-		<link href="css/general.css" rel="stylesheet" />
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon"/>
+		<link href="css/mui.min.css" rel="stylesheet"/>
+		<link href="css/general.css" rel="stylesheet"/>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
@@ -17,56 +17,56 @@
 		</header>
 		<div class="mui-content">
 			<div class="mui-input-row">
-			    <input id="Time" type="text" value="00:00:00" style="text-align: center;" oninput="TimeInput();" onkeydown="if(event.keyCode==13){document.getElementById('StartButton').click();}" />
+			    <input id="Time" type="text" value="00:00:00" style="text-align:center;" oninput="TimeInput();" onkeydown="if(event.keyCode==13){document.getElementById('StartButton').click();}"/>
 			</div>
 			<div class="mui-input-row mui-input-range">
 			    <label id="HourLabel"></label>
-                <input type="range" id="Hour" value="0" min="0" max="23" onchange="TimeChanged();" />
+                <input type="range" id="Hour" value="0" min="0" max="23" onchange="TimeChanged();"/>
 			</div>
 			<div class="mui-input-row mui-input-range">
 			    <label id="MinuteLabel"></label>
-			    <input type="range" id="Minute" value="0" min="0" max="59" onchange="TimeChanged();" />
+			    <input type="range" id="Minute" value="0" min="0" max="59" onchange="TimeChanged();"/>
 			</div>
 			<div class="mui-input-row mui-input-range">
 			    <label id="SecondLabel"></label>
-			    <input type="range" id="Second" value="0" min="0" max="59" onchange="TimeChanged();" />
+			    <input type="range" id="Second" value="0" min="0" max="59" onchange="TimeChanged();"/>
 			</div>
-			<select id="Mode" style="margin-top: 15px;"></select>
+			<select id="Mode" style="margin-top:15px;"></select>
 			<button id="StartButton" type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
 			<button id="PauseButton" type="button" class="mui-btn mui-btn-block" disabled="disabled" onclick="Pause();"></button>
-			<fieldset style="margin-top: 20px;">
+			<fieldset style="margin-top:20px;">
 				<legend id="TimedTask"></legend>
 				<div class="mui-input-row mui-checkbox">
 					<label id="CreateMessageBoxLabel"></label>
-					<input id="CreateMessageBoxCheck" name="Checkbox" type="checkbox" checked="checked" />
+					<input id="CreateMessageBoxCheck" name="Checkbox" type="checkbox" checked="checked"/>
 				</div>
 				<div class="mui-input-row">
-					<input id="CreateMessageBoxInput" type="text" class="mui-input-clear" />
+					<input id="CreateMessageBoxInput" type="text" class="mui-input-clear"/>
 				</div>
 				<div class="mui-input-row mui-checkbox">
 					<label id="OpenWebPageLabel"></label>
-					<input id="OpenWebPageCheck" name="Checkbox" type="checkbox" />
+					<input id="OpenWebPageCheck" name="Checkbox" type="checkbox"/>
 				</div>
 				<div class="mui-input-row">
-					<input id="OpenWebPageInput" type="text" class="mui-input-clear" />
+					<input id="OpenWebPageInput" type="text" class="mui-input-clear"/>
 				</div>
 				<div id="SpeakDiv1" class="mui-input-row mui-checkbox">
 					<label id="SpeakLabel"></label>
-					<input id="SpeakCheck" name="Checkbox" type="checkbox" checked="checked" />
+					<input id="SpeakCheck" name="Checkbox" type="checkbox" checked="checked"/>
 				</div>
 				<div id="SpeakDiv2" class="mui-input-row">
-					<input id="SpeakInput" type="text" class="mui-input-clear" />
+					<input id="SpeakInput" type="text" class="mui-input-clear"/>
 				</div>
 				<div id="PushNotificationDiv1" class="mui-input-row mui-checkbox">
 					<label id="PushNotificationLabel"></label>
-					<input id="PushNotificationCheck" name="Checkbox" type="checkbox" checked="checked" />
+					<input id="PushNotificationCheck" name="Checkbox" type="checkbox" checked="checked"/>
 				</div>
 				<div id="PushNotificationDiv2" class="mui-input-row">
-					<input id="PushNotificationInput" type="text" class="mui-input-clear" />
+					<input id="PushNotificationInput" type="text" class="mui-input-clear"/>
 				</div>
 				<button id="PreviewButton" type="button" class="mui-btn mui-btn-block" onclick="Task();"></button>
 			</fieldset>
-			<fieldset style="margin-top: 20px;">
+			<fieldset style="margin-top:20px;">
 				<legend id="History"></legend>
 				<textarea id="HistoryText" rows="5"></textarea>
 				<ul class="mui-table-view">
@@ -138,8 +138,8 @@
 				document.getElementById("SpeakDiv1").style.display="none";
 				document.getElementById("SpeakDiv2").style.display="none";
 			}
-			WidthChanged();
-			function WidthChanged(){
+			OnResize();
+			function OnResize(){
 				if(document.documentElement.clientWidth>500){
 					document.getElementById("Time").style.fontSize="45px";
 					document.getElementById("Time").style.height="90px";
@@ -147,18 +147,17 @@
 					document.getElementById("Time").style.fontSize="";
 					document.getElementById("Time").style.height="";
 				}
+				if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").remote.getCurrentWindow().setAlwaysOnTop(false);}
 			}
 		</script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
-			else{mui.init({swipeBack:false});}
-			window.onresize=WidthChanged;
-			if(window.location.href.indexOf("rths.tk")!=-1){document.write("<script async src='\/\/pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'><\/script><ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3063060312105983' data-ad-slot='4806317432' data-ad-format='auto'><\/ins><script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script><script async src='https://www.googletagmanager.com/gtag/js?id=UA-109975281-1'><\/script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-109975281-1');<\/script>");}
-			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
+			Init(true);
+			window.onresize=OnResize;
 			if(navigator.userAgent.indexOf("Html5Plus")==-1){
 				if(window.Notification){
-					Notification.requestPermission(function (){
+					Notification.requestPermission(function(){
 						if(Notification.permission!="granted"){
 							document.getElementById("PushNotificationDiv1").style.display="none";
 							document.getElementById("PushNotificationDiv2").style.display="none";
@@ -167,6 +166,17 @@
 				}else{
 					document.getElementById("PushNotificationDiv1").style.display="none";
 					document.getElementById("PushNotificationDiv2").style.display="none";
+				}
+			}
+			if(navigator.userAgent.indexOf("Electron")!=-1){
+				if(process.platform=="darwin"){
+					document.addEventListener("visibilitychange",function(){
+						if(document.hidden){
+							let win=require("electron").remote.getCurrentWindow();
+							win.setAlwaysOnTop(true);
+							win.setSize(200,160);
+						}
+					});
 				}
 			}
 			function TimeInput(){
@@ -181,7 +191,6 @@
 					document.getElementById("Hour").value=TimeSplit[0];
 				}
 			}
-			function AddZero(num,length){return (Array(length).join("0")+num).slice(-length);}
 			function TimeChanged(){
 				var SecondStr=AddZero(document.getElementById("Second").value,2),
 				MinuteStr=AddZero(document.getElementById("Minute").value,2),
@@ -217,20 +226,13 @@
 					if(Language=="SimplifiedChinese"){mui.alert(document.getElementById("CreateMessageBoxInput").value,"计时器");}
 					else{mui.alert(document.getElementById("CreateMessageBoxInput").value,"Timer","OK");}
 				}
-				if(document.getElementById("OpenWebPageCheck").checked==true){
-					if(navigator.userAgent.indexOf("Html5Plus")!=-1){plus.runtime.openURL(document.getElementById("OpenWebPageInput").value);}
-					else if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").shell.openExternal(document.getElementById("OpenWebPageInput").value);}
-					else{window.open(document.getElementById("OpenWebPageInput").value);}
-				}
+				if(document.getElementById("OpenWebPageCheck").checked==true){OpenWebPage(document.getElementById("OpenWebPageInput").value);}
 				if(document.getElementById("SpeakCheck").checked==true&&window.speechSynthesis){window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementById("SpeakInput").value));}
 				if(document.getElementById("PushNotificationCheck").checked==true){
 					if(navigator.userAgent.indexOf("Html5Plus")!=-1){plus.push.createMessage(document.getElementById("PushNotificationInput").value);}
 					else if(window.Notification){
 						if(Notification.permission=="granted"){
-							var notification=new Notification(document.getElementById("ToolboxTitle").innerText,{
-								body:document.getElementById("PushNotificationInput").value,
-								icon:"unpackage/res/icons/512x512.png"
-							});
+							var notification=new Notification(document.getElementById("ToolboxTitle").innerText,{body:document.getElementById("PushNotificationInput").value});
 							notification.onclick=function(){notification.close();}
 						}
 					}

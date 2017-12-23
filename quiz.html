@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!-- Code written by Shangzhen Yang -->
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
-		<meta name="theme-color" content="#0066cc" />
+		<!--Code written by Shangzhen Yang-->
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover"/>
+		<meta name="theme-color" content="#0066cc"/>
 		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
-		<link href="css/mui.min.css" rel="stylesheet" />
-		<link href="css/general.css" rel="stylesheet" />
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon"/>
+		<link href="css/mui.min.css" rel="stylesheet"/>
+		<link href="css/general.css" rel="stylesheet"/>
 		<style>
 			.show{
-				height: 50px;
-				line-height: 50px;
-				text-align: center;
-				background-color: #FFFFFF;
-				font-size: 20px;
-				border-radius: 5px;
+				height:50px;
+				line-height:50px;
+				text-align:center;
+				background-color:#FFFFFF;
+				font-size:20px;
+				border-radius:5px;
 			}
 		</style>
 	</head>
@@ -27,15 +27,15 @@
 		</header>
 		<div class="mui-content">
 			<div class="show"></div>
-			<div id="EnterWordDiv" class="mui-input-row" style="margin-top: 20px;">
+			<div id="EnterWordDiv" class="mui-input-row" style="margin-top:20px;">
 			    <label id="WordLabel"></label>
-			    <input id="EnteredWord" type="text" onkeydown="if(event.keyCode==13){if(document.getElementById('EnteredWord').value!=''){Next();}}" />
+			    <input id="EnteredWord" type="text" onkeydown="if(event.keyCode==13){if(document.getElementById('EnteredWord').value!=''){Next();}}"/>
 			</div>
 			<div id="EnterDefinitionDiv" class="mui-input-row">
 			    <label id="DefinitionLabel"></label>
-			    <input id="EnteredDefinition" type="text" onkeydown="if(event.keyCode==13){if(document.getElementById('EnteredDefinition').value!=''){Next();}}" />
+			    <input id="EnteredDefinition" type="text" onkeydown="if(event.keyCode==13){if(document.getElementById('EnteredDefinition').value!=''){Next();}}"/>
 			</div>
-			<ul id="OptionsUl" class="mui-table-view" style="display: none; margin-top: 20px;">
+			<ul id="OptionsUl" class="mui-table-view" style="display:none;margin-top:20px;">
 		        <li class="mui-table-view-cell">
 		            <a id="Option1" class="mui-navigate-right" href="javascript:OptionClicked(0);"></a>
 		        </li>
@@ -49,9 +49,9 @@
 		            <a id="Option4" class="mui-navigate-right" href="javascript:OptionClicked(3);"></a>
 		        </li>
 		    </ul>
-			<button id="Next" type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top: 20px;" onclick="Next();"></button>
-			<textarea id="MistakesBox" style="margin-top: 20px; display: none;" rows="10">RTH 1</textarea>
-			<ul id="OptionUl" class="mui-table-view" style="margin-top: 20px;">
+			<button id="Next" type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:20px;" onclick="Next();"></button>
+			<textarea id="MistakesBox" style="margin-top:20px;display:none;" rows="10">RTH 1</textarea>
+			<ul id="OptionUl" class="mui-table-view" style="margin-top:20px;">
 				<li class="mui-table-view-cell">
 					<a id="Restart" href="javascript:Restart();" class="mui-navigate-right"></a>
 				</li>
@@ -259,9 +259,9 @@
 			}
 		</script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){mui.init({swipeBack:true});}
-			else{mui.init({swipeBack:false});}
+			Init(true);
 			window.onkeydown=function(e){
 				switch(e.keyCode){
 					case 49:OptionClicked(0);break;
@@ -271,8 +271,6 @@
 					default:break;
 				}
 			}
-			if(window.location.href.indexOf("rths.tk")!=-1){document.write("<script async src='\/\/pagead2.googlesyndication.com/pagead/js/adsbygoogle.js'><\/script><ins class='adsbygoogle' style='display:block' data-ad-client='ca-pub-3063060312105983' data-ad-slot='4806317432' data-ad-format='auto'><\/ins><script>(adsbygoogle = window.adsbygoogle || []).push({});<\/script><script async src='https://www.googletagmanager.com/gtag/js?id=UA-109975281-1'><\/script><script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-109975281-1');<\/script>");}
-			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
 			function OptionClicked(ClickedNum){
 				if(ClickedNum==CorrectInt){
 					ShowAnswer=true;

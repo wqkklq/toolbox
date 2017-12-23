@@ -12,21 +12,21 @@ electron-packager . \
   --platform=mas \
   --app-bundle-id=tk.rthsoftware.rthtoolbox.mac \
   --app-version="$npm_package_version" \
-  --build-version="4.0.0" \
+  --build-version="4.2.0" \
   --arch=x64 \
-  --icon=./electron.icns \
+  --icon=./electron/electron.icns \
   --prune=true \
   --out=out \
-  --extend-info=./info.plist \
+  --extend-info=./electron/info.plist \
   --electron-version=1.7.9
 
-APP_PATH="./out/$APP-mas-x64/$APP.app"
-RESULT_PATH="./out/$APP.pkg"
+APP_PATH="./electron/out/$APP-mas-x64/$APP.app"
+RESULT_PATH="./electron/out/$APP.pkg"
 APP_KEY="3rd Party Mac Developer Application: Shangzhen Yang (7564J9XM8X)"
 INSTALLER_KEY="3rd Party Mac Developer Installer: Shangzhen Yang (7564J9XM8X)"
 FRAMEWORKS_PATH="$APP_PATH/Contents/Frameworks"
-CHILD_PLIST="./child.plist"
-PARENT_PLIST="./parent.plist"
+CHILD_PLIST="./electron/child.plist"
+PARENT_PLIST="./electron/parent.plist"
 
 codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$FRAMEWORKS_PATH/Electron Framework.framework/Versions/A/Electron Framework"
 codesign -s "$APP_KEY" -f --entitlements "$CHILD_PLIST" "$FRAMEWORKS_PATH/Electron Framework.framework/Versions/A/Libraries/libffmpeg.dylib"

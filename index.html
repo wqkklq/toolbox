@@ -1,31 +1,32 @@
 ﻿<!DOCTYPE html>
 <html>
 	<head>
-		<!-- Code written by Shangzhen Yang -->
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, viewport-fit=cover" />
-		<meta name="theme-color" content="#0066cc" />
+		<!--Code written by Shangzhen Yang-->
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover"/>
+		<meta name="theme-color" content="#0066cc"/>
 		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon" />
-		<link href="css/mui.min.css" rel="stylesheet" />
-		<link href="css/home.css" rel="stylesheet" />
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon"/>
+		<link href="css/mui.min.css" rel="stylesheet"/>
+		<link href="css/home.css" rel="stylesheet"/>
 	</head>
 	<body>
+		<div class="drag"></div>
 		<div class="icon">
 			<a href="javascript:if(localStorage.getItem('Recent')!=null){OpenWindow(localStorage.getItem('Recent'));}">
-				<img src="img/icon.png" width="100px" style="border-radius: 25%;" />
+				<img src="img/icon.png" width="100px" style="border-radius:25%;"/>
 			</a>
 		</div>
 		<div class="title"></div>
 		<div class="menu">
 			<ul>
-				<li onclick="OpenWindow('wordlist');" id="WordList" />
-				<li onclick="OpenWindow('timer');" id="Timer" />
-				<li onclick="OpenWindow('calculator');" id="Calculator" />
-				<li onclick="OpenWindow('chatbot');" id="Chatbot" />
-				<li onclick="OpenWindow('randomnumber');" id="RandomNumber" />
-				<li onclick="OpenWindow('search');" id="Search" />
-				<li onclick="OpenWindow('texteditor');" id="TextEditor" />
+				<li onclick="OpenWindow('wordlist');" id="WordList"/>
+				<li onclick="OpenWindow('timer');" id="Timer"/>
+				<li onclick="OpenWindow('calculator');" id="Calculator"/>
+				<li onclick="OpenWindow('chatbot');" id="Chatbot"/>
+				<li onclick="OpenWindow('randomnumber');" id="RandomNumber"/>
+				<li onclick="OpenWindow('search');" id="Search"/>
+				<li onclick="OpenWindow('texteditor');" id="TextEditor"/>
 			</ul>
 		</div>
 		<a class="mui-icon mui-icon-more more" href="javascript:More();"></a>
@@ -54,7 +55,7 @@
 								case 4:
 									if(xhr.status==200){
 										var newVer=xhr.responseText;
-										if(wgtVer&&newVer&&(wgtVer!=newVer)){plus.downloader.createDownload("http://t.rths.tk/web/toolbox/update/H58039057.wgt", {filename:"_doc/update/"}, function(d,status){if(status==200){plus.runtime.install(d.filename);}}).start();}
+										if(wgtVer&&newVer&&(wgtVer!=newVer)){plus.downloader.createDownload("http://t.rths.tk/web/toolbox/update/H58039057.wgt",{filename:"_doc/update/"},function(d,status){if(status==200){plus.runtime.install(d.filename);}}).start();}
 									}
 									break;
 								default:break;
@@ -115,13 +116,14 @@
 				document.getElementById("TextEditor").innerText="Text Editor";
 			}
 			if(!navigator.onLine){document.getElementsByClassName("more")[0].style.display="none";}
-			WidthChanged();
-			function WidthChanged(){
+			OnResize();
+			function OnResize(){
 				if(document.documentElement.clientWidth>500){document.getElementsByClassName("title")[0].style.textAlign="left";}
 				else{document.getElementsByClassName("title")[0].style.textAlign="center";}
 			}
 		</script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			if(navigator.userAgent.indexOf("Html5Plus")!=-1&&navigator.userAgent.indexOf("Android")!=-1){
 				mui.init({preloadPages:[
@@ -142,20 +144,17 @@
 					{url:"about.html",id:"about"}
 				],preloadLimit:15,swipeBack:false});
 			}else{mui.init({swipeBack:false});}
-			window.onresize=WidthChanged;
+			window.onresize=OnResize;
 			if(window.location.href.indexOf("rthsoftware.tk")!=-1){window.location.href="http://rths.tk/";}
-			if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").webFrame.setZoomLevelLimits(1,1);}
-			function OpenWindow(name){
-				if(navigator.userAgent.indexOf("Html5Plus")!=-1){
-					plus.webview.create(name+".html",name,{"popGesture":"hide"});
-					plus.webview.show(name,"pop-in");
-				}else{window.location.href=name+".html";}
-				if(window.localStorage){localStorage.setItem("Recent",name);}
-			}
-			function OpenWebPage(href){
-				if(navigator.userAgent.indexOf("Html5Plus")!=-1){plus.runtime.openURL(href);}
-				else if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").shell.openExternal(href);}
-				else{window.open(href);}
+			if(navigator.userAgent.indexOf("Electron")!=-1){
+				const electron=require("electron");
+				electron.webFrame.setZoomLevelLimits(1,1);
+				var path=electron.remote.getGlobal("sharedObj").path;
+				if(path&&window.localStorage){
+					localStorage.setItem("WordList",require("fs").readFileSync(path,"utf8"));
+					localStorage.setItem("WordListCurrentItem","WordList");
+					OpenWindow("wordlist");
+				}
 			}
 			function More(){
 				var xhr=new XMLHttpRequest();
