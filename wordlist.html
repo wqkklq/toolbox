@@ -12,8 +12,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-input-row">
@@ -53,7 +53,7 @@
 		<script type="text/javascript">
 			var Language=localStorage.getItem("Language"),CurrentItem,DocumentsCount;
 			if(Language=="SimplifiedChinese"){
-				document.getElementById("ToolboxTitle").innerText="单词表";
+				document.title="单词表";
 				document.getElementById("LookUpBox").placeholder="输入要查询的单词";
 				document.getElementById("LookUpButton").innerText="查询";
 				document.getElementById("NewWL").innerText="新单词表";
@@ -65,7 +65,7 @@
 				document.getElementById("AddWord").innerText="添加单词";
 				document.getElementById("Delete").innerText="删除";
 			}else{
-				document.getElementById("ToolboxTitle").innerText="Word List";
+				document.title="Word List";
 				document.getElementById("LookUpBox").placeholder="Enter the word you want to look up";
 				document.getElementById("LookUpButton").innerText="Look Up";
 				document.getElementById("NewWL").innerText="New Word List";
@@ -77,6 +77,7 @@
 				document.getElementById("AddWord").innerText="Add Word";
 				document.getElementById("Delete").innerText="Delete";
 			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title;
 			var OWList=document.getElementById("OWLUl").innerHTML;
 			Load();
 			function Load(){
@@ -325,7 +326,7 @@
 				if(name=="save"){
 					if(navigator.userAgent.indexOf("Electron")!=-1){
 						require("electron").remote.dialog.showSaveDialog({
-							defaultPath:document.getElementById("ToolboxTitle").innerText,
+							defaultPath:document.title,
 							filters:[{name:"RTH Toolbox Files",extensions:["rth"]}]
 						},function(filename){
 							if(filename){

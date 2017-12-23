@@ -13,8 +13,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<div id="ChatbotDiv" style="padding-bottom:87px;">
@@ -33,12 +33,14 @@
 		<script type="text/javascript">
 			var Language=localStorage.getItem("Language");
 			if(Language=="SimplifiedChinese"){
-				document.getElementById("ToolboxTitle").innerText="康康";
+				document.title="聊天机器人";
+				document.getElementsByClassName("mui-title")[0].innerText="康康";
 				document.getElementById("Welcome").innerText="我们已经是好友啦，一起来聊天吧！";
 				document.getElementById("SendButton").innerText="发送";
 				Hitokoto();
 			}else{
-				document.getElementById("ToolboxTitle").innerText="Kangkang";
+				document.title="Chatbot";
+				document.getElementsByClassName("mui-title")[0].innerText="Kangkang";
 				document.getElementById("Welcome").innerText="You are now connected on RTH Toolbox.";
 				document.getElementById("SendButton").innerText="Send";
 			}
@@ -74,10 +76,10 @@
 					document.getElementById("ChatbotDiv").appendChild(NewDiv);
 					if(navigator.onLine){
 						if(Language=="SimplifiedChinese"){
-							document.getElementById("ToolboxTitle").innerText="对方正在输入";
+							document.getElementsByClassName("mui-title")[0].innerText="对方正在输入";
 							ChatbotReply(document.getElementById("SendBox").value);
 						}else{
-							document.getElementById("ToolboxTitle").innerText="Typing";
+							document.getElementsByClassName("mui-title")[0].innerText="Typing";
 							Translate(document.getElementById("SendBox").value);
 						}
 					}else{
@@ -105,7 +107,7 @@
 							if(Language=="SimplifiedChinese"){
 								NewDiv.innerText=BotText;
 								document.getElementById("ChatbotDiv").appendChild(NewDiv);
-								document.getElementById("ToolboxTitle").innerText="康康";
+								document.getElementsByClassName("mui-title")[0].innerText="康康";
 							}else{
 								var salt=(new Date).getTime();
 								var str1=appid+BotText+salt+key;
@@ -125,7 +127,7 @@
 								    success:function(data){
 										NewDiv.innerText=data.trans_result[0].dst;
 										document.getElementById("ChatbotDiv").appendChild(NewDiv);
-										document.getElementById("ToolboxTitle").innerText="Kangkang";
+										document.getElementsByClassName("mui-title")[0].innerText="Kangkang";
 								    }
 								});
 							}

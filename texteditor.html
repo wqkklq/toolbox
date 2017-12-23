@@ -18,8 +18,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<ul id="SavedTextUl" class="mui-table-view">
@@ -70,7 +70,7 @@
 		<script type="text/javascript">
 			var Language=localStorage.getItem("Language"),CurrentItem;
 			if(Language=="SimplifiedChinese"){
-				document.getElementById("ToolboxTitle").innerText="文本编辑器";
+				document.title="文本编辑器";
 				document.getElementById("NewTextDoc").innerText="新文本文档";
 				document.getElementById("TitleBox").placeholder="标题";
 				document.getElementById("TextEditorBox").placeholder="正文";
@@ -85,7 +85,7 @@
 				document.getElementById("Delete").innerText="删除";
 				document.getElementById("RunHTMLCode").innerText="作为 HTML 代码运行";
 			}else{
-				document.getElementById("ToolboxTitle").innerText="Text Editor";
+				document.title="Text Editor";
 				document.getElementById("NewTextDoc").innerText="New Text Document";
 				document.getElementById("TitleBox").placeholder="Title";
 				document.getElementById("TextEditorBox").placeholder="Text";
@@ -100,6 +100,7 @@
 				document.getElementById("Delete").innerText="Delete";
 				document.getElementById("RunHTMLCode").innerText="Run as HTML Code";
 			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title;
 			if(!window.speechSynthesis){document.getElementById("SpeakLi").style.display="none";}
 			var SavedTextList=document.getElementById("SavedTextUl").innerHTML;
 			Load();

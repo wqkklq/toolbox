@@ -13,8 +13,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<div style="line-height:30px;">
@@ -52,12 +52,13 @@
 		<script type="text/javascript">
 			var Language=localStorage.getItem("Language"),EnterNum,InputId=1;
 			if(Language=="SimplifiedChinese"){
-				document.getElementById("ToolboxTitle").innerText="计算器";
+				document.title="计算器";
 				EnterNum="输入数字";
 			}else{
-				document.getElementById("ToolboxTitle").innerText="Calculator";
+				document.title="Calculator";
 				EnterNum="Enter the number";
 			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title;
 			document.getElementById("aInput").placeholder=EnterNum;
 			document.getElementById("bInput").placeholder=EnterNum;
 			document.getElementById("cInput").placeholder=EnterNum;

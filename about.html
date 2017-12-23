@@ -18,8 +18,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<div style="text-align:center;line-height:30px;"><span id="AppName" style="font-size:16pt;color:#0066CC;"></span><br /><label id="Studio" style="color:#0066CC;"></label></div>
@@ -33,7 +33,7 @@
 		    	<li class="mui-table-view-cell mui-collapse">
 		        	<a id="LastUpdated1" class="mui-navigate-right" href="#"></a>
 		        	<div class="mui-collapse-content">
-		        	 	<p id="LastUpdated2">2017/12/23</p>
+		        	 	<p id="LastUpdated2">2017/12/24</p>
 		        	</div>
 		    	</li>
 		    	<li class="mui-table-view-cell mui-collapse">
@@ -89,7 +89,7 @@
 		<script type="text/javascript">
 			var Language=localStorage.getItem("Language");
 			if(Language=="SimplifiedChinese"){
-				document.getElementById("ToolboxTitle").innerText="关于";
+				document.title="关于";
 				document.getElementById("AppName").innerText="RTH 工具箱";
 				document.getElementById("Studio").innerText="RTH 软件工作室的产品";
 				document.getElementById("Version").innerText="版本";
@@ -105,7 +105,7 @@
 				document.getElementById("WeChatPay").innerText="微信支付";
 				document.getElementById("PrivacyPolicy").innerText="隐私声明";
 			}else{
-				document.getElementById("ToolboxTitle").innerText="About";
+				document.title="About";
 				document.getElementById("AppName").innerText="RTH Toolbox";
 				document.getElementById("Studio").innerText="A Product of RTH Software Studio";
 				document.getElementById("Version").innerText="Version";
@@ -123,6 +123,7 @@
 				document.getElementById("WeChatPay").innerText="WeChat Pay";
 				document.getElementById("PrivacyPolicy").innerText="Privacy Policy";
 			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title;
 			document.getElementById("EnvInfo2").innerText=navigator.userAgent;
 		</script>
 		<script src="js/mui.min.js"></script>

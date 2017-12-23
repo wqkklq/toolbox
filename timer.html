@@ -12,8 +12,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-input-row">
@@ -82,7 +82,7 @@
 		<script type="text/javascript">
 			var Language=localStorage.getItem("Language"),Hour,Minute,Second,TimeOut;
 			if(Language=="SimplifiedChinese"){
-				document.getElementById("ToolboxTitle").innerText="计时器";
+				document.title="计时器";
 				document.getElementById("HourLabel").innerText="时";
 				document.getElementById("MinuteLabel").innerText="分";
 				document.getElementById("SecondLabel").innerText="秒";
@@ -108,7 +108,7 @@
 				document.getElementById("Add").innerText="添加";
 				document.getElementById("Clear").innerText="清空";
 			}else{
-				document.getElementById("ToolboxTitle").innerText="Timer";
+				document.title="Timer";
 				document.getElementById("HourLabel").innerText="Hour";
 				document.getElementById("MinuteLabel").innerText="Minute";
 				document.getElementById("SecondLabel").innerText="Second";
@@ -134,6 +134,7 @@
 				document.getElementById("Add").innerText="Add";
 				document.getElementById("Clear").innerText="Clear";
 			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title;
 			if(!window.speechSynthesis){
 				document.getElementById("SpeakDiv1").style.display="none";
 				document.getElementById("SpeakDiv2").style.display="none";
@@ -232,7 +233,7 @@
 					if(navigator.userAgent.indexOf("Html5Plus")!=-1){plus.push.createMessage(document.getElementById("PushNotificationInput").value);}
 					else if(window.Notification){
 						if(Notification.permission=="granted"){
-							var notification=new Notification(document.getElementById("ToolboxTitle").innerText,{body:document.getElementById("PushNotificationInput").value});
+							var notification=new Notification(document.title,{body:document.getElementById("PushNotificationInput").value});
 							notification.onclick=function(){notification.close();}
 						}
 					}

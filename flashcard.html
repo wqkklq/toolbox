@@ -13,8 +13,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content" style="margin:0px 15px;text-align:center;">
 			<div id="Word" class="dict" style="line-height:40px;font-size:30px;color:#0066CC;"></div>
@@ -31,6 +31,7 @@
 		</footer>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/md5.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var Language=localStorage.getItem("Language"),
 			AudioURL,
@@ -39,12 +40,10 @@
 			WLTSplit;
 			if(WordListText!=""&&WordListText!=null){WLTSplit=WordListText.split("\n");}
 			if(Language=="SimplifiedChinese"){
-				document.getElementById("ToolboxTitle").innerText="学习卡";
 				document.getElementById("ShowDefinition").innerText="显示释义";
 				document.getElementById("Previous").innerText="上一个";
 				document.getElementById("Next").innerText="下一个";
 			}else{
-				document.getElementById("ToolboxTitle").innerText="Flash Card";
 				document.getElementById("ShowDefinition").innerText="Show Definition";
 				document.getElementById("Previous").innerText="Previous";
 				document.getElementById("Next").innerText="Next";
@@ -53,8 +52,13 @@
 			var r=window.location.search.substr(1).match(reg);
 			if(r!=null){
 				var Word=unescape(r[2].replace(/_/g,"%"));
-				if(Language=="SimplifiedChinese"){document.getElementById("ToolboxTitle").innerText="正在加载";}
-				else{document.getElementById("ToolboxTitle").innerText="Loading";}
+				if(Language=="SimplifiedChinese"){
+					document.title="词典";
+					document.getElementsByClassName("mui-title")[0].innerText="正在加载";
+				}else{
+					document.title="Dictionary";
+					document.getElementsByClassName("mui-title")[0].innerText="Loading";
+				}
 				document.getElementById("CNDefinition").style.display="";
 				document.getElementById("ENDefinition").style.display="";
 				document.getElementById("ShowDefinition").style.display="none";
@@ -98,15 +102,16 @@
 					xhr.open("GET","https://api.shanbay.com/bdc/search/?word="+Word);
 					xhr.send();
 				}
-			}else{LoadWord();}
+			}else{
+				if(Language=="SimplifiedChinese"){document.title="学习卡";}
+				else{document.title="Flash Card";}
+				document.getElementsByClassName("mui-title")[0].innerText=document.title;
+				LoadWord();
+			}
 			function LoadTitle(){
-				if(Language=="SimplifiedChinese"){
-					document.getElementById("ToolboxTitle").innerText="词典";
-					document.getElementsByTagName("footer")[0].innerText="下载 RTH 工具箱，即可查看详细内容";
-				}else{
-					document.getElementById("ToolboxTitle").innerText="Dictionary";
-					document.getElementsByTagName("footer")[0].innerText="Download RTH Toolbox to view the details";
-				}
+				if(Language=="SimplifiedChinese"){document.getElementsByTagName("footer")[0].innerText="下载 RTH 工具箱，即可查看详细内容";}
+				else{document.getElementsByTagName("footer")[0].innerText="Download RTH Toolbox to view the details";}
+				document.getElementsByClassName("mui-title")[0].innerText=document.title;
 				if(navigator.userAgent.indexOf("Html5Plus")==-1&&navigator.userAgent.indexOf("Electron")==-1){
 					document.getElementsByTagName("footer")[0].style.display="";
 					document.getElementsByTagName("footer")[0].onclick=function(){window.open("http://rths.tk/");}
@@ -184,7 +189,6 @@
 			}
 		</script>
 		<script src="js/mui.min.js"></script>
-		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			Init(false);
 			document.getElementById("Word").onclick=function(){

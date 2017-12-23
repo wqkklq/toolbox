@@ -13,8 +13,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<div style="line-height:30px;">
@@ -72,7 +72,7 @@
 			None,
 			InputId=1;
 			if(Language=="SimplifiedChinese"){
-				document.getElementById("ToolboxTitle").innerText="计算器";
+				document.title="计算器";
 				EnterNum="输入数字";
 				document.getElementById("VertexForm1").innerText="顶点式：";
 				document.getElementById("AxisSymmetry1").innerText="对称轴：直线";
@@ -99,7 +99,7 @@
 				document.getElementById("yIntercept1").innerText="与 y 轴的交点：";
 				None="无";
 			}else{
-				document.getElementById("ToolboxTitle").innerText="Calculator";
+				document.title="Calculator";
 				EnterNum="Enter the number";
 				document.getElementById("VertexForm1").innerText="Vertex Form: ";
 				document.getElementById("AxisSymmetry1").innerText="Axis of Symmetry: Line";
@@ -124,6 +124,7 @@
 				document.getElementById("yIntercept1").innerText="y-Intercept: ";
 				None="None";
 			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title;
 			document.getElementById("aInput").placeholder=EnterNum;
 			document.getElementById("bInput").placeholder=EnterNum;
 			document.getElementById("cInput").placeholder=EnterNum;

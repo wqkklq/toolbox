@@ -12,8 +12,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-input-row">
@@ -45,7 +45,7 @@
 		<script type="text/javascript">
 			var Language=localStorage.getItem("Language");
 			if(Language=="SimplifiedChinese"){
-				document.getElementById("ToolboxTitle").innerText="计算器";
+				document.title="计算器";
 				document.getElementById("CalculatorBox").placeholder="输入算式";
 				document.getElementById("CalculateButton").innerText="计算";
 				document.getElementById("Date").innerText="日期";
@@ -55,7 +55,7 @@
 				document.getElementById("FindLinearFunction").innerText="求一次函数解析式";
 				document.getElementById("QuadraticEquationOneUnknown").innerText="一元二次方程";
 			}else{
-				document.getElementById("ToolboxTitle").innerText="Calculator";
+				document.title="Calculator";
 				document.getElementById("CalculatorBox").placeholder="Enter the formula";
 				document.getElementById("CalculateButton").innerText="Calculate";
 				document.getElementById("Date").innerText="Date";
@@ -65,6 +65,7 @@
 				document.getElementById("FindLinearFunction").innerText="Find Analytic Formula of Linear Function";
 				document.getElementById("QuadraticEquationOneUnknown").innerText="Quadratic Equation in One Unknown";
 			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title;
 		</script>
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>

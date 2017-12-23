@@ -12,8 +12,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<select id="EngineSelect1" onchange="CategoryChanged();"></select>
@@ -26,7 +26,7 @@
 		<script type="text/javascript">
 			var Language=localStorage.getItem("Language");
 			if(Language=="SimplifiedChinese"){
-				document.getElementById("ToolboxTitle").innerText="搜索";
+				document.title="搜索";
 				document.getElementById("EngineSelect1").options.add(new Option("网页","Web"));
 				document.getElementById("EngineSelect1").options.add(new Option("百科","Encyclopedia"));
 				document.getElementById("EngineSelect1").options.add(new Option("词典","Dictionary"));
@@ -37,7 +37,7 @@
 				document.getElementById("SearchBox").placeholder="输入搜索词";
 				document.getElementById("SearchButton").innerText="搜索";
 			}else{
-				document.getElementById("ToolboxTitle").innerText="Search";
+				document.title="Search";
 				document.getElementById("EngineSelect1").options.add(new Option("Web","Web"));
 				document.getElementById("EngineSelect1").options.add(new Option("Encyclopedia","Encyclopedia"));
 				document.getElementById("EngineSelect1").options.add(new Option("Dictionary","Dictionary"));
@@ -48,6 +48,7 @@
 				document.getElementById("SearchBox").placeholder="Enter a search term";
 				document.getElementById("SearchButton").innerText="Search";
 			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title;
 			EngineSelect1.value="Web";
 			CategoryChanged();
 			EngineSelect2.value="Automatic";

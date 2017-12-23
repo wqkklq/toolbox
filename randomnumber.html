@@ -22,8 +22,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<div class="number">0</div>
@@ -76,13 +76,13 @@
 			        <li class="mui-table-view-cell">
 			            <a id="NamesClear" href="javascript:NamesClear();" class="mui-navigate-right"></a>
 			        </li>
-			   </ul>
+				</ul>
 			</fieldset>
 		</div>
 		<script type="text/javascript">
 			var Language=localStorage.getItem("Language"),NamesValue=localStorage.getItem("Names"),Scrolling=true,MultipleTimes=true,TimeOut;
 			if(Language=="SimplifiedChinese"){
-				document.getElementById("ToolboxTitle").innerText="随机抽号";
+				document.title="随机抽号";
 				document.getElementById("SelectButton").innerText="立即抽号";
 				document.getElementById("Settings").innerText="设置";
 				document.getElementById("MinimumLabel").innerText="最小值";
@@ -100,7 +100,7 @@
 				document.getElementById("NamesAdd").innerText="添加";
 				document.getElementById("NamesClear").innerText="清空";
 			}else{
-				document.getElementById("ToolboxTitle").innerText="Random Number";
+				document.title="Random Number";
 				document.getElementById("SelectButton").innerText="Select Randomly";
 				document.getElementById("Settings").innerText="Settings";
 				document.getElementById("MinimumLabel").innerText="Minimum";
@@ -118,6 +118,7 @@
 				document.getElementById("NamesAdd").innerText="Add";
 				document.getElementById("NamesClear").innerText="Clear";
 			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title;
 			document.getElementById("NamesText").value=NamesValue;
 			Count();
 			RScrolling();

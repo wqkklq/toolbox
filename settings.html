@@ -12,8 +12,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<select id="LanguageSelect" onchange="LanguageChanged();">
@@ -34,14 +34,15 @@
 			LanguageChanged();
 			function LanguageChanged(){
 				if(LanguageSelect.value=="SimplifiedChinese"){
-					document.getElementById("ToolboxTitle").innerText="设置";
+					document.title="设置";
 					document.getElementById("About").innerText="关于 RTH 工具箱";
 					document.getElementById("ClearData").innerText="清除数据";
 				}else{
-					document.getElementById("ToolboxTitle").innerText="Settings";
+					document.title="Settings";
 					document.getElementById("About").innerText="About RTH Toolbox";
 					document.getElementById("ClearData").innerText="Clear Data";
 				}
+				document.getElementsByClassName("mui-title")[0].innerText=document.title;
 				if(window.localStorage&&LanguageSelect.value!=localStorage.getItem("Language")){
 					localStorage.setItem("Language",document.getElementById("LanguageSelect").value);
 					if(LanguageSelect.value=="SimplifiedChinese"){mui.alert("需要重新启动 RTH 工具箱","已应用",function(e){Restart();});}

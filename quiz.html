@@ -22,8 +22,8 @@
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-blue mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 id="ToolboxTitle" class="mui-title"></h1>
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+		   	<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<div class="show"></div>
@@ -58,7 +58,7 @@
 				<li class="mui-table-view-cell">
 					<a id="End" href="javascript:End();" class="mui-navigate-right"></a>
 				</li>
-				<li class="mui-table-view-cell">
+				<li id="SpeakLi" class="mui-table-view-cell">
 					<a id="Speak" href="javascript:Speak();" class="mui-navigate-right"></a>
 				</li>
 				<li class="mui-table-view-cell">
@@ -119,6 +119,7 @@
 			WLTSplit;
 			if(WordListText!=""&&WordListText!=null){WLTSplit=WordListText.split("\n");}
 			if(Language=="SimplifiedChinese"){
+				document.title="测验";
 				document.getElementById("WordLabel").innerText="单词";
 				document.getElementById("EnteredWord").placeholder="在这里输入";
 				document.getElementById("DefinitionLabel").innerText="释义";
@@ -135,6 +136,7 @@
 				document.getElementById("ShowWords").innerText="显示单词";
 				document.getElementById("ShowDefinitions").innerText="显示释义";
 			}else{
+				document.title="Quiz";
 				document.getElementById("WordLabel").innerText="Word";
 				document.getElementById("EnteredWord").placeholder="Enter here";
 				document.getElementById("DefinitionLabel").innerText="Definition";
@@ -152,6 +154,7 @@
 				document.getElementById("ShowDefinitions").innerText="Show Definitions";
 			}
 			if(!window.speechSynthesis){
+				document.getElementById("SpeakLi").style.display="none";
 				document.getElementById("SpeakWordsLi").style.display="none";
 				document.getElementById("SpeakDefinitionsLi").style.display="none";
 			}
@@ -198,7 +201,7 @@
 				ShowAnswer=false;
 				document.getElementById("EnteredWord").value="";
 				document.getElementById("EnteredDefinition").value="";
-				ProgressChanged();
+				document.getElementsByClassName("mui-title")[0].innerText=document.title+" ("+Progress+"/"+(WLTSplit.length-2)/2+")";
 				GenerateOrder();
   				OutOfOrderStr+="["+WordInt+"]\n";
   				CorrectWord=WLTSplit[WordInt*2-1];
@@ -245,10 +248,6 @@
 				}
 				Speak();
 			}
-			function ProgressChanged(){
-				if(Language=="SimplifiedChinese"){document.getElementById("ToolboxTitle").innerText="测验 ("+Progress+"/"+(WLTSplit.length-2)/2+")";}
-				else{document.getElementById("ToolboxTitle").innerText="Quiz ("+Progress+"/"+(WLTSplit.length-2)/2+")";}
-			}
 			function Speak(){
 				if(window.speechSynthesis){
 					var SpeakText="";
@@ -283,11 +282,11 @@
 			}
 			function ShowReport(){
 				document.getElementById("EnterWordDiv").style.display="none";
-                document.getElementById("EnterDefinitionDiv").style.display="none";
-                document.getElementById("OptionsUl").style.display="none";
-                document.getElementById("Next").style.display="none";
-                document.getElementById("MistakesBox").style.display="";
-                document.getElementById("OptionUl").style.marginTop="0px";
+				document.getElementById("EnterDefinitionDiv").style.display="none";
+				document.getElementById("OptionsUl").style.display="none";
+				document.getElementById("Next").style.display="none";
+				document.getElementById("MistakesBox").style.display="";
+				document.getElementById("OptionUl").style.marginTop="0px";
 			}
 			function Next(){
 				if(SettingsChanged){

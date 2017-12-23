@@ -20,7 +20,7 @@ function OpenWindow(name){
         let win=new BrowserWindow({width:1000,height:700,titleBarStyle:"hiddenInset",autoHideMenuBar:true,show:false});
         win.on("close",function(){win=null});
         win.loadURL(path.join("file://",__dirname,name+Suffix));
-        win.once("ready-to-show",() => {win.show()});
+        win.once("ready-to-show",()=>{win.show()});
     }else{window.location.href=name+Suffix;}
     if(window.localStorage){localStorage.setItem("Recent",name);}
 }
