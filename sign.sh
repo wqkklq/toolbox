@@ -9,7 +9,7 @@ electron-packager . \
   --platform=mas \
   --app-bundle-id=tk.rthsoftware.rthtoolbox.mac \
   --app-version="$npm_package_version" \
-  --build-version="4.2.0" \
+  --build-version="4.3.0" \
   --arch=x64 \
   --icon=./electron/electron.icns \
   --prune=true \
