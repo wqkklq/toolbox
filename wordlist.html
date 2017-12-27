@@ -265,7 +265,8 @@
 						if(Language=="SimplifiedChinese"&&CNDef!=null){document.getElementsByTagName("textarea")[0].value+=NewWord+"\n"+CNDef.replace(/\n/g,"；")}
 						else if(ENDef!=null){document.getElementsByTagName("textarea")[0].value+=NewWord+"\n"+ENDef.replace(/\n/g,"; ")}
 						else{AskForDefinition(NewWord)}
-					}else if(navigator.onLine){
+					}else if(navigator.userAgent.indexOf("Html5Plus")==-1&&navigator.userAgent.indexOf("Electron")==-1){Translate(NewWord)}
+					else if(navigator.onLine){
 						var xhr=new XMLHttpRequest()
 						xhr.onreadystatechange=function(){
 							switch(xhr.readyState){
