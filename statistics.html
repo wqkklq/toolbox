@@ -13,92 +13,92 @@
 	<body>
 		<header class="mui-bar mui-bar-nav title">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 class="mui-title"></h1>
+			<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
-			<textarea id="StatisticsBox" rows="10"></textarea>
-			<button id="CalculateButton" type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="Calculate();"></button>
-			<ul class="mui-table-view" style="margin-top:20px;">
+			<textarea rows="10"></textarea>
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="Calculate()"></button>
+			<ul class="mui-table-view" style="margin-top:20px">
 				<li class="mui-table-view-cell">
-					<a id="Add" href="javascript:Add();" class="mui-navigate-right"></a>
+					<a id="Add" href="javascript:Add()" class="mui-navigate-right"></a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a id="Clear" href="javascript:Clear();" class="mui-navigate-right"></a>
+					<a id="Clear" href="javascript:Clear()" class="mui-navigate-right"></a>
 				</li>
 			</ul>
-			<fieldset style="margin-top:20px;">
+			<fieldset style="margin-top:20px">
 				<div class="mui-input-row">
-				    <label id="CountLabel"></label>
-				    <input id="Count" type="text" oninput="ResultOnInput();"/>
+					<label id="CountLabel"></label>
+					<input id="Count" type="text" oninput="ResultOnInput()"/>
 				</div>
 				<div class="mui-input-row">
-				    <label id="AverageLabel"></label>
-				    <input id="Average" type="text" oninput="ResultOnInput();"/>
+					<label id="AverageLabel"></label>
+					<input id="Average" type="text" oninput="ResultOnInput()"/>
 				</div>
 				<div class="mui-input-row">
-				    <label id="SumLabel"></label>
-				    <input id="Sum" type="text" oninput="ResultOnInput();"/>
+					<label id="SumLabel"></label>
+					<input id="Sum" type="text" oninput="ResultOnInput()"/>
 				</div>
 			</fieldset>
 		</div>
 		<script type="text/javascript">
-			var Language=localStorage.getItem("Language");
+			var Language=localStorage.getItem("Language")
 			if(Language=="SimplifiedChinese"){
-				document.title="计算器";
-				document.getElementById("StatisticsBox").placeholder="输入数字";
-				document.getElementById("CalculateButton").innerText="计算";
-				document.getElementById("Add").innerText="添加";
-				document.getElementById("Clear").innerText="清空";
-				document.getElementById("CountLabel").innerText="计数";
-				document.getElementById("AverageLabel").innerText="平均值";
-				document.getElementById("SumLabel").innerText="求和";
+				document.title="计算器"
+				document.getElementsByTagName("textarea")[0].placeholder="输入数字"
+				document.getElementsByTagName("button")[0].innerText="计算"
+				document.getElementById("Add").innerText="添加"
+				document.getElementById("Clear").innerText="清空"
+				document.getElementById("CountLabel").innerText="计数"
+				document.getElementById("AverageLabel").innerText="平均值"
+				document.getElementById("SumLabel").innerText="求和"
 			}else{
-				document.title="Calculator";
-				document.getElementById("StatisticsBox").placeholder="Enter numbers";
-				document.getElementById("CalculateButton").innerText="Calculate";
-				document.getElementById("Add").innerText="Add";
-				document.getElementById("Clear").innerText="Clear";
-				document.getElementById("CountLabel").innerText="Count";
-				document.getElementById("AverageLabel").innerText="Average";
-				document.getElementById("SumLabel").innerText="Sum";
+				document.title="Calculator"
+				document.getElementsByTagName("textarea")[0].placeholder="Enter numbers"
+				document.getElementsByTagName("button")[0].innerText="Calculate"
+				document.getElementById("Add").innerText="Add"
+				document.getElementById("Clear").innerText="Clear"
+				document.getElementById("CountLabel").innerText="Count"
+				document.getElementById("AverageLabel").innerText="Average"
+				document.getElementById("SumLabel").innerText="Sum"
 			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title;
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
 		</script>
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			Init(true);
+			Init(true)
 			function Calculate(){
-				var Num=document.getElementById("StatisticsBox").value;
+				var Num=document.getElementsByTagName("textarea")[0].value
 				if(Num!=""&&Num!=null){
-					var NumSplit=Num.split("\n"),SumValue=0;
-					document.getElementById("Count").value=NumSplit.length;
+					var NumSplit=Num.split("\n"),SumValue=0
+					document.getElementById("Count").value=NumSplit.length
 					for (i=0;i<NumSplit.length;i++){
-						var CurrentNum=NumSplit[i]*1;
-						SumValue+=CurrentNum;
+						var CurrentNum=NumSplit[i]*1
+						SumValue+=CurrentNum
 					}
-					document.getElementById("Average").value=SumValue/NumSplit.length;
-					document.getElementById("Sum").value=SumValue;
-				}else{Add();}
+					document.getElementById("Average").value=SumValue/NumSplit.length
+					document.getElementById("Sum").value=SumValue
+				}else{Add()}
 			}
 			function Add(){
-				if(Language=="SimplifiedChinese"){mui.prompt("输入一个数字","","添加",function(e){if(e.index==1){AddTrue(e)}});}
-				else{mui.prompt("Enter a number","","Add",["Cancel","OK"],function(e){if(e.index==1){AddTrue(e)}});}
+				if(Language=="SimplifiedChinese"){mui.prompt("输入一个数字","","添加",function(e){if(e.index==1){AddTrue(e)}})}
+				else{mui.prompt("Enter a number","","Add",["Cancel","OK"],function(e){if(e.index==1){AddTrue(e)}})}
 				function AddTrue(e){
-					var NumSplit=document.getElementById("StatisticsBox").value.split("\n");
-					if(NumSplit[NumSplit.length-1]!=""){document.getElementById("StatisticsBox").value+="\n";}
-					document.getElementById("StatisticsBox").value+=e.value;
+					var NumSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
+					if(NumSplit[NumSplit.length-1]!=""){document.getElementsByTagName("textarea")[0].value+="\n"}
+					document.getElementsByTagName("textarea")[0].value+=e.value
 				}
 			}
 			function Clear(){
-				document.getElementById("StatisticsBox").value="";
-				document.getElementById("Count").value="";
-				document.getElementById("Average").value="";
-				document.getElementById("Sum").value="";
+				document.getElementsByTagName("textarea")[0].value=""
+				document.getElementById("Count").value=""
+				document.getElementById("Average").value=""
+				document.getElementById("Sum").value=""
 			}
 			function ResultOnInput(){
-				if(document.getElementById("StatisticsBox").value==""){Clear();}
-				else{Calculate();}
+				if(document.getElementsByTagName("textarea")[0].value==""){Clear()}
+				else{Calculate()}
 			}
 		</script>
 	</body>

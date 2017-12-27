@@ -14,120 +14,126 @@
 	<body>
 		<header class="mui-bar mui-bar-nav title">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 class="mui-title"></h1>
+			<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
-			<div style="line-height:30px;">
+			<div style="line-height:30px">
 				<label id="aLabel">a</label>x<sup>2</sup> + <label id="bLabel">b</label>x + <label id="cLabel">c</label> = 0 &#40;a ≠ 0&#41;
 			</div>
 			<hr />
 			<div class="mui-input-row">
-			    <label>a =</label>
-			    <input id="aInput" type="number" onclick="InputId=1;" oninput="AOnInput();"/>
+				<label>a =</label>
+				<input id="aInput" type="number" onclick="InputId=1" oninput="AOnInput()"/>
 			</div>
 			<div class="mui-input-row">
-			    <label>b =</label>
-			    <input id="bInput" type="number" onclick="InputId=2;" oninput="BOnInput();"/>
+				<label>b =</label>
+				<input id="bInput" type="number" onclick="InputId=2" oninput="BOnInput()"/>
 			</div>
 			<div class="mui-input-row">
-			    <label>c =</label>
-			    <input id="cInput" type="number" onclick="InputId=3;" oninput="COnInput();"/>
+				<label>c =</label>
+				<input id="cInput" type="number" onclick="InputId=3" oninput="COnInput()"/>
 			</div>
 			<hr />
 			<div class="mui-input-row">
-			    <label>Δ =</label>
-			    <input id="DeltaInput" type="text" oninput="Calculate();"/>
+				<label>Δ =</label>
+				<input id="DeltaInput" type="text" oninput="Calculate()"/>
 			</div>
 			<div class="mui-input-row">
-			    <label>x<sub>1</sub> =</label>
-			    <input id="x1Input" type="text" oninput="Calculate();"/>
+				<label>x<sub>1</sub> =</label>
+				<input id="x1Input" type="text" oninput="Calculate()"/>
 			</div>
 			<div class="mui-input-row">
-			    <label>x<sub>2</sub> =</label>
-			    <input id="x2Input" type="text" oninput="Calculate();"/>
+				<label>x<sub>2</sub> =</label>
+				<input id="x2Input" type="text" oninput="Calculate()"/>
 			</div>
 			<hr />
 		</div>
 		<button type="button" class="mui-btn mui-btn-blue sign">+/-</button>
 		<script type="text/javascript">
-			var Language=localStorage.getItem("Language"),EnterNum,InputId=1;
+			var Language=localStorage.getItem("Language"),EnterNum,InputId=1
 			if(Language=="SimplifiedChinese"){
-				document.title="计算器";
-				EnterNum="输入数字";
+				document.title="计算器"
+				EnterNum="输入数字"
 			}else{
-				document.title="Calculator";
-				EnterNum="Enter the number";
+				document.title="Calculator"
+				EnterNum="Enter the number"
 			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title;
-			document.getElementById("aInput").placeholder=EnterNum;
-			document.getElementById("bInput").placeholder=EnterNum;
-			document.getElementById("cInput").placeholder=EnterNum;
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			document.getElementById("aInput").placeholder=EnterNum
+			document.getElementById("bInput").placeholder=EnterNum
+			document.getElementById("cInput").placeholder=EnterNum
 		</script>
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			Init(false);
+			Init(false)
 			function Calculate(){
 				var a=document.getElementById("aInput").value*1,
 				b=document.getElementById("bInput").value*1,
 				c=document.getElementById("cInput").value*1,
 				x1,
-				x2;
-				var Delta=Math.pow(b,2)-4*a*c;
-				if(Delta>0){document.getElementById("DeltaInput").value=Delta+" > 0";}
-				else if(Delta==0){document.getElementById("DeltaInput").value=Delta+" = 0";}
-				else if(Delta<0){document.getElementById("DeltaInput").value=Delta+" < 0";}
-				x1=(-b+Math.sqrt(Delta))/(2*a);
-				x2=(-b-Math.sqrt(Delta))/(2*a);
-				document.getElementById("x1Input").value=x1;
-				document.getElementById("x2Input").value=x2;
+				x2
+				var Delta=Math.pow(b,2)-4*a*c
+				if(Delta>0){document.getElementById("DeltaInput").value=Delta+" > 0"}
+				else if(Delta==0){document.getElementById("DeltaInput").value=Delta+" = 0"}
+				else if(Delta<0){document.getElementById("DeltaInput").value=Delta+" < 0"}
+				x1=(-b+Math.sqrt(Delta))/(2*a)
+				x2=(-b-Math.sqrt(Delta))/(2*a)
+				document.getElementById("x1Input").value=x1
+				document.getElementById("x2Input").value=x2
 			}
 			function AOnInput(){
-				var a=document.getElementById("aInput").value;
-				if(a==""||a=="0"){document.getElementById("aLabel").innerText="a";}
-				else{document.getElementById("aLabel").innerText=a;}
-				Calculate();
+				var a=document.getElementById("aInput").value
+				if(a==""||a=="0"){document.getElementById("aLabel").innerText="a"}
+				else{document.getElementById("aLabel").innerText=a}
+				Calculate()
 			}
 			function BOnInput(){
-				var b=document.getElementById("bInput").value;
-				if(b==""){document.getElementById("bLabel").innerText="b";}
-				else{document.getElementById("bLabel").innerText=b;}
-				Calculate();
+				var b=document.getElementById("bInput").value
+				if(b==""){document.getElementById("bLabel").innerText="b"}
+				else{document.getElementById("bLabel").innerText=b}
+				Calculate()
 			}
 			function COnInput(){
-				var c=document.getElementById("cInput").value;
-				if(c==""){document.getElementById("cLabel").innerText="c";}
-				else{document.getElementById("cLabel").innerText=c;}
-				Calculate();
+				var c=document.getElementById("cInput").value
+				if(c==""){document.getElementById("cLabel").innerText="c"}
+				else{document.getElementById("cLabel").innerText=c}
+				Calculate()
 			}
 			document.getElementsByClassName("sign")[0].onclick=function(){
-				var Value;
-				switch (InputId){
-					case 1:Value=document.getElementById("aInput").value;break;
-					case 2:Value=document.getElementById("bInput").value;break;
-					case 3:Value=document.getElementById("cInput").value;break;
-					default:break;
-				}
-				if(Value!=""&&Value!=null){
-					if(Value.indexOf("-")!=-1){Value=Value.replace("-","");}
-					else{Value="-"+Value;}
-				}else{Value="-0";}
+				var Value
 				switch (InputId){
 					case 1:
-						document.getElementById("aInput").value=Value;
-						AOnInput();
-						break;
+						Value=document.getElementById("aInput").value
+						break
 					case 2:
-						document.getElementById("bInput").value=Value;
-						BOnInput();
-						break;
+						Value=document.getElementById("bInput").value
+						break
 					case 3:
-						document.getElementById("cInput").value=Value;
-						COnInput();
-						break;
-					default:break;
+						Value=document.getElementById("cInput").value
+						break
+					default:break
 				}
-				Calculate();
+				if(Value!=""&&Value!=null){
+					if(Value.indexOf("-")!=-1){Value=Value.replace("-","")}
+					else{Value="-"+Value}
+				}else{Value="-0"}
+				switch (InputId){
+					case 1:
+						document.getElementById("aInput").value=Value
+						AOnInput()
+						break
+					case 2:
+						document.getElementById("bInput").value=Value
+						BOnInput()
+						break
+					case 3:
+						document.getElementById("cInput").value=Value
+						COnInput()
+						break
+					default:break
+				}
+				Calculate()
 			}
 		</script>
 	</body>

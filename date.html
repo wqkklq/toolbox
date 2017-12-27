@@ -15,58 +15,58 @@
 				font-size:16pt;
 				margin-top:20px;
 				-webkit-user-select:text;
-				user-select:text;
+				user-select:text
 			}
 		</style>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 class="mui-title"></h1>
+			<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<fieldset>
-				<legend id="DateDiffLegend"></legend>
+				<legend></legend>
 				<div class="mui-input-row">
-			    	<label id="StartDateLabel"></label>
-			    	<input id="StartDate" type="date" oninput="Calculate();"/>
+					<label id="StartDateLabel"></label>
+					<input id="StartDate" type="date" oninput="Calculate()"/>
 				</div>
 				<div class="mui-input-row">
-				    <label id="EndDateLabel"></label>
-				    <input id="EndDate" type="date" oninput="Calculate();"/>
+					<label id="EndDateLabel"></label>
+					<input id="EndDate" type="date" oninput="Calculate()"/>
 				</div>
 				<div class="result"></div>
 			</fieldset>
 		</div>
 		<script type="text/javascript">
-			var Language=localStorage.getItem("Language"),DateValue=new Date();
+			var Language=localStorage.getItem("Language"),DateValue=new Date()
 			if(Language=="SimplifiedChinese"){
-				document.title="计算器";
-				document.getElementById("DateDiffLegend").innerText="日期之间的差异";
-				document.getElementById("StartDateLabel").innerText="起始日期";
-				document.getElementById("EndDateLabel").innerText="结束日期";
-				document.getElementsByClassName("result")[0].innerText="距离 0 天";
+				document.title="计算器"
+				document.getElementsByTagName("legend")[0].innerText="日期之间的差异"
+				document.getElementById("StartDateLabel").innerText="起始日期"
+				document.getElementById("EndDateLabel").innerText="结束日期"
+				document.getElementsByClassName("result")[0].innerText="距离 0 天"
 			}else{
-				document.title="Calculator";
-				document.getElementById("DateDiffLegend").innerText="Date Diff";
-				document.getElementById("StartDateLabel").innerText="Start Date";
-				document.getElementById("EndDateLabel").innerText="End Date";
-				document.getElementsByClassName("result")[0].innerText="0 Day";
+				document.title="Calculator"
+				document.getElementsByTagName("legend")[0].innerText="Date Diff"
+				document.getElementById("StartDateLabel").innerText="Start Date"
+				document.getElementById("EndDateLabel").innerText="End Date"
+				document.getElementsByClassName("result")[0].innerText="0 Day"
 			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title;
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
 		</script>
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			Init(true);
+			Init(true)
 			function Calculate(){
 				var StartDateValue=new Date(document.getElementById("StartDate").value),
-				EndDateValue=new Date(document.getElementById("EndDate").value);
-				var DateDiff=parseInt(Math.abs(EndDateValue-StartDateValue)/1000/60/60/24);
-				if(Language=="SimplifiedChinese"){document.getElementsByClassName("result")[0].innerText="距离 "+DateDiff+" 天";}
+				EndDateValue=new Date(document.getElementById("EndDate").value)
+				var DateDiff=parseInt(Math.abs(EndDateValue-StartDateValue)/1000/60/60/24)
+				if(Language=="SimplifiedChinese"){document.getElementsByClassName("result")[0].innerText="距离 "+DateDiff+" 天"}
 				else{
-					if(Math.abs(DateDiff>1)){document.getElementsByClassName("result")[0].innerText=DateDiff+" Days";}
-					else{document.getElementsByClassName("result")[0].innerText=DateDiff+" Day";}
+					if(Math.abs(DateDiff>1)){document.getElementsByClassName("result")[0].innerText=DateDiff+" Days"}
+					else{document.getElementsByClassName("result")[0].innerText=DateDiff+" Day"}
 				}
 			}
 		</script>

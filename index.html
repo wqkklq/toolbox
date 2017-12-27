@@ -13,114 +13,124 @@
 	<body>
 		<div class="drag"></div>
 		<div class="icon">
-			<a href="javascript:if(localStorage.getItem('Recent')!=null){OpenWindow(localStorage.getItem('Recent'));}">
-				<img src="img/icon.png" width="100px" style="border-radius:25%;"/>
+			<a href="javascript:if(localStorage.getItem('Recent')!=null){OpenWindow(localStorage.getItem('Recent'))}">
+				<img src="img/icon.png" width="100px" style="border-radius:25%"/>
 			</a>
 		</div>
 		<div class="title"></div>
 		<div class="menu">
 			<ul>
-				<li onclick="OpenWindow('wordlist');" id="WordList"/>
-				<li onclick="OpenWindow('timer');" id="Timer"/>
-				<li onclick="OpenWindow('calculator');" id="Calculator"/>
-				<li onclick="OpenWindow('chatbot');" id="Chatbot"/>
-				<li onclick="OpenWindow('randomnumber');" id="RandomNumber"/>
-				<li onclick="OpenWindow('search');" id="Search"/>
-				<li onclick="OpenWindow('texteditor');" id="TextEditor"/>
+				<li onclick="OpenWindow('wordlist')" id="WordList"/>
+				<li onclick="OpenWindow('timer')" id="Timer"/>
+				<li onclick="OpenWindow('calculator')" id="Calculator"/>
+				<li onclick="OpenWindow('chatbot')" id="Chatbot"/>
+				<li onclick="OpenWindow('randomnumber')" id="RandomNumber"/>
+				<li onclick="OpenWindow('search')" id="Search"/>
+				<li onclick="OpenWindow('texteditor')" id="TextEditor"/>
 			</ul>
 		</div>
-		<a class="mui-icon mui-icon-more more" href="javascript:More();"></a>
-		<a class="mui-icon mui-icon-settings settings" href="javascript:OpenWindow('settings');"></a>
+		<a class="mui-icon mui-icon-more more" href="javascript:More()"></a>
+		<a class="mui-icon mui-icon-settings settings" href="javascript:OpenWindow('settings')"></a>
 		<script type="text/javascript">
-			var Language=localStorage.getItem("Language"),Menu;
+			var Language=localStorage.getItem("Language"),Menu
 			if(Language!="SimplifiedChinese"&&Language!="English"&&window.localStorage){
 				if(navigator.language.indexOf("zh")!=-1){
-					Language="SimplifiedChinese";
-					localStorage.setItem("Language","SimplifiedChinese");
+					Language="SimplifiedChinese"
+					localStorage.setItem("Language","SimplifiedChinese")
 				}else{
-					Language="English";
-					localStorage.setItem("Language","English");
+					Language="English"
+					localStorage.setItem("Language","English")
 				}
 			}
 			if(navigator.userAgent.indexOf("Html5Plus")!=-1){
-	  			var wgtVer=null;
+				var wgtVer=null
 				function plusReady(){
-					plus.navigator.setStatusBarBackground("#0066CC");
-					plus.navigator.setStatusBarStyle("light");
+					plus.navigator.setStatusBarBackground("#0066CC")
+					plus.navigator.setStatusBarStyle("light")
 					if(navigator.userAgent.indexOf("Android")!=-1){
-						plus.runtime.getProperty(plus.runtime.appid,function(inf){wgtVer=inf.version;});
-						var xhr=new XMLHttpRequest();
+						plus.runtime.getProperty(plus.runtime.appid,function(inf){wgtVer=inf.version})
+						var xhr=new XMLHttpRequest()
 						xhr.onreadystatechange=function(){
 							switch(xhr.readyState){
 								case 4:
 									if(xhr.status==200){
-										var newVer=xhr.responseText;
-										if(wgtVer&&newVer&&(wgtVer!=newVer)){plus.downloader.createDownload("http://t.rths.tk/web/toolbox/update/H58039057.wgt",{filename:"_doc/update/"},function(d,status){if(status==200){plus.runtime.install(d.filename);}}).start();}
+										var newVer=xhr.responseText
+										if(wgtVer&&newVer&&(wgtVer!=newVer)){plus.downloader.createDownload("http://t.rths.tk/web/toolbox/update/H58039057.wgt",{filename:"_doc/update/"},function(d,status){if(status==200){plus.runtime.install(d.filename)}}).start()}
 									}
-									break;
-								default:break;
+									break
+								default:break
 							}
 						}
-						xhr.open("GET","http://t.rths.tk/web/toolbox/update/check.php");
-						xhr.send();
+						xhr.open("GET","http://t.rths.tk/web/toolbox/update/check.php")
+						xhr.send()
 					}else{
-						plus.webview.create("wordlist.html","wordlist",{"popGesture":"hide"});
-						plus.webview.create("timer.html","timer",{"popGesture":"hide"});
-						plus.webview.create("calculator.html","calculator",{"popGesture":"hide"});
-						plus.webview.create("date.html","date",{"popGesture":"hide"});
-						plus.webview.create("statistics.html","statistics",{"popGesture":"hide"});
-						plus.webview.create("quadraticfunction.html","quadraticfunction",{"popGesture":"hide"});
-						plus.webview.create("equation21.html","equation21",{"popGesture":"hide"});
-						plus.webview.create("findlinearfunction.html","findlinearfunction",{"popGesture":"hide"});
-						plus.webview.create("equation12.html","equation12",{"popGesture":"hide"});
-						plus.webview.create("chatbot.html","chatbot",{"popGesture":"hide"});
-						plus.webview.create("randomnumber.html","randomnumber",{"popGesture":"hide"});
-						plus.webview.create("search.html","search",{"popGesture":"hide"});
-						plus.webview.create("texteditor.html","texteditor",{"popGesture":"hide"});
-						plus.webview.create("settings.html","settings",{"popGesture":"hide"});
-						plus.webview.create("about.html","about",{"popGesture":"hide"});
+						plus.webview.create("wordlist.html","wordlist",{"popGesture":"hide"})
+						plus.webview.create("timer.html","timer",{"popGesture":"hide"})
+						plus.webview.create("calculator.html","calculator",{"popGesture":"hide"})
+						plus.webview.create("date.html","date",{"popGesture":"hide"})
+						plus.webview.create("statistics.html","statistics",{"popGesture":"hide"})
+						plus.webview.create("quadraticfunction.html","quadraticfunction",{"popGesture":"hide"})
+						plus.webview.create("equation21.html","equation21",{"popGesture":"hide"})
+						plus.webview.create("findlinearfunction.html","findlinearfunction",{"popGesture":"hide"})
+						plus.webview.create("equation12.html","equation12",{"popGesture":"hide"})
+						plus.webview.create("chatbot.html","chatbot",{"popGesture":"hide"})
+						plus.webview.create("randomnumber.html","randomnumber",{"popGesture":"hide"})
+						plus.webview.create("search.html","search",{"popGesture":"hide"})
+						plus.webview.create("texteditor.html","texteditor",{"popGesture":"hide"})
+						plus.webview.create("settings.html","settings",{"popGesture":"hide"})
+						plus.webview.create("about.html","about",{"popGesture":"hide"})
 						if(plus.runtime.launcher=="shortcut"){
-							var cmd=JSON.parse(plus.runtime.arguments);
-							var type=cmd&&cmd.type;
+							var cmd=JSON.parse(plus.runtime.arguments)
+							var type=cmd&&cmd.type
 							switch(type){
-							    case "wordlist":plus.webview.show("wordlist","pop-in");break;
-							    case "timer":plus.webview.show("timer","pop-in");break;
-							    case "calculator":plus.webview.show("calculator","pop-in");break;
-							    case "search":plus.webview.show("search","pop-in");break;
-							    case "about":plus.webview.show("about","pop-in");break;
-							    default:break;
+								case "wordlist":
+									plus.webview.show("wordlist","pop-in")
+									break
+								case "timer":
+									plus.webview.show("timer","pop-in")
+									break
+								case "calculator":
+									plus.webview.show("calculator","pop-in")
+									break
+								case "search":
+									plus.webview.show("search","pop-in")
+									break
+								case "about":
+									plus.webview.show("about","pop-in")
+									break
+								default:break
 							}
 						}
 					}
 				}
-				if(window.plus){plusReady();}
-				else{document.addEventListener("plusready",plusReady,false);}
-		  	}
-			if(Language=="SimplifiedChinese"){
-				document.title="RTH 工具箱";
-				document.getElementsByClassName("title")[0].innerText="工具箱";
-				document.getElementById("WordList").innerText="单词表";
-				document.getElementById("Timer").innerText="计时器";
-				document.getElementById("Calculator").innerText="计算器";
-				document.getElementById("Chatbot").innerText="聊天机器人";
-				document.getElementById("RandomNumber").innerText="随机抽号";
-				document.getElementById("Search").innerText="搜索";
-				document.getElementById("TextEditor").innerText="文本编辑器";
-			}else{
-				document.getElementsByClassName("title")[0].innerText="Toolbox";
-				document.getElementById("WordList").innerText="Word List";
-				document.getElementById("Timer").innerText="Timer";
-				document.getElementById("Calculator").innerText="Calculator";
-				document.getElementById("Chatbot").innerText="Chatbot";
-				document.getElementById("RandomNumber").innerText="Random Number";
-				document.getElementById("Search").innerText="Search";
-				document.getElementById("TextEditor").innerText="Text Editor";
+				if(window.plus){plusReady()}
+				else{document.addEventListener("plusready",plusReady,false)}
 			}
-			if(!navigator.onLine){document.getElementsByClassName("more")[0].style.display="none";}
-			OnResize();
+			if(Language=="SimplifiedChinese"){
+				document.title="RTH 工具箱"
+				document.getElementsByClassName("title")[0].innerText="工具箱"
+				document.getElementById("WordList").innerText="单词表"
+				document.getElementById("Timer").innerText="计时器"
+				document.getElementById("Calculator").innerText="计算器"
+				document.getElementById("Chatbot").innerText="聊天机器人"
+				document.getElementById("RandomNumber").innerText="随机抽号"
+				document.getElementById("Search").innerText="搜索"
+				document.getElementById("TextEditor").innerText="文本编辑器"
+			}else{
+				document.getElementsByClassName("title")[0].innerText="Toolbox"
+				document.getElementById("WordList").innerText="Word List"
+				document.getElementById("Timer").innerText="Timer"
+				document.getElementById("Calculator").innerText="Calculator"
+				document.getElementById("Chatbot").innerText="Chatbot"
+				document.getElementById("RandomNumber").innerText="Random Number"
+				document.getElementById("Search").innerText="Search"
+				document.getElementById("TextEditor").innerText="Text Editor"
+			}
+			if(!navigator.onLine){document.getElementsByClassName("more")[0].style.display="none"}
+			OnResize()
 			function OnResize(){
-				if(document.documentElement.clientWidth>500){document.getElementsByClassName("title")[0].style.textAlign="left";}
-				else{document.getElementsByClassName("title")[0].style.textAlign="center";}
+				if(document.documentElement.clientWidth>500){document.getElementsByClassName("title")[0].style.textAlign="left"}
+				else{document.getElementsByClassName("title")[0].style.textAlign="center"}
 			}
 		</script>
 		<script src="js/mui.min.js"></script>
@@ -143,40 +153,40 @@
 					{url:"texteditor.html",id:"texteditor"},
 					{url:"settings.html",id:"settings"},
 					{url:"about.html",id:"about"}
-				],preloadLimit:15,swipeBack:false});
-			}else{mui.init({swipeBack:false});}
-			window.onresize=OnResize;
-			if(window.location.href.indexOf("rthsoftware.tk")!=-1){window.location.href="http://rths.tk/";}
+				],preloadLimit:15,swipeBack:false})
+			}else{mui.init({swipeBack:false})}
+			window.onresize=OnResize
+			if(window.location.href.indexOf("rthsoftware.tk")!=-1||"ActiveXObject" in window){window.location.href="http://rths.tk/"}
 			if(navigator.userAgent.indexOf("Electron")!=-1){
-				const electron=require("electron");
-				electron.webFrame.setZoomLevelLimits(1,1);
-				var path=electron.remote.getGlobal("sharedObj").path;
+				const electron=require("electron")
+				electron.webFrame.setZoomLevelLimits(1,1)
+				var path=electron.remote.getGlobal("sharedObj").path
 				if(path&&window.localStorage){
-					localStorage.setItem("WordList",require("fs").readFileSync(path,"utf8"));
-					localStorage.setItem("WordListCurrentItem","WordList");
-					OpenWindow("wordlist");
+					localStorage.setItem("WordList",require("fs").readFileSync(path,"utf8"))
+					localStorage.setItem("WordListCurrentItem","WordList")
+					OpenWindow("wordlist")
 				}
 			}
 			function More(){
-				var xhr=new XMLHttpRequest();
+				var xhr=new XMLHttpRequest()
 				xhr.onreadystatechange=function(){
 					switch(xhr.readyState){
 						case 4:
 							if(xhr.status==200){
-								document.getElementsByClassName("more")[0].style.display="none";
-								Menu=document.getElementsByClassName("menu")[0].innerHTML;
-								document.getElementsByClassName("menu")[0].innerHTML=xhr.responseText;
+								document.getElementsByClassName("more")[0].style.display="none"
+								Menu=document.getElementsByClassName("menu")[0].innerHTML
+								document.getElementsByClassName("menu")[0].innerHTML=xhr.responseText
 							}
-							break;
-						default:break;
+							break
+						default:break
 					}
 				}
-				xhr.open("GET","http://t.rths.tk/web/toolbox/more_"+Language+".html");
-				xhr.send();
+				xhr.open("GET","http://t.rths.tk/web/toolbox/more_"+Language+".html")
+				xhr.send()
 			}
 			function Back(){
-				document.getElementsByClassName("menu")[0].innerHTML=Menu;
-				document.getElementsByClassName("more")[0].style.display="";
+				document.getElementsByClassName("menu")[0].innerHTML=Menu
+				document.getElementsByClassName("more")[0].style.display=""
 			}
 		</script>
 	</body>

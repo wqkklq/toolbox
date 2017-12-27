@@ -14,146 +14,154 @@
 	<body>
 		<header class="mui-bar mui-bar-nav title">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 class="mui-title"></h1>
+			<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
-			<div style="line-height:30px;">
+			<div style="line-height:30px">
 				a &#40;<label id="x1Label1">x</label><sub><label id="x1Label2">1</label></sub>&#44; <label id="y1Label1">y</label><sub><label id="y1Label2">1</label></sub>&#41;<br />
 				b &#40;<label id="x2Label1">x</label><sub><label id="x2Label2">2</label></sub>&#44; <label id="y2Label1">y</label><sub><label id="y2Label2">2</label></sub>&#41;
 			</div>
 			<hr />
 			<div class="mui-input-row">
-			    <label>x<sub>1</sub>=</label>
-			    <input id="x1Input" type="number" onclick="InputId=1;" oninput="X1OnInput();"/>
+				<label>x<sub>1</sub>=</label>
+				<input id="x1Input" type="number" onclick="InputId=1" oninput="X1OnInput()"/>
 			</div>
 			<div class="mui-input-row">
-			    <label>y<sub>1</sub>=</label>
-			    <input id="y1Input" type="number" onclick="InputId=2;" oninput="Y1OnInput();"/>
+				<label>y<sub>1</sub>=</label>
+				<input id="y1Input" type="number" onclick="InputId=2" oninput="Y1OnInput()"/>
 			</div>
 			<div class="mui-input-row">
-			    <label>x<sub>2</sub>=</label>
-			    <input id="x2Input" type="number" onclick="InputId=3;" oninput="X2OnInput();"/>
+				<label>x<sub>2</sub>=</label>
+				<input id="x2Input" type="number" onclick="InputId=3" oninput="X2OnInput()"/>
 			</div>
 			<div class="mui-input-row">
-			    <label>y<sub>2</sub>=</label>
-			    <input id="y2Input" type="number" onclick="InputId=4;" oninput="Y2OnInput();"/>
+				<label>y<sub>2</sub>=</label>
+				<input id="y2Input" type="number" onclick="InputId=4" oninput="Y2OnInput()"/>
 			</div>
 			<hr />
-			<div class="result" style="text-align:center;font-size:16pt;">y = <label id="kLabel">k</label>x + <label id="bLabel">b</label></div>
+			<div class="result" style="text-align:center;font-size:16pt">y = <label id="kLabel">k</label>x + <label id="bLabel">b</label></div>
 			<hr />
 		</div>
 		<button type="button" class="mui-btn mui-btn-blue sign">+/-</button>
 		<script type="text/javascript">
-			var Language=localStorage.getItem("Language"),EnterNum,InputId=1;
+			var Language=localStorage.getItem("Language"),EnterNum,InputId=1
 			if(Language=="SimplifiedChinese"){
-				document.title="计算器";
-				EnterNum="输入数字";
+				document.title="计算器"
+				EnterNum="输入数字"
 			}else{
-				document.title="Calculator";
-				EnterNum="Enter the number";
+				document.title="Calculator"
+				EnterNum="Enter the number"
 			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title;
-			document.getElementById("x1Input").placeholder=EnterNum;
-			document.getElementById("y1Input").placeholder=EnterNum;
-			document.getElementById("x2Input").placeholder=EnterNum;
-			document.getElementById("y2Input").placeholder=EnterNum;
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			document.getElementById("x1Input").placeholder=EnterNum
+			document.getElementById("y1Input").placeholder=EnterNum
+			document.getElementById("x2Input").placeholder=EnterNum
+			document.getElementById("y2Input").placeholder=EnterNum
 		</script>
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			Init(false);
+			Init(false)
 			function Calculate(){
 				var a=document.getElementById("x1Input").value*1,
 				c=document.getElementById("y1Input").value*(-1),
 				d=document.getElementById("x2Input").value*1,
-				f=document.getElementById("y2Input").value*(-1);
+				f=document.getElementById("y2Input").value*(-1)
 				if(a!=d){
 					var k=(f-c)/(a-d),
-					b=(a*f-d*c)/(d-a);
-					document.getElementById("kLabel").innerText=k;
-					document.getElementById("bLabel").innerText=b;
+					b=(a*f-d*c)/(d-a)
+					document.getElementById("kLabel").innerText=k
+					document.getElementById("bLabel").innerText=b
 				}else{
-					document.getElementById("kLabel").innerText="k";
-					document.getElementById("bLabel").innerText="b";
+					document.getElementById("kLabel").innerText="k"
+					document.getElementById("bLabel").innerText="b"
 				}
 			}
 			function X1OnInput(){
-				var x1=document.getElementById("x1Input").value;
+				var x1=document.getElementById("x1Input").value
 				if(x1==""){
-					document.getElementById("x1Label1").innerText="x";
-					document.getElementById("x1Label2").innerText="1";
+					document.getElementById("x1Label1").innerText="x"
+					document.getElementById("x1Label2").innerText="1"
 				}else{
-					document.getElementById("x1Label1").innerText=x1;
-					document.getElementById("x1Label2").innerText="";
+					document.getElementById("x1Label1").innerText=x1
+					document.getElementById("x1Label2").innerText=""
 				}
-				Calculate();
+				Calculate()
 			}
 			function Y1OnInput(){
-				var y1=document.getElementById("y1Input").value;
+				var y1=document.getElementById("y1Input").value
 				if(y1==""){
-					document.getElementById("y1Label1").innerText="y";
-					document.getElementById("y1Label2").innerText="1";
+					document.getElementById("y1Label1").innerText="y"
+					document.getElementById("y1Label2").innerText="1"
 				}else{
-					document.getElementById("y1Label1").innerText=y1;
-					document.getElementById("y1Label2").innerText="";
+					document.getElementById("y1Label1").innerText=y1
+					document.getElementById("y1Label2").innerText=""
 				}
-				Calculate();
+				Calculate()
 			}
 			function X2OnInput(){
-				var x2=document.getElementById("x2Input").value;
+				var x2=document.getElementById("x2Input").value
 				if(x2==""){
-					document.getElementById("x2Label1").innerText="x";
-					document.getElementById("x2Label2").innerText="2";
+					document.getElementById("x2Label1").innerText="x"
+					document.getElementById("x2Label2").innerText="2"
 				}else{
-					document.getElementById("x2Label1").innerText=x2;
-					document.getElementById("x2Label2").innerText="";
+					document.getElementById("x2Label1").innerText=x2
+					document.getElementById("x2Label2").innerText=""
 				}
-				Calculate();
+				Calculate()
 			}
 			function Y2OnInput(){
-				var y2=document.getElementById("y2Input").value;
+				var y2=document.getElementById("y2Input").value
 				if(y2==""){
-					document.getElementById("y2Label1").innerText="y";
-					document.getElementById("y2Label2").innerText="2";
+					document.getElementById("y2Label1").innerText="y"
+					document.getElementById("y2Label2").innerText="2"
 				}else{
-					document.getElementById("y2Label1").innerText=y2;
-					document.getElementById("y2Label2").innerText="";
+					document.getElementById("y2Label1").innerText=y2
+					document.getElementById("y2Label2").innerText=""
 				}
-				Calculate();
+				Calculate()
 			}
 			document.getElementsByClassName("sign")[0].onclick=function(){
-				var Value;
-				switch (InputId){
-					case 1:Value=document.getElementById("x1Input").value;break;
-					case 2:Value=document.getElementById("y1Input").value;break;
-					case 3:Value=document.getElementById("x2Input").value;break;
-					case 4:Value=document.getElementById("y2Input").value;break;
-					default:break;
-				}
-				if(Value!=""&&Value!=null){
-					if(Value.indexOf("-")!=-1){Value=Value.replace("-","");}
-					else{Value="-"+Value;}
-				}else{Value="-0";}
+				var Value
 				switch (InputId){
 					case 1:
-						document.getElementById("x1Input").value=Value;
-						X1OnInput();
-						break;
+						Value=document.getElementById("x1Input").value
+						break
 					case 2:
-						document.getElementById("y1Input").value=Value;
-						Y1OnInput();
-						break;
+						Value=document.getElementById("y1Input").value
+						break
 					case 3:
-						document.getElementById("x2Input").value=Value;
-						X2OnInput();
-						break;
+						Value=document.getElementById("x2Input").value
+						break
 					case 4:
-						document.getElementById("y2Input").value=Value;
-						Y2OnInput();
-						break;
-					default:break;
+						Value=document.getElementById("y2Input").value
+						break
+					default:break
 				}
-				Calculate();
+				if(Value!=""&&Value!=null){
+					if(Value.indexOf("-")!=-1){Value=Value.replace("-","")}
+					else{Value="-"+Value}
+				}else{Value="-0"}
+				switch (InputId){
+					case 1:
+						document.getElementById("x1Input").value=Value
+						X1OnInput()
+						break
+					case 2:
+						document.getElementById("y1Input").value=Value
+						Y1OnInput()
+						break
+					case 3:
+						document.getElementById("x2Input").value=Value
+						X2OnInput()
+						break
+					case 4:
+						document.getElementById("y2Input").value=Value
+						Y2OnInput()
+						break
+					default:break
+				}
+				Calculate()
 			}
 		</script>
 	</body>

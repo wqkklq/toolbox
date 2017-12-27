@@ -14,96 +14,96 @@
 				height:50px;
 				line-height:50px;
 				text-align:center;
-				background-color:#FFFFFF;
+				background-color:white;
 				font-size:20px;
-				border-radius:5px;
+				border-radius:5px
 			}
 		</style>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 class="mui-title"></h1>
+			<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<div class="show"></div>
-			<div id="EnterWordDiv" class="mui-input-row" style="margin-top:20px;">
-			    <label id="WordLabel"></label>
-			    <input id="EnteredWord" type="text" onkeydown="if(event.keyCode==13){if(document.getElementById('EnteredWord').value!=''){Next();}}"/>
+			<div id="EnterWordDiv" class="mui-input-row" style="margin-top:20px">
+				<label id="WordLabel"></label>
+				<input id="EnteredWord" type="text" onkeydown="if(event.keyCode==13){if(document.getElementById('EnteredWord').value!=''){Next()}}"/>
 			</div>
 			<div id="EnterDefinitionDiv" class="mui-input-row">
-			    <label id="DefinitionLabel"></label>
-			    <input id="EnteredDefinition" type="text" onkeydown="if(event.keyCode==13){if(document.getElementById('EnteredDefinition').value!=''){Next();}}"/>
+				<label id="DefinitionLabel"></label>
+				<input id="EnteredDefinition" type="text" onkeydown="if(event.keyCode==13){if(document.getElementById('EnteredDefinition').value!=''){Next()}}"/>
 			</div>
-			<ul id="OptionsUl" class="mui-table-view" style="display:none;margin-top:20px;">
-		        <li class="mui-table-view-cell">
-		            <a id="Option1" class="mui-navigate-right" href="javascript:OptionClicked(0);"></a>
-		        </li>
-		        <li class="mui-table-view-cell">
-		            <a id="Option2" class="mui-navigate-right" href="javascript:OptionClicked(1);"></a>
-		        </li>
-		        <li class="mui-table-view-cell">
-		            <a id="Option3" class="mui-navigate-right" href="javascript:OptionClicked(2);"></a>
-		        </li>
-		        <li class="mui-table-view-cell">
-		            <a id="Option4" class="mui-navigate-right" href="javascript:OptionClicked(3);"></a>
-		        </li>
-		    </ul>
-			<button id="Next" type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:20px;" onclick="Next();"></button>
-			<textarea id="MistakesBox" style="margin-top:20px;display:none;" rows="10">RTH 1</textarea>
-			<ul id="OptionUl" class="mui-table-view" style="margin-top:20px;">
+			<ul id="OptionsUl" class="mui-table-view" style="margin-top:20px;display:none">
 				<li class="mui-table-view-cell">
-					<a id="Restart" href="javascript:Restart();" class="mui-navigate-right"></a>
+					<a id="Option1" class="mui-navigate-right" href="javascript:OptionClicked(0)"></a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a id="End" href="javascript:End();" class="mui-navigate-right"></a>
+					<a id="Option2" class="mui-navigate-right" href="javascript:OptionClicked(1)"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="Option3" class="mui-navigate-right" href="javascript:OptionClicked(2)"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="Option4" class="mui-navigate-right" href="javascript:OptionClicked(3)"></a>
+				</li>
+			</ul>
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:20px" onclick="Next()"></button>
+			<textarea style="margin-top:20px;display:none" rows="10">RTH 1</textarea>
+			<ul id="OptionUl" class="mui-table-view" style="margin-top:20px">
+				<li class="mui-table-view-cell">
+					<a id="Restart" href="javascript:Restart()" class="mui-navigate-right"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="End" href="javascript:End()" class="mui-navigate-right"></a>
 				</li>
 				<li id="SpeakLi" class="mui-table-view-cell">
-					<a id="Speak" href="javascript:Speak();" class="mui-navigate-right"></a>
+					<a id="Speak" href="javascript:Speak()" class="mui-navigate-right"></a>
 				</li>
 				<li class="mui-table-view-cell">
-		            <span id="MultipleChoice"></span>
+					<span id="MultipleChoice"></span>
 					<div id="MultipleChoiceSwitch" class="mui-switch mui-switch-blue mui-switch-mini">
-						<div class="mui-switch-handle" onclick="SettingsChanged=true;"></div>
+						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
-		        </li>
-		        <li id="SpeakWordsLi" class="mui-table-view-cell">
-		            <span id="SpeakWords"></span>
+				</li>
+				<li id="SpeakWordsLi" class="mui-table-view-cell">
+					<span id="SpeakWords"></span>
 					<div id="SpeakWordsSwitch" class="mui-switch mui-switch-blue mui-switch-mini mui-active">
-						<div class="mui-switch-handle" onclick="SettingsChanged=true;"></div>
+						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
-		        </li>
-		        <li id="SpeakDefinitionsLi" class="mui-table-view-cell">
-		            <span id="SpeakDefinitions"></span>
+				</li>
+				<li id="SpeakDefinitionsLi" class="mui-table-view-cell">
+					<span id="SpeakDefinitions"></span>
 					<div id="SpeakDefinitionsSwitch" class="mui-switch mui-switch-blue mui-switch-mini">
-						<div class="mui-switch-handle" onclick="SettingsChanged=true;"></div>
+						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
-		        </li>
+				</li>
 				<li class="mui-table-view-cell">
-		            <span id="EnterWords"></span>
+					<span id="EnterWords"></span>
 					<div id="EnterWordsSwitch" class="mui-switch mui-switch-blue mui-switch-mini mui-active">
-						<div class="mui-switch-handle" onclick="SettingsChanged=true;"></div>
+						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
-		        </li>
-		        <li class="mui-table-view-cell">
-		            <span id="EnterDefinitions"></span>
+				</li>
+				<li class="mui-table-view-cell">
+					<span id="EnterDefinitions"></span>
 					<div id="EnterDefinitionsSwitch" class="mui-switch mui-switch-blue mui-switch-mini">
-						<div class="mui-switch-handle" onclick="SettingsChanged=true;"></div>
+						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
-		        </li>
-		        <li class="mui-table-view-cell">
-		            <span id="ShowWords"></span>
+				</li>
+				<li class="mui-table-view-cell">
+					<span id="ShowWords"></span>
 					<div id="ShowWordsSwitch" class="mui-switch mui-switch-blue mui-switch-mini">
-						<div class="mui-switch-handle" onclick="SettingsChanged=true;"></div>
+						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
-		        </li>
-		        <li class="mui-table-view-cell">
-		            <span id="ShowDefinitions"></span>
+				</li>
+				<li class="mui-table-view-cell">
+					<span id="ShowDefinitions"></span>
 					<div id="ShowDefinitionsSwitch" class="mui-switch mui-switch-blue mui-switch-mini mui-active">
-						<div class="mui-switch-handle" onclick="SettingsChanged=true;"></div>
+						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
-		        </li>
-		    </ul>
+				</li>
+			</ul>
 		</div>
 		<script type="text/javascript">
 			var Language=localStorage.getItem("Language"),
@@ -116,245 +116,264 @@
 			ShowAnswer=false,
 			WordInt,
 			WordListText=localStorage.getItem("WordList"),
-			WLTSplit;
-			if(WordListText!=""&&WordListText!=null){WLTSplit=WordListText.split("\n");}
+			WLTSplit
+			if(WordListText!=""&&WordListText!=null){WLTSplit=WordListText.split("\n")}
 			if(Language=="SimplifiedChinese"){
-				document.title="测验";
-				document.getElementById("WordLabel").innerText="单词";
-				document.getElementById("EnteredWord").placeholder="在这里输入";
-				document.getElementById("DefinitionLabel").innerText="释义";
-				document.getElementById("EnteredDefinition").placeholder="在这里输入";
-				document.getElementById("Next").innerText="下一题";
-				document.getElementById("Restart").innerText="重新开始";
-				document.getElementById("End").innerText="结束";
-				document.getElementById("Speak").innerText="朗读";
-				document.getElementById("MultipleChoice").innerText="选择题";
-				document.getElementById("SpeakWords").innerText="朗读单词";
-				document.getElementById("SpeakDefinitions").innerText="朗读释义";
-				document.getElementById("EnterWords").innerText="输入单词";
-				document.getElementById("EnterDefinitions").innerText="输入释义";
-				document.getElementById("ShowWords").innerText="显示单词";
-				document.getElementById("ShowDefinitions").innerText="显示释义";
+				document.title="测验"
+				document.getElementById("WordLabel").innerText="单词"
+				document.getElementById("EnteredWord").placeholder="在这里输入"
+				document.getElementById("DefinitionLabel").innerText="释义"
+				document.getElementById("EnteredDefinition").placeholder="在这里输入"
+				document.getElementsByTagName("button")[0].innerText="下一题"
+				document.getElementById("Restart").innerText="重新开始"
+				document.getElementById("End").innerText="结束"
+				document.getElementById("Speak").innerText="朗读"
+				document.getElementById("MultipleChoice").innerText="选择题"
+				document.getElementById("SpeakWords").innerText="朗读单词"
+				document.getElementById("SpeakDefinitions").innerText="朗读释义"
+				document.getElementById("EnterWords").innerText="输入单词"
+				document.getElementById("EnterDefinitions").innerText="输入释义"
+				document.getElementById("ShowWords").innerText="显示单词"
+				document.getElementById("ShowDefinitions").innerText="显示释义"
 			}else{
-				document.title="Quiz";
-				document.getElementById("WordLabel").innerText="Word";
-				document.getElementById("EnteredWord").placeholder="Enter here";
-				document.getElementById("DefinitionLabel").innerText="Definition";
-				document.getElementById("EnteredDefinition").placeholder="Enter here";
-				document.getElementById("Next").innerText="Next";
-				document.getElementById("Restart").innerText="Restart";
-				document.getElementById("End").innerText="End";
-				document.getElementById("Speak").innerText="Speak";
-				document.getElementById("MultipleChoice").innerText="Multiple Choice";
-				document.getElementById("SpeakWords").innerText="Speak Words";
-				document.getElementById("SpeakDefinitions").innerText="Speak Definitions";
-				document.getElementById("EnterWords").innerText="Enter Words";
-				document.getElementById("EnterDefinitions").innerText="Enter Definitions";
-				document.getElementById("ShowWords").innerText="Show Words";
-				document.getElementById("ShowDefinitions").innerText="Show Definitions";
+				document.title="Quiz"
+				document.getElementById("WordLabel").innerText="Word"
+				document.getElementById("EnteredWord").placeholder="Enter here"
+				document.getElementById("DefinitionLabel").innerText="Definition"
+				document.getElementById("EnteredDefinition").placeholder="Enter here"
+				document.getElementsByTagName("button")[0].innerText="Next"
+				document.getElementById("Restart").innerText="Restart"
+				document.getElementById("End").innerText="End"
+				document.getElementById("Speak").innerText="Speak"
+				document.getElementById("MultipleChoice").innerText="Multiple Choice"
+				document.getElementById("SpeakWords").innerText="Speak Words"
+				document.getElementById("SpeakDefinitions").innerText="Speak Definitions"
+				document.getElementById("EnterWords").innerText="Enter Words"
+				document.getElementById("EnterDefinitions").innerText="Enter Definitions"
+				document.getElementById("ShowWords").innerText="Show Words"
+				document.getElementById("ShowDefinitions").innerText="Show Definitions"
 			}
 			if(!window.speechSynthesis){
-				document.getElementById("SpeakLi").style.display="none";
-				document.getElementById("SpeakWordsLi").style.display="none";
-				document.getElementById("SpeakDefinitionsLi").style.display="none";
+				document.getElementById("SpeakLi").style.display="none"
+				document.getElementById("SpeakWordsLi").style.display="none"
+				document.getElementById("SpeakDefinitionsLi").style.display="none"
 			}
-			Restart();
+			Restart()
 			function Restart(){
-				SettingsChanged=false;
-				Progress=1;
-				OutOfOrderStr="";
-				document.getElementById("MistakesBox").value="RTH 1";
-				LoadQuestion();
+				SettingsChanged=false
+				Progress=1
+				OutOfOrderStr=""
+				document.getElementsByTagName("textarea")[0].value="RTH 1"
+				LoadQuestion()
 				if(document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){
-					document.getElementById("OptionsUl").style.display="";
-					document.getElementById("EnterWordDiv").style.display="none";
-					document.getElementById("EnterDefinitionDiv").style.display="none";
+					document.getElementById("OptionsUl").style.display=""
+					document.getElementById("EnterWordDiv").style.display="none"
+					document.getElementById("EnterDefinitionDiv").style.display="none"
 				}else{
-					document.getElementById("OptionsUl").style.display="none";
+					document.getElementById("OptionsUl").style.display="none"
 					if(document.getElementById("EnterWordsSwitch").classList.contains("mui-active")&&document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
-						document.getElementById("EnterWordDiv").style.display="";
-						document.getElementById("EnterDefinitionDiv").style.display="";
+						document.getElementById("EnterWordDiv").style.display=""
+						document.getElementById("EnterDefinitionDiv").style.display=""
 					}else if(document.getElementById("EnterWordsSwitch").classList.contains("mui-active")&&!document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
-						document.getElementById("EnterWordDiv").style.display="";
-						document.getElementById("EnterDefinitionDiv").style.display="none";
+						document.getElementById("EnterWordDiv").style.display=""
+						document.getElementById("EnterDefinitionDiv").style.display="none"
 					}else if(!document.getElementById("EnterWordsSwitch").classList.contains("mui-active")&&document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
-						document.getElementById("EnterWordDiv").style.display="none";
-						document.getElementById("EnterDefinitionDiv").style.display="";
+						document.getElementById("EnterWordDiv").style.display="none"
+						document.getElementById("EnterDefinitionDiv").style.display=""
 					}else{
-						document.getElementById("EnterWordDiv").style.display="none";
-						document.getElementById("EnterDefinitionDiv").style.display="none";
+						document.getElementById("EnterWordDiv").style.display="none"
+						document.getElementById("EnterDefinitionDiv").style.display="none"
 					}
 				}
-				document.getElementById("Next").style.display="";
-				document.getElementById("MistakesBox").style.display="none";
-				document.getElementById("OptionUl").style.marginTop="20px";
+				document.getElementsByTagName("button")[0].style.display=""
+				document.getElementsByTagName("textarea")[0].style.display="none"
+				document.getElementById("OptionUl").style.marginTop="20px"
 			}
 			function GenerateOrder(){
 				var Min=1,
-				Max=(WLTSplit.length-2)/2;
+				Max=(WLTSplit.length-2)/2
 				var Range=Max-Min,
-				Rand=Math.random();
-				WordInt=Min+Math.round(Rand*Range);
-				if(OutOfOrderStr.indexOf("["+WordInt+"]")!=-1){GenerateOrder();}
+				Rand=Math.random()
+				WordInt=Min+Math.round(Rand*Range)
+				if(OutOfOrderStr.indexOf("["+WordInt+"]")!=-1){GenerateOrder()}
 			}
 			function LoadQuestion(){
-				ShowAnswer=false;
-				document.getElementById("EnteredWord").value="";
-				document.getElementById("EnteredDefinition").value="";
-				document.getElementsByClassName("mui-title")[0].innerText=document.title+" ("+Progress+"/"+(WLTSplit.length-2)/2+")";
-				GenerateOrder();
-  				OutOfOrderStr+="["+WordInt+"]\n";
-  				CorrectWord=WLTSplit[WordInt*2-1];
-  				CorrectDefinition=WLTSplit[WordInt*2];
-  				if(document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){
-  					document.getElementById("Option1").innerText="";
-  					document.getElementById("Option2").innerText="";
-  					document.getElementById("Option3").innerText="";
-  					document.getElementById("Option4").innerText="";
-  					var OptionInt=0,OptionStr="";
-  					CorrectInt=Math.round(Math.random()*3);
-  					var OptionsStr="["+WordInt+"]\n";
-  					if(document.getElementById("EnterWordsSwitch").classList.contains("mui-active")){OptionStr=CorrectWord;}
-  					else if(document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){OptionStr=CorrectDefinition;}
-  					switch(CorrectInt){
-  						case 0:document.getElementById("Option1").innerText=OptionStr;break;
-  						case 1:document.getElementById("Option2").innerText=OptionStr;break;
-  						case 2:document.getElementById("Option3").innerText=OptionStr;break;
-  						case 3:document.getElementById("Option4").innerText=OptionStr;break;
-  						default:break;
-  					}
-  					for(i=0;i<4;i++){
-  						GenerateOption();
-  						if(document.getElementById("Option1").innerText==""){document.getElementById("Option1").innerText=OptionStr;}
-  						else if(document.getElementById("Option2").innerText==""){document.getElementById("Option2").innerText=OptionStr;}
-  						else if(document.getElementById("Option3").innerText==""){document.getElementById("Option3").innerText=OptionStr;}
-  						else if(document.getElementById("Option4").innerText==""){document.getElementById("Option4").innerText=OptionStr;}
-  					}
-  					function GenerateOption(){
-  						var Range=(WLTSplit.length-2)/2,
-      					Rand=Math.random();
-      					OptionInt=Math.round(Rand*Range);
-	      				if(document.getElementById("EnterWordsSwitch").classList.contains("mui-active")){OptionStr=WLTSplit[(OptionInt+1)*2-1];}
-  						else if(document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){OptionStr=WLTSplit[(OptionInt+1)*2];}
-      					if(OptionsStr.indexOf("["+(OptionInt+1)+"]")!=-1||OptionStr==null){GenerateOption();}
-      					else{OptionsStr+="["+(OptionInt+1)+"]\n";}
-  					}
-  				}
-  				if(document.getElementById("ShowWordsSwitch").classList.contains("mui-active")){document.getElementsByClassName("show")[0].innerText=CorrectWord;}
-				else if(document.getElementById("ShowDefinitionsSwitch").classList.contains("mui-active")){document.getElementsByClassName("show")[0].innerText=CorrectDefinition;}
-				else{
-					if(Language=="SimplifiedChinese"){document.getElementsByClassName("show")[0].innerText="没有可显示的内容";}
-					else{document.getElementsByClassName("show")[0].innerText="There is nothing to show";}
+				ShowAnswer=false
+				document.getElementById("EnteredWord").value=""
+				document.getElementById("EnteredDefinition").value=""
+				document.getElementsByClassName("mui-title")[0].innerText=document.title+" ("+Progress+"/"+(WLTSplit.length-2)/2+")"
+				GenerateOrder()
+				OutOfOrderStr+="["+WordInt+"]\n"
+				CorrectWord=WLTSplit[WordInt*2-1]
+				CorrectDefinition=WLTSplit[WordInt*2]
+				if(document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){
+					document.getElementById("Option1").innerText=""
+					document.getElementById("Option2").innerText=""
+					document.getElementById("Option3").innerText=""
+					document.getElementById("Option4").innerText=""
+					var OptionInt=0,OptionStr=""
+					CorrectInt=Math.round(Math.random()*3)
+					var OptionsStr="["+WordInt+"]\n"
+					if(document.getElementById("EnterWordsSwitch").classList.contains("mui-active")){OptionStr=CorrectWord}
+					else if(document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){OptionStr=CorrectDefinition}
+					switch(CorrectInt){
+						case 0:
+							document.getElementById("Option1").innerText=OptionStr
+							break
+						case 1:
+							document.getElementById("Option2").innerText=OptionStr
+							break
+						case 2:
+							document.getElementById("Option3").innerText=OptionStr
+							break
+						case 3:
+							document.getElementById("Option4").innerText=OptionStr
+							break
+						default:break
+					}
+					for(i=0;i<4;i++){
+						GenerateOption()
+						if(document.getElementById("Option1").innerText==""){document.getElementById("Option1").innerText=OptionStr}
+						else if(document.getElementById("Option2").innerText==""){document.getElementById("Option2").innerText=OptionStr}
+						else if(document.getElementById("Option3").innerText==""){document.getElementById("Option3").innerText=OptionStr}
+						else if(document.getElementById("Option4").innerText==""){document.getElementById("Option4").innerText=OptionStr}
+					}
+					function GenerateOption(){
+						var Range=(WLTSplit.length-2)/2,
+						Rand=Math.random()
+						OptionInt=Math.round(Rand*Range)
+						if(document.getElementById("EnterWordsSwitch").classList.contains("mui-active")){OptionStr=WLTSplit[(OptionInt+1)*2-1]}
+						else if(document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){OptionStr=WLTSplit[(OptionInt+1)*2]}
+						if(OptionsStr.indexOf("["+(OptionInt+1)+"]")!=-1||OptionStr==null){GenerateOption()}
+						else{OptionsStr+="["+(OptionInt+1)+"]\n"}
+					}
 				}
-				Speak();
+				if(document.getElementById("ShowWordsSwitch").classList.contains("mui-active")){document.getElementsByClassName("show")[0].innerText=CorrectWord}
+				else if(document.getElementById("ShowDefinitionsSwitch").classList.contains("mui-active")){document.getElementsByClassName("show")[0].innerText=CorrectDefinition}
+				else{
+					if(Language=="SimplifiedChinese"){document.getElementsByClassName("show")[0].innerText="没有可显示的内容"}
+					else{document.getElementsByClassName("show")[0].innerText="There is nothing to show"}
+				}
+				Speak()
 			}
 			function Speak(){
 				if(window.speechSynthesis){
-					var SpeakText="";
-					if(document.getElementById("SpeakWordsSwitch").classList.contains("mui-active")){SpeakText+=CorrectWord+". ";}
-					if(document.getElementById("SpeakDefinitionsSwitch").classList.contains("mui-active")){SpeakText+=CorrectDefinition+". ";}
-					window.speechSynthesis.speak(new SpeechSynthesisUtterance(SpeakText));
+					var SpeakText=""
+					if(document.getElementById("SpeakWordsSwitch").classList.contains("mui-active")){SpeakText+=CorrectWord+". "}
+					if(document.getElementById("SpeakDefinitionsSwitch").classList.contains("mui-active")){SpeakText+=CorrectDefinition+". "}
+					window.speechSynthesis.speak(new SpeechSynthesisUtterance(SpeakText))
 				}
 			}
 		</script>
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			Init(true);
+			Init(true)
 			window.onkeydown=function(e){
 				switch(e.keyCode){
-					case 49:OptionClicked(0);break;
-					case 50:OptionClicked(1);break;
-					case 51:OptionClicked(2);break;
-					case 52:OptionClicked(3);break;
-					default:break;
+					case 49:
+						OptionClicked(0)
+						break
+					case 50:
+						OptionClicked(1)
+						break
+					case 51:
+						OptionClicked(2)
+						break
+					case 52:
+						OptionClicked(3)
+						break
+					default:break
 				}
 			}
 			function OptionClicked(ClickedNum){
 				if(ClickedNum==CorrectInt){
-					ShowAnswer=true;
-					Next();
+					ShowAnswer=true
+					Next()
 				}else{
-					if(document.getElementById("MistakesBox").value.indexOf(CorrectWord)==-1){document.getElementById("MistakesBox").value+="\n"+CorrectWord+"\n"+CorrectDefinition;}
-					if(Language=="SimplifiedChinese"){mui.alert("不是这个","测验");}
-					else{mui.alert("Not this one","Quiz","OK");}
+					if(document.getElementsByTagName("textarea")[0].value.indexOf(CorrectWord)==-1){document.getElementsByTagName("textarea")[0].value+="\n"+CorrectWord+"\n"+CorrectDefinition}
+					if(Language=="SimplifiedChinese"){mui.alert("不是这个","测验")}
+					else{mui.alert("Not this one","Quiz","OK")}
 				}
 			}
 			function ShowReport(){
-				document.getElementById("EnterWordDiv").style.display="none";
-				document.getElementById("EnterDefinitionDiv").style.display="none";
-				document.getElementById("OptionsUl").style.display="none";
-				document.getElementById("Next").style.display="none";
-				document.getElementById("MistakesBox").style.display="";
-				document.getElementById("OptionUl").style.marginTop="0px";
+				document.getElementById("EnterWordDiv").style.display="none"
+				document.getElementById("EnterDefinitionDiv").style.display="none"
+				document.getElementById("OptionsUl").style.display="none"
+				document.getElementsByTagName("button")[0].style.display="none"
+				document.getElementsByTagName("textarea")[0].style.display=""
+				document.getElementById("OptionUl").style.marginTop="0px"
 			}
 			function Next(){
 				if(SettingsChanged){
-					if(Language=="SimplifiedChinese"){mui.alert("单击重新开始使设置生效","测验");}
-					else{mui.alert("Click Restart to apply the settings","Quiz","OK");}
+					if(Language=="SimplifiedChinese"){mui.alert("单击重新开始使设置生效","测验")}
+					else{mui.alert("Click Restart to apply the settings","Quiz","OK")}
 				}else{
-					if(!ShowAnswer&&document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){if(document.getElementById("MistakesBox").value.indexOf(CorrectWord)==-1){document.getElementById("MistakesBox").value+="\n"+CorrectWord+"\n"+CorrectDefinition;}}
+					if(!ShowAnswer&&document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){if(document.getElementsByTagName("textarea")[0].value.indexOf(CorrectWord)==-1){document.getElementsByTagName("textarea")[0].value+="\n"+CorrectWord+"\n"+CorrectDefinition}}
 					if(!ShowAnswer&&!document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){
-						ShowAnswer=true;
+						ShowAnswer=true
 						if(document.getElementById("EnterWordsSwitch").classList.contains("mui-active")){
 							if(document.getElementById("EnteredWord").value.replace(/(\s*$)/g,"").toLowerCase()==CorrectWord.toLowerCase()){
-								if(Language=="SimplifiedChinese"){document.getElementById("EnteredWord").value+="（正确）";}
-								else{document.getElementById("EnteredWord").value+=" (Correct)";}
+								if(Language=="SimplifiedChinese"){document.getElementById("EnteredWord").value+="（正确）"}
+								else{document.getElementById("EnteredWord").value+=" (Correct)"}
 							}else{
-								if(document.getElementById("MistakesBox").value.indexOf(CorrectWord)==-1){document.getElementById("MistakesBox").value+="\n"+CorrectWord+"\n"+CorrectDefinition;}
-								if(Language=="SimplifiedChinese"){document.getElementById("EnteredWord").value+=" ≠ "+CorrectWord+"（错误）";}
-								else{document.getElementById("EnteredWord").value+=" ≠ "+CorrectWord+" (Incorrect)";}
+								if(document.getElementsByTagName("textarea")[0].value.indexOf(CorrectWord)==-1){document.getElementsByTagName("textarea")[0].value+="\n"+CorrectWord+"\n"+CorrectDefinition}
+								if(Language=="SimplifiedChinese"){document.getElementById("EnteredWord").value+=" ≠ "+CorrectWord+"（错误）"}
+								else{document.getElementById("EnteredWord").value+=" ≠ "+CorrectWord+" (Incorrect)"}
 							}
 						}
 						if(document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
 							var EnteredDefWithoutSpace=document.getElementById("EnteredDefinition").value.replace(/\s+/g,""),
-							CorrectDefWithoutSpace=CorrectDefinition.replace(/\s+/g,"");
+							CorrectDefWithoutSpace=CorrectDefinition.replace(/\s+/g,"")
 							if(EnteredDefWithoutSpace==CorrectDefWithoutSpace){
-								if(Language=="SimplifiedChinese"){document.getElementById("EnteredDefinition").value+="（正确）";}
-								else{document.getElementById("EnteredDefinition").value+=" (Correct)";}
+								if(Language=="SimplifiedChinese"){document.getElementById("EnteredDefinition").value+="（正确）"}
+								else{document.getElementById("EnteredDefinition").value+=" (Correct)"}
 							}else if(CorrectDefWithoutSpace.indexOf(EnteredDefWithoutSpace)!=-1||EnteredDefWithoutSpace.indexOf(CorrectDefWithoutSpace)!=-1){
-								if(EnteredDefWithoutSpace==""){Incorrect();}
+								if(EnteredDefWithoutSpace==""){Incorrect()}
 								else{
-									var DefCorrectRate;
-									if(CorrectDefinition.length>EnteredDefWithoutSpace.length){DefCorrectRate=(EnteredDefWithoutSpace.length/CorrectDefinition.length)*100;}
-									else{DefCorrectRate=(CorrectDefinition.length/EnteredDefWithoutSpace.length)*100;}
-									if(DefCorrectRate<1){DefCorrectRate=1;}
-									else if(DefCorrectRate>99){DefCorrectRate=99;}
-									if(Language=="SimplifiedChinese"){document.getElementById("EnteredDefinition").value+=" ≈ "+CorrectDefinition+"（"+DefCorrectRate+"% 正确）";}
-									else{document.getElementById("EnteredDefinition").value+=" ≈ "+CorrectDefinition+" ("+DefCorrectRate+"% Correct)";}
+									var DefCorrectRate
+									if(CorrectDefinition.length>EnteredDefWithoutSpace.length){DefCorrectRate=(EnteredDefWithoutSpace.length/CorrectDefinition.length)*100}
+									else{DefCorrectRate=(CorrectDefinition.length/EnteredDefWithoutSpace.length)*100}
+									if(DefCorrectRate<1){DefCorrectRate=1}
+									else if(DefCorrectRate>99){DefCorrectRate=99}
+									if(Language=="SimplifiedChinese"){document.getElementById("EnteredDefinition").value+=" ≈ "+CorrectDefinition+"（"+DefCorrectRate+"% 正确）"}
+									else{document.getElementById("EnteredDefinition").value+=" ≈ "+CorrectDefinition+" ("+DefCorrectRate+"% Correct)"}
 								}
-							}else{Incorrect();}
+							}else{Incorrect()}
 							function Incorrect(){
-								if(document.getElementById("MistakesBox").value.indexOf(CorrectWord)==-1){document.getElementById("MistakesBox").value+="\n"+CorrectWord+"\n"+CorrectDefinition;}
-								if(Language=="SimplifiedChinese"){document.getElementById("EnteredDefinition").value+=" ≠ "+CorrectDefinition+"（错误）";}
-								else{document.getElementById("EnteredDefinition").value+=" ≠ "+CorrectDefinition+" (Incorrect)";}
+								if(document.getElementsByTagName("textarea")[0].value.indexOf(CorrectWord)==-1){document.getElementsByTagName("textarea")[0].value+="\n"+CorrectWord+"\n"+CorrectDefinition}
+								if(Language=="SimplifiedChinese"){document.getElementById("EnteredDefinition").value+=" ≠ "+CorrectDefinition+"（错误）"}
+								else{document.getElementById("EnteredDefinition").value+=" ≠ "+CorrectDefinition+" (Incorrect)"}
 							}
 						}
 					}else{
 						if(Progress>=(WLTSplit.length-2)/2){
-		                    ShowReport();
-		                    var MCount=(document.getElementById("MistakesBox").value.split("\n").length-1)/2,
-							WCount=(WLTSplit.length-2)/2;
-		                    var CorrectRate=100-(MCount/WCount)*100;
-		                    if(Language=="SimplifiedChinese"){document.getElementsByClassName("show")[0].innerText="正确率："+CorrectRate+"%";}
-		                    else{document.getElementsByClassName("show")[0].innerText="Correct rate: "+CorrectRate+"%";}
+							ShowReport()
+							var MCount=(document.getElementsByTagName("textarea")[0].value.split("\n").length-1)/2,
+							WCount=(WLTSplit.length-2)/2
+							var CorrectRate=100-(MCount/WCount)*100
+							if(Language=="SimplifiedChinese"){document.getElementsByClassName("show")[0].innerText="正确率："+CorrectRate+"%"}
+							else{document.getElementsByClassName("show")[0].innerText="Correct rate: "+CorrectRate+"%"}
 						}else{
-							Progress+=1;
-							LoadQuestion();
+							Progress+=1
+							LoadQuestion()
 						}
 					}
 				}
 			}
 			function End(){
-				if(document.getElementById("MistakesBox").style.display!="none"){mui.back();}
+				if(document.getElementsByTagName("textarea")[0].style.display!="none"){
+					if(navigator.userAgent.indexOf("Electron")!=-1){window.close()}
+					else{mui.back()}
+				}
 				else{
-					ShowReport();
-                    var MCount=(document.getElementById("MistakesBox").value.split("\n").length-1)/2,
-					WCount=(WLTSplit.length-2)/2;
-                    var CorrectRate1=Math.round(100-((MCount+WCount-Progress)/WCount)*100),
-                    CorrectRate2=Math.round(100-(MCount/Progress)*100);
-                    if(Language=="SimplifiedChinese"){document.getElementsByClassName("show")[0].innerText="正确率："+CorrectRate1+"% ~ "+CorrectRate2+"%";}
-                    else{document.getElementsByClassName("show")[0].innerText="Correct rate: "+CorrectRate1+"% ~ "+CorrectRate2+"%";}
+					ShowReport()
+					var MCount=(document.getElementsByTagName("textarea")[0].value.split("\n").length-1)/2,
+					WCount=(WLTSplit.length-2)/2
+					var CorrectRate1=Math.round(100-((MCount+WCount-Progress)/WCount)*100),
+					CorrectRate2=Math.round(100-(MCount/Progress)*100)
+					if(Language=="SimplifiedChinese"){document.getElementsByClassName("show")[0].innerText="正确率："+CorrectRate1+"% ~ "+CorrectRate2+"%"}
+					else{document.getElementsByClassName("show")[0].innerText="Correct rate: "+CorrectRate1+"% ~ "+CorrectRate2+"%"}
 				}
 			}
 		</script>

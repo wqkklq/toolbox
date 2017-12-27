@@ -13,74 +13,74 @@
 	<body>
 		<header class="mui-bar mui-bar-nav title">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 class="mui-title"></h1>
+			<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
 			<div class="mui-input-row">
-			    <input id="CalculatorBox" type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13){Calculate();}"/>
+				<input type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13){Calculate()}"/>
 			</div>
-			<button id="CalculateButton" type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="Calculate();"></button>
-			<iframe id="CalcIFrame" frameborder="0" style="width:100%;display:none;"></iframe>
-			<ul class="mui-table-view" style="margin-top:20px;">
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="Calculate()"></button>
+			<iframe frameborder="0" width="100%" style="display:none"></iframe>
+			<ul class="mui-table-view" style="margin-top:20px">
 				<li class="mui-table-view-cell">
-		            <a id="Date" class="mui-navigate-right" href="javascript:OpenWindow('date');"></a>
-		        </li>
-		        <li class="mui-table-view-cell">
-		            <a id="Statistics" class="mui-navigate-right" class="mui-navigate-right" href="javascript:OpenWindow('statistics');"></a>
-		        </li>
-		        <li class="mui-table-view-cell">
-		            <a id="QuadraticFunction" class="mui-navigate-right" class="mui-navigate-right" href="javascript:OpenWindow('quadraticfunction');"></a>
-		        </li>
-		        <li class="mui-table-view-cell">
-		            <a id="SystemLinearEquationsTwoUnknowns" class="mui-navigate-right" href="javascript:OpenWindow('equation21');"></a>
-		        </li>
-		        <li class="mui-table-view-cell">
-		            <a id="FindLinearFunction" class="mui-navigate-right" href="javascript:OpenWindow('findlinearfunction');"></a>
-		        </li>
-		        <li class="mui-table-view-cell">
-		            <a id="QuadraticEquationOneUnknown" class="mui-navigate-right" href="javascript:OpenWindow('equation12');"></a>
-		        </li>
-		    </ul>
+					<a id="Date" class="mui-navigate-right" href="javascript:OpenWindow('date')"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="Statistics" class="mui-navigate-right" class="mui-navigate-right" href="javascript:OpenWindow('statistics')"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="QuadraticFunction" class="mui-navigate-right" class="mui-navigate-right" href="javascript:OpenWindow('quadraticfunction')"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="SystemLinearEquationsTwoUnknowns" class="mui-navigate-right" href="javascript:OpenWindow('equation21')"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="FindLinearFunction" class="mui-navigate-right" href="javascript:OpenWindow('findlinearfunction')"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="QuadraticEquationOneUnknown" class="mui-navigate-right" href="javascript:OpenWindow('equation12')"></a>
+				</li>
+			</ul>
 		</div>
 		<script type="text/javascript">
-			var Language=localStorage.getItem("Language");
+			var Language=localStorage.getItem("Language")
 			if(Language=="SimplifiedChinese"){
-				document.title="计算器";
-				document.getElementById("CalculatorBox").placeholder="输入算式";
-				document.getElementById("CalculateButton").innerText="计算";
-				document.getElementById("Date").innerText="日期";
-				document.getElementById("Statistics").innerText="统计";
-				document.getElementById("QuadraticFunction").innerText="二次函数";
-				document.getElementById("SystemLinearEquationsTwoUnknowns").innerText="二元一次方程组";
-				document.getElementById("FindLinearFunction").innerText="求一次函数解析式";
-				document.getElementById("QuadraticEquationOneUnknown").innerText="一元二次方程";
+				document.title="计算器"
+				document.getElementsByTagName("input")[0].placeholder="输入算式"
+				document.getElementsByTagName("button")[0].innerText="计算"
+				document.getElementById("Date").innerText="日期"
+				document.getElementById("Statistics").innerText="统计"
+				document.getElementById("QuadraticFunction").innerText="二次函数"
+				document.getElementById("SystemLinearEquationsTwoUnknowns").innerText="二元一次方程组"
+				document.getElementById("FindLinearFunction").innerText="求一次函数解析式"
+				document.getElementById("QuadraticEquationOneUnknown").innerText="一元二次方程"
 			}else{
-				document.title="Calculator";
-				document.getElementById("CalculatorBox").placeholder="Enter the formula";
-				document.getElementById("CalculateButton").innerText="Calculate";
-				document.getElementById("Date").innerText="Date";
-				document.getElementById("Statistics").innerText="Statistics";
-				document.getElementById("QuadraticFunction").innerText="Quadratic Function";
-				document.getElementById("SystemLinearEquationsTwoUnknowns").innerText="System of Linear Equations in Two Unknowns";
-				document.getElementById("FindLinearFunction").innerText="Find Analytic Formula of Linear Function";
-				document.getElementById("QuadraticEquationOneUnknown").innerText="Quadratic Equation in One Unknown";
+				document.title="Calculator"
+				document.getElementsByTagName("input")[0].placeholder="Enter the formula"
+				document.getElementsByTagName("button")[0].innerText="Calculate"
+				document.getElementById("Date").innerText="Date"
+				document.getElementById("Statistics").innerText="Statistics"
+				document.getElementById("QuadraticFunction").innerText="Quadratic Function"
+				document.getElementById("SystemLinearEquationsTwoUnknowns").innerText="System of Linear Equations in Two Unknowns"
+				document.getElementById("FindLinearFunction").innerText="Find Analytic Formula of Linear Function"
+				document.getElementById("QuadraticEquationOneUnknown").innerText="Quadratic Equation in One Unknown"
 			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title;
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
 		</script>
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			Init(true);
+			Init(true)
 			function Calculate(){
-				var Formula=document.getElementById("CalculatorBox").value;
+				var Formula=document.getElementsByTagName("input")[0].value
 				if(Formula==""){
-					if(Language=="SimplifiedChinese"){mui.alert("请输入算式","计算器");}
-					else{mui.alert("Please enter the formula","Calculator","OK");}
+					if(Language=="SimplifiedChinese"){mui.alert("请输入算式","计算器")}
+					else{mui.alert("Please enter the formula","Calculator","OK")}
 				}else{
-          			document.getElementById("CalcIFrame").contentDocument.open();
-          			document.getElementById("CalcIFrame").contentDocument.write("<label id='Result'></label><script type='text/javascript'>var Answer=("+Formula+")*1;document.getElementById('Result').innerText='"+Formula+"='+Answer;<\/script>");
-          			document.getElementById("CalcIFrame").contentDocument.close();
-          			document.getElementById("CalcIFrame").style.display="";
+					document.getElementsByTagName("iframe")[0].contentDocument.open()
+					document.getElementsByTagName("iframe")[0].contentDocument.write("<script type='text/javascript'>var Answer=("+Formula+")*1;document.write('"+Formula+"='+Answer)<\/script>")
+					document.getElementsByTagName("iframe")[0].contentDocument.close()
+					document.getElementsByTagName("iframe")[0].style.display=""
 				}
 			}
 		</script>

@@ -14,52 +14,52 @@
 	<body>
 		<header class="mui-bar mui-bar-nav title">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 class="mui-title"></h1>
+			<h1 class="mui-title"></h1>
 		</header>
 		<div class="mui-content">
-			<div id="ChatbotDiv" style="padding-bottom:87px;">
+			<div id="ChatbotDiv" style="padding-bottom:87px">
 				<div id="Welcome" class="msg msg-bot"></div>
-				<div id="Hitokoto" class="msg msg-bot" style="display:none;" onclick="Hitokoto();"></div>
+				<div id="Hitokoto" class="msg msg-bot" style="display:none" onclick="Hitokoto()"></div>
 			</div>
 		</div>
 		<div class="new-msg">
 			<div class="send">
-				<input id="SendBox" type="text" onkeydown="if(event.keyCode==13){Send();}"/>
+				<input type="text" onkeydown="if(event.keyCode==13){Send()}"/>
 			</div>
 			<div class="send-right">
-				<button id="SendButton" type="button" class="mui-btn mui-btn-blue" onclick="Send();"></button>
+				<button type="button" class="mui-btn mui-btn-blue" onclick="Send()"></button>
 			</div>
 		</footer>
 		<script type="text/javascript">
-			var Language=localStorage.getItem("Language");
+			var Language=localStorage.getItem("Language")
 			if(Language=="SimplifiedChinese"){
-				document.title="聊天机器人";
-				document.getElementsByClassName("mui-title")[0].innerText="康康";
-				document.getElementById("Welcome").innerText="我们已经是好友啦，一起来聊天吧！";
-				document.getElementById("SendButton").innerText="发送";
-				Hitokoto();
+				document.title="聊天机器人"
+				document.getElementsByClassName("mui-title")[0].innerText="康康"
+				document.getElementById("Welcome").innerText="我们已经是好友啦，一起来聊天吧！"
+				document.getElementsByTagName("button")[0].innerText="发送"
+				Hitokoto()
 			}else{
-				document.title="Chatbot";
-				document.getElementsByClassName("mui-title")[0].innerText="Kangkang";
-				document.getElementById("Welcome").innerText="You are now connected on RTH Toolbox.";
-				document.getElementById("SendButton").innerText="Send";
+				document.title="Chatbot"
+				document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
+				document.getElementById("Welcome").innerText="You are now connected on RTH Toolbox."
+				document.getElementsByTagName("button")[0].innerText="Send"
 			}
 			function Hitokoto(){
-				var xhr=new XMLHttpRequest();
+				var xhr=new XMLHttpRequest()
 				xhr.onreadystatechange=function(){
 					switch(xhr.readyState){
 						case 4:
 							if(xhr.status==200){
-								var Json=JSON.parse(xhr.responseText);
-								document.getElementById("Hitokoto").innerText=Json.hitokoto;
-								document.getElementById("Hitokoto").style.display="";
+								var Json=JSON.parse(xhr.responseText)
+								document.getElementById("Hitokoto").innerText=Json.hitokoto
+								document.getElementById("Hitokoto").style.display=""
 							}
-							break;
-						default:break;
+							break
+						default:break
 					}
 				}
-				xhr.open("GET","https://sslapi.hitokoto.cn/");
-				xhr.send();
+				xhr.open("GET","https://sslapi.hitokoto.cn/")
+				xhr.send()
 			}
 		</script>
 		<script src="js/mui.min.js"></script>
@@ -67,95 +67,95 @@
 		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			Init(false);
+			Init(false)
 			function Send(){
-				if(document.getElementById("SendBox").value!=""){
-					var NewDiv=document.createElement("div");
-					NewDiv.setAttribute("class","msg msg-me");
-					NewDiv.innerText=document.getElementById("SendBox").value;
-					document.getElementById("ChatbotDiv").appendChild(NewDiv);
+				if(document.getElementsByTagName("input")[0].value!=""){
+					var NewDiv=document.createElement("div")
+					NewDiv.setAttribute("class","msg msg-me")
+					NewDiv.innerText=document.getElementsByTagName("input")[0].value
+					document.getElementById("ChatbotDiv").appendChild(NewDiv)
 					if(navigator.onLine){
 						if(Language=="SimplifiedChinese"){
-							document.getElementsByClassName("mui-title")[0].innerText="对方正在输入";
-							ChatbotReply(document.getElementById("SendBox").value);
+							document.getElementsByClassName("mui-title")[0].innerText="对方正在输入"
+							ChatbotReply(document.getElementsByTagName("input")[0].value)
 						}else{
-							document.getElementsByClassName("mui-title")[0].innerText="Typing";
-							Translate(document.getElementById("SendBox").value);
+							document.getElementsByClassName("mui-title")[0].innerText="Typing"
+							Translate(document.getElementsByTagName("input")[0].value)
 						}
 					}else{
-						var NewDiv=document.createElement("div");
-						NewDiv.setAttribute("class","msg msg-bot");
-						if(Language=="SimplifiedChinese"){NewDiv.innerText="我需要连接到互联网才能和你聊天。";}
-						else{NewDiv.innerText="I cannot chat with you without connecting to the Internet.";}
-						document.getElementById("ChatbotDiv").appendChild(NewDiv);
+						var NewDiv=document.createElement("div")
+						NewDiv.setAttribute("class","msg msg-bot")
+						if(Language=="SimplifiedChinese"){NewDiv.innerText="我需要连接到互联网才能和你聊天。"}
+						else{NewDiv.innerText="I cannot chat with you without connecting to the Internet."}
+						document.getElementById("ChatbotDiv").appendChild(NewDiv)
 					}
-					document.getElementById("SendBox").value="";
+					document.getElementsByTagName("input")[0].value=""
 				}
 			}
 			function ChatbotReply(BotInfo){
-				var xhr=new XMLHttpRequest();
+				var xhr=new XMLHttpRequest()
 				xhr.onreadystatechange=function(){
 					switch(xhr.readyState){
 						case 4:
-							var BotText;
+							var BotText
 							if(xhr.status==200){
-								var Json=JSON.parse(xhr.responseText);
-								BotText=Json.text;
+								var Json=JSON.parse(xhr.responseText)
+								BotText=Json.text
 							}
-							var NewDiv=document.createElement("div");
-							NewDiv.setAttribute("class","msg msg-bot");
+							var NewDiv=document.createElement("div")
+							NewDiv.setAttribute("class","msg msg-bot")
 							if(Language=="SimplifiedChinese"){
-								NewDiv.innerText=BotText;
-								document.getElementById("ChatbotDiv").appendChild(NewDiv);
-								document.getElementsByClassName("mui-title")[0].innerText="康康";
+								NewDiv.innerText=BotText
+								document.getElementById("ChatbotDiv").appendChild(NewDiv)
+								document.getElementsByClassName("mui-title")[0].innerText="康康"
 							}else{
-								var salt=(new Date).getTime();
-								var str1=appid+BotText+salt+key;
-								var sign=MD5(str1);
+								var salt=(new Date).getTime()
+								var str1=appid+BotText+salt+key
+								var sign=MD5(str1)
 								$.ajax({
-								    url:"http://api.fanyi.baidu.com/api/trans/vip/translate",
-								    type:"get",
-								    dataType:"jsonp",
-								    data:{
-								        q:BotText,
-								        appid:appid,
-								        salt:salt,
-								        from:"zh",
-								        to:"en",
-								        sign:sign
-								    },
-								    success:function(data){
-										NewDiv.innerText=data.trans_result[0].dst;
-										document.getElementById("ChatbotDiv").appendChild(NewDiv);
-										document.getElementsByClassName("mui-title")[0].innerText="Kangkang";
-								    }
-								});
+									url:"http://api.fanyi.baidu.com/api/trans/vip/translate",
+									type:"get",
+									dataType:"jsonp",
+									data:{
+										q:BotText,
+										appid:appid,
+										salt:salt,
+										from:"zh",
+										to:"en",
+										sign:sign
+									},
+									success:function(data){
+										NewDiv.innerText=data.trans_result[0].dst
+										document.getElementById("ChatbotDiv").appendChild(NewDiv)
+										document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
+									}
+								})
 							}
-							break;
-						default:break;
+							break
+						default:break
 					}
 				}
-				xhr.open("GET","http://www.tuling123.com/openapi/api?key=42cff502574d42e996841e655fecd78a&info="+BotInfo);
-				xhr.send();
+				xhr.open("GET","http://www.tuling123.com/openapi/api?key=42cff502574d42e996841e655fecd78a&info="+BotInfo)
+				xhr.send()
 			}
 			function Translate(query){
-				var salt=(new Date).getTime();
-				var str1=appid+query+salt+key;
-				var sign=MD5(str1);
+				var salt=(new Date).getTime()
+				var str1=appid+query+salt+key
+				var sign=MD5(str1)
 				$.ajax({
-				    url:"http://api.fanyi.baidu.com/api/trans/vip/translate",
-				    type:"get",
-				    dataType:"jsonp",
-				    data:{
-				        q:query,
-				        appid:appid,
-				        salt:salt,
-				        from:"auto",
-				        to:"zh",
-				        sign:sign
-				    },
-				    success:function(data){ChatbotReply(data.trans_result[0].dst);}
-				});
+					url:"http://api.fanyi.baidu.com/api/trans/vip/translate",
+					type:"get",
+					dataType:"jsonp",
+					data:{
+						q:query,
+						appid:appid,
+						salt:salt,
+						from:"auto",
+						to:"zh",
+						sign:sign
+					},
+					success:function(data){ChatbotReply(data.trans_result[0].dst)}
+				})
 			}
 		</script>
 	</body>

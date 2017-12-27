@@ -14,20 +14,20 @@
 	<body>
 		<header class="mui-bar mui-bar-nav title">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-		   	<h1 class="mui-title"></h1>
+			<h1 class="mui-title"></h1>
 		</header>
-		<div class="mui-content" style="margin:0px 15px;text-align:center;">
-			<div id="Word" class="dict" style="line-height:40px;font-size:30px;color:#0066CC;"></div>
-			<div id="Pronunciation" class="dict" style="line-height:35px;font-size:20px;color:#0066CC;" onclick="new Audio(AudioURL).play();"></div>
-			<div id="CNDefinition" class="dict" style="line-height:35px;font-size:20px;display:none;"></div>
-			<div id="ENDefinition" class="dict" style="line-height:30px;font-size:15px;display:none;"></div>
+		<div class="mui-content" style="margin:0px 15px;text-align:center">
+			<div id="Word" class="dict" style="line-height:40px;font-size:30px;color:#0066CC"></div>
+			<div id="Pronunciation" class="dict" style="line-height:35px;font-size:20px;color:#0066CC" onclick="new Audio(AudioURL).play()"></div>
+			<div id="CNDefinition" class="dict" style="line-height:35px;font-size:20px;display:none"></div>
+			<div id="ENDefinition" class="dict" style="line-height:30px;font-size:15px;display:none"></div>
 		</div>
-		<div style="position:fixed;width:100%;bottom:45px;">
+		<div style="position:fixed;width:100%;bottom:45px">
 			<button id="ShowDefinition" type="button" class="mui-btn mui-btn-link mui-btn-block"></button>
 		</div>
 		<footer>
-			<div id="Previous" onclick="Previous();"></div>
-			<div id="Next" onclick="Next();"></div>
+			<div id="Previous" onclick="Previous()"></div>
+			<div id="Next" onclick="Next()"></div>
 		</footer>
 		<script src="js/mui.min.js"></script>
 		<script src="js/jquery.min.js"></script>

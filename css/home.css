@@ -1,65 +1,65 @@
 /*Code written by Shangzhen Yang*/
-html{height:100%;}
+html{height:100%}
 body{
-    background:linear-gradient(#0066CC,#004488);
-    color:#FFFFFF;
-    font-size:15px;
-    background-position:center center;
-    background-repeat:no-repeat;
-    background-attachment:fixed;
-    background-size:cover;
+	background:linear-gradient(#0066CC,#004488);
+	color:white;
+	font-size:15px;
+	background-position:center center;
+	background-repeat:no-repeat;
+	background-attachment:fixed;
+	background-size:cover
 }
-::-webkit-scrollbar{display:none;}
+::-webkit-scrollbar{display:none}
 .drag{
-    position:fixed;
-    top:0px;
-    left:0px;
-    height:85px;
-    width:100%;
-    -webkit-app-region:drag;
+	position:fixed;
+	top:0px;
+	left:0px;
+	height:85px;
+	width:100%;
+	-webkit-app-region:drag
 }
 .icon{
-    position:absolute;
-    top:65px;
-    left:40px;
-    -webkit-app-region:no-drag;
+	position:absolute;
+	top:65px;
+	left:40px;
+	-webkit-app-region:no-drag
 }
 .title{
-    position:absolute;
-    top:105px;
-    left:180px;
-    font-size:20px;
-    width:calc(100% - 260px);
+	position:absolute;
+	top:105px;
+	left:180px;
+	font-size:20px;
+	width:calc(100% - 260px)
 }
 .menu{
-    position:absolute;
-    top:210px;
-    left:0px;
-    width:calc(100% - 40px);
-    height:calc(100% - 265px);
-    overflow:auto;
+	position:absolute;
+	top:210px;
+	left:0px;
+	width:calc(100% - 40px);
+	height:calc(100% - 265px);
+	overflow:auto
 }
 li{
-    overflow:hidden;
-    padding:11px 15px;
-    color:#FFFFFF;
-    border-bottom:1px solid #0066CC;
+	overflow:hidden;
+	padding:11px 15px;
+	color:white;
+	border-bottom:1px solid #0066CC
 }
 li:active{
-    background-color:#FFFFFF;
-    color:#0066CC;
-    border-radius:5px;
+	background-color:white;
+	color:#0066CC;
+	border-radius:5px
 }
 .more{
-    position:absolute;
-    bottom:15px;
-    left:15px;
-    color:#FFFFFF;
+	position:absolute;
+	bottom:15px;
+	left:15px;
+	color:white
 }
 .settings{
-    position:absolute;
-    bottom:15px;
-    right:15px;
-    color:#FFFFFF;
+	position:absolute;
+	bottom:15px;
+	right:15px;
+	color:white
 }
-.mui-table-view-cell:active{color:#0066CC;}
+.mui-table-view-cell:active{color:#0066CC}
