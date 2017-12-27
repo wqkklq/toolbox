@@ -333,7 +333,7 @@
 					else{mui.alert("Please enter the code","Text Editor","OK")}
 				}else{
 					document.getElementsByTagName("iframe")[0].contentDocument.open()
-					document.getElementsByTagName("iframe")[0].contentDocument.write("<script type='text/javascript'>"+Code+"<\/script>")
+					document.getElementsByTagName("iframe")[0].contentDocument.write("<script type='text/javascript'>try{"+Code+"}catch(e){alert(e.message)}<\/script>")
 					document.getElementsByTagName("iframe")[0].contentDocument.close()
 				}
 			}
