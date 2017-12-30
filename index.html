@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<!--Code written by Shangzhen Yang-->
@@ -8,16 +8,22 @@
 		<title>RTH Toolbox</title>
 		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
+		<link href="css/general.css" rel="stylesheet">
 		<link href="css/home.css" rel="stylesheet">
 	</head>
 	<body>
 		<div class="drag"></div>
+		<div class="win" style="display:none">
+			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
+			<div style="right:40px" onclick="Maximize()">+</div>
+			<div style="right:0px" onclick="window.close()">×</div>
+		</div>
 		<div class="icon">
 			<a href="javascript:if(localStorage.getItem('Recent')!=null){OpenWindow(localStorage.getItem('Recent'))}">
 				<img src="img/icon.png" width="100px" style="border-radius:25%">
 			</a>
 		</div>
-		<div class="title"></div>
+		<div class="home-title"></div>
 		<div class="menu">
 			<ul>
 				<li onclick="OpenWindow('wordlist')" id="WordList"></li>
@@ -108,7 +114,7 @@
 			}
 			if(Language=="SimplifiedChinese"){
 				document.title="RTH 工具箱"
-				document.getElementsByClassName("title")[0].innerText="工具箱"
+				document.getElementsByClassName("home-title")[0].innerText="工具箱"
 				document.getElementById("WordList").innerText="单词表"
 				document.getElementById("Timer").innerText="计时器"
 				document.getElementById("Calculator").innerText="计算器"
@@ -117,7 +123,7 @@
 				document.getElementById("Search").innerText="搜索"
 				document.getElementById("TextEditor").innerText="文本编辑器"
 			}else{
-				document.getElementsByClassName("title")[0].innerText="Toolbox"
+				document.getElementsByClassName("home-title")[0].innerText="Toolbox"
 				document.getElementById("WordList").innerText="Word List"
 				document.getElementById("Timer").innerText="Timer"
 				document.getElementById("Calculator").innerText="Calculator"
@@ -129,8 +135,8 @@
 			if(!navigator.onLine){document.getElementsByClassName("more")[0].style.display="none"}
 			OnResize()
 			function OnResize(){
-				if(document.documentElement.clientWidth>500){document.getElementsByClassName("title")[0].style.textAlign="left"}
-				else{document.getElementsByClassName("title")[0].style.textAlign="center"}
+				if(document.documentElement.clientWidth>500){document.getElementsByClassName("home-title")[0].style.textAlign="left"}
+				else{document.getElementsByClassName("home-title")[0].style.textAlign="center"}
 			}
 		</script>
 		<script src="js/mui.min.js"></script>
@@ -158,16 +164,37 @@
 			window.onresize=OnResize
 			if(window.location.href.indexOf("rthsoftware.tk")!=-1||"ActiveXObject" in window){window.location.href="http://rths.tk/"}
 			if(navigator.userAgent.indexOf("Electron")!=-1){
+				if(process.platform!=="darwin"){document.getElementsByClassName("win")[0].style.display=""}
 				const electron=require("electron")
 				electron.webFrame.setZoomLevelLimits(1,1)
-				var path=electron.remote.getGlobal("sharedObj").path
+				let path
+				if(process.platform=="darwin"){path=electron.remote.getGlobal("sharedObj").path}
+				else if(process.platform=="win32"){path=electron.remote.getGlobal("sharedObj").path[1]}
 				if(path&&window.localStorage){
 					localStorage.setItem("WordList",require("fs").readFileSync(path,"utf8"))
 					localStorage.setItem("WordListCurrentItem","WordList")
 					OpenWindow("wordlist")
+				}else{
+					const package=require("./package.json")
+					const Num=10000+Math.round(Math.random()*89999)
+					const xhr=new XMLHttpRequest()
+					xhr.onreadystatechange=function(){
+						switch(xhr.readyState){
+							case 4:
+								if(xhr.status==200){
+									const Json=JSON.parse(xhr.responseText)
+									if(package.version!=Json.version){window.location.href="electron/update.html"}
+								}
+								break
+							default:break
+						}
+					}
+					xhr.open("GET","http://t.rths.tk/package.json?"+Num)
+					xhr.send()
 				}
 			}
 			function More(){
+				var Num=10000+Math.round(Math.random()*89999)
 				var xhr=new XMLHttpRequest()
 				xhr.onreadystatechange=function(){
 					switch(xhr.readyState){
@@ -181,7 +208,7 @@
 						default:break
 					}
 				}
-				xhr.open("GET","http://t.rths.tk/web/toolbox/more_"+Language+".html")
+				xhr.open("GET","http://t.rths.tk/web/toolbox/more_"+Language+".html?"+Num)
 				xhr.send()
 			}
 			function Back(){

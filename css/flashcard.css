@@ -2,22 +2,22 @@
 body{margin:40px 0px 10px}
 .dict{
 	margin-top:35px;
-	-webkit-user-select:text;
-	user-select:text
+	user-select:text;
+	-webkit-user-select:text
 }
 footer{
-	width:100%;
-	height:45px;
-	position:fixed;
-	bottom:0px;
-	line-height:45px;
-	text-align:center;
 	background-color:#FAFAFA;
-	color:#007AFF
+	bottom:0px;
+	color:#007AFF;
+	height:45px;
+	line-height:45px;
+	position:fixed;
+	text-align:center;
+	width:100%
 }
 footer div{
-	width:50%;
+	float:left;
 	height:100%;
-	float:left
+	width:50%
 }
 footer div:active{background-color:#F2F2F2}

@@ -1,15 +1,17 @@
 /*Code written by Shangzhen Yang*/
 html{padding-top:20px}
+body{font-family:"Helvetica Neue",Helvetica,sans-serif,"等线"}
 ::-webkit-scrollbar{display:none}
 .mui-content{
-	margin:40px 15px 15px;
 	color:#6D6D72;
-	font-size:15px
+	font-size:15px;
+	margin:40px 15px 15px
 }
 .title{
 	background-color:#0066CC;
-	padding-top:40px;
+	cursor:default;
 	height:85px;
+	padding-top:40px;
 	-webkit-app-region:drag
 }
 .back{
@@ -17,7 +19,31 @@ html{padding-top:20px}
 	-webkit-app-region:no-drag
 }
 .mui-title{
-	text-align:left;
 	color:white;
-	font-size:20px
+	font-size:20px;
+	text-align:left
+}
+.win{
+	color:white;
+	cursor:default;
+	font-size:20px;
+	height:40px;
+	line-height:40px;
+	position:fixed;
+	right:0px;
+	text-align:center;
+	top:0px;
+	width:120px;
+	z-index:11;
+	-webkit-app-region:no-drag
+}
+.win div{
+	height:40px;
+	position:fixed;
+	width:40px
+}
+.win div:hover{background-color:#007AF4}
+.win div:active{
+	background-color:white;
+	color:#0066CC
 }

@@ -25,6 +25,11 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
+		<div class="win" style="display:none">
+			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
+			<div style="right:40px" onclick="Maximize()">+</div>
+			<div style="right:0px" onclick="window.close()">×</div>
+		</div>
 		<div class="mui-content">
 			<div class="show"></div>
 			<div id="EnterWordDiv" class="mui-input-row" style="margin-top:20px">
@@ -365,8 +370,7 @@
 				if(document.getElementsByTagName("textarea")[0].style.display!="none"){
 					if(navigator.userAgent.indexOf("Electron")!=-1){window.close()}
 					else{mui.back()}
-				}
-				else{
+				}else{
 					ShowReport()
 					var MCount=(document.getElementsByTagName("textarea")[0].value.split("\n").length-1)/2,
 					WCount=(WLTSplit.length-2)/2

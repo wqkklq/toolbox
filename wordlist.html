@@ -15,6 +15,11 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
+		<div class="win" style="display:none">
+			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
+			<div style="right:40px" onclick="Maximize()">+</div>
+			<div style="right:0px" onclick="window.close()">×</div>
+		</div>
 		<div class="mui-content">
 			<div class="mui-input-row">
 				<input type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13){LookUp('')}">
@@ -239,6 +244,7 @@
 					localStorage.setItem("WordList","")
 					localStorage.setItem("WordListCurrentItem","WordList")
 				}
+				window.scrollTo(0,0)
 				Reload()
 			}
 			function Delete(){
@@ -370,6 +376,7 @@
 				if(window.localStorage){
 					localStorage.setItem("WordList",document.getElementsByTagName("textarea")[0].value)
 					localStorage.setItem("WordListCurrentItem",CurrentItem)
+					window.scrollTo(0,0)
 					Reload()
 				}
 			}

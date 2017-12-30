@@ -21,19 +21,24 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
+		<div class="win" style="display:none">
+			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
+			<div style="right:40px" onclick="Maximize()">+</div>
+			<div style="right:0px" onclick="window.close()">×</div>
+		</div>
 		<div class="mui-content">
 			<div style="text-align:center;line-height:30px"><span id="AppName" style="font-size:16pt;color:#0066CC"></span><br><label id="Studio" style="color:#0066CC"></label></div>
 			<ul class="mui-table-view" style="margin-top:15px">
 				<li class="mui-table-view-cell mui-collapse">
 					<a id="Version" class="mui-navigate-right" href="#"></a>
 					<div class="mui-collapse-content">
-						<p>V4.3</p>
+						<p>V4.4</p>
 					</div>
 				</li>
 				<li class="mui-table-view-cell mui-collapse">
 					<a id="LastUpdated1" class="mui-navigate-right" href="#"></a>
 					<div class="mui-collapse-content">
-						<p id="LastUpdated2">2017/12/28</p>
+						<p id="LastUpdated2">2017/12/31</p>
 					</div>
 				</li>
 				<li class="mui-table-view-cell mui-collapse">

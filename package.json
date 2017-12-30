@@ -1,9 +1,13 @@
 {
-  "name":"rthtoolbox",
-  "productName":"RTH Toolbox",
-  "version":"4.3.0",
-  "description":"A Product of RTH Software Studio",
-  "main":"electron/main.js",
-  "author":"Shangzhen Yang",
-  "license":"ISC"
+  "name": "rthtoolbox",
+  "productName": "RTH Toolbox",
+  "version": "4.4.0",
+  "description": "A Product of RTH Software Studio",
+  "main": "electron/main.js",
+  "scripts": {
+    "build-win": "electron-packager . --icon=./electron/icon.ico --electron-version=1.4.13",
+    "build-mac": "electron-packager . 'RTH Toolbox' --app-bundle-id=tk.rthsoftware.rthtoolbox.mac --extend-info=./electron/info.plist --icon=./electron/electron.icns --electron-version=1.7.9"
+  },
+  "author": "Shangzhen Yang",
+  "license": "ISC"
 }

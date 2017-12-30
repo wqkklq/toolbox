@@ -15,6 +15,11 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
+		<div class="win" style="display:none">
+			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
+			<div style="right:40px" onclick="Maximize()">+</div>
+			<div style="right:0px" onclick="window.close()">×</div>
+		</div>
 		<div class="mui-content">
 			<div class="mui-input-row">
 				<input id="Time" type="text" value="00:00:00" style="text-align:center" oninput="TimeInput()" onkeydown="if(event.keyCode==13){document.getElementById('StartButton').click()}">
@@ -170,15 +175,14 @@
 				}
 			}
 			if(navigator.userAgent.indexOf("Electron")!=-1){
-				if(process.platform=="darwin"){
-					document.addEventListener("visibilitychange",function(){
-						if(document.hidden){
-							let win=require("electron").remote.getCurrentWindow()
-							win.setAlwaysOnTop(true)
-							win.setSize(200,160)
-						}
-					})
-				}
+				document.addEventListener("visibilitychange",function(){
+					if(document.hidden){
+						const win=require("electron").remote.getCurrentWindow()
+						win.restore()
+						win.setSize(200,160)
+						win.setAlwaysOnTop(true)
+					}
+				})
 			}
 			function TimeInput(){
 				var TimeSplit=document.getElementById("Time").value.split(":")

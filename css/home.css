@@ -2,64 +2,65 @@
 html{height:100%}
 body{
 	background:linear-gradient(#0066CC,#004488);
-	color:white;
-	font-size:15px;
+	background-attachment:fixed;
 	background-position:center center;
 	background-repeat:no-repeat;
-	background-attachment:fixed;
-	background-size:cover
+	background-size:cover;
+	color:white;
+	font-size:15px
 }
-::-webkit-scrollbar{display:none}
 .drag{
+	height:85px;
+	left:0px;
 	position:fixed;
 	top:0px;
-	left:0px;
-	height:85px;
 	width:100%;
 	-webkit-app-region:drag
 }
 .icon{
+	left:40px;
 	position:absolute;
 	top:65px;
-	left:40px;
 	-webkit-app-region:no-drag
 }
-.title{
+.home-title{
+	cursor:default;
+	font-size:20px;
+	left:180px;
 	position:absolute;
 	top:105px;
-	left:180px;
-	font-size:20px;
 	width:calc(100% - 260px)
 }
 .menu{
+	height:calc(100% - 265px);
+	left:0px;
+	overflow:auto;
 	position:absolute;
 	top:210px;
-	left:0px;
-	width:calc(100% - 40px);
-	height:calc(100% - 265px);
-	overflow:auto
+	width:calc(100% - 40px)
 }
 li{
-	overflow:hidden;
-	padding:11px 15px;
+	border-bottom:1px solid #0066CC;
 	color:white;
-	border-bottom:1px solid #0066CC
+	cursor:default;
+	overflow:hidden;
+	padding:11px 15px
 }
 li:active{
 	background-color:white;
-	color:#0066CC;
-	border-radius:5px
+	border-radius:5px;
+	color:#0066CC
 }
 .more{
-	position:absolute;
 	bottom:15px;
+	color:white;
 	left:15px;
-	color:white
+	position:absolute
 }
 .settings{
-	position:absolute;
 	bottom:15px;
-	right:15px;
-	color:white
+	color:white;
+	position:absolute;
+	right:15px
 }
 .mui-table-view-cell:active{color:#0066CC}

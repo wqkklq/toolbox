@@ -16,6 +16,11 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
+		<div class="win" style="display:none">
+			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
+			<div style="right:40px" onclick="Maximize()">+</div>
+			<div style="right:0px" onclick="window.close()">×</div>
+		</div>
 		<div class="mui-content">
 			<div style="line-height:30px">
 				a &#40;<label id="x1Label1">x</label><sub><label id="x1Label2">1</label></sub>&#44; <label id="y1Label1">y</label><sub><label id="y1Label2">1</label></sub>&#41;<br>
