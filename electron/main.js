@@ -9,8 +9,7 @@ if(process.platform!=="darwin"){
         frame:false,
         height:700,
         icon:__dirname+"/icon.png",
-        width:1000,
-        show:false
+        width:1000
     }
 }else{
     options={
@@ -88,7 +87,6 @@ function createWindow(){
         protocol:"file:",
         slashes:true
     }))
-    win.on("closed",()=>{win=null})
     win.once("ready-to-show",()=>{win.show()})
 }
 app.on("ready",()=>{
