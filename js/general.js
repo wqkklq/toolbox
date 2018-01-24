@@ -1,6 +1,7 @@
 /*Code written by Shangzhen Yang*/
 if(window.location.href.indexOf("rthsoftware.tk")!=-1&&window.location.href.indexOf("sharedtext")==-1){window.location.href="http://rths.tk/"}
 var back=document.getElementsByClassName("mui-action-back")[0],
+existingScript="",
 language=localStorage.getItem("Language")
 if(language!="SimplifiedChinese"&&language!="English"){
 	if(navigator.language.indexOf("zh")!=-1){
@@ -57,17 +58,17 @@ function getToolbox(){
 	else{window.location.href=addTime("http://t.rths.tk/web/toolbox/download.html")}
 }
 function loadJS(src,callback){
-	var existingScript=document.getElementsByTagName("script")
-	for(var i=0;i<existingScript.length;i++){if(existingScript.src==src){return false}}
-	var loadScript=function(i){
-		var newScript=document.createElement("script")
-		newScript.setAttribute("src",src[i])
-		if(i<src.length-1){newScript.onload=function(){loadScript(i+1)}}
-		else{newScript.onload=callback}
-		document.body.appendChild(newScript)
-	}
-	loadScript(0)
-	return true
+	if(existingScript.indexOf(src)==-1){
+		var loadScript=function(i){
+			var newScript=document.createElement("script")
+			newScript.setAttribute("src",src[i])
+			if(i<src.length-1){newScript.onload=function(){loadScript(i+1)}}
+			else{newScript.onload=callback}
+			document.body.appendChild(newScript)
+			existingScript+=src[i]+","
+		}
+		loadScript(0)
+	}else{callback()}
 }
 function loadOnline(){
 	var wvs=plus.webview.all()
