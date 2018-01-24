@@ -3,8 +3,10 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
+		<meta name="renderer" content="webkit">
 		<title>RTH Toolbox</title>
 		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
@@ -17,27 +19,35 @@
 		</header>
 		<div class="win" style="display:none">
 			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="Maximize()">+</div>
+			<div style="right:40px" onclick="maximize()">+</div>
 			<div style="right:0px" onclick="window.close()">×</div>
 		</div>
 		<div class="mui-content">
-			<select id="LanguageSelect" onchange="LanguageChanged()">
+			<select id="LanguageSelect" onchange="languageChanged()">
 				<option value="SimplifiedChinese">简体中文</option>
 				<option value="English">English</option>
 			</select>
 			<ul class="mui-table-view">
 				<li class="mui-table-view-cell">
-					<a id="About" class="mui-navigate-right" href="javascript:OpenWindow('about')"></a>
+					<a id="About" class="mui-navigate-right" href="javascript:openWindow('about')"></a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a id="ClearData" class="mui-navigate-right" href="javascript:ClearData()"></a>
+					<a id="ClearData" class="mui-navigate-right" href="javascript:clearData()"></a>
 				</li>
 			</ul>
 		</div>
+		<!--[if IE]>
+			<script type="text/javascript">
+				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
+			</script>
+		<![endif]-->
+		<!--[if !IE]><!-->
+		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			document.getElementById("LanguageSelect").value=localStorage.getItem("Language")
-			LanguageChanged()
-			function LanguageChanged(){
+			document.getElementById("LanguageSelect").value=language
+			languageChanged()
+			function languageChanged(){
 				if(document.getElementById("LanguageSelect").value=="SimplifiedChinese"){
 					document.title="设置"
 					document.getElementById("About").innerText="关于 RTH 工具箱"
@@ -48,40 +58,35 @@
 					document.getElementById("ClearData").innerText="Clear Data"
 				}
 				document.getElementsByClassName("mui-title")[0].innerText=document.title
-				if(window.localStorage&&document.getElementById("LanguageSelect").value!=localStorage.getItem("Language")){
+				if(document.getElementById("LanguageSelect").value!=language){
 					localStorage.setItem("Language",document.getElementById("LanguageSelect").value)
-					if(document.getElementById("LanguageSelect").value=="SimplifiedChinese"){mui.alert("需要重新启动 RTH 工具箱","已应用",function(e){Restart()})}
-					else{mui.alert("RTH Toolbox needs to be restarted","Applied","OK",function(e){Restart()})}
+					if(document.getElementById("LanguageSelect").value=="SimplifiedChinese"){mui.alert("需要重新启动 RTH 工具箱","已应用",function(e){restart()})}
+					else{mui.alert("RTH Toolbox needs to be restarted","Applied","OK",function(e){restart()})}
 				}
 			}
-		</script>
-		<script src="js/mui.min.js"></script>
-		<script src="js/general.js"></script>
-		<script type="text/javascript">
-			Init(true)
-			function Restart(){
-				if(navigator.userAgent.indexOf("Html5Plus")!=-1){plus.runtime.restart()}
-				else if(navigator.userAgent.indexOf("Electron")!=-1){
+			function restart(){
+				if(isPlus()){
+					if(isOnline()){loadOnline()}
+					else{plus.runtime.restart()}
+				}else if(isElectron()){
 					require("electron").ipcRenderer.send("restart-index")
 					window.close()
 				}else{window.location.href="index.html"}
 			}
-			function ClearData(){
-				if(navigator.userAgent.indexOf("Html5Plus")!=-1){
-					plus.cache.clear()
-					plus.navigator.removeAllCookie()
-				}
-				if(window.localStorage){
-					if(document.getElementById("LanguageSelect").value=="SimplifiedChinese"){mui.confirm("您想要清除应用数据吗？","清除",["否","是"],function(e){if(e.index==1){ClearDataTrue()}})}
-					else{mui.confirm("Do you want to clear the app data?","Clear",["No","Yes"],function(e){if(e.index==1){ClearDataTrue()}})}
-					function ClearDataTrue(){
-						localStorage.clear()
-						var Num=10000+Math.round(Math.random()*89999)
-						if(document.getElementById("LanguageSelect").value=="SimplifiedChinese"){mui.alert("需要重新启动 RTH 工具箱 ["+Num+"]","已清除",function(e){Restart()})}
-						else{mui.alert("RTH Toolbox needs to be restarted ["+Num+"]","Cleared","OK",function(e){Restart()})}
+			function clearData(){
+				var clearDataTrue=function(){
+					localStorage.clear()
+					if(isPlus()){
+						plus.cache.clear()
+						plus.navigator.removeAllCookie()
 					}
+					if(document.getElementById("LanguageSelect").value=="SimplifiedChinese"){mui.alert("需要重新启动 RTH 工具箱 ["+(new Date).getTime()+"]","已清除",function(e){restart()})}
+					else{mui.alert("RTH Toolbox needs to be restarted ["+(new Date).getTime()+"]","Cleared","OK",function(e){restart()})}
 				}
+				if(document.getElementById("LanguageSelect").value=="SimplifiedChinese"){mui.confirm("您想要清除应用数据吗？","清除",["否","是"],function(e){if(e.index==1){clearDataTrue()}})}
+				else{mui.confirm("Do you want to clear the app data?","Clear",["No","Yes"],function(e){if(e.index==1){clearDataTrue()}})}
 			}
 		</script>
+		<!--<![endif]-->
 	</body>
 </html>

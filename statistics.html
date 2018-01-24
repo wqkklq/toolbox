@@ -3,8 +3,10 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
+		<meta name="renderer" content="webkit">
 		<title>RTH Toolbox</title>
 		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
@@ -17,38 +19,45 @@
 		</header>
 		<div class="win" style="display:none">
 			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="Maximize()">+</div>
+			<div style="right:40px" onclick="maximize()">+</div>
 			<div style="right:0px" onclick="window.close()">×</div>
 		</div>
 		<div class="mui-content">
 			<textarea rows="10"></textarea>
-			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="Calculate()"></button>
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="calculate()"></button>
 			<ul class="mui-table-view" style="margin-top:20px">
 				<li class="mui-table-view-cell">
-					<a id="Add" href="javascript:Add()" class="mui-navigate-right"></a>
+					<a id="Add" href="javascript:add()" class="mui-navigate-right"></a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a id="Clear" href="javascript:Clear()" class="mui-navigate-right"></a>
+					<a id="Clear" href="javascript:clear()" class="mui-navigate-right"></a>
 				</li>
 			</ul>
 			<fieldset style="margin-top:20px">
 				<div class="mui-input-row">
 					<label id="CountLabel"></label>
-					<input id="Count" type="text" oninput="ResultOnInput()">
+					<input id="Count" type="text" oninput="resultOnInput()">
 				</div>
 				<div class="mui-input-row">
 					<label id="AverageLabel"></label>
-					<input id="Average" type="text" oninput="ResultOnInput()">
+					<input id="Average" type="text" oninput="resultOnInput()">
 				</div>
 				<div class="mui-input-row">
 					<label id="SumLabel"></label>
-					<input id="Sum" type="text" oninput="ResultOnInput()">
+					<input id="Sum" type="text" oninput="resultOnInput()">
 				</div>
 			</fieldset>
 		</div>
+		<!--[if IE]>
+			<script type="text/javascript">
+				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
+			</script>
+		<![endif]-->
+		<!--[if !IE]><!-->
+		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var Language=localStorage.getItem("Language")
-			if(Language=="SimplifiedChinese"){
+			if(language=="SimplifiedChinese"){
 				document.title="计算器"
 				document.getElementsByTagName("textarea")[0].placeholder="输入数字"
 				document.getElementsByTagName("button")[0].innerText="计算"
@@ -68,43 +77,36 @@
 				document.getElementById("SumLabel").innerText="Sum"
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
-		</script>
-		<script src="js/mui.min.js"></script>
-		<script src="js/general.js"></script>
-		<script type="text/javascript">
-			Init(true)
-			function Calculate(){
-				var Num=document.getElementsByTagName("textarea")[0].value
-				if(Num!=""&&Num!=null){
-					var NumSplit=Num.split("\n"),SumValue=0
-					document.getElementById("Count").value=NumSplit.length
-					for (i=0;i<NumSplit.length;i++){
-						var CurrentNum=NumSplit[i]*1
-						SumValue+=CurrentNum
-					}
-					document.getElementById("Average").value=SumValue/NumSplit.length
+			function calculate(){
+				var num=document.getElementsByTagName("textarea")[0].value
+				if(num!=""&&num!=null){
+					var numSplit=num.split("\n"),SumValue=0
+					document.getElementById("Count").value=numSplit.length
+					for(var i=0;i<numSplit.length;i++){SumValue+=numSplit[i]*1}
+					document.getElementById("Average").value=SumValue/numSplit.length
 					document.getElementById("Sum").value=SumValue
-				}else{Add()}
+				}else{add()}
 			}
-			function Add(){
-				if(Language=="SimplifiedChinese"){mui.prompt("输入一个数字","","添加",function(e){if(e.index==1){AddTrue(e)}})}
-				else{mui.prompt("Enter a number","","Add",["Cancel","OK"],function(e){if(e.index==1){AddTrue(e)}})}
-				function AddTrue(e){
-					var NumSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
-					if(NumSplit[NumSplit.length-1]!=""){document.getElementsByTagName("textarea")[0].value+="\n"}
+			function add(){
+				var addTrue=function(e){
+					var numSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
+					if(numSplit[numSplit.length-1]!=""){document.getElementsByTagName("textarea")[0].value+="\n"}
 					document.getElementsByTagName("textarea")[0].value+=e.value
 				}
+				if(language=="SimplifiedChinese"){mui.prompt("输入一个数字","","添加",function(e){if(e.index==1){addTrue(e)}})}
+				else{mui.prompt("Enter a number","","Add",["Cancel","OK"],function(e){if(e.index==1){addTrue(e)}})}
 			}
-			function Clear(){
+			function clear(){
 				document.getElementsByTagName("textarea")[0].value=""
 				document.getElementById("Count").value=""
 				document.getElementById("Average").value=""
 				document.getElementById("Sum").value=""
 			}
-			function ResultOnInput(){
-				if(document.getElementsByTagName("textarea")[0].value==""){Clear()}
-				else{Calculate()}
+			function resultOnInput(){
+				if(document.getElementsByTagName("textarea")[0].value==""){clear()}
+				else{calculate()}
 			}
 		</script>
+		<!--<![endif]-->
 	</body>
 </html>

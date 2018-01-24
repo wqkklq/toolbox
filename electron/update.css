@@ -3,7 +3,7 @@ body{
 	color:white;
 	font-family:"Helvetica Neue",Helvetica,sans-serif,"等线";
 	user-select:none;
-	-webkit-user-select:none
+	-webkit-user-select:none;
 }
 ::-webkit-scrollbar{display:none}
 .drag{
@@ -16,7 +16,7 @@ body{
 	position:fixed;
 	top:0px;
 	width:100%;
-	-webkit-app-region:drag
+	-webkit-app-region:drag;
 }
 .win{
 	color:white;
@@ -30,17 +30,17 @@ body{
 	top:0px;
 	width:120px;
 	z-index:11;
-	-webkit-app-region:no-drag
+	-webkit-app-region:no-drag;
 }
 .win div{
 	height:40px;
 	position:fixed;
-	width:40px
+	width:40px;
 }
 .win div:hover{background-color:#007AF4}
 .win div:active{
 	background-color:white;
-	color:#0066CC
+	color:#0066CC;
 }
 .content{
 	background-color:black;
@@ -51,5 +51,5 @@ body{
 	padding:15px;
 	position:fixed;
 	top:40px;
-	width:100%
+	width:100%;
 }

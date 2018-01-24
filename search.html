@@ -3,8 +3,10 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
+		<meta name="renderer" content="webkit">
 		<title>RTH Toolbox</title>
 		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
@@ -17,20 +19,27 @@
 		</header>
 		<div class="win" style="display:none">
 			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="Maximize()">+</div>
+			<div style="right:40px" onclick="maximize()">+</div>
 			<div style="right:0px" onclick="window.close()">×</div>
 		</div>
 		<div class="mui-content">
-			<select id="EngineSelect1" onchange="CategoryChanged()"></select>
+			<select id="EngineSelect1" onchange="categoryChanged()"></select>
 			<select id="EngineSelect2"></select>
 			<div class="mui-input-row">
-				<input type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13){Search()}">
+				<input type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13&&this.value!=''){search()}">
 			</div>
-			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="Search()"></button>
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="search()"></button>
 		</div>
+		<!--[if IE]>
+			<script type="text/javascript">
+				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
+			</script>
+		<![endif]-->
+		<!--[if !IE]><!-->
+		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var Language=localStorage.getItem("Language")
-			if(Language=="SimplifiedChinese"){
+			if(language=="SimplifiedChinese"){
 				document.title="搜索"
 				document.getElementById("EngineSelect1").options.add(new Option("网页","Web"))
 				document.getElementById("EngineSelect1").options.add(new Option("百科","Encyclopedia"))
@@ -55,12 +64,12 @@
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			document.getElementById("EngineSelect1").value="Web"
-			CategoryChanged()
+			categoryChanged()
 			document.getElementById("EngineSelect2").value="Automatic"
-			function CategoryChanged(){
+			function categoryChanged(){
 				document.getElementById("EngineSelect2").options.length=0
 				if(document.getElementById("EngineSelect1").value=="Web"){
-					if(Language=="SimplifiedChinese"){
+					if(language=="SimplifiedChinese"){
 						document.getElementById("EngineSelect2").options.add(new Option("自动","Automatic"))
 						document.getElementById("EngineSelect2").options.add(new Option("百度","Baidu"))
 						document.getElementById("EngineSelect2").options.add(new Option("必应","Bing"))
@@ -80,7 +89,7 @@
 						document.getElementById("EngineSelect2").options.add(new Option("360 Search Engine","360SearchEngine"))
 					}
 				}else if(document.getElementById("EngineSelect1").value=="Encyclopedia"){
-					if(Language=="SimplifiedChinese"){
+					if(language=="SimplifiedChinese"){
 						document.getElementById("EngineSelect2").options.add(new Option("百度百科","BaiduEncyclopedia"))
 						document.getElementById("EngineSelect2").options.add(new Option("互动百科","HudongEncyclopedia"))
 						document.getElementById("EngineSelect2").options.add(new Option("维基百科","Wikipedia"))
@@ -90,7 +99,7 @@
 						document.getElementById("EngineSelect2").options.add(new Option("Wikipedia","Wikipedia"))
 					}
 				}else if(document.getElementById("EngineSelect1").value=="Dictionary"){
-					if(Language=="SimplifiedChinese"){
+					if(language=="SimplifiedChinese"){
 						document.getElementById("EngineSelect2").options.add(new Option("Dictionary.com","DictionaryCom"))
 						document.getElementById("EngineSelect2").options.add(new Option("剑桥词典","CambridgeDictionary"))
 						document.getElementById("EngineSelect2").options.add(new Option("金山词霸","KingsoftPowerword"))
@@ -106,7 +115,7 @@
 						document.getElementById("EngineSelect2").options.add(new Option("Youdao Dictionary","YoudaoDictionary"))
 					}
 				}else if(document.getElementById("EngineSelect1").value=="Translate"){
-					if(Language=="SimplifiedChinese"){
+					if(language=="SimplifiedChinese"){
 						document.getElementById("EngineSelect2").options.add(new Option("百度翻译","BaiduTranslate"))
 						document.getElementById("EngineSelect2").options.add(new Option("谷歌翻译","GoogleTranslate"))
 					}else{
@@ -114,7 +123,7 @@
 						document.getElementById("EngineSelect2").options.add(new Option("Google Translate","GoogleTranslate"))
 					}
 				}else if(document.getElementById("EngineSelect1").value=="Video"){
-					if(Language=="SimplifiedChinese"){
+					if(language=="SimplifiedChinese"){
 						document.getElementById("EngineSelect2").options.add(new Option("AcFun","AcFun"))
 						document.getElementById("EngineSelect2").options.add(new Option("爱奇艺","IQIYI"))
 						document.getElementById("EngineSelect2").options.add(new Option("哔哩哔哩","Bilibili"))
@@ -134,13 +143,13 @@
 						document.getElementById("EngineSelect2").options.add(new Option("YinYueTai","YinYueTai"))
 					}
 				}else if(document.getElementById("EngineSelect1").value=="Picture"){
-					if(Language=="SimplifiedChinese"){
+					if(language=="SimplifiedChinese"){
 						document.getElementById("EngineSelect2").options.add(new Option("二维码","QRCode"))
 					}else{
 						document.getElementById("EngineSelect2").options.add(new Option("QR Code","QRCode"))
 					}
 				}else if(document.getElementById("EngineSelect1").value=="Music"){
-					if(Language=="SimplifiedChinese"){
+					if(language=="SimplifiedChinese"){
 						document.getElementById("EngineSelect2").options.add(new Option("QQ音乐","QQMusic"))
 						document.getElementById("EngineSelect2").options.add(new Option("网易云音乐","NetEaseCloudMusic"))
 					}else{
@@ -149,60 +158,49 @@
 					}
 				}
 			}
-		</script>
-		<script src="js/mui.min.js"></script>
-		<script src="js/general.js"></script>
-		<script type="text/javascript">
-			Init(true)
-			function Search(){
-				var Engine,SearchTerm=document.getElementsByTagName("input")[0].value
+			function search(){
+				var engine,searchTerm=document.getElementsByTagName("input")[0].value
 				if(document.getElementById("EngineSelect2").value=="Automatic"){
-					var pattern=new RegExp("[A-Za-z]+")
-					if(pattern.test(SearchTerm)){
-						if(Language=="SimplifiedChinese"){Engine="http://bing.com/search?q="}
-						else{Engine="https://www.google.com/search?q="}
-					}else{Engine="http://www.baidu.com/s?wd="}
-				}else if(document.getElementById("EngineSelect2").value=="Baidu"){Engine="http://www.baidu.com/s?wd="}
-				else if(document.getElementById("EngineSelect2").value=="Bing"){Engine="http://bing.com/search?q="}
-				else if(document.getElementById("EngineSelect2").value=="DuckDuckGo"){Engine="https://www.duckduckgo.com/?q="}
-				else if(document.getElementById("EngineSelect2").value=="Google"){Engine="https://www.google.com/search?q="}
-				else if(document.getElementById("EngineSelect2").value=="Sogou"){Engine="https://www.sogou.com/web?query="}
-				else if(document.getElementById("EngineSelect2").value=="Yahoo"){Engine="https://search.yahoo.com/search?p="}
-				else if(document.getElementById("EngineSelect2").value=="360SearchEngine"){Engine="https://www.so.com/s?q="}
-				else if(document.getElementById("EngineSelect2").value=="BaiduEncyclopedia"){Engine="http://baike.baidu.com/search?word="}
-				else if(document.getElementById("EngineSelect2").value=="HudongEncyclopedia"){Engine="http://www.baike.com/wiki/"}
-				else if(document.getElementById("EngineSelect2").value=="Wikipedia"){Engine="https://en.wikipedia.org/wiki/"}
-				else if(document.getElementById("EngineSelect2").value=="DictionaryCom"){Engine="http://www.dictionary.com/browse/"}
-				else if(document.getElementById("EngineSelect2").value=="CambridgeDictionary"){Engine="http://dictionary.cambridge.org/us/dictionary/english/"}
-				else if(document.getElementById("EngineSelect2").value=="KingsoftPowerword"){Engine="http://www.iciba.com/"}
-				else if(document.getElementById("EngineSelect2").value=="OxfordDictionaries"){Engine="https://en.oxforddictionaries.com/definition/"}
-				else if(document.getElementById("EngineSelect2").value=="Wiktionary"){Engine="https://en.wiktionary.org/wiki/"}
-				else if(document.getElementById("EngineSelect2").value=="YoudaoDictionary"){Engine="http://www.youdao.com/w/"}
-				else if(document.getElementById("EngineSelect2").value=="BaiduTranslate"){Engine="http://fanyi.baidu.com/#en/zh/"}
-				else if(document.getElementById("EngineSelect2").value=="GoogleTranslate"){Engine="http://translate.google.cn/#en/zh-CN/"}
-				else if(document.getElementById("EngineSelect2").value=="AcFun"){Engine="http://www.acfun.tv/search/#query="}
-				else if(document.getElementById("EngineSelect2").value=="IQIYI"){Engine="http://so.iqiyi.com/so/q_"}
-				else if(document.getElementById("EngineSelect2").value=="Bilibili"){Engine="http://search.bilibili.com/all?keyword="}
-				else if(document.getElementById("EngineSelect2").value=="SohuTV"){Engine="http://so.tv.sohu.com/mts?wd="}
-				else if(document.getElementById("EngineSelect2").value=="TencentVideo"){Engine="http://v.qq.com/x/search/?q="}
-				else if(document.getElementById("EngineSelect2").value=="Youku"){Engine="http://www.soku.com/search_video/q_"}
-				else if(document.getElementById("EngineSelect2").value=="YouTube"){Engine="https://www.youtube.com/results?search_query="}
-				else if(document.getElementById("EngineSelect2").value=="YinYueTai"){Engine="http://so.yinyuetai.com/?keyword="}
-				else if(document.getElementById("EngineSelect2").value=="QRCode"){Engine="http://qr.topscan.com/api.php?text="}
-				else if(document.getElementById("EngineSelect2").value=="QQMusic"){Engine="http://y.qq.com/portal/search.html#w="}
-				else if(document.getElementById("EngineSelect2").value=="NetEaseCloudMusic"){Engine="http://music.163.com/#/search/m/?s="}
+					if(isEnglish(searchTerm)){
+						if(language=="SimplifiedChinese"){engine="http://bing.com/search?q="}
+						else{engine="https://www.google.com/search?q="}
+					}else{engine="http://www.baidu.com/s?wd="}
+				}else if(document.getElementById("EngineSelect2").value=="Baidu"){engine="http://www.baidu.com/s?wd="}
+				else if(document.getElementById("EngineSelect2").value=="Bing"){engine="http://bing.com/search?q="}
+				else if(document.getElementById("EngineSelect2").value=="DuckDuckGo"){engine="https://www.duckduckgo.com/?q="}
+				else if(document.getElementById("EngineSelect2").value=="Google"){engine="https://www.google.com/search?q="}
+				else if(document.getElementById("EngineSelect2").value=="Sogou"){engine="https://www.sogou.com/web?query="}
+				else if(document.getElementById("EngineSelect2").value=="Yahoo"){engine="https://search.yahoo.com/search?p="}
+				else if(document.getElementById("EngineSelect2").value=="360SearchEngine"){engine="https://www.so.com/s?q="}
+				else if(document.getElementById("EngineSelect2").value=="BaiduEncyclopedia"){engine="http://baike.baidu.com/search?word="}
+				else if(document.getElementById("EngineSelect2").value=="HudongEncyclopedia"){engine="http://www.baike.com/wiki/"}
+				else if(document.getElementById("EngineSelect2").value=="Wikipedia"){engine="https://en.wikipedia.org/wiki/"}
+				else if(document.getElementById("EngineSelect2").value=="DictionaryCom"){engine="http://www.dictionary.com/browse/"}
+				else if(document.getElementById("EngineSelect2").value=="CambridgeDictionary"){engine="http://dictionary.cambridge.org/us/dictionary/english/"}
+				else if(document.getElementById("EngineSelect2").value=="KingsoftPowerword"){engine="http://www.iciba.com/"}
+				else if(document.getElementById("EngineSelect2").value=="OxfordDictionaries"){engine="https://en.oxforddictionaries.com/definition/"}
+				else if(document.getElementById("EngineSelect2").value=="Wiktionary"){engine="https://en.wiktionary.org/wiki/"}
+				else if(document.getElementById("EngineSelect2").value=="YoudaoDictionary"){engine="http://www.youdao.com/w/"}
+				else if(document.getElementById("EngineSelect2").value=="BaiduTranslate"){engine="http://fanyi.baidu.com/#en/zh/"}
+				else if(document.getElementById("EngineSelect2").value=="GoogleTranslate"){engine="http://translate.google.cn/#en/zh-CN/"}
+				else if(document.getElementById("EngineSelect2").value=="AcFun"){engine="http://www.acfun.tv/search/#query="}
+				else if(document.getElementById("EngineSelect2").value=="IQIYI"){engine="http://so.iqiyi.com/so/q_"}
+				else if(document.getElementById("EngineSelect2").value=="Bilibili"){engine="http://search.bilibili.com/all?keyword="}
+				else if(document.getElementById("EngineSelect2").value=="SohuTV"){engine="http://so.tv.sohu.com/mts?wd="}
+				else if(document.getElementById("EngineSelect2").value=="TencentVideo"){engine="http://v.qq.com/x/search/?q="}
+				else if(document.getElementById("EngineSelect2").value=="Youku"){engine="http://www.soku.com/search_video/q_"}
+				else if(document.getElementById("EngineSelect2").value=="YouTube"){engine="https://www.youtube.com/results?search_query="}
+				else if(document.getElementById("EngineSelect2").value=="YinYueTai"){engine="http://so.yinyuetai.com/?keyword="}
+				else if(document.getElementById("EngineSelect2").value=="QRCode"){engine="http://qr.topscan.com/api.php?text="}
+				else if(document.getElementById("EngineSelect2").value=="QQMusic"){engine="http://y.qq.com/portal/search.html#w="}
+				else if(document.getElementById("EngineSelect2").value=="NetEaseCloudMusic"){engine="http://music.163.com/#/search/m/?s="}
 				else{return false}
-				if(SearchTerm==""){
-					if(Language=="SimplifiedChinese"){mui.alert("请输入要搜索的文字","搜索")}
+				if(searchTerm==""){
+					if(language=="SimplifiedChinese"){mui.alert("请输入要搜索的文字","搜索")}
 					else{mui.alert("Please enter the text you want to search for","Search","OK")}
-				}else{
-					if(navigator.userAgent.indexOf("Html5Plus")!=-1){
-						var SearchURL=encodeURI(Engine+SearchTerm)
-						plus.runtime.openURL(SearchURL)
-					}else if(navigator.userAgent.indexOf("Electron")!=-1){require("electron").shell.openExternal(Engine+SearchTerm)}
-					else{window.open(Engine+SearchTerm)}
-				}
+				}else{openWebPage(engine+searchTerm)}
 			}
 		</script>
+		<!--<![endif]-->
 	</body>
 </html>

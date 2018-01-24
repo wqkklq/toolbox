@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--Code written by Shangzhen Yang-->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
+		<meta name="theme-color" content="#0066cc">
+		<meta name="renderer" content="webkit">
+		<title>RTH Toolbox</title>
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
+		<link href="css/mui.min.css" rel="stylesheet">
+		<link href="css/general.css" rel="stylesheet">
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+			<h1 class="mui-title"></h1>
+		</header>
+		<div class="win" style="display:none">
+			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
+			<div style="right:40px" onclick="maximize()">+</div>
+			<div style="right:0px" onclick="window.close()">×</div>
+		</div>
+		<div class="mui-content">
+			<select onchange="calculateBasedOnMole()"></select>
+			<div class="mui-input-row">
+				<label id="SearchLabel"></label>
+				<input id="Search" type="text">
+			</div>
+			<div class="mui-input-row">
+				<label id="ParticleLabel"></label>
+				<input id="Particle" type="text">
+			</div>
+			<div class="mui-input-row">
+				<label id="MoleLabel"></label>
+				<input id="Mole" type="text" oninput="calculateBasedOnMole()">
+			</div>
+			<div class="mui-input-row">
+				<label id="MassLabel"></label>
+				<input id="Mass" type="text" oninput="calculateBasedOnMass()">
+			</div>
+			<div class="mui-input-row">
+				<label id="VolumeLabel"></label>
+				<input id="Volume" type="text">
+			</div>
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:15px" onclick="recordMass()"></button>
+			<div class="card" style="display:none" onclick="addOption()"></div>
+		</div>
+		<!--[if IE]>
+			<script type="text/javascript">
+				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
+			</script>
+		<![endif]-->
+		<!--[if !IE]><!-->
+		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
+		<script type="text/javascript">
+			var enterNum
+			if(language=="SimplifiedChinese"){
+				document.title="计算器"
+				document.getElementById("SearchLabel").innerText="搜索"
+				document.getElementById("Search").placeholder="输入搜索词"
+				document.getElementById("ParticleLabel").innerText="粒子"
+				document.getElementById("MoleLabel").innerText="摩尔"
+				document.getElementById("MassLabel").innerText="质量"
+				document.getElementById("VolumeLabel").innerText="体积"
+				enterNum="输入数字"
+				document.getElementsByTagName("button")[0].innerText="记录质量"
+			}else{
+				document.title="Calculator"
+				document.getElementById("SearchLabel").innerText="Search"
+				document.getElementById("Search").placeholder="Enter a search term"
+				document.getElementById("ParticleLabel").innerText="Particle"
+				document.getElementById("MoleLabel").innerText="Mole"
+				document.getElementById("MassLabel").innerText="Mass"
+				document.getElementById("VolumeLabel").innerText="Volume"
+				enterNum="Enter the number"
+				document.getElementsByTagName("button")[0].innerText="Record Mass"
+			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			document.getElementById("Particle").placeholder=enterNum
+			document.getElementById("Mole").placeholder=enterNum
+			document.getElementById("Mass").placeholder=enterNum
+			document.getElementById("Volume").placeholder=enterNum
+			var elements=[{
+				"symbol":"H",
+				"name":"Hydrogen",
+				"name_cn":"氢",
+				"mass":1.008
+			},{
+				"symbol":"He",
+				"name":"Helium",
+				"name_cn":"氦",
+				"mass":4.003
+			},{
+				"symbol":"Li",
+				"name":"Lithium",
+				"name_cn":"锂",
+				"mass":6.941
+			},{
+				"symbol":"Be",
+				"name":"Beryllium",
+				"name_cn":"铍",
+				"mass":9.012
+			},{
+				"symbol":"B",
+				"name":"Boron",
+				"name_cn":"硼",
+				"mass":10.811
+			},{
+				"symbol":"C",
+				"name":"Carbon",
+				"name_cn":"碳",
+				"mass":12.011
+			},{
+				"symbol":"N",
+				"name":"Nitrogen",
+				"name_cn":"氮",
+				"mass":14.007
+			},{
+				"symbol":"O",
+				"name":"Oxygen",
+				"name_cn":"氧",
+				"mass":15.999
+			},{
+				"symbol":"F",
+				"name":"Fluorine",
+				"name_cn":"氟",
+				"mass":18.998
+			},{
+				"symbol":"Ne",
+				"name":"Neon",
+				"name_cn":"氖",
+				"mass":20.180
+			},{
+				"symbol":"Na",
+				"name":"Sodium",
+				"name_cn":"钠",
+				"mass":22.990
+			},{
+				"symbol":"Mg",
+				"name":"Magnesium",
+				"name_cn":"镁",
+				"mass":24.305
+			},{
+				"symbol":"Al",
+				"name":"Aluminum",
+				"name_cn":"铝",
+				"mass":26.982
+			},{
+				"symbol":"Si",
+				"name":"Silicon",
+				"name_cn":"硅",
+				"mass":28.086
+			},{
+				"symbol":"P",
+				"name":"Phosphorus",
+				"name_cn":"磷",
+				"mass":30.974
+			},{
+				"symbol":"S",
+				"name":"Sulfur",
+				"name_cn":"硫",
+				"mass":32.066
+			},{
+				"symbol":"Cl",
+				"name":"Chlorine",
+				"name_cn":"氯",
+				"mass":35.453
+			},{
+				"symbol":"Ar",
+				"name":"Argon",
+				"name_cn":"氩",
+				"mass":39.948
+			},{
+				"symbol":"K",
+				"name":"Potassium",
+				"name_cn":"钾",
+				"mass":39.098
+			},{
+				"symbol":"Ca",
+				"name":"Calcium",
+				"name_cn":"钙",
+				"mass":40.078
+			},{
+				"symbol":"Sc",
+				"name":"Scandium",
+				"name_cn":"钪",
+				"mass":44.956
+			},{
+				"symbol":"Ti",
+				"name":"Titanium",
+				"name_cn":"钛",
+				"mass":47.867
+			},{
+				"symbol":"V",
+				"name":"Vanadium",
+				"name_cn":"钒",
+				"mass":50.942
+			},{
+				"symbol":"Cr",
+				"name":"Chromium",
+				"name_cn":"铬",
+				"mass":51.996
+			},{
+				"symbol":"Mn",
+				"name":"Manganese",
+				"name_cn":"锰",
+				"mass":54.938
+			},{
+				"symbol":"Fe",
+				"name":"Iron",
+				"name_cn":"铁",
+				"mass":55.845
+			},{
+				"symbol":"Co",
+				"name":"Cobalt",
+				"name_cn":"钴",
+				"mass":58.933
+			},{
+				"symbol":"Ni",
+				"name":"Nickel",
+				"name_cn":"镍",
+				"mass":58.693
+			},{
+				"symbol":"Cu",
+				"name":"Copper",
+				"name_cn":"铜",
+				"mass":63.546
+			},{
+				"symbol":"Zn",
+				"name":"Zinc",
+				"name_cn":"锌",
+				"mass":65.38
+			},{
+				"symbol":"Ga",
+				"name":"Gallium",
+				"name_cn":"镓",
+				"mass":69.723
+			},{
+				"symbol":"Ge",
+				"name":"Germanium",
+				"name_cn":"锗",
+				"mass":72.630
+			},{
+				"symbol":"As",
+				"name":"Arsenic",
+				"name_cn":"砷",
+				"mass":74.922
+			},{
+				"symbol":"Se",
+				"name":"Selenium",
+				"name_cn":"硒",
+				"mass":78.971
+			},{
+				"symbol":"Br",
+				"name":"Bromine",
+				"name_cn":"溴",
+				"mass":79.904
+			},{
+				"symbol":"Kr",
+				"name":"Krypton",
+				"name_cn":"氪",
+				"mass":83.798
+			},{
+				"symbol":"Rb",
+				"name":"Rubidium",
+				"name_cn":"铷",
+				"mass":85.468
+			},{
+				"symbol":"Sr",
+				"name":"Strontium",
+				"name_cn":"锶",
+				"mass":87.62
+			},{
+				"symbol":"Y",
+				"name":"Yttrium",
+				"name_cn":"钇",
+				"mass":88.906
+			},{
+				"symbol":"Zr",
+				"name":"Zirconium",
+				"name_cn":"锆",
+				"mass":91.224
+			},{
+				"symbol":"Nb",
+				"name":"Niobium",
+				"name_cn":"铌",
+				"mass":92.906
+			},{
+				"symbol":"Mo",
+				"name":"Molybdenum",
+				"name_cn":"钼",
+				"mass":95.95
+			},{
+				"symbol":"Tc",
+				"name":"Technetium",
+				"name_cn":"锝",
+				"mass":98
+			},{
+				"symbol":"Ru",
+				"name":"Ruthenium",
+				"name_cn":"钌",
+				"mass":101.07
+			},{
+				"symbol":"Rh",
+				"name":"Rhodium",
+				"name_cn":"铑",
+				"mass":102.906
+			},{
+				"symbol":"Pd",
+				"name":"Palladium",
+				"name_cn":"钯",
+				"mass":106.42
+			},{
+				"symbol":"Ag",
+				"name":"Silver",
+				"name_cn":"银",
+				"mass":107.868
+			},{
+				"symbol":"Cd",
+				"name":"Cadmium",
+				"name_cn":"镉",
+				"mass":112.411
+			},{
+				"symbol":"In",
+				"name":"Indium",
+				"name_cn":"铟",
+				"mass":114.818
+			},{
+				"symbol":"Sn",
+				"name":"Tin",
+				"name_cn":"锡",
+				"mass":118.710
+			},{
+				"symbol":"Sb",
+				"name":"Antimony",
+				"name_cn":"锑",
+				"mass":121.760
+			},{
+				"symbol":"Te",
+				"name":"Tellurium",
+				"name_cn":"碲",
+				"mass":127.60
+			},{
+				"symbol":"I",
+				"name":"Iodine",
+				"name_cn":"碘",
+				"mass":126.904
+			},{
+				"symbol":"Xe",
+				"name":"Xenon",
+				"name_cn":"氙",
+				"mass":131.29
+			},{
+				"symbol":"Cs",
+				"name":"Caesium",
+				"name_cn":"铯",
+				"mass":132.905
+			},{
+				"symbol":"Ba",
+				"name":"Barium",
+				"name_cn":"钡",
+				"mass":137.327
+			},{
+				"symbol":"La",
+				"name":"Lanthanum",
+				"name_cn":"镧",
+				"mass":138.906
+			},{
+				"symbol":"Ce",
+				"name":"Cerium",
+				"name_cn":"铈",
+				"mass":140.116
+			},{
+				"symbol":"Pr",
+				"name":"Praseodymium",
+				"name_cn":"镨",
+				"mass":140.908
+			},{
+				"symbol":"Nd",
+				"name":"Neodymium",
+				"name_cn":"钕",
+				"mass":144.24
+			},{
+				"symbol":"Pm",
+				"name":"Promethium",
+				"name_cn":"钷",
+				"mass":145
+			},{
+				"symbol":"Sm",
+				"name":"Samarium",
+				"name_cn":"钐",
+				"mass":150.36
+			},{
+				"symbol":"Eu",
+				"name":"Europium",
+				"name_cn":"铕",
+				"mass":151.964
+			},{
+				"symbol":"Gd",
+				"name":"Gadolinium",
+				"name_cn":"钆",
+				"mass":157.25
+			},{
+				"symbol":"Tb",
+				"name":"Terbium",
+				"name_cn":"铽",
+				"mass":158.925
+			},{
+				"symbol":"Dy",
+				"name":"Dysprosium",
+				"name_cn":"镝",
+				"mass":162.50
+			},{
+				"symbol":"Ho",
+				"name":"Holmium",
+				"name_cn":"钬",
+				"mass":164.930
+			},{
+				"symbol":"Er",
+				"name":"Erbium",
+				"name_cn":"铒",
+				"mass":167.26
+			},{
+				"symbol":"Tm",
+				"name":"Thulium",
+				"name_cn":"铥",
+				"mass":168.934
+			},{
+				"symbol":"Yb",
+				"name":"Ytterbium",
+				"name_cn":"镱",
+				"mass":173.05
+			},{
+				"symbol":"Lu",
+				"name":"Lutetium",
+				"name_cn":"镥",
+				"mass":174.967
+			},{
+				"symbol":"Hf",
+				"name":"Hafnium",
+				"name_cn":"铪",
+				"mass":178.49
+			},{
+				"symbol":"Ta",
+				"name":"Tantalum",
+				"name_cn":"钽",
+				"mass":180.948
+			},{
+				"symbol":"W",
+				"name":"Tungsten",
+				"name_cn":"钨",
+				"mass":183.84
+			},{
+				"symbol":"Re",
+				"name":"Rhenium",
+				"name_cn":"铼",
+				"mass":186.207
+			},{
+				"symbol":"Os",
+				"name":"Osmium",
+				"name_cn":"锇",
+				"mass":190.23
+			},{
+				"symbol":"Ir",
+				"name":"Iridium",
+				"name_cn":"铱",
+				"mass":192.217
+			},{
+				"symbol":"Pt",
+				"name":"Platinum",
+				"name_cn":"铂",
+				"mass":195.078
+			},{
+				"symbol":"Au",
+				"name":"Gold",
+				"name_cn":"金",
+				"mass":196.967
+			},{
+				"symbol":"Hg",
+				"name":"Mercury",
+				"name_cn":"汞",
+				"mass":200.59
+			},{
+				"symbol":"Tl",
+				"name":"Thallium",
+				"name_cn":"铊",
+				"mass":204.383
+			},{
+				"symbol":"Pb",
+				"name":"Lead",
+				"name_cn":"铅",
+				"mass":207.2
+			},{
+				"symbol":"Bi",
+				"name":"Bismuth",
+				"name_cn":"铋",
+				"mass":208.980
+			},{
+				"symbol":"Po",
+				"name":"Polonium",
+				"name_cn":"钋",
+				"mass":209
+			},{
+				"symbol":"At",
+				"name":"Astatine",
+				"name_cn":"砹",
+				"mass":210
+			},{
+				"symbol":"Rn",
+				"name":"Radon",
+				"name_cn":"氡",
+				"mass":222
+			},{
+				"symbol":"Fr",
+				"name":"Francium",
+				"name_cn":"钫",
+				"mass":223
+			},{
+				"symbol":"Ra",
+				"name":"Radium",
+				"name_cn":"镭",
+				"mass":226
+			},{
+				"symbol":"Ac",
+				"name":"Actinium",
+				"name_cn":"锕",
+				"mass":227
+			},{
+				"symbol":"Th",
+				"name":"Thorium",
+				"name_cn":"钍",
+				"mass":232.038
+			},{
+				"symbol":"Pa",
+				"name":"Protactinium",
+				"name_cn":"镤",
+				"mass":231.036
+			},{
+				"symbol":"U",
+				"name":"Uranium",
+				"name_cn":"铀",
+				"mass":238.029
+			},{
+				"symbol":"Np",
+				"name":"Neptunium",
+				"name_cn":"镎",
+				"mass":237
+			},{
+				"symbol":"Pu",
+				"name":"Plutonium",
+				"name_cn":"钚",
+				"mass":244
+			},{
+				"symbol":"Am",
+				"name":"Americium",
+				"name_cn":"镅",
+				"mass":243
+			},{
+				"symbol":"Cm",
+				"name":"Curium",
+				"name_cn":"锔",
+				"mass":247
+			},{
+				"symbol":"Bk",
+				"name":"Berkelium",
+				"name_cn":"锫",
+				"mass":247
+			},{
+				"symbol":"Cf",
+				"name":"Californium",
+				"name_cn":"锎",
+				"mass":251
+			},{
+				"symbol":"Es",
+				"name":"Einsteinium",
+				"name_cn":"锿",
+				"mass":252
+			},{
+				"symbol":"Fm",
+				"name":"Fermium",
+				"name_cn":"镄",
+				"mass":257
+			},{
+				"symbol":"Md",
+				"name":"Mendelevium",
+				"name_cn":"钔",
+				"mass":258
+			},{
+				"symbol":"No",
+				"name":"Nobelium",
+				"name_cn":"锘",
+				"mass":259
+			},{
+				"symbol":"Lr",
+				"name":"Lawrencium",
+				"name_cn":"铹",
+				"mass":266
+			},{
+				"symbol":"Rf",
+				"name":"Rutherfordium",
+				"name_cn":"𬬻",
+				"mass":267
+			},{
+				"symbol":"Db",
+				"name":"Dubnium",
+				"name_cn":"𬭊",
+				"mass":268
+			},{
+				"symbol":"Sg",
+				"name":"Seaborgium",
+				"name_cn":"𬭳",
+				"mass":269
+			},{
+				"symbol":"Bh",
+				"name":"Bohrium",
+				"name_cn":"𬭛",
+				"mass":270
+			},{
+				"symbol":"Hs",
+				"name":"Hassium",
+				"name_cn":"𬭶",
+				"mass":277
+			},{
+				"symbol":"Mt",
+				"name":"Meitnerium",
+				"name_cn":"鿏",
+				"mass":278
+			},{
+				"symbol":"Ds",
+				"name":"Darmstadtium",
+				"name_cn":"𫟼",
+				"mass":281
+			},{
+				"symbol":"Rg",
+				"name":"Roentgenium",
+				"name_cn":"𬬭",
+				"mass":282
+			},{
+				"symbol":"Cn",
+				"name":"Copernicium",
+				"name_cn":"鎶",
+				"mass":285
+			},{
+				"symbol":"Nh",
+				"name":"Nihonium",
+				"name_cn":"鉨",
+				"mass":286
+			},{
+				"symbol":"Fl",
+				"name":"Flerovium",
+				"name_cn":"𫓧",
+				"mass":289
+			},{
+				"symbol":"Mc",
+				"name":"Moscovium",
+				"name_cn":"镆",
+				"mass":290
+			},{
+				"symbol":"Lv",
+				"name":"Livermorium",
+				"name_cn":"鉝",
+				"mass":293
+			},{
+				"symbol":"Ts",
+				"name":"Tennessine",
+				"name_cn":"Tennessine",
+				"mass":294
+			},{
+				"symbol":"Og",
+				"name":"Oganesson",
+				"name_cn":"Oganesson",
+				"mass":294
+			}]
+			for(var i=0;i<elements.length;i++){
+				var name
+				if(language=="SimplifiedChinese"){name=elements[i].name_cn}
+				else{name=elements[i].name}
+				document.getElementsByTagName("select")[0].options.add(new Option(i+1+". "+elements[i].symbol+" ("+name+")",elements[i].mass))
+			}
+			function clear(){
+				document.getElementById("Particle").value=""
+				document.getElementById("Mole").value=""
+				document.getElementById("Mass").value=""
+				document.getElementById("Volume").value=""
+			}
+			function search(searchTerm){
+				for(var i=0;i<elements.length;i++){
+					if(searchTerm.substr(0,4)=="mono"){
+						document.getElementById("Mole").value="1"
+						searchTerm=searchTerm.replace("mono","")
+					}else if(searchTerm.substr(0,2)=="di"){
+						document.getElementById("Mole").value="2"
+						searchTerm=searchTerm.replace("di","")
+					}else if(searchTerm.substr(0,3)=="tri"){
+						document.getElementById("Mole").value="3"
+						searchTerm=searchTerm.replace("tri","")
+					}else if(searchTerm.substr(0,5)=="tetra"){
+						document.getElementById("Mole").value="4"
+						searchTerm=searchTerm.replace("tetra","")
+					}else if(searchTerm.substr(0,5)=="penta"){
+						document.getElementById("Mole").value="5"
+						searchTerm=searchTerm.replace("penta","")
+					}else if(searchTerm.substr(0,4)=="hexa"){
+						document.getElementById("Mole").value="6"
+						searchTerm=searchTerm.replace("hexa","")
+					}else if(searchTerm.substr(0,5)=="hepta"){
+						document.getElementById("Mole").value="7"
+						searchTerm=searchTerm.replace("hepta","")
+					}else if(searchTerm.substr(0,4)=="octa"){
+						document.getElementById("Mole").value="8"
+						searchTerm=searchTerm.replace("octa","")
+					}else if(searchTerm.substr(0,4)=="nona"){
+						document.getElementById("Mole").value="9"
+						searchTerm=searchTerm.replace("nona","")
+					}else if(searchTerm.substr(0,4)=="deca"){
+						document.getElementById("Mole").value="10"
+						searchTerm=searchTerm.replace("deca","")
+					}else if(searchTerm.substr(0,6)=="undeca"){
+						document.getElementById("Mole").value="11"
+						searchTerm=searchTerm.replace("undeca","")
+					}else if(searchTerm.substr(0,6)=="dodeca"){
+						document.getElementById("Mole").value="12"
+						searchTerm=searchTerm.replace("dodeca","")
+					}else if(searchTerm.substr(0,1)=="一"){
+						document.getElementById("Mole").value="1"
+						searchTerm=searchTerm.replace("一","")
+					}else if(searchTerm.substr(0,1)=="二"){
+						document.getElementById("Mole").value="2"
+						searchTerm=searchTerm.replace("二","")
+					}else if(searchTerm.substr(0,1)=="三"){
+						document.getElementById("Mole").value="3"
+						searchTerm=searchTerm.replace("三","")
+					}else if(searchTerm.substr(0,1)=="四"){
+						document.getElementById("Mole").value="4"
+						searchTerm=searchTerm.replace("四","")
+					}else if(searchTerm.substr(0,1)=="五"){
+						document.getElementById("Mole").value="5"
+						searchTerm=searchTerm.replace("五","")
+					}else if(searchTerm.substr(0,1)=="六"){
+						document.getElementById("Mole").value="6"
+						searchTerm=searchTerm.replace("六","")
+					}else if(searchTerm.substr(0,1)=="七"){
+						document.getElementById("Mole").value="7"
+						searchTerm=searchTerm.replace("七","")
+					}else if(searchTerm.substr(0,1)=="八"){
+						document.getElementById("Mole").value="8"
+						searchTerm=searchTerm.replace("八","")
+					}else if(searchTerm.substr(0,1)=="九"){
+						document.getElementById("Mole").value="9"
+						searchTerm=searchTerm.replace("九","")
+					}else if(searchTerm.substr(0,1)=="十"){
+						document.getElementById("Mole").value="10"
+						searchTerm=searchTerm.replace("十","")
+					}
+					if(searchTerm.length<=2&&elements[i].symbol.toLowerCase()==searchTerm||searchTerm.length>2&&elements[i].name.toLowerCase().indexOf(searchTerm)!=-1||elements[i].name_cn==searchTerm||i+1==searchTerm||Math.round(elements[i].mass)==Math.round(searchTerm)){document.getElementsByTagName("select")[0].selectedIndex=i}
+				}
+				calculateBasedOnMole()
+			}
+			document.getElementById("Search").oninput=function(){
+				var searchTerm=this.value.toLowerCase()
+				search(searchTerm)
+			}
+			document.getElementById("Search").onkeydown=function(e){
+				var searchTerm=this.value.toLowerCase().replace(/^\s+|\s+$/g,"")
+				if(e.keyCode==13){
+					if(searchTerm!=""){
+						if(searchTerm.indexOf(" ")!=-1){
+							var letters=searchTerm.split("")
+							document.getElementsByClassName("card")[0].innerHTML=""
+							document.getElementById("Mole").value="1"
+							searchTerm=""
+							for(var i=0;i<letters.length;i++){
+								searchTerm+=letters[i]
+								search(searchTerm)
+								if(letters[i]==" "){
+									recordMass()
+									document.getElementById("Mole").value="1"
+									searchTerm=""
+								}
+							}
+							recordMass()
+							addOption()
+						}else if(searchTerm.indexOf("化")!=-1){
+							var characters=searchTerm.split("化")
+							document.getElementsByClassName("card")[0].innerHTML=""
+							document.getElementById("Mole").value="1"
+							search(characters[1])
+							recordMass()
+							document.getElementById("Mole").value="1"
+							search(characters[0])
+							recordMass()
+							addOption()
+						}else{recordMass()}
+					}
+				}
+			}
+			document.getElementById("Particle").oninput=function(){
+				var particle=this.value*1
+				if(particle!=0){
+					var mole=particle/(6.022*Math.pow(10,23))
+					document.getElementById("Mole").value=mole
+					document.getElementById("Mass").value=mole*document.getElementsByTagName("select")[0].value
+					document.getElementById("Volume").value=mole*22.4
+				}else{clear()}
+			}
+			function calculateBasedOnMole(){
+				var mole=document.getElementById("Mole").value*1
+				if(mole!=0){
+					document.getElementById("Particle").value=mole*(6.022*Math.pow(10,23))
+					document.getElementById("Mass").value=mole*document.getElementsByTagName("select")[0].value
+					document.getElementById("Volume").value=mole*22.4
+				}else{clear()}
+			}
+			function calculateBasedOnMass(){
+				var mass=document.getElementById("Mass").value*1
+				if(mass!=0){
+					var mole=mass/document.getElementsByTagName("select")[0].value
+					document.getElementById("Mole").value=mole
+					document.getElementById("Particle").value=mole*(6.022*Math.pow(10,23))
+					document.getElementById("Volume").value=mole*22.4
+				}else{clear()}
+			}
+			document.getElementById("Volume").oninput=function(){
+				var volume=this.value*1
+				if(volume!=0){
+					var mole=volume/22.4
+					document.getElementById("Mole").value=mole
+					document.getElementById("Particle").value=mole*(6.022*Math.pow(10,23))
+					document.getElementById("Mass").value=mole*document.getElementsByTagName("select")[0].value
+				}else{clear()}
+			}
+			function recordMass(){
+				document.getElementById("Search").value=""
+				var mole=document.getElementById("Mole").value*1,symbol
+				mole=Math.round(mole)
+				if(mole<=0){mole=1}
+				document.getElementById("Mole").value=mole
+				calculateBasedOnMole()
+				var select=document.getElementsByTagName("select")[0]
+				if(select.selectedIndex>=elements.length){
+					if(mole>1){symbol="("+select.options[select.selectedIndex].text+")"}
+					else{symbol=select.options[select.selectedIndex].text}
+				}else{symbol=elements[select.selectedIndex].symbol}
+				if(mole>1){symbol+="<sub>"+document.getElementById("Mole").value+"</sub>"}
+				if(document.getElementsByClassName("card")[0].innerHTML==""){
+					document.getElementsByClassName("card")[0].innerHTML=symbol+"-"+document.getElementById("Mass").value
+					document.getElementsByClassName("card")[0].style.display=""
+				}else{
+					var record=document.getElementsByClassName("card")[0].innerHTML.split("-")
+					document.getElementsByClassName("card")[0].innerHTML=record[0]+symbol+"-"+(record[1]*1+document.getElementById("Mass").value*1)*1
+				}
+			}
+			function addOption(){
+				var record=document.getElementsByClassName("card")[0].innerHTML.split("-")
+				document.getElementsByTagName("select")[0].options.add(new Option(record[0].replace(/<sub>|<\/sub>/g,""),record[1]))
+				document.getElementsByTagName("select")[0].selectedIndex=document.getElementsByTagName("select")[0].options.length-1
+				document.getElementById("Mass").value=record[1]
+				calculateBasedOnMass()
+				document.getElementsByClassName("card")[0].style.display="none"
+				document.getElementsByClassName("card")[0].innerHTML=""
+			}
+		</script>
+		<!--<![endif]-->
+	</body>
+</html>

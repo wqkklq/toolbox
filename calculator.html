@@ -3,8 +3,10 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
+		<meta name="renderer" content="webkit">
 		<title>RTH Toolbox</title>
 		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
@@ -17,77 +19,99 @@
 		</header>
 		<div class="win" style="display:none">
 			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="Maximize()">+</div>
+			<div style="right:40px" onclick="maximize()">+</div>
 			<div style="right:0px" onclick="window.close()">×</div>
 		</div>
 		<div class="mui-content">
 			<div class="mui-input-row">
-				<input type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13){Calculate()}">
+				<input type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13&&this.value!=''){calculate()}">
 			</div>
-			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="Calculate()"></button>
-			<iframe frameborder="0" width="100%" style="display:none"></iframe>
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="calculate()"></button>
 			<ul class="mui-table-view" style="margin-top:20px">
 				<li class="mui-table-view-cell">
-					<a id="Date" class="mui-navigate-right" href="javascript:OpenWindow('date')"></a>
+					<a id="CurrencyConversion" class="mui-navigate-right" href="javascript:openWindow('currency')"></a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a id="Statistics" class="mui-navigate-right" class="mui-navigate-right" href="javascript:OpenWindow('statistics')"></a>
+					<a id="MoleConversion" class="mui-navigate-right" href="javascript:openWindow('mole')"></a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a id="QuadraticFunction" class="mui-navigate-right" class="mui-navigate-right" href="javascript:OpenWindow('quadraticfunction')"></a>
+					<a id="Date" class="mui-navigate-right" href="javascript:openWindow('date')"></a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a id="SystemLinearEquationsTwoUnknowns" class="mui-navigate-right" href="javascript:OpenWindow('equation21')"></a>
+					<a id="Statistics" class="mui-navigate-right" class="mui-navigate-right" href="javascript:openWindow('statistics')"></a>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top:20px">
+				<li class="mui-table-view-cell">
+					<a id="QuadraticEquationOneUnknown" class="mui-navigate-right" href="javascript:openWindow('equation12')"></a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a id="FindLinearFunction" class="mui-navigate-right" href="javascript:OpenWindow('findlinearfunction')"></a>
+					<a id="SystemLinearEquations2Unknowns" class="mui-navigate-right" href="javascript:openWindow('equation21')"></a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a id="QuadraticEquationOneUnknown" class="mui-navigate-right" href="javascript:OpenWindow('equation12')"></a>
+					<a id="SystemLinearEquations3Unknowns" class="mui-navigate-right" href="javascript:openWindow('equation31')"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="QuadraticFunction" class="mui-navigate-right" class="mui-navigate-right" href="javascript:openWindow('quadraticfunction')"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="FindLinearFunction" class="mui-navigate-right" href="javascript:openWindow('findlinearfunction')"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="FindQuadraticFunction" class="mui-navigate-right" href="javascript:openWindow('findquadraticfunction')"></a>
 				</li>
 			</ul>
 		</div>
+		<!--[if IE]>
+			<script type="text/javascript">
+				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
+			</script>
+		<![endif]-->
+		<!--[if !IE]><!-->
+		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var Language=localStorage.getItem("Language")
-			if(Language=="SimplifiedChinese"){
+			if(language=="SimplifiedChinese"){
 				document.title="计算器"
 				document.getElementsByTagName("input")[0].placeholder="输入算式"
 				document.getElementsByTagName("button")[0].innerText="计算"
+				document.getElementById("CurrencyConversion").innerText="货币换算"
+				document.getElementById("MoleConversion").innerText="摩尔换算"
 				document.getElementById("Date").innerText="日期"
 				document.getElementById("Statistics").innerText="统计"
-				document.getElementById("QuadraticFunction").innerText="二次函数"
-				document.getElementById("SystemLinearEquationsTwoUnknowns").innerText="二元一次方程组"
-				document.getElementById("FindLinearFunction").innerText="求一次函数解析式"
 				document.getElementById("QuadraticEquationOneUnknown").innerText="一元二次方程"
+				document.getElementById("SystemLinearEquations2Unknowns").innerText="二元一次方程组"
+				document.getElementById("SystemLinearEquations3Unknowns").innerText="三元一次方程组"
+				document.getElementById("QuadraticFunction").innerText="二次函数"
+				document.getElementById("FindLinearFunction").innerText="求一次函数解析式"
+				document.getElementById("FindQuadraticFunction").innerText="求二次函数解析式"
 			}else{
 				document.title="Calculator"
 				document.getElementsByTagName("input")[0].placeholder="Enter the formula"
 				document.getElementsByTagName("button")[0].innerText="Calculate"
+				document.getElementById("CurrencyConversion").innerText="Currency Conversion"
+				document.getElementById("MoleConversion").innerText="Mole Conversion"
 				document.getElementById("Date").innerText="Date"
 				document.getElementById("Statistics").innerText="Statistics"
-				document.getElementById("QuadraticFunction").innerText="Quadratic Function"
-				document.getElementById("SystemLinearEquationsTwoUnknowns").innerText="System of Linear Equations in Two Unknowns"
-				document.getElementById("FindLinearFunction").innerText="Find Analytic Formula of Linear Function"
 				document.getElementById("QuadraticEquationOneUnknown").innerText="Quadratic Equation in One Unknown"
+				document.getElementById("SystemLinearEquations2Unknowns").innerText="System of Linear Equations in 2 Unknowns"
+				document.getElementById("SystemLinearEquations3Unknowns").innerText="System of Linear Equations in 3 Unknowns"
+				document.getElementById("QuadraticFunction").innerText="Quadratic Function"
+				document.getElementById("FindLinearFunction").innerText="Find Analytic Formula of Linear Function"
+				document.getElementById("FindQuadraticFunction").innerText="Find Analytic Formula of Quadratic Function"
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
-		</script>
-		<script src="js/mui.min.js"></script>
-		<script src="js/general.js"></script>
-		<script type="text/javascript">
-			Init(true)
-			function Calculate(){
-				var Formula=document.getElementsByTagName("input")[0].value
-				if(Formula==""){
-					if(Language=="SimplifiedChinese"){mui.alert("请输入算式","计算器")}
+			function calculate(){
+				var formula=document.getElementsByTagName("input")[0].value
+				if(formula==""){
+					if(language=="SimplifiedChinese"){mui.alert("请输入算式","计算器")}
 					else{mui.alert("Please enter the formula","Calculator","OK")}
 				}else{
-					document.getElementsByTagName("iframe")[0].contentDocument.open()
-					document.getElementsByTagName("iframe")[0].contentDocument.write("<script type='text/javascript'>var Answer=("+Formula+")*1;document.write('"+Formula+"='+Answer)<\/script>")
-					document.getElementsByTagName("iframe")[0].contentDocument.close()
-					document.getElementsByTagName("iframe")[0].style.display=""
+					if(formula.indexOf("=")!=-1){formula=formula.split("=")[0]}
+					document.getElementsByTagName("input")[0].value=formula+"="+eval(formula)
 				}
 			}
 		</script>
+		<!--<![endif]-->
 	</body>
 </html>

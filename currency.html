@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--Code written by Shangzhen Yang-->
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
+		<meta name="theme-color" content="#0066cc">
+		<meta name="renderer" content="webkit">
+		<title>RTH Toolbox</title>
+		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
+		<link href="css/mui.min.css" rel="stylesheet">
+		<link href="css/general.css" rel="stylesheet">
+		<style>
+			td{padding:0px 5px}
+			footer{
+				background-color:#FAFAFA;
+				bottom:0px;
+				color:#007AFF;
+				height:45px;
+				line-height:45px;
+				position:fixed;
+				text-align:center;
+				width:100%;
+			}
+			footer:active{background-color:#F2F2F2}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
+			<h1 class="mui-title"></h1>
+		</header>
+		<div class="win" style="display:none">
+			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
+			<div style="right:40px" onclick="maximize()">+</div>
+			<div style="right:0px" onclick="window.close()">×</div>
+		</div>
+		<div class="mui-content">
+			<table style="width:100%;display:none">
+				<tbody>
+					<tr>
+						<td width="30%">
+							<select onchange="calculate2()">
+								<option value="AUD">AUD</option>
+								<option value="CAD">CAD</option>
+								<option value="CNY">CNY</option>
+								<option value="EUR">EUR</option>
+								<option value="GBP">GBP</option>
+								<option value="HKD">HKD</option>
+								<option value="JPY">JPY</option>
+								<option value="KRW">KRW</option>
+								<option value="MOP">MOP</option>
+								<option value="MXN">MXN</option>
+								<option value="SGD">SGD</option>
+								<option value="TWD">TWD</option>
+								<option value="USD">USD</option>
+							</select>
+						</td>
+						<td width="70%">
+							<div class="mui-input-row">
+								<input type="text" oninput="calculate1()">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td width="30%">
+							<select onchange="calculate1()">
+								<option value="AUD">AUD</option>
+								<option value="CAD">CAD</option>
+								<option value="CNY">CNY</option>
+								<option value="EUR">EUR</option>
+								<option value="GBP">GBP</option>
+								<option value="HKD">HKD</option>
+								<option value="JPY">JPY</option>
+								<option value="KRW">KRW</option>
+								<option value="MOP">MOP</option>
+								<option value="MXN">MXN</option>
+								<option value="SGD">SGD</option>
+								<option value="TWD">TWD</option>
+								<option value="USD">USD</option>
+							</select>
+						</td>
+						<td width="70%">
+							<div class="mui-input-row">
+								<input type="text" oninput="calculate2()">
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<footer onclick="updateRate()"></footer>
+		<!--[if IE]>
+			<script type="text/javascript">
+				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
+			</script>
+		<![endif]-->
+		<!--[if !IE]><!-->
+		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
+		<script type="text/javascript">
+			if(language=="SimplifiedChinese"){
+				document.title="计算器"
+				document.getElementsByTagName("footer")[0].innerText="更新汇率"
+			}else{
+				document.title="Calculator"
+				document.getElementsByTagName("footer")[0].innerText="Update the exchange rate"
+			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			document.getElementsByTagName("select")[0].value="CNY"
+			document.getElementsByTagName("select")[1].value="USD"
+			var rate=localStorage.getItem("Rate")
+			if(rate){document.getElementsByTagName("table")[0].style.display=""}
+			else{updateRate()}
+			function updateRate(){
+				request("http://www.apilayer.net/api/live?access_key=305f5a80f4da12a238c9ebfe5479c648",function(e){
+					var Json=JSON.parse(e)
+					if(Json.success){
+						rate=e
+						localStorage.setItem("Rate",rate)
+						document.getElementsByTagName("table")[0].style.display=""
+					}
+				})
+			}
+			function calculate1(){
+				if(document.getElementsByTagName("input")[0].value!=""){
+					if(document.getElementsByTagName("select")[0].value=="USD"){
+						document.getElementsByTagName("input")[1].value=document.getElementsByTagName("input")[0].value*eval("var rate="+rate+";rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
+					}else{
+						document.getElementsByTagName("input")[1].value=eval("var rate="+rate+";"+document.getElementsByTagName("input")[0].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[0].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
+					}
+				}else{document.getElementsByTagName("input")[1].value=""}
+			}
+			function calculate2(){
+				if(document.getElementsByTagName("input")[1].value!=""){
+					if(document.getElementsByTagName("select")[1].value=="USD"){
+						document.getElementsByTagName("input")[0].value=document.getElementsByTagName("input")[1].value*eval("var rate="+rate+";rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
+					}else{
+						document.getElementsByTagName("input")[0].value=eval("var rate="+rate+";"+document.getElementsByTagName("input")[1].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[1].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
+					}
+				}else{document.getElementsByTagName("input")[0].value=""}
+			}
+		</script>
+		<!--<![endif]-->
+	</body>
+</html>

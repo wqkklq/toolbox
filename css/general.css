@@ -1,27 +1,34 @@
 /*Code written by Shangzhen Yang*/
 html{padding-top:20px}
 body{font-family:"Helvetica Neue",Helvetica,sans-serif,"等线"}
+legend{cursor:default}
 ::-webkit-scrollbar{display:none}
 .mui-content{
 	color:#6D6D72;
 	font-size:15px;
-	margin:40px 15px 15px
+	margin:40px 15px 15px;
 }
 .title{
 	background-color:#0066CC;
 	cursor:default;
 	height:85px;
 	padding-top:40px;
-	-webkit-app-region:drag
+	-webkit-app-region:drag;
 }
 .back{
 	color:white;
-	-webkit-app-region:no-drag
+	-webkit-app-region:no-drag;
+}
+.back-icon{
+	font-family:SimSun;
+	font-size:20px;
+	font-weight:900;
+	padding:12px 0px 0px 5px;
 }
 .mui-title{
 	color:white;
 	font-size:20px;
-	text-align:left
+	text-align:left;
 }
 .win{
 	color:white;
@@ -35,15 +42,46 @@ body{font-family:"Helvetica Neue",Helvetica,sans-serif,"等线"}
 	top:0px;
 	width:120px;
 	z-index:11;
-	-webkit-app-region:no-drag
+	-webkit-app-region:no-drag;
 }
 .win div{
 	height:40px;
 	position:fixed;
-	width:40px
+	width:40px;
 }
 .win div:hover{background-color:#007AF4}
 .win div:active{
 	background-color:white;
-	color:#0066CC
+	color:#0066CC;
+}
+.card{
+	background-color:white;
+	line-height:30px;
+	margin-top:10px;
+	padding:10px;
+	user-select:text;
+	-webkit-user-select:text;
+}
+.card:active{background-color:whitesmoke}
+.card sub{
+	user-select:text;
+	-webkit-user-select:text;
+}
+.result{
+	line-height:30px;
+	user-select:text;
+	-webkit-user-select:text;
+}
+.result label{
+	user-select:text;
+	-webkit-user-select:text;
+}
+.result sup{
+	user-select:text;
+	-webkit-user-select:text;
+}
+.sign{
+	bottom:15px;
+	position:fixed;
+	right:15px;
 }

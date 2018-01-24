@@ -3,8 +3,10 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
+		<meta name="renderer" content="webkit">
 		<title>RTH Toolbox</title>
 		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
@@ -27,7 +29,7 @@
 		</header>
 		<div class="win" style="display:none">
 			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="Maximize()">+</div>
+			<div style="right:40px" onclick="maximize()">+</div>
 			<div style="right:0px" onclick="window.close()">×</div>
 		</div>
 		<div class="mui-content">
@@ -45,7 +47,7 @@
 				</div>
 				<div class="mui-input-row mui-checkbox ">
 					<label id="ScrollLabel"></label>
-					<input id="ScrollCheck" name="Checkbox" type="checkbox" checked="checked" onchange="ScrollChanged()">
+					<input id="ScrollCheck" name="Checkbox" type="checkbox" checked="checked" onchange="scrollChanged()">
 				</div>
 				<div class="mui-input-row mui-checkbox ">
 					<label id="OddNumberOnlyLabel"></label>
@@ -61,7 +63,7 @@
 				<textarea id="HistoryText" rows="5"></textarea>
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
-						<a id="Add" href="javascript:Add()" class="mui-navigate-right"></a>
+						<a id="Add" href="javascript:add()" class="mui-navigate-right"></a>
 					</li>
 					<li class="mui-table-view-cell">
 						<a id="Clear" href="javascript:document.getElementById('HistoryText').value=''" class="mui-navigate-right"></a>
@@ -73,20 +75,28 @@
 				<textarea id="NamesText" rows="5"></textarea>
 				<ul class="mui-table-view">
 					<li class="mui-table-view-cell">
-						<a id="NamesSave" href="javascript:NamesSave()" class="mui-navigate-right"></a>
+						<a id="NamesSave" href="javascript:namesSave()" class="mui-navigate-right"></a>
 					</li>
 					<li class="mui-table-view-cell">
-						<a id="NamesAdd" href="javascript:NamesAdd()" class="mui-navigate-right"></a>
+						<a id="NamesAdd" href="javascript:namesAdd()" class="mui-navigate-right"></a>
 					</li>
 					<li class="mui-table-view-cell">
-						<a id="NamesClear" href="javascript:NamesClear()" class="mui-navigate-right"></a>
+						<a id="NamesClear" href="javascript:namesClear()" class="mui-navigate-right"></a>
 					</li>
 				</ul>
 			</fieldset>
 		</div>
+		<!--[if IE]>
+			<script type="text/javascript">
+				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
+			</script>
+		<![endif]-->
+		<!--[if !IE]><!-->
+		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var Language=localStorage.getItem("Language"),NamesValue=localStorage.getItem("Names"),Scrolling=true,MultipleTimes=true,TimeOut
-			if(Language=="SimplifiedChinese"){
+			var namesValue=localStorage.getItem("Names"),scrolling=true,multipleTimes=true,intervalId
+			if(language=="SimplifiedChinese"){
 				document.title="随机抽号"
 				document.getElementsByTagName("button")[0].innerText="立即抽号"
 				document.getElementById("Settings").innerText="设置"
@@ -124,123 +134,111 @@
 				document.getElementById("NamesClear").innerText="Clear"
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			document.getElementById("NamesText").value=NamesValue
-			Count()
-			RScrolling()
-			function Count(){
-				if(NamesValue==""||NamesValue==null){
+			document.getElementById("NamesText").value=namesValue
+			count()
+			intervalId=setInterval(function(){RScrolling()},10)
+			function count(){
+				if(namesValue==""||namesValue==null){
 					document.getElementById("Minimum").value="1"
 					document.getElementById("Maximum").value="60"
 				}else{
 					document.getElementById("Minimum").value="0"
-					document.getElementById("Maximum").value=NamesValue.split("\n").length-2
+					document.getElementById("Maximum").value=namesValue.split("\n").length-2
 				}
 			}
-			function Random(){
-				var Min=parseInt(document.getElementById("Minimum").value),
-				Max=parseInt(document.getElementById("Maximum").value)
-				var Range=Max-Min,
-				Rand=Math.random()
-				var RandomNumberValue=Min+Math.round(Rand*Range)
+			function random(){
+				var min=parseInt(document.getElementById("Minimum").value),
+				max=parseInt(document.getElementById("Maximum").value)
+				var RandomNumberValue=min+Math.round(Math.random()*(max-min))
 				if(document.getElementById("OddNumberOnlyCheck").checked==true&&RandomNumberValue%2==0||document.getElementById("EvenNumberOnlyCheck").checked==true&&RandomNumberValue%2!=0){
-					Random()
+					random()
 					return false
 				}
-				if(NamesValue!=""&&NamesValue!=null){
-					var NamesSplit
-					NamesSplit=NamesValue.split("\n")
-					document.getElementsByClassName("number")[0].innerText=NamesSplit[RandomNumberValue]
+				if(namesValue!=""&&namesValue!=null){
+					var namesSplit
+					namesSplit=namesValue.split("\n")
+					document.getElementsByClassName("number")[0].innerText=namesSplit[RandomNumberValue]
 				}else{document.getElementsByClassName("number")[0].innerText=RandomNumberValue}
 			}
 			function RScrolling(){
-				var Min=parseInt(document.getElementById("Minimum").value),
-				Max=parseInt(document.getElementById("Maximum").value)
-				if(Min==Max){document.getElementsByClassName("number")[0].innerText="?"}
-				else{Random()}
-				TimeOut=setTimeout("RScrolling()",10)
-				Scrolling=true
+				var min=parseInt(document.getElementById("Minimum").value),
+				max=parseInt(document.getElementById("Maximum").value)
+				if(min==max){document.getElementsByClassName("number")[0].innerText="?"}
+				else{random()}
+				scrolling=true
 			}
-		</script>
-		<script src="js/mui.min.js"></script>
-		<script src="js/general.js"></script>
-		<script type="text/javascript">
-			Init(true)
 			document.getElementsByTagName("button")[0].onclick=function(){
+				var selected=function(){
+					if(multipleTimes==false){
+						namesValue=namesValue.replace(document.getElementsByClassName("number")[0].innerText+"\n","")
+						count()
+					}
+				}
 				if(document.getElementById("ScrollCheck").checked==true){
-					if(Scrolling==false){
-						TimeOut=setTimeout("RScrolling()",10)
-						Scrolling=true
+					if(scrolling==false){
+						intervalId=setInterval(function(){RScrolling()},10)
+						scrolling=true
 					}else{
-						clearTimeout(TimeOut)
-						Scrolling=false
-						if(document.getElementsByClassName("number")[0].innerText=="?"){Random()}
-						Selected()
+						clearInterval(intervalId)
+						scrolling=false
+						if(document.getElementsByClassName("number")[0].innerText=="?"){random()}
+						selected()
 					}
 				}else{
-					Random()
-					Selected()
-				}
-				function Selected(){
-					if(MultipleTimes==false){
-						var SelectedName=document.getElementsByClassName("number")[0].innerText
-						NamesValue=NamesValue.replace(SelectedName+"\n","")
-						Count()
-					}
+					random()
+					selected()
 				}
 			}
-			function ScrollChanged(){
+			function scrollChanged(){
 				if(document.getElementById("ScrollCheck").checked==true){
-					TimeOut=setTimeout("RScrolling()",10)
-					Scrolling=true
+					intervalId=setInterval(function(){RScrolling()},10)
+					scrolling=true
 				}else{
-					clearTimeout(TimeOut)
-					Scrolling=false
+					clearInterval(intervalId)
+					scrolling=false
 				}
 			}
-			function Add(){
-				var HistoryValue=document.getElementById("HistoryText").value
-				if(HistoryValue==""){document.getElementById("HistoryText").value=document.getElementsByClassName("number")[0].innerText}
-				else{document.getElementById("HistoryText").value=document.getElementsByClassName("number")[0].innerText+"\n"+HistoryValue}
+			function add(){
+				var historyValue=document.getElementById("HistoryText").value
+				if(historyValue==""){document.getElementById("HistoryText").value=document.getElementsByClassName("number")[0].innerText}
+				else{document.getElementById("HistoryText").value=document.getElementsByClassName("number")[0].innerText+"\n"+historyValue}
 			}
-			function NamesSave(){
-				MultipleTimes=true
+			function namesSave(){
+				multipleTimes=true
 				document.getElementById("NamesText").style.display=""
-				if(window.localStorage){
-					NamesValue=document.getElementById("NamesText").value
-					var NamesSplit=NamesValue.split("\n")
-					if(NamesSplit[NamesSplit.length-1]!=""){NamesValue+="\n"}
-					localStorage.setItem("Names",NamesValue)
-					Count()
-					window.scrollTo(0,0)
-					if(Language=="SimplifiedChinese"){mui.confirm("一个名字能被抽到多次吗？","随机抽号",["否","是"],function(e){if(e.index==0){NoMultipleTimes()}})}
-					else{mui.confirm("Can a name be selected multiple times?","Random Number",["No","Yes"],function(e){if(e.index==0){NoMultipleTimes()}})}
-					function NoMultipleTimes(){
-						MultipleTimes=false
-						document.getElementById("NamesText").style.display="none"
-					}
+				namesValue=document.getElementById("NamesText").value
+				var namesSplit=namesValue.split("\n")
+				if(namesSplit[namesSplit.length-1]!=""){namesValue+="\n"}
+				localStorage.setItem("Names",namesValue)
+				count()
+				window.scrollTo(0,0)
+				var noMultipleTimes=function(){
+					multipleTimes=false
+					document.getElementById("NamesText").style.display="none"
 				}
+				if(language=="SimplifiedChinese"){mui.confirm("一个名字能被抽到多次吗？","随机抽号",["否","是"],function(e){if(e.index==0){noMultipleTimes()}})}
+				else{mui.confirm("Can a name be selected multiple times?","Random Number",["No","Yes"],function(e){if(e.index==0){noMultipleTimes()}})}
 			}
-			function NamesAdd(){
-				MultipleTimes=true
+			function namesAdd(){
+				multipleTimes=true
 				document.getElementById("NamesText").style.display=""
-				if(Language=="SimplifiedChinese"){mui.prompt("输入一个人的名字","","添加",function(e){if(e.index==1){AddTrue(e)}})}
-				else{mui.prompt("Enter a person's name","","Add",["Cancel","OK"],function(e){if(e.index==1){AddTrue(e)}})}
-				function AddTrue(e){
-					var NamesSplit=document.getElementById("NamesText").value.split("\n")
-					if(NamesSplit[NamesSplit.length-1]!=""){document.getElementById("NamesText").value+="\n"}
+				var addTrue=function(e){
+					var namesSplit=document.getElementById("NamesText").value.split("\n")
+					if(namesSplit[namesSplit.length-1]!=""){document.getElementById("NamesText").value+="\n"}
 					document.getElementById("NamesText").value+=e.value
 				}
+				if(language=="SimplifiedChinese"){mui.prompt("输入一个人的名字","","添加",function(e){if(e.index==1){addTrue(e)}})}
+				else{mui.prompt("Enter a person's name","","Add",["Cancel","OK"],function(e){if(e.index==1){addTrue(e)}})}
 			}
-			function NamesClear(){
-				if(window.localStorage){
-					document.getElementById("NamesText").value=""
-					localStorage.setItem("Names","")
-					NamesValue=""
-					MultipleTimes=true
-					document.getElementById("NamesText").style.display=""
-					Count()
-				}
+			function namesClear(){
+				document.getElementById("NamesText").value=""
+				localStorage.removeItem("Names")
+				namesValue=""
+				multipleTimes=true
+				document.getElementById("NamesText").style.display=""
+				count()
 			}
 		</script>
+		<!--<![endif]-->
 	</body>
 </html>

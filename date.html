@@ -3,8 +3,10 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
+		<meta name="renderer" content="webkit">
 		<title>RTH Toolbox</title>
 		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
@@ -26,7 +28,7 @@
 		</header>
 		<div class="win" style="display:none">
 			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="Maximize()">+</div>
+			<div style="right:40px" onclick="maximize()">+</div>
 			<div style="right:0px" onclick="window.close()">×</div>
 		</div>
 		<div class="mui-content">
@@ -43,9 +45,16 @@
 				<div class="result"></div>
 			</fieldset>
 		</div>
+		<!--[if IE]>
+			<script type="text/javascript">
+				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
+			</script>
+		<![endif]-->
+		<!--[if !IE]><!-->
+		<script src="js/mui.min.js"></script>
+		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var Language=localStorage.getItem("Language"),DateValue=new Date()
-			if(Language=="SimplifiedChinese"){
+			if(language=="SimplifiedChinese"){
 				document.title="计算器"
 				document.getElementsByTagName("legend")[0].innerText="日期之间的差异"
 				document.getElementById("StartDateLabel").innerText="起始日期"
@@ -59,21 +68,17 @@
 				document.getElementsByClassName("result")[0].innerText="0 Day"
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
-		</script>
-		<script src="js/mui.min.js"></script>
-		<script src="js/general.js"></script>
-		<script type="text/javascript">
-			Init(true)
 			function Calculate(){
-				var StartDateValue=new Date(document.getElementById("StartDate").value),
-				EndDateValue=new Date(document.getElementById("EndDate").value)
-				var DateDiff=parseInt(Math.abs(EndDateValue-StartDateValue)/1000/60/60/24)
-				if(Language=="SimplifiedChinese"){document.getElementsByClassName("result")[0].innerText="距离 "+DateDiff+" 天"}
+				var startDateValue=new Date(document.getElementById("StartDate").value),
+				endDateValue=new Date(document.getElementById("EndDate").value)
+				var dateDiff=parseInt(Math.abs(endDateValue-startDateValue)/1000/60/60/24)
+				if(language=="SimplifiedChinese"){document.getElementsByClassName("result")[0].innerText="距离 "+dateDiff+" 天"}
 				else{
-					if(Math.abs(DateDiff>1)){document.getElementsByClassName("result")[0].innerText=DateDiff+" Days"}
-					else{document.getElementsByClassName("result")[0].innerText=DateDiff+" Day"}
+					if(Math.abs(dateDiff>1)){document.getElementsByClassName("result")[0].innerText=dateDiff+" Days"}
+					else{document.getElementsByClassName("result")[0].innerText=dateDiff+" Day"}
 				}
 			}
 		</script>
+		<!--<![endif]-->
 	</body>
 </html>
