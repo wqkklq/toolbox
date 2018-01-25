@@ -1,8 +1,7 @@
 /*Code written by Shangzhen Yang*/
 if(window.location.href.indexOf("rthsoftware.tk")!=-1&&window.location.href.indexOf("sharedtext")==-1){window.location.href="http://rths.tk/"}
-var back=document.getElementsByClassName("mui-action-back")[0],
-existingScript="",
-language=localStorage.getItem("Language")
+const back=document.getElementsByClassName("mui-action-back")[0]
+let existingScript="",inputId=0,language=localStorage.getItem("Language")
 if(language!="SimplifiedChinese"&&language!="English"){
 	if(navigator.language.indexOf("zh")!=-1){
 		language="SimplifiedChinese"
@@ -22,18 +21,42 @@ if(back!=null){
 	}
 }
 if(isElectron()){
-	require("electron").webFrame.setZoomLevelLimits(1,1)
-	if(process.platform!=="darwin"){document.getElementsByClassName("win")[0].style.display=""}
+	const{remote,webFrame}=require("electron")
+	webFrame.setZoomLevelLimits(1,1)
+	if(process.platform!=="darwin"){
+		const newDiv=document.createElement("div"),
+		newMinimizeDiv=document.createElement("div")
+		newMaximizeDiv=document.createElement("div")
+		newCloseDiv=document.createElement("div")
+		newDiv.setAttribute("class","win")
+		newMinimizeDiv.style.right="80px"
+		newMinimizeDiv.innerText="-"
+		newMinimizeDiv.onclick=function(){remote.getCurrentWindow().minimize()}
+		newDiv.appendChild(newMinimizeDiv)
+		newMaximizeDiv.style.right="40px"
+		newMaximizeDiv.innerText="+"
+		newMaximizeDiv.onclick=function(){
+			const win=remote.getCurrentWindow()
+			if(win.isMaximized()){win.unmaximize()}
+			else{win.maximize()}
+		}
+		newDiv.appendChild(newMaximizeDiv)
+		newCloseDiv.style.right="0px"
+		newCloseDiv.innerText="×"
+		newCloseDiv.onclick=function(){window.close()}
+		newDiv.appendChild(newCloseDiv)
+		document.body.appendChild(newDiv)
+	}
 	if(back!=null){back.onclick=function(){window.close()}}
 	document.addEventListener("keydown",function(e){
 		if(e.ctrlKey||e.metaKey){
 			if(e.keyCode==82){window.location.reload()}
-			else if(e.keyCode==85){require("electron").remote.getCurrentWindow().toggleDevTools()}
+			else if(e.keyCode==85){remote.getCurrentWindow().toggleDevTools()}
 		}
 	})
 }
 function isElectron(){return navigator.userAgent.indexOf("Electron")!=-1}
-function isPlus(){return navigator.userAgent.indexOf("Html5Plus")!=-1}
+function isPlus(){return navigator.userAgent.indexOf("Html5Plus")!=-1&&window.plus}
 function isApp(){return isElectron()||isPlus()}
 function isAndroid(){return navigator.userAgent.indexOf("Android")!=-1}
 function isAndroidApp(){return isAndroid()&&isPlus()}
@@ -42,7 +65,7 @@ function isMobile(){return isAndroid()||isiOS()}
 function isEdge(){return navigator.userAgent.indexOf("Edge")!=-1}
 function isLinux(){return navigator.userAgent.indexOf("Linux")!=-1}
 function isMac(){return navigator.userAgent.indexOf("Macintosh")!=-1}
-function isEnglish(text){return (new RegExp("[A-Za-z]+")).test(text)}
+function isEnglish(text){return(new RegExp("[A-Za-z]+")).test(text)}
 function isOnline(){return window.location.href.indexOf("t.rths.tk")!=-1}
 function addTime(url){
 	if(url.indexOf("?")!=-1){url+="&time="+(new Date).getTime()}
@@ -57,10 +80,41 @@ function getToolbox(){
 	}else if(isiOS()){window.location.href="https://itunes.apple.com/app/rth-toolbox/id1294479577"}
 	else{window.location.href=addTime("http://t.rths.tk/web/toolbox/download.html")}
 }
+function initCalculator(max,calculate){
+	if(language=="SimplifiedChinese"){document.title="计算器"}
+	else{document.title="Calculator"}
+	document.getElementsByClassName("mui-title")[0].innerText=document.title
+	const input=document.getElementsByTagName("input")
+	for(let i=0;i<=max;i++){
+		if(language=="SimplifiedChinese"){input[i].placeholder="输入数字"}
+		else{input[i].placeholder="Enter the number"}
+		input[i].oninput=function(){
+			const name=input[i].id.replace("Input","")
+			const num=name.replace(/[A-Za-z]+/g,"")
+			const display=name.replace(num,"")+"<sub>"+num+"</sub>"
+			const label=document.getElementById(name+"Label")
+			if(input[i].value==""){label.innerHTML=display}
+			else{label.innerHTML=input[i].value}
+			calculate()
+		}
+		input[i].onclick=function(){inputId=i}
+	}
+	document.getElementsByClassName("sign")[0].onclick=function(){
+		let value=input[inputId].value
+		if(value!=""&&value!=null){
+			if(value.indexOf("-")!=-1){value=value.replace("-","")}
+			else{value="-"+value}
+		}else{value="-0"}
+		input[inputId].value=value
+		const label=document.getElementById(input[inputId].id.replace("Input","")+"Label")
+		label.innerHTML=input[inputId].value
+		calculate()
+	}
+}
 function loadJS(src,callback){
 	if(existingScript.indexOf(src)==-1){
-		var loadScript=function(i){
-			var newScript=document.createElement("script")
+		const loadScript=function(i){
+			const newScript=document.createElement("script")
 			newScript.setAttribute("src",src[i])
 			if(i<src.length-1){newScript.onload=function(){loadScript(i+1)}}
 			else{newScript.onload=callback}
@@ -71,14 +125,9 @@ function loadJS(src,callback){
 	}else{callback()}
 }
 function loadOnline(){
-	var wvs=plus.webview.all()
-	for(var i=0;i<wvs.length;i++){plus.webview.close(wvs[i].id)}
+	const wvs=plus.webview.all()
+	for(let i=0;i<wvs.length;i++){plus.webview.close(wvs[i].id)}
 	openWindow("http://t.rths.tk/index")
-}
-function maximize(){
-	const win=require("electron").remote.getCurrentWindow()
-	if(win.isMaximized()){win.unmaximize()}
-	else{win.maximize()}
 }
 function openDialog(){
 	document.getElementById("OpenFileInput").value=""
@@ -92,9 +141,9 @@ function openWebPage(href){
 	else{window.open(href)}
 }
 function openWindow(name){
-	var suffix=".html"
+	let suffix=".html"
 	if(name.indexOf(suffix)!=-1){suffix=""}
-	var url=name+suffix
+	let url=name+suffix
 	if(isPlus()){
 		if(isOnline()){url=addTime(url)}
 		if(url.indexOf("http")!=-1||url.indexOf("?")!=-1||url.indexOf("flashcard")!=-1||url.indexOf("quiz")!=-1){plus.webview.open(url,name,{"popGesture":"close"},"fade-in")}
@@ -131,11 +180,15 @@ function openWindow(name){
 }
 function request(url,callback){
 	if(url.indexOf("t.rths.tk")!=-1){url=addTime(url)}
-	var xhr=new XMLHttpRequest()
+	const xhr=new XMLHttpRequest()
 	xhr.onreadystatechange=function(){
 		switch(xhr.readyState){
 			case 4:
 				if(xhr.status==200){callback(xhr.responseText)}
+				else{
+					if(language=="SimplifiedChinese"){mui.toast("无法获取数据")}
+					else{mui.toast("Unable to get data")}
+				}
 				break
 			default:break
 		}
@@ -144,23 +197,34 @@ function request(url,callback){
 	xhr.send()
 }
 function searchURL(key,url){
-	var reg=new RegExp("(^|&)"+key+"=([^&]*)(&|$)")
-	var r=url.substr(1).match(reg)
-	if(r!=null){
-		var value=unescape(decodeURI(r[2]))
+	if(url.indexOf("http")!=-1){
+		const urlSplit=url.split("?")
+		url=url.replace(urlSplit[0],"")
+	}
+	const match=url.substr(1).match(new RegExp("(^|&)"+key+"=([^&]*)(&|$)"))
+	if(match!=null){
+		const value=unescape(decodeURI(match[2]))
 		if(value!=null&value!=""){return value}
 		else{return false}
-	}else{return false}
+	}else{
+		if(url!=window.location.search){
+			if(language=="SimplifiedChinese"){mui.toast("无效的网址")}
+			else{mui.toast("Invalid URL")}
+		}
+		return false
+	}
 }
 function translate(query,from,to,callback){
+	if(language=="SimplifiedChinese"){mui.toast("正在翻译")}
+	else{mui.toast("Translating")}
 	loadJS(["js/jquery.min.js","js/md5.min.js"],function(){
-		var appid="20171109000093780",key="ZR6EGbP8ZzwU7GookTvy",salt=(new Date).getTime()
+		const appid="20171109000093780",key="ZR6EGbP8ZzwU7GookTvy",salt=(new Date).getTime()
 		if(to=="auto"){
 			if(isEnglish(query)){to="zh"}
 			else{to="en"}
 		}
-		var str1=appid+query+salt+key
-		var sign=MD5(str1)
+		const str1=appid+query+salt+key
+		const sign=MD5(str1)
 		$.ajax({
 			url:"http://api.fanyi.baidu.com/api/trans/vip/translate",
 			type:"get",
@@ -173,7 +237,11 @@ function translate(query,from,to,callback){
 				to:to,
 				sign:sign
 			},
-			success:function(data){callback(data)}
+			success:function(data){
+				if(language=="SimplifiedChinese"){mui.toast("已翻译")}
+				else{mui.toast("Translated")}
+				callback(data)
+			}
 		})
 	})
 }

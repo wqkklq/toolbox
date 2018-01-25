@@ -27,11 +27,6 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="mui-content">
 			<div class="number">0</div>
 			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:20px"></button>
@@ -95,7 +90,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var namesValue=localStorage.getItem("Names"),scrolling=true,multipleTimes=true,intervalId
+			let namesValue=localStorage.getItem("Names"),scrolling=true,multipleTimes=true,intervalId
 			if(language=="SimplifiedChinese"){
 				document.title="随机抽号"
 				document.getElementsByTagName("button")[0].innerText="立即抽号"
@@ -147,28 +142,25 @@
 				}
 			}
 			function random(){
-				var min=parseInt(document.getElementById("Minimum").value),
+				const min=parseInt(document.getElementById("Minimum").value),
 				max=parseInt(document.getElementById("Maximum").value)
-				var RandomNumberValue=min+Math.round(Math.random()*(max-min))
+				const RandomNumberValue=min+Math.round(Math.random()*(max-min))
 				if(document.getElementById("OddNumberOnlyCheck").checked==true&&RandomNumberValue%2==0||document.getElementById("EvenNumberOnlyCheck").checked==true&&RandomNumberValue%2!=0){
 					random()
 					return false
 				}
-				if(namesValue!=""&&namesValue!=null){
-					var namesSplit
-					namesSplit=namesValue.split("\n")
-					document.getElementsByClassName("number")[0].innerText=namesSplit[RandomNumberValue]
-				}else{document.getElementsByClassName("number")[0].innerText=RandomNumberValue}
+				if(namesValue!=""&&namesValue!=null){document.getElementsByClassName("number")[0].innerText=namesValue.split("\n")[RandomNumberValue]}
+				else{document.getElementsByClassName("number")[0].innerText=RandomNumberValue}
 			}
 			function RScrolling(){
-				var min=parseInt(document.getElementById("Minimum").value),
+				const min=parseInt(document.getElementById("Minimum").value),
 				max=parseInt(document.getElementById("Maximum").value)
 				if(min==max){document.getElementsByClassName("number")[0].innerText="?"}
 				else{random()}
 				scrolling=true
 			}
 			document.getElementsByTagName("button")[0].onclick=function(){
-				var selected=function(){
+				const selected=function(){
 					if(multipleTimes==false){
 						namesValue=namesValue.replace(document.getElementsByClassName("number")[0].innerText+"\n","")
 						count()
@@ -199,7 +191,7 @@
 				}
 			}
 			function add(){
-				var historyValue=document.getElementById("HistoryText").value
+				const historyValue=document.getElementById("HistoryText").value
 				if(historyValue==""){document.getElementById("HistoryText").value=document.getElementsByClassName("number")[0].innerText}
 				else{document.getElementById("HistoryText").value=document.getElementsByClassName("number")[0].innerText+"\n"+historyValue}
 			}
@@ -207,12 +199,12 @@
 				multipleTimes=true
 				document.getElementById("NamesText").style.display=""
 				namesValue=document.getElementById("NamesText").value
-				var namesSplit=namesValue.split("\n")
+				const namesSplit=namesValue.split("\n")
 				if(namesSplit[namesSplit.length-1]!=""){namesValue+="\n"}
 				localStorage.setItem("Names",namesValue)
 				count()
 				window.scrollTo(0,0)
-				var noMultipleTimes=function(){
+				const noMultipleTimes=function(){
 					multipleTimes=false
 					document.getElementById("NamesText").style.display="none"
 				}
@@ -222,8 +214,8 @@
 			function namesAdd(){
 				multipleTimes=true
 				document.getElementById("NamesText").style.display=""
-				var addTrue=function(e){
-					var namesSplit=document.getElementById("NamesText").value.split("\n")
+				const addTrue=function(e){
+					const namesSplit=document.getElementById("NamesText").value.split("\n")
 					if(namesSplit[namesSplit.length-1]!=""){document.getElementById("NamesText").value+="\n"}
 					document.getElementById("NamesText").value+=e.value
 				}

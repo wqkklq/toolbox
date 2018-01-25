@@ -17,11 +17,6 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="mui-content">
 			<div class="mui-input-row">
 				<input id="Time" type="text" value="00:00:00" style="text-align:center" oninput="timeInput()" onkeydown="if(event.keyCode==13){start()}">
@@ -102,7 +97,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var Hour,intervalId,Minute,Second
+			let Hour,intervalId,Minute,Second
 			if(language=="SimplifiedChinese"){
 				document.title="计时器"
 				document.getElementById("HourLabel").innerText="时"
@@ -202,7 +197,7 @@
 				if(isElectron()){require("electron").remote.getCurrentWindow().setAlwaysOnTop(false)}
 			}
 			function timeInput(){
-				var timeSplit=document.getElementById("Time").value.split(":")
+				const timeSplit=document.getElementById("Time").value.split(":")
 				if(timeSplit.length<3){
 					document.getElementById("Second").value=0
 					document.getElementById("Minute").value=0
@@ -214,7 +209,7 @@
 				}
 			}
 			function timeChanged(){
-				var secondStr=addZero(document.getElementById("Second").value,2),
+				let secondStr=addZero(document.getElementById("Second").value,2),
 				minuteStr=addZero(document.getElementById("Minute").value,2),
 				hourStr=addZero(document.getElementById("Hour").value,2)
 				if(secondStr=="0"){secondStr="00"}
@@ -257,7 +252,7 @@
 					if(isPlus()){plus.push.createMessage(document.getElementById("PushNotificationInput").value)}
 					else if(window.Notification){
 						if(Notification.permission=="granted"){
-							var notification=new Notification(document.title,{
+							const notification=new Notification(document.title,{
 								body:document.getElementById("PushNotificationInput").value,
 								icon:"unpackage/res/icons/512x512.png"
 							})
@@ -316,11 +311,11 @@
 				document.getElementById("PauseButton").disabled="disabled"
 			}
 			function add(){
-				var dateValue=new Date()
-				var TimeStr=document.getElementById("Time").value+" ("+dateValue.getHours()+":"+dateValue.getMinutes()+":"+dateValue.getSeconds()+")",
-				HistoryValue=document.getElementById("HistoryText").value
-				if(HistoryValue==""){document.getElementById("HistoryText").value=TimeStr}
-				else{document.getElementById("HistoryText").value=TimeStr+"\n"+HistoryValue}
+				const dateValue=new Date()
+				const TimeStr=document.getElementById("Time").value+" ("+dateValue.getHours()+":"+dateValue.getMinutes()+":"+dateValue.getSeconds()+")",
+				historyValue=document.getElementById("HistoryText").value
+				if(historyValue==""){document.getElementById("HistoryText").value=TimeStr}
+				else{document.getElementById("HistoryText").value=TimeStr+"\n"+historyValue}
 			}
 		</script>
 		<!--<![endif]-->

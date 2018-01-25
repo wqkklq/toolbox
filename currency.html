@@ -31,11 +31,6 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="mui-content">
 			<table style="width:100%;display:none">
 				<tbody>
@@ -110,13 +105,13 @@
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			document.getElementsByTagName("select")[0].value="CNY"
 			document.getElementsByTagName("select")[1].value="USD"
-			var rate=localStorage.getItem("Rate")
+			let rate=localStorage.getItem("Rate")
 			if(rate){document.getElementsByTagName("table")[0].style.display=""}
 			else{updateRate()}
 			function updateRate(){
 				request("http://www.apilayer.net/api/live?access_key=305f5a80f4da12a238c9ebfe5479c648",function(e){
-					var Json=JSON.parse(e)
-					if(Json.success){
+					const json=JSON.parse(e)
+					if(json.success){
 						rate=e
 						localStorage.setItem("Rate",rate)
 						document.getElementsByTagName("table")[0].style.display=""
@@ -126,18 +121,18 @@
 			function calculate1(){
 				if(document.getElementsByTagName("input")[0].value!=""){
 					if(document.getElementsByTagName("select")[0].value=="USD"){
-						document.getElementsByTagName("input")[1].value=document.getElementsByTagName("input")[0].value*eval("var rate="+rate+";rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
+						document.getElementsByTagName("input")[1].value=document.getElementsByTagName("input")[0].value*eval("const rate="+rate+";rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
 					}else{
-						document.getElementsByTagName("input")[1].value=eval("var rate="+rate+";"+document.getElementsByTagName("input")[0].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[0].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
+						document.getElementsByTagName("input")[1].value=eval("const rate="+rate+";"+document.getElementsByTagName("input")[0].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[0].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
 					}
 				}else{document.getElementsByTagName("input")[1].value=""}
 			}
 			function calculate2(){
 				if(document.getElementsByTagName("input")[1].value!=""){
 					if(document.getElementsByTagName("select")[1].value=="USD"){
-						document.getElementsByTagName("input")[0].value=document.getElementsByTagName("input")[1].value*eval("var rate="+rate+";rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
+						document.getElementsByTagName("input")[0].value=document.getElementsByTagName("input")[1].value*eval("const rate="+rate+";rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
 					}else{
-						document.getElementsByTagName("input")[0].value=eval("var rate="+rate+";"+document.getElementsByTagName("input")[1].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[1].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
+						document.getElementsByTagName("input")[0].value=eval("const rate="+rate+";"+document.getElementsByTagName("input")[1].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[1].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
 					}
 				}else{document.getElementsByTagName("input")[0].value=""}
 			}

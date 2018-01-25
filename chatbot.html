@@ -79,11 +79,6 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="mui-content">
 			<div id="ChatbotDiv" style="padding-bottom:87px">
 				<div id="Welcome" class="msg msg-bot"></div>
@@ -121,17 +116,17 @@
 			}
 			function hitokoto(){
 				request("https://sslapi.hitokoto.cn/",function(e){
-					var Json=JSON.parse(e)
-					document.getElementById("Hitokoto").innerText=Json.hitokoto
+					const json=JSON.parse(e)
+					document.getElementById("Hitokoto").innerText=json.hitokoto
 					document.getElementById("Hitokoto").style.display=""
 				})
 			}
 			function send(){
 				if(document.getElementsByTagName("input")[0].value!=""){
-					var newDiv=document.createElement("div")
-					newDiv.setAttribute("class","msg msg-me")
-					newDiv.innerText=document.getElementsByTagName("input")[0].value
-					document.getElementById("ChatbotDiv").appendChild(newDiv)
+					const newMyDiv=document.createElement("div")
+					newMyDiv.setAttribute("class","msg msg-me")
+					newMyDiv.innerText=document.getElementsByTagName("input")[0].value
+					document.getElementById("ChatbotDiv").appendChild(newMyDiv)
 					if(navigator.onLine){
 						if(language=="SimplifiedChinese"){
 							document.getElementsByClassName("mui-title")[0].innerText="对方正在输入"
@@ -141,21 +136,20 @@
 							translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){chatbotReply(e.trans_result[0].dst)})
 						}
 					}else{
-						var newDiv=document.createElement("div")
-						newDiv.setAttribute("class","msg msg-bot")
-						if(language=="SimplifiedChinese"){newDiv.innerText="我需要连接到互联网才能和你聊天。"}
-						else{newDiv.innerText="I cannot chat with you without connecting to the Internet."}
-						document.getElementById("ChatbotDiv").appendChild(newDiv)
+						const newErrorDiv=document.createElement("div")
+						newErrorDiv.setAttribute("class","msg msg-bot")
+						if(language=="SimplifiedChinese"){newErrorDiv.innerText="我需要连接到互联网才能和你聊天。"}
+						else{newErrorDiv.innerText="I cannot chat with you without connecting to the Internet."}
+						document.getElementById("ChatbotDiv").appendChild(newErrorDiv)
 					}
 					document.getElementsByTagName("input")[0].value=""
 				}
 			}
 			function chatbotReply(botInfo){
 				request("http://www.tuling123.com/openapi/api?key=42cff502574d42e996841e655fecd78a&info="+botInfo,function(e){
-					var botText
-					var Json=JSON.parse(e)
-					botText=Json.text
-					var newDiv=document.createElement("div")
+					const json=JSON.parse(e)
+					const botText=json.text
+					const newDiv=document.createElement("div")
 					newDiv.setAttribute("class","msg msg-bot")
 					if(language=="SimplifiedChinese"){
 						newDiv.innerText=botText

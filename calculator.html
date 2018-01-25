@@ -17,11 +17,6 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="mui-content">
 			<div class="mui-input-row">
 				<input type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13&&this.value!=''){calculate()}">
@@ -102,7 +97,7 @@
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			function calculate(){
-				var formula=document.getElementsByTagName("input")[0].value
+				let formula=document.getElementsByTagName("input")[0].value
 				if(formula==""){
 					if(language=="SimplifiedChinese"){mui.alert("请输入算式","计算器")}
 					else{mui.alert("Please enter the formula","Calculator","OK")}

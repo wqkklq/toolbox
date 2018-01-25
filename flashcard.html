@@ -35,11 +35,6 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="mui-content">
 			<div class="mui-input-row">
 				<input type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13&&this.value!=''){lookUp(this.value)}">
@@ -66,7 +61,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var audioURL,
+			let audioURL,
 			progress=1,
 			showDefinition,
 			WordListText=localStorage.getItem("WordList"),
@@ -85,8 +80,8 @@
 				document.getElementById("Previous").innerText="Previous"
 				document.getElementById("Next").innerText="Next"
 			}
-			var word=searchURL("word",window.location.search)
-			if(word){lookUp(word)}
+			const wordURL=searchURL("word",window.location.search)
+			if(wordURL){lookUp(wordURL)}
 			else{
 				if(language=="SimplifiedChinese"){document.title="学习卡"}
 				else{document.title="Flash Card"}
@@ -98,8 +93,8 @@
 				if(!isApp()){document.getElementById("Download").style.display=""}
 			}
 			function dictChanged(){
-				var dictBox
-				var changeDisplay=function(alwaysShow){
+				let dictBox
+				const changeDisplay=function(alwaysShow){
 					if(dictBox.innerText==""||dictBox.innerText=="undefined"){dictBox.style.display="none"}
 					else if(showDefinition||alwaysShow){dictBox.style.display=""}
 				}
@@ -140,7 +135,7 @@
 				document.getElementById("ShowDefinition").style.display="none"
 				document.getElementsByTagName("footer")[0].style.display="none"
 				document.getElementsByTagName("input")[0].value=word
-				var wordWithoutSpace=word.replace(/\s/g,"").toLowerCase()
+				const wordWithoutSpace=word.replace(/\s/g,"").toLowerCase()
 				if(localStorage.getItem(wordWithoutSpace+"_CNDef")!=null){
 					loadTitle()
 					document.getElementById("Pronunciation").innerText=localStorage.getItem(wordWithoutSpace+"_Pronunciation")
@@ -151,19 +146,19 @@
 				}else if(!isApp()){translateWord(word)}
 				else{
 					request("https://api.shanbay.com/bdc/search/?word="+word,function(e){
-						var Json=JSON.parse(e)
-						if(Json.msg=="SUCCESS"){
+						const json=JSON.parse(e)
+						if(json.msg=="SUCCESS"){
 							loadTitle()
-							document.getElementById("Pronunciation").innerText=Json.data.pronunciation
-							audioURL=Json.data.audio
-							document.getElementById("CNDefinition").innerText=Json.data.cn_definition.defn
-							document.getElementById("ENDefinition").innerText=Json.data.en_definition.defn
+							document.getElementById("Pronunciation").innerText=json.data.pronunciation
+							audioURL=json.data.audio
+							document.getElementById("CNDefinition").innerText=json.data.cn_definition.defn
+							document.getElementById("ENDefinition").innerText=json.data.en_definition.defn
 							dictChanged()
 							if(wordWithoutSpace.indexOf(" ")==-1){
-								localStorage.setItem(wordWithoutSpace+"_Pronunciation",Json.data.pronunciation)
-								localStorage.setItem(wordWithoutSpace+"_Audio",Json.data.audio)
-								localStorage.setItem(wordWithoutSpace+"_CNDef",Json.data.cn_definition.defn)
-								localStorage.setItem(wordWithoutSpace+"_ENDef",Json.data.en_definition.defn)
+								localStorage.setItem(wordWithoutSpace+"_Pronunciation",json.data.pronunciation)
+								localStorage.setItem(wordWithoutSpace+"_Audio",json.data.audio)
+								localStorage.setItem(wordWithoutSpace+"_CNDef",json.data.cn_definition.defn)
+								localStorage.setItem(wordWithoutSpace+"_ENDef",json.data.en_definition.defn)
 							}
 						}else{translateWord(word)}
 					})
@@ -175,7 +170,7 @@
 				document.getElementById("CNDefinition").style.display="none"
 				document.getElementById("ENDefinition").style.display="none"
 				document.getElementById("ENDefinition").innerText=WLTSplit[progress*2]
-				var wordWithoutSpace=WLTSplit[progress*2-1].replace(/\s/g,"").toLowerCase()
+				const wordWithoutSpace=WLTSplit[progress*2-1].replace(/\s/g,"").toLowerCase()
 				if(localStorage.getItem(wordWithoutSpace+"_CNDef")!=null){
 					document.getElementById("Pronunciation").innerText=localStorage.getItem(wordWithoutSpace+"_Pronunciation")
 					audioURL=localStorage.getItem(wordWithoutSpace+"_Audio")
@@ -186,18 +181,18 @@
 					document.getElementById("Previous").style.display="none"
 					document.getElementById("Next").style.display="none"
 					request("https://api.shanbay.com/bdc/search/?word="+WLTSplit[progress*2-1],function(e){
-						var Json=JSON.parse(e)
-						if(Json.msg=="SUCCESS"){
-							document.getElementById("Pronunciation").innerText=Json.data.pronunciation
-							audioURL=Json.data.audio
-							document.getElementById("CNDefinition").innerText=Json.data.cn_definition.defn
-							document.getElementById("ENDefinition").innerText=Json.data.en_definition.defn
+						const json=JSON.parse(e)
+						if(json.msg=="SUCCESS"){
+							document.getElementById("Pronunciation").innerText=json.data.pronunciation
+							audioURL=json.data.audio
+							document.getElementById("CNDefinition").innerText=json.data.cn_definition.defn
+							document.getElementById("ENDefinition").innerText=json.data.en_definition.defn
 							dictChanged()
 							if(wordWithoutSpace.indexOf(" ")==-1){
-								localStorage.setItem(wordWithoutSpace+"_Pronunciation",Json.data.pronunciation)
-								localStorage.setItem(wordWithoutSpace+"_Audio",Json.data.audio)
-								localStorage.setItem(wordWithoutSpace+"_CNDef",Json.data.cn_definition.defn)
-								localStorage.setItem(wordWithoutSpace+"_ENDef",Json.data.en_definition.defn)
+								localStorage.setItem(wordWithoutSpace+"_Pronunciation",json.data.pronunciation)
+								localStorage.setItem(wordWithoutSpace+"_Audio",json.data.audio)
+								localStorage.setItem(wordWithoutSpace+"_CNDef",json.data.cn_definition.defn)
+								localStorage.setItem(wordWithoutSpace+"_ENDef",json.data.en_definition.defn)
 							}
 						}
 						document.getElementById("Previous").style.display=""

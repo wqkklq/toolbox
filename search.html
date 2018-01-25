@@ -17,11 +17,6 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="mui-content">
 			<select id="EngineSelect1" onchange="categoryChanged()"></select>
 			<select id="EngineSelect2"></select>
@@ -159,7 +154,8 @@
 				}
 			}
 			function search(){
-				var engine,searchTerm=document.getElementsByTagName("input")[0].value
+				let engine
+				const searchTerm=document.getElementsByTagName("input")[0].value
 				if(document.getElementById("EngineSelect2").value=="Automatic"){
 					if(isEnglish(searchTerm)){
 						if(language=="SimplifiedChinese"){engine="http://bing.com/search?q="}

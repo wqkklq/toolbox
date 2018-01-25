@@ -98,11 +98,6 @@
 	</head>
 	<body>
 		<div class="drag"></div>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="icon">
 			<a href="javascript:if(localStorage.getItem('Recent')!=null){openWindow(localStorage.getItem('Recent'))}">
 				<img src="img/icon.png" width="100px" style="border-radius:25%">
@@ -134,13 +129,13 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var back,menu
+			let backStr,menu
 			if(isPlus()){
 				function plusReady(){
 					plus.navigator.setStatusBarBackground("#0066CC")
 					plus.navigator.setStatusBarStyle("light")
 					if(isAndroid()){
-						var wgtVer
+						let wgtVer
 						plus.runtime.getProperty(plus.runtime.appid,function(inf){wgtVer=inf.version})
 						request("http://t.rths.tk/web/toolbox/update/check.php",function(newVer){if(wgtVer&&newVer&&(wgtVer!=newVer)){plus.downloader.createDownload("http://t.rths.tk/web/toolbox/update/H58039057.wgt",{filename:"_doc/update/"},function(d,status){if(status==200){plus.runtime.install(d.filename)}}).start()}})
 					}else if(!isOnline()){
@@ -164,8 +159,8 @@
 						plus.webview.create("timer.html","timer",{"popGesture":"hide"})
 						plus.webview.create("wordlist.html","wordlist",{"popGesture":"hide"})
 						if(plus.runtime.launcher=="shortcut"){
-							var cmd=JSON.parse(plus.runtime.arguments)
-							var type=cmd&&cmd.type
+							const cmd=JSON.parse(plus.runtime.arguments)
+							const type=cmd&&cmd.type
 							switch(type){
 								case "wordlist":
 									openWindow("wordlist")
@@ -206,7 +201,7 @@
 				document.getElementById("RandomNumber").innerText="随机抽号"
 				document.getElementById("Search").innerText="搜索"
 				document.getElementById("TextEditor").innerText="文本编辑器"
-				back="返回"
+				backStr="返回"
 				document.getElementsByClassName("get")[0].innerText="下载 RTH 工具箱"
 			}else{
 				document.getElementsByClassName("home-title")[0].innerText="Toolbox"
@@ -217,7 +212,7 @@
 				document.getElementById("RandomNumber").innerText="Random Number"
 				document.getElementById("Search").innerText="Search"
 				document.getElementById("TextEditor").innerText="Text Editor"
-				back="Back"
+				backStr="Back"
 				document.getElementsByClassName("get")[0].innerText="Get RTH Toolbox"
 			}
 			if(!navigator.onLine){document.getElementsByClassName("more")[0].style.display="none"}
@@ -268,8 +263,8 @@
 				}else{
 					const package=require("./package.json")
 					request("http://t.rths.tk/package.json",function(e){
-						const Json=JSON.parse(e)
-						if(package.version!=Json.version){window.location.href="electron/update.html"}
+						const json=JSON.parse(e)
+						if(package.version!=json.version){window.location.href="electron/update.html"}
 					})
 				}
 			}
@@ -281,10 +276,10 @@
 				request("http://t.rths.tk/web/toolbox/more_"+language+".html",function(e){
 					document.getElementsByClassName("more")[0].style.display="none"
 					menu=document.getElementsByTagName("ul")[0].innerHTML
-					document.getElementsByTagName("ul")[0].innerHTML="<li onclick='Back()'>"+back+"</li>"+e
+					document.getElementsByTagName("ul")[0].innerHTML="<li onclick='liBack()'>"+backStr+"</li>"+e
 				})
 			}
-			function Back(){
+			function liBack(){
 				if(window.history.length>1&&window.location.search.indexOf("more=1")!=-1){history.go(-1)}
 				else{
 					document.getElementsByTagName("ul")[0].innerHTML=menu

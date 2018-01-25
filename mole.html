@@ -17,16 +17,11 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="mui-content">
 			<select onchange="calculateBasedOnMole()"></select>
 			<div class="mui-input-row">
 				<label id="SearchLabel"></label>
-				<input id="Search" type="text">
+				<input id="Search" type="text" oninput="search(this.value.toLowerCase())">
 			</div>
 			<div class="mui-input-row">
 				<label id="ParticleLabel"></label>
@@ -56,7 +51,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var enterNum
+			let enterNum
 			if(language=="SimplifiedChinese"){
 				document.title="计算器"
 				document.getElementById("SearchLabel").innerText="搜索"
@@ -83,7 +78,7 @@
 			document.getElementById("Mole").placeholder=enterNum
 			document.getElementById("Mass").placeholder=enterNum
 			document.getElementById("Volume").placeholder=enterNum
-			var elements=[{
+			const elements=[{
 				"symbol":"H",
 				"name":"Hydrogen",
 				"name_cn":"氢",
@@ -674,8 +669,8 @@
 				"name_cn":"Oganesson",
 				"mass":294
 			}]
-			for(var i=0;i<elements.length;i++){
-				var name
+			for(let i=0;i<elements.length;i++){
+				let name
 				if(language=="SimplifiedChinese"){name=elements[i].name_cn}
 				else{name=elements[i].name}
 				document.getElementsByTagName("select")[0].options.add(new Option(i+1+". "+elements[i].symbol+" ("+name+")",elements[i].mass))
@@ -687,7 +682,7 @@
 				document.getElementById("Volume").value=""
 			}
 			function search(searchTerm){
-				for(var i=0;i<elements.length;i++){
+				for(let i=0;i<elements.length;i++){
 					if(searchTerm.substr(0,4)=="mono"){
 						document.getElementById("Mole").value="1"
 						searchTerm=searchTerm.replace("mono","")
@@ -759,20 +754,16 @@
 				}
 				calculateBasedOnMole()
 			}
-			document.getElementById("Search").oninput=function(){
-				var searchTerm=this.value.toLowerCase()
-				search(searchTerm)
-			}
 			document.getElementById("Search").onkeydown=function(e){
-				var searchTerm=this.value.toLowerCase().replace(/^\s+|\s+$/g,"")
+				let searchTerm=this.value.toLowerCase().replace(/^\s+|\s+$/g,"")
 				if(e.keyCode==13){
 					if(searchTerm!=""){
 						if(searchTerm.indexOf(" ")!=-1){
-							var letters=searchTerm.split("")
+							const letters=searchTerm.split("")
 							document.getElementsByClassName("card")[0].innerHTML=""
 							document.getElementById("Mole").value="1"
 							searchTerm=""
-							for(var i=0;i<letters.length;i++){
+							for(let i=0;i<letters.length;i++){
 								searchTerm+=letters[i]
 								search(searchTerm)
 								if(letters[i]==" "){
@@ -784,7 +775,7 @@
 							recordMass()
 							addOption()
 						}else if(searchTerm.indexOf("化")!=-1){
-							var characters=searchTerm.split("化")
+							const characters=searchTerm.split("化")
 							document.getElementsByClassName("card")[0].innerHTML=""
 							document.getElementById("Mole").value="1"
 							search(characters[1])
@@ -798,16 +789,16 @@
 				}
 			}
 			document.getElementById("Particle").oninput=function(){
-				var particle=this.value*1
+				const particle=this.value*1
 				if(particle!=0){
-					var mole=particle/(6.022*Math.pow(10,23))
+					const mole=particle/(6.022*Math.pow(10,23))
 					document.getElementById("Mole").value=mole
 					document.getElementById("Mass").value=mole*document.getElementsByTagName("select")[0].value
 					document.getElementById("Volume").value=mole*22.4
 				}else{clear()}
 			}
 			function calculateBasedOnMole(){
-				var mole=document.getElementById("Mole").value*1
+				const mole=document.getElementById("Mole").value*1
 				if(mole!=0){
 					document.getElementById("Particle").value=mole*(6.022*Math.pow(10,23))
 					document.getElementById("Mass").value=mole*document.getElementsByTagName("select")[0].value
@@ -815,18 +806,18 @@
 				}else{clear()}
 			}
 			function calculateBasedOnMass(){
-				var mass=document.getElementById("Mass").value*1
+				const mass=document.getElementById("Mass").value*1
 				if(mass!=0){
-					var mole=mass/document.getElementsByTagName("select")[0].value
+					const mole=mass/document.getElementsByTagName("select")[0].value
 					document.getElementById("Mole").value=mole
 					document.getElementById("Particle").value=mole*(6.022*Math.pow(10,23))
 					document.getElementById("Volume").value=mole*22.4
 				}else{clear()}
 			}
 			document.getElementById("Volume").oninput=function(){
-				var volume=this.value*1
+				const volume=this.value*1
 				if(volume!=0){
-					var mole=volume/22.4
+					const mole=volume/22.4
 					document.getElementById("Mole").value=mole
 					document.getElementById("Particle").value=mole*(6.022*Math.pow(10,23))
 					document.getElementById("Mass").value=mole*document.getElementsByTagName("select")[0].value
@@ -834,12 +825,12 @@
 			}
 			function recordMass(){
 				document.getElementById("Search").value=""
-				var mole=document.getElementById("Mole").value*1,symbol
+				let mole=document.getElementById("Mole").value*1,symbol
 				mole=Math.round(mole)
 				if(mole<=0){mole=1}
 				document.getElementById("Mole").value=mole
 				calculateBasedOnMole()
-				var select=document.getElementsByTagName("select")[0]
+				const select=document.getElementsByTagName("select")[0]
 				if(select.selectedIndex>=elements.length){
 					if(mole>1){symbol="("+select.options[select.selectedIndex].text+")"}
 					else{symbol=select.options[select.selectedIndex].text}
@@ -849,12 +840,12 @@
 					document.getElementsByClassName("card")[0].innerHTML=symbol+"-"+document.getElementById("Mass").value
 					document.getElementsByClassName("card")[0].style.display=""
 				}else{
-					var record=document.getElementsByClassName("card")[0].innerHTML.split("-")
+					const record=document.getElementsByClassName("card")[0].innerHTML.split("-")
 					document.getElementsByClassName("card")[0].innerHTML=record[0]+symbol+"-"+(record[1]*1+document.getElementById("Mass").value*1)*1
 				}
 			}
 			function addOption(){
-				var record=document.getElementsByClassName("card")[0].innerHTML.split("-")
+				const record=document.getElementsByClassName("card")[0].innerHTML.split("-")
 				document.getElementsByTagName("select")[0].options.add(new Option(record[0].replace(/<sub>|<\/sub>/g,""),record[1]))
 				document.getElementsByTagName("select")[0].selectedIndex=document.getElementsByTagName("select")[0].options.length-1
 				document.getElementById("Mass").value=record[1]

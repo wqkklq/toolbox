@@ -17,11 +17,6 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="mui-content">
 			<div style="line-height:30px">
 				<label id="a1Label">a<sub>1</sub></label>x + <label id="b1Label">b<sub>1</sub></label>y = <label id="c1Label">c<sub>1</sub></label><br>
@@ -30,28 +25,28 @@
 			<hr>
 			<div class="mui-input-row">
 				<label>a<sub>1</sub> =</label>
-				<input id="a1Input" type="number" onclick="inputId=1" oninput="a1OnInput()">
+				<input id="a1Input" type="number">
 			</div>
 			<div class="mui-input-row">
 				<label>b<sub>1</sub> =</label>
-				<input id="b1Input" type="number" onclick="inputId=2" oninput="b1OnInput()">
+				<input id="b1Input" type="number">
 			</div>
 			<div class="mui-input-row">
 				<label>c<sub>1</sub> =</label>
-				<input id="c1Input" type="number" onclick="inputId=3" oninput="c1OnInput()">
+				<input id="c1Input" type="number">
 			</div>
 			<hr>
 			<div class="mui-input-row">
 				<label>a<sub>2</sub> =</label>
-				<input id="a2Input" type="number" onclick="inputId=4" oninput="a2OnInput()">
+				<input id="a2Input" type="number">
 			</div>
 			<div class="mui-input-row">
 				<label>b<sub>2</sub> =</label>
-				<input id="b2Input" type="number" onclick="inputId=5" oninput="b2OnInput()">
+				<input id="b2Input" type="number">
 			</div>
 			<div class="mui-input-row">
 				<label>c<sub>2</sub> =</label>
-				<input id="c2Input" type="number" onclick="inputId=6" oninput="c2OnInput()">
+				<input id="c2Input" type="number">
 			</div>
 			<hr>
 			<div class="mui-input-row">
@@ -74,23 +69,9 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var enterNum,inputId=1
-			if(language=="SimplifiedChinese"){
-				document.title="计算器"
-				enterNum="输入数字"
-			}else{
-				document.title="Calculator"
-				enterNum="Enter the number"
-			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			document.getElementById("a1Input").placeholder=enterNum
-			document.getElementById("b1Input").placeholder=enterNum
-			document.getElementById("c1Input").placeholder=enterNum
-			document.getElementById("a2Input").placeholder=enterNum
-			document.getElementById("b2Input").placeholder=enterNum
-			document.getElementById("c2Input").placeholder=enterNum
+			initCalculator(5,calculate)
 			function calculate(){
-				var a1=document.getElementById("a1Input").value*1,
+				const a1=document.getElementById("a1Input").value*1,
 				b1=document.getElementById("b1Input").value*1,
 				c1=document.getElementById("c1Input").value*(-1),
 				a2=document.getElementById("a2Input").value*1,
@@ -98,98 +79,6 @@
 				c2=document.getElementById("c2Input").value*(-1)
 				document.getElementById("xInput").value=(b1*c2-b2*c1)/(a1*b2-b1*a2)
 				document.getElementById("yInput").value=(a1*c2-a2*c1)/(b1*a2-a1*b2)
-			}
-			function a1OnInput(){
-				var a=document.getElementById("a1Input").value
-				if(a==""){document.getElementById("a1Label").innerHTML="a<sub>1</sub>"}
-				else{document.getElementById("a1Label").innerHTML=a}
-				calculate()
-			}
-			function b1OnInput(){
-				var b=document.getElementById("b1Input").value
-				if(b==""){document.getElementById("b1Label").innerHTML="b<sub>1</sub>"}
-				else{document.getElementById("b1Label").innerHTML=b}
-				calculate()
-			}
-			function c1OnInput(){
-				var c=document.getElementById("c1Input").value
-				if(c==""){document.getElementById("c1Label").innerHTML="c<sub>1</sub>"}
-				else{document.getElementById("c1Label").innerHTML=c}
-				calculate()
-			}
-			function a2OnInput(){
-				var d=document.getElementById("a2Input").value
-				if(d==""){document.getElementById("a2Label").innerHTML="a<sub>2</sub>"}
-				else{document.getElementById("a2Label").innerHTML=d}
-				calculate()
-			}
-			function b2OnInput(){
-				var e=document.getElementById("b2Input").value
-				if(e==""){document.getElementById("b2Label").innerHTML="b<sub>2</sub>"}
-				else{document.getElementById("b2Label").innerHTML=e}
-				calculate()
-			}
-			function c2OnInput(){
-				var f=document.getElementById("c2Input").value
-				if(f==""){document.getElementById("c2Label").innerHTML="c<sub>2</sub>"}
-				else{document.getElementById("c2Label").innerHTML=f}
-				calculate()
-			}
-			document.getElementsByClassName("sign")[0].onclick=function(){
-				var Value
-				switch(inputId){
-					case 1:
-						Value=document.getElementById("a1Input").value
-						break
-					case 2:
-						Value=document.getElementById("b1Input").value
-						break
-					case 3:
-						Value=document.getElementById("c1Input").value
-						break
-					case 4:
-						Value=document.getElementById("a2Input").value
-						break
-					case 5:
-						Value=document.getElementById("b2Input").value
-						break
-					case 6:
-						Value=document.getElementById("c2Input").value
-						break
-					default:break
-				}
-				if(Value!=""&&Value!=null){
-					if(Value.indexOf("-")!=-1){Value=Value.replace("-","")}
-					else{Value="-"+Value}
-				}else{Value="-0"}
-				switch(inputId){
-					case 1:
-						document.getElementById("a1Input").value=Value
-						a1OnInput()
-						break
-					case 2:
-						document.getElementById("b1Input").value=Value
-						b1OnInput()
-						break
-					case 3:
-						document.getElementById("c1Input").value=Value
-						c1OnInput()
-						break
-					case 4:
-						document.getElementById("a2Input").value=Value
-						a2OnInput()
-						break
-					case 5:
-						document.getElementById("b2Input").value=Value
-						b2OnInput()
-						break
-					case 6:
-						document.getElementById("c2Input").value=Value
-						c2OnInput()
-						break
-					default:break
-				}
-				calculate()
 			}
 		</script>
 		<!--<![endif]-->

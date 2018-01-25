@@ -17,11 +17,6 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="mui-content">
 			<div style="line-height:30px">
 				a &#40;<label id="x1Label">x<sub>1</sub></label>&#44; <label id="y1Label">y<sub>1</sub></label>&#41;<br>
@@ -31,29 +26,29 @@
 			<hr>
 			<div class="mui-input-row">
 				<label>x<sub>1</sub>=</label>
-				<input id="x1Input" type="number" onclick="inputId=1" oninput="x1OnInput()">
+				<input id="x1Input" type="number">
 			</div>
 			<div class="mui-input-row">
 				<label>y<sub>1</sub>=</label>
-				<input id="y1Input" type="number" onclick="inputId=2" oninput="y1OnInput()">
+				<input id="y1Input" type="number">
 			</div>
 			<hr>
 			<div class="mui-input-row">
 				<label>x<sub>2</sub>=</label>
-				<input id="x2Input" type="number" onclick="inputId=3" oninput="x2OnInput()">
+				<input id="x2Input" type="number">
 			</div>
 			<div class="mui-input-row">
 				<label>y<sub>2</sub>=</label>
-				<input id="y2Input" type="number" onclick="inputId=4" oninput="y2OnInput()">
+				<input id="y2Input" type="number">
 			</div>
 			<hr>
 			<div class="mui-input-row">
 				<label>x<sub>3</sub>=</label>
-				<input id="x3Input" type="number" onclick="inputId=5" oninput="x3OnInput()">
+				<input id="x3Input" type="number">
 			</div>
 			<div class="mui-input-row">
 				<label>y<sub>3</sub>=</label>
-				<input id="y3Input" type="number" onclick="inputId=6" oninput="y3OnInput()">
+				<input id="y3Input" type="number">
 			</div>
 			<hr>
 			<div class="result" style="text-align:center;font-size:16pt">y = <label id="aLabel">a</label>x<sup>2</sup> + <label id="bLabel">b</label>x + <label id="cLabel">c</label></div>
@@ -69,23 +64,9 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var enterNum,inputId=1
-			if(language=="SimplifiedChinese"){
-				document.title="计算器"
-				enterNum="输入数字"
-			}else{
-				document.title="Calculator"
-				enterNum="Enter the number"
-			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			document.getElementById("x1Input").placeholder=enterNum
-			document.getElementById("y1Input").placeholder=enterNum
-			document.getElementById("x2Input").placeholder=enterNum
-			document.getElementById("y2Input").placeholder=enterNum
-			document.getElementById("x3Input").placeholder=enterNum
-			document.getElementById("y3Input").placeholder=enterNum
+			initCalculator(5,calculate)
 			function calculate(){
-				var a1=Math.pow(document.getElementById("x1Input").value,2),
+				const a1=Math.pow(document.getElementById("x1Input").value,2),
 				b1=document.getElementById("x1Input").value*1,
 				c1=1,
 				d1=document.getElementById("y1Input").value*1,
@@ -97,102 +78,10 @@
 				b3=document.getElementById("x3Input").value*1,
 				c3=1,
 				d3=document.getElementById("y3Input").value*1
-				var delta=a1*b2*c3+b1*c2*a3+c1*a2*b3-c1*b2*a3-a1*c2*b3-b1*a2*c3
+				const delta=a1*b2*c3+b1*c2*a3+c1*a2*b3-c1*b2*a3-a1*c2*b3-b1*a2*c3
 				document.getElementById("aLabel").innerText=(d1*b2*c3+b1*c2*d3+c1*d2*b3-c1*b2*d3-d1*c2*b3-b1*d2*c3)/delta
 				document.getElementById("bLabel").innerText=(a1*d2*c3+d1*c2*a3+c1*a2*d3-c1*d2*a3-a1*c2*d3-d1*a2*c3)/delta
 				document.getElementById("cLabel").innerText=(a1*b2*d3+b1*d2*a3+d1*a2*b3-d1*b2*a3-a1*d2*b3-b1*a2*d3)/delta
-			}
-			function x1OnInput(){
-				var x1=document.getElementById("x1Input").value
-				if(x1==""){document.getElementById("x1Label").innerHTML="x<sub>1</sub>"}
-				else{document.getElementById("x1Label").innerHTML=x1}
-				calculate()
-			}
-			function y1OnInput(){
-				var y1=document.getElementById("y1Input").value
-				if(y1==""){document.getElementById("y1Label").innerHTML="y<sub>1</sub>"}
-				else{document.getElementById("y1Label").innerHTML=y1}
-				calculate()
-			}
-			function x2OnInput(){
-				var x2=document.getElementById("x2Input").value
-				if(x2==""){document.getElementById("x2Label").innerHTML="x<sub>2</sub>"}
-				else{document.getElementById("x2Label").innerHTML=x2}
-				calculate()
-			}
-			function y2OnInput(){
-				var y2=document.getElementById("y2Input").value
-				if(y2==""){document.getElementById("y2Label").innerHTML="y<sub>2</sub>"}
-				else{document.getElementById("y2Label").innerHTML=y2}
-				calculate()
-			}
-			function x3OnInput(){
-				var x3=document.getElementById("x3Input").value
-				if(x3==""){document.getElementById("x3Label").innerHTML="x<sub>3</sub>"}
-				else{document.getElementById("x3Label").innerHTML=x3}
-				calculate()
-			}
-			function y3OnInput(){
-				var y3=document.getElementById("y3Input").value
-				if(y3==""){document.getElementById("y3Label").innerHTML="y<sub>3</sub>"}
-				else{document.getElementById("y3Label").innerHTML=y3}
-				calculate()
-			}
-			document.getElementsByClassName("sign")[0].onclick=function(){
-				var Value
-				switch(inputId){
-					case 1:
-						Value=document.getElementById("x1Input").value
-						break
-					case 2:
-						Value=document.getElementById("y1Input").value
-						break
-					case 3:
-						Value=document.getElementById("x2Input").value
-						break
-					case 4:
-						Value=document.getElementById("y2Input").value
-						break
-					case 5:
-						Value=document.getElementById("x3Input").value
-						break
-					case 6:
-						Value=document.getElementById("y3Input").value
-						break
-					default:break
-				}
-				if(Value!=""&&Value!=null){
-					if(Value.indexOf("-")!=-1){Value=Value.replace("-","")}
-					else{Value="-"+Value}
-				}else{Value="-0"}
-				switch(inputId){
-					case 1:
-						document.getElementById("x1Input").value=Value
-						x1OnInput()
-						break
-					case 2:
-						document.getElementById("y1Input").value=Value
-						y1OnInput()
-						break
-					case 3:
-						document.getElementById("x2Input").value=Value
-						x2OnInput()
-						break
-					case 4:
-						document.getElementById("y2Input").value=Value
-						y2OnInput()
-						break
-					case 5:
-						document.getElementById("x3Input").value=Value
-						x3OnInput()
-						break
-					case 6:
-						document.getElementById("y3Input").value=Value
-						y3OnInput()
-						break
-					default:break
-				}
-				calculate()
 			}
 		</script>
 		<!--<![endif]-->

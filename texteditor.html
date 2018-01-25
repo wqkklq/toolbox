@@ -18,25 +18,28 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="mui-content">
 			<div class="mui-input-row">
 				<input type="text" class="mui-input-clear">
 			</div>
 			<textarea id="Text" rows="10" oninput="count()"></textarea>
-			<ul id="OptionUl" class="mui-table-view">
+			<ul class="mui-table-view">
 				<li class="mui-table-view-cell">
 					<a id="Save" href="javascript:save()" class="mui-navigate-right"></a>
 				</li>
 				<li class="mui-table-view-cell">
+					<a id="RunJSCode" href="javascript:runJSCode()" class="mui-navigate-right"></a>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top:15px">
+				<li class="mui-table-view-cell">
 					<a id="CreateMessageBox" href="javascript:createMessageBox()" class="mui-navigate-right"></a>
 				</li>
 				<li class="mui-table-view-cell">
-					<a id="Open" href="javascript:openDialog()" class="mui-navigate-right"></a>
+					<a id="OpenLocalDocument" href="javascript:openDialog()" class="mui-navigate-right"></a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a id="OpenOnlineDocument" href="javascript:openOText()" class="mui-navigate-right"></a>
 				</li>
 				<li class="mui-table-view-cell">
 					<a id="Share" href="javascript:if(!isEmpty()){openWebPage('http://rthsoftware.tk/web/toolbox/sharedtext.html?title='+escape(document.getElementsByTagName('input')[0].value)+'&text='+escape(readText()))}" class="mui-navigate-right"></a>
@@ -51,10 +54,7 @@
 					<a id="Clear" href="javascript:clear()" class="mui-navigate-right"></a>
 				</li>
 				<li id="DeleteLi" class="mui-table-view-cell">
-					<a id="Delete" href="javascript:Delete()" class="mui-navigate-right"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="RunJSCode" href="javascript:runJSCode()" class="mui-navigate-right"></a>
+					<a id="Delete" href="javascript:deleteDocument()" class="mui-navigate-right"></a>
 				</li>
 			</ul>
 			<ul id="SavedTextUl" class="mui-table-view" style="margin-top:15px;display:none"></ul>
@@ -69,37 +69,38 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var currentItem
+			let currentItem,myCodeMirror
 			if(language=="SimplifiedChinese"){
 				document.title="文本编辑器"
 				document.getElementsByTagName("input")[0].placeholder="标题"
 				document.getElementById("Text").placeholder="正文"
 				document.getElementById("Save").innerText="保存"
+				document.getElementById("RunJSCode").innerText="作为 JS 代码运行"
 				document.getElementById("CreateMessageBox").innerText="创建消息框"
-				document.getElementById("Open").innerText="打开"
+				document.getElementById("OpenLocalDocument").innerText="打开本地文件"
+				document.getElementById("OpenOnlineDocument").innerText="打开在线文件"
 				document.getElementById("Share").innerText="分享"
 				document.getElementById("TranslateFullText").innerText="翻译全文"
 				document.getElementById("Speak").innerText="朗读"
 				document.getElementById("Clear").innerText="清空"
 				document.getElementById("Delete").innerText="删除"
-				document.getElementById("RunJSCode").innerText="作为 JS 代码运行"
 			}else{
 				document.title="Text Editor"
 				document.getElementsByTagName("input")[0].placeholder="Title"
 				document.getElementById("Text").placeholder="Text"
 				document.getElementById("Save").innerText="Save"
+				document.getElementById("RunJSCode").innerText="Run as JavaScript Code"
 				document.getElementById("CreateMessageBox").innerText="Create Message Box"
-				document.getElementById("Open").innerText="Open"
+				document.getElementById("OpenLocalDocument").innerText="Open Local Document"
+				document.getElementById("OpenOnlineDocument").innerText="Open Online Document"
 				document.getElementById("Share").innerText="Share"
 				document.getElementById("TranslateFullText").innerText="Translate Full Text"
 				document.getElementById("Speak").innerText="Speak"
 				document.getElementById("Clear").innerText="Clear"
 				document.getElementById("Delete").innerText="Delete"
-				document.getElementById("RunJSCode").innerText="Run as JavaScript Code"
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(!window.speechSynthesis){document.getElementById("SpeakLi").style.display="none"}
-			var myCodeMirror
 			if(!isMobile()){
 				loadJS(["js/codemirror.js","js/javascript.js","js/matchbrackets.js"],function(){
 					myCodeMirror=CodeMirror.fromTextArea(document.getElementById("Text"),{
@@ -129,16 +130,16 @@
 					textChanged()
 				}
 				if(localStorage.getItem("Title")!=null){document.getElementsByTagName("input")[0].value=localStorage.getItem("Title")}
-				var documentsCount=0
-				for(var i=9999;i>0;i-=1){
-					var savedText=localStorage.getItem("Text"+i)
+				let documentsCount=0
+				for(let i=9999;i>0;i-=1){
+					const savedText=localStorage.getItem("Text"+i)
 					if(savedText!=null&&savedText!=""){
 						documentsCount+=1
-						var newA=document.createElement("a")
+						const newA=document.createElement("a")
 						if(localStorage.getItem("Text"+i+"Title")!=null&&localStorage.getItem("Text"+i+"Title")!=""){newA.innerText=localStorage.getItem("Text"+i+"Title")}
 						else{newA.innerText=savedText}
 						newA.href="javascript:openText("+i+")"
-						var newLi=document.createElement("li")
+						const newLi=document.createElement("li")
 						newLi.setAttribute("class","mui-table-view-cell")
 						if("Text"+i==currentItem){newLi.style.backgroundColor="whitesmoke"}
 						newLi.appendChild(newA)
@@ -154,7 +155,7 @@
 				count()
 			}
 			function count(){
-				var wordCount=(readText().match(/[a-z]+|[\u4E00-\uFA29]/ig)||[]).length
+				const wordCount=(readText().match(/[a-z]+|[\u4E00-\uFA29]/ig)||[]).length
 				if(wordCount<=0){
 					if(language=="SimplifiedChinese"){document.getElementsByTagName("input")[0].placeholder="标题"}
 					else{document.getElementsByTagName("input")[0].placeholder="Title"}
@@ -196,7 +197,7 @@
 			}
 			function openLText(file){
 				if(file.name.split(".")[1]=="txt"||file.name.split(".")[1]=="js"){
-					var reader=new FileReader()
+					const reader=new FileReader()
 					reader.onload=function(e){
 						document.getElementsByTagName("input")[0].value=file.name.split(".")[0]
 						setText(this.result)
@@ -208,6 +209,29 @@
 					else{mui.alert("Unable to open this type of file","Text Editor","OK")}
 				}
 			}
+			function openOText(){
+				const openTrue=function(url){
+					if(url!=null&&url!=""){
+						clearTrue()
+						if(url.indexOf("?")!=-1&&url.indexOf("text=")!=-1&&url.indexOf("title=")!=-1){
+							const title=searchURL("title",url)
+							if(title){document.getElementsByTagName("input")[0].value=title}
+							const text=searchURL("text",url)
+							if(text){setText(text)}
+							apply(0)
+						}else{
+							url=addTime(url)
+							if(url.indexOf("http")==-1){url="http://"+url}
+							request(url,function(e){
+								setText(e)
+								apply(0)
+							})
+						}
+					}
+				}
+				if(language=="SimplifiedChinese"){mui.prompt("输入网址","","打开",function(e){if(e.index==1){openTrue(e.value)}})}
+				else{mui.prompt("Enter the URL","","Open",["Cancel","OK"],function(e){if(e.index==1){openTrue(e.value)}})}
+			}
 			function save(){
 				if(isElectron()){
 					require("electron").remote.dialog.showSaveDialog({
@@ -216,7 +240,7 @@
 					},function(filename){if(filename){require("fs").writeFileSync(filename,readText())}})
 				}else if(isMobile()||isEdge()){
 					if(currentItem==null||currentItem=="Text"){
-						for(var i=1;i<10000;i++){
+						for(let i=1;i<10000;i++){
 							if(localStorage.getItem("Text"+i)==null||localStorage.getItem("Text"+i)==""){
 								currentItem="Text"+i
 								i=10000
@@ -230,16 +254,16 @@
 					else{mui.toast("The text has been saved")}
 					apply(currentItem.replace("Text",""))
 				}else{
-					var filename=document.getElementsByTagName("input")[0].value
+					let filename=document.getElementsByTagName("input")[0].value
 					if(filename==""){
 						if(language=="SimplifiedChinese"){filename="文本文档"}
 						else{filename="Text Document"}
 					}
-					var dl=document.createElement("a")
+					const dl=document.createElement("a")
 					dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(readText()))
 					dl.setAttribute("download",filename)
 					if(document.createEvent){
-						var event=document.createEvent("MouseEvents")
+						const event=document.createEvent("MouseEvents")
 						event.initEvent("click",true,true)
 						dl.dispatchEvent(event)
 					}else{dl.click()}
@@ -257,7 +281,7 @@
 					if(navigator.onLine){
 						openWebPage("http://rthsoftware.tk/web/toolbox/sharedtext.html?alert=1&title="+escape(document.getElementsByTagName("input")[0].value)+"&text="+escape(readText()))
 					}else{
-						var title=document.getElementsByTagName("input")[0].value
+						let title=document.getElementsByTagName("input")[0].value
 						if(title==""){
 							if(language=="SimplifiedChinese"){title="无标题"}
 							else{title="Untitled"}
@@ -284,8 +308,8 @@
 				localStorage.removeItem("TextEditorCurrentItem")
 				reload()
 			}
-			function Delete(){
-				var deleteTrue=function(){
+			function deleteDocument(){
+				const deleteTrue=function(){
 					localStorage.removeItem(currentItem)
 					clearTrue()
 				}
@@ -294,14 +318,14 @@
 			}
 			function runJSCode(){
 				if(!isEmpty()){
-					var runTrue=function(){
+					const runTrue=function(){
 						try{eval(code)}
 						catch(e){
 							if(language=="SimplifiedChinese"){mui.alert(e.message,"错误")}
 							else{mui.alert(e.message,"Error","OK")}
 						}
 					}
-					var code=readText().replace(/coin|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast")
+					const code=readText().replace(/coin|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast")
 					if(code.indexOf("init()")==-1&&code.indexOf("initElectron()")==-1&&code.indexOf("RTH Toolbox")==-1){
 						if(code.indexOf("eval")!=-1||isPlus()&&code.indexOf("plus")!=-1||isElectron()&&code.indexOf("require")!=-1){
 							if(language=="SimplifiedChinese"){mui.confirm("此代码可能会对您的设备有害","警告",["取消","继续"],function(e){if(e.index==1){runTrue()}})}

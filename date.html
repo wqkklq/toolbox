@@ -26,21 +26,16 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
 			<h1 class="mui-title"></h1>
 		</header>
-		<div class="win" style="display:none">
-			<div style="right:80px" onclick="require('electron').remote.getCurrentWindow().minimize()">-</div>
-			<div style="right:40px" onclick="maximize()">+</div>
-			<div style="right:0px" onclick="window.close()">×</div>
-		</div>
 		<div class="mui-content">
 			<fieldset>
 				<legend></legend>
 				<div class="mui-input-row">
 					<label id="StartDateLabel"></label>
-					<input id="StartDate" type="date" oninput="Calculate()">
+					<input id="StartDate" type="date" oninput="calculate()">
 				</div>
 				<div class="mui-input-row">
 					<label id="EndDateLabel"></label>
-					<input id="EndDate" type="date" oninput="Calculate()">
+					<input id="EndDate" type="date" oninput="calculate()">
 				</div>
 				<div class="result"></div>
 			</fieldset>
@@ -68,10 +63,10 @@
 				document.getElementsByClassName("result")[0].innerText="0 Day"
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			function Calculate(){
-				var startDateValue=new Date(document.getElementById("StartDate").value),
+			function calculate(){
+				const startDateValue=new Date(document.getElementById("StartDate").value),
 				endDateValue=new Date(document.getElementById("EndDate").value)
-				var dateDiff=parseInt(Math.abs(endDateValue-startDateValue)/1000/60/60/24)
+				const dateDiff=parseInt(Math.abs(endDateValue-startDateValue)/1000/60/60/24)
 				if(language=="SimplifiedChinese"){document.getElementsByClassName("result")[0].innerText="距离 "+dateDiff+" 天"}
 				else{
 					if(Math.abs(dateDiff>1)){document.getElementsByClassName("result")[0].innerText=dateDiff+" Days"}
