@@ -56,7 +56,7 @@ if(isElectron()){
 	})
 }
 function isElectron(){return navigator.userAgent.indexOf("Electron")!=-1}
-function isPlus(){return navigator.userAgent.indexOf("Html5Plus")!=-1&&window.plus}
+function isPlus(){return navigator.userAgent.indexOf("Html5Plus")!=-1}
 function isApp(){return isElectron()||isPlus()}
 function isAndroid(){return navigator.userAgent.indexOf("Android")!=-1}
 function isAndroidApp(){return isAndroid()&&isPlus()}
