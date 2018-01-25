@@ -320,13 +320,10 @@
 				if(!isEmpty()){
 					const runTrue=function(){
 						try{eval(code)}
-						catch(e){
-							if(language=="SimplifiedChinese"){mui.alert(e.message,"错误")}
-							else{mui.alert(e.message,"Error","OK")}
-						}
+						catch(e){mui.toast(e.message)}
 					}
 					const code=readText().replace(/coin|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast")
-					if(code.indexOf("init()")==-1&&code.indexOf("initElectron()")==-1&&code.indexOf("RTH Toolbox")==-1){
+					if(code.indexOf("language==\"SimplifiedChinese\"")==-1){
 						if(code.indexOf("eval")!=-1||isPlus()&&code.indexOf("plus")!=-1||isElectron()&&code.indexOf("require")!=-1){
 							if(language=="SimplifiedChinese"){mui.confirm("此代码可能会对您的设备有害","警告",["取消","继续"],function(e){if(e.index==1){runTrue()}})}
 							else{mui.confirm("This code can harm your device","Warning",["Cancel","Continue"],function(e){if(e.index==1){runTrue()}})}
