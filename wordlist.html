@@ -363,7 +363,7 @@
 							}else{dl.click()}
 						}
 						apply(currentItem.replace("WordList",""))
-						if(r!=null){window.location.search=""}
+						if(searchURL("list",window.location.search)){window.location.search=""}
 					}
 				}else if(name=="share"){openWebPage('http://t.rths.tk/wordlist.html?list='+escape(document.getElementsByTagName('textarea')[0].value))}
 				else{
