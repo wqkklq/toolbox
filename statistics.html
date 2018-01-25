@@ -75,11 +75,12 @@
 			function calculate(){
 				const num=document.getElementsByTagName("textarea")[0].value
 				if(num!=""&&num!=null){
-					const numSplit=num.split("\n"),SumValue=0
+					const numSplit=num.split("\n")
+					let sumValue=0
 					document.getElementById("Count").value=numSplit.length
-					for(let i=0;i<numSplit.length;i++){SumValue+=numSplit[i]*1}
-					document.getElementById("Average").value=SumValue/numSplit.length
-					document.getElementById("Sum").value=SumValue
+					for(let i=0;i<numSplit.length;i++){sumValue+=numSplit[i]*1}
+					document.getElementById("Average").value=sumValue/numSplit.length
+					document.getElementById("Sum").value=sumValue
 				}else{add()}
 			}
 			function add(){
