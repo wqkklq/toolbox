@@ -189,7 +189,7 @@ function openWindow(name){
 		if(isOnline()){
 			url=addTime(url)
 		}
-		if(/http|\?|flashcard|quiz/.test(url)){
+		if(/http|\?|flashcard|quiz/.test(url)||isAndroid()){
 			plus.webview.open(url,name,{"popGesture":"close"},"fade-in")
 		}else{
 			plus.webview.create(url,name,{"popGesture":"hide"})
@@ -411,7 +411,6 @@ if(appliedTheme=="Dark"){
 	loadCSS("css/dark.css")
 }
 if(header!=null){
-	header.classList.add("title")
 	const newA=document.createElement("a"),
 	newH1=document.createElement("h1")
 	newA.setAttribute("class","mui-action-back mui-icon mui-icon-left-nav mui-pull-left back")

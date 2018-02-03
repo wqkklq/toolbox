@@ -287,35 +287,11 @@
 				document.title="RTH"
 				document.getElementsByClassName("home-title")[0].innerText="RTH"
 			}
-			if(isAndroidApp()&&!isOnline()){
-				mui.init({preloadPages:[
-					{url:"about.html",id:"about"},
-					{url:"calculator.html",id:"calculator"},
-					{url:"chatbot.html",id:"chatbot"},
-					{url:"currency.html",id:"currency"},
-					{url:"date.html",id:"date"},
-					{url:"equation12.html",id:"equation12"},
-					{url:"equation21.html",id:"equation21"},
-					{url:"equation31.html",id:"equation31"},
-					{url:"feedback.html",id:"feedback"},
-					{url:"findlinearfunction.html",id:"findlinearfunction"},
-					{url:"findquadraticfunction.html",id:"findquadraticfunction"},
-					{url:"mole.html",id:"mole"},
-					{url:"numberbase.html",id:"numberbase"},
-					{url:"quadraticfunction.html",id:"quadraticfunction"},
-					{url:"randomnumber.html",id:"randomnumber"},
-					{url:"search.html",id:"search"},
-					{url:"settings.html",id:"settings"},
-					{url:"statistics.html",id:"statistics"},
-					{url:"texteditor.html",id:"texteditor"},
-					{url:"timer.html",id:"timer"},
-					{url:"wordlist.html",id:"wordlist"}
-				],preloadLimit:21,swipeBack:false})
+			mui.init({swipeBack:false})
+			if(isAndroidApp()){
 				mui.back=function(){
 					plus.runtime.quit()
 				}
-			}else{
-				mui.init({swipeBack:false})
 			}
 			if(isElectron()){
 				const{remote}=require("electron")

@@ -11,7 +11,7 @@
 		<link href="css/general.css" rel="stylesheet">
 	</head>
 	<body>
-		<header class="mui-bar mui-bar-nav"></header>
+		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
 			<table style="width:100%;display:none">
 				<tbody>
@@ -98,13 +98,7 @@
 				}
 			}
 			function updateRate(){
-				if(isPlus()){
-					plus.nativeUI.showWaiting()
-				}
 				request("http://www.apilayer.net/api/live?access_key=305f5a80f4da12a238c9ebfe5479c648",function(e){
-					if(isPlus()){
-						plus.nativeUI.closeWaiting()
-					}
 					const json=JSON.parse(e)
 					if(json.success){
 						rate=e
