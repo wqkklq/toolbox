@@ -196,8 +196,9 @@
 					plus.navigator.setStatusBarStyle("light")
 					if(isAndroid()){
 						plus.runtime.getProperty(plus.runtime.appid,function(inf){
-							request("http://t.rths.tk/web/toolbox/update/check.php",function(e){
-								if(inf.version&&e&&inf.version!=e){
+							request("http://t.rths.tk/package.json",function(e){
+								const json=JSON.parse(e)
+								if(inf.version!=json.version){
 									showAlert([
 										"Going to the download page",
 										"即将前往下载页面"
