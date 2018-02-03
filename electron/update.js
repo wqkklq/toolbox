@@ -7,6 +7,7 @@ try{
 	require("electron").webFrame.setZoomLevelLimits(1,1)
 	if(process.platform=="darwin"){
 		document.getElementsByClassName("drag")[0].style.display="none"
+		document.getElementsByClassName("content")[0].style.paddingTop="15px"
 	}else{
 		document.getElementsByClassName("win")[0].style.display=""
 	}
