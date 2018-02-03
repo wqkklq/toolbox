@@ -97,9 +97,11 @@
 						}
 						myCodeMirror.on("change",count)
 						textChanged()
-						callback()
+						if(callback){
+							callback()
+						}
 					})
-				}else{
+				}else if(callback){
 					callback()
 				}
 			}
@@ -517,7 +519,7 @@
 			if(isMobile()){
 				document.getElementById("OpenLocalDocument").style.display="none"
 			}else{
-				enableCodeEditor(null)
+				enableCodeEditor()
 			}
 			load()
 		</script>
