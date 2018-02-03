@@ -7,117 +7,202 @@
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
 		<meta name="renderer" content="webkit">
-		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 	</head>
 	<body>
-		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-			<h1 class="mui-title"></h1>
-		</header>
+		<header class="mui-bar mui-bar-nav"></header>
 		<div class="mui-content">
 			<div class="mui-input-row">
-				<input type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13&&this.value!=''){lookUp('')}">
+				<input type="text" class="mui-input-clear">
 			</div>
-			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="lookUp('')"></button>
-			<ul id="OWLUl" class="mui-table-view" style="margin-top:20px">
-				<li class="mui-table-view-cell">
-					<a id="NewWL" href="javascript:edit()" class="mui-navigate-right"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="OpenLWL" href="javascript:openDialog()" class="mui-navigate-right"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="OpenSWL" href="javascript:openSWL()" class="mui-navigate-right"></a>
-				</li>
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
+			<ul id="OWLUl" class="menu" style="margin-top:20px">
+				<li id="NewWL" class="menu"></li>
+				<li id="OpenLWL" class="menu"></li>
+				<li id="OpenSWL" class="menu"></li>
 			</ul>
-			<ul id="OptionUl1" class="mui-table-view" style="margin-top:20px;display:none">
-				<li class="mui-table-view-cell">
-					<a id="Quiz" href="javascript:arrange('quiz')" class="mui-navigate-right"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="Share" href="javascript:arrange('share')" class="mui-navigate-right"></a>
-				</li>
-				<li id="CloseLi" class="mui-table-view-cell" style="display:none">
-					<a id="Close" href="javascript:closeDocument()" class="mui-navigate-right"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="FlashCard" href="javascript:arrange('flashcard')" class="mui-navigate-right"></a>
-				</li>
+			<ul id="OptionUl1" class="menu" style="margin-top:20px;display:none">
+				<li id="Quiz" class="menu"></li>
+				<li id="Share" class="menu"></li>
+				<li id="Close" class="menu"></li>
+				<li id="FlashCard" class="menu"></li>
 			</ul>
-			<ul id="WordListUl" class="mui-table-view" style="margin-top:20px;display:none"></ul>
+			<ul id="WordListUl" class="menu" style="display:none"></ul>
 			<textarea rows="10" style="margin-top:20px;display:none"></textarea>
-			<ul id="OptionUl2" class="mui-table-view" style="display:none">
-				<li class="mui-table-view-cell">
-					<a id="Save" href="javascript:arrange('save')" class="mui-navigate-right"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="AddWord" href="javascript:addWord()" class="mui-navigate-right"></a>
-				</li>
-				<li id="DeleteLi" class="mui-table-view-cell">
-					<a id="Delete" href="javascript:deleteDocument()" class="mui-navigate-right"></a>
-				</li>
+			<ul id="OptionUl2" class="menu" style="display:none">
+				<li id="Save" class="menu"></li>
+				<li id="AddWord" class="menu"></li>
+				<li id="Delete" class="menu"></li>
 			</ul>
 		</div>
-		<input id="OpenFileInput" type="file" accept=".rth,.txt" style="display:none" onchange="openLWL(event.target.files[0])">
-		<!--[if IE]>
-			<script type="text/javascript">
-				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
-			</script>
-		<![endif]-->
+		<input id="OpenFileInput" type="file" accept=".rth" style="display:none">
+		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			let currentItem,documentsCount,list
-			if(language=="SimplifiedChinese"){
-				document.title="单词表"
-				document.getElementsByTagName("input")[0].placeholder="输入要查询的单词"
-				document.getElementsByTagName("button")[0].innerText="查询"
-				document.getElementById("NewWL").innerText="新单词表"
-				document.getElementById("OpenLWL").innerText="打开本地的单词表"
-				document.getElementById("OpenSWL").innerText="打开共享的单词表"
-				document.getElementById("Quiz").innerText="测验"
-				document.getElementById("Share").innerText="分享"
-				document.getElementById("Close").innerText="关闭文档"
-				document.getElementById("FlashCard").innerText="学习卡"
-				document.getElementsByTagName("textarea")[0].placeholder="单词表为空"
-				document.getElementById("Save").innerText="保存"
-				document.getElementById("AddWord").innerText="添加单词"
-				document.getElementById("Delete").innerText="删除"
-			}else{
-				document.title="Word List"
-				document.getElementsByTagName("input")[0].placeholder="Enter the word you want to look up"
-				document.getElementsByTagName("button")[0].innerText="Look Up"
-				document.getElementById("NewWL").innerText="New Word List"
-				document.getElementById("OpenLWL").innerText="Open Local Word List"
-				document.getElementById("OpenSWL").innerText="Open Shared Word List"
-				document.getElementById("Quiz").innerText="Quiz"
-				document.getElementById("Share").innerText="Share"
-				document.getElementById("Close").innerText="Close Document"
-				document.getElementById("FlashCard").innerText="Flash Card"
-				document.getElementsByTagName("textarea")[0].placeholder="The word list is empty"
-				document.getElementById("Save").innerText="Save"
-				document.getElementById("AddWord").innerText="Add Word"
-				document.getElementById("Delete").innerText="Delete"
+			function apply(serialNumber){
+				if(serialNumber==0){
+					currentItem="WordList"
+				}else{
+					currentItem="WordList"+serialNumber
+				}
+				localStorage.setItem("WordList",document.getElementsByTagName("textarea")[0].value)
+				localStorage.setItem("WordListCurrentItem",currentItem)
+				reload()
 			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			const OWList=document.getElementById("OWLUl").innerHTML
-			load()
+			function arrange(name){
+				let WLSplitFS=document.getElementsByTagName("textarea")[0].value.split("\n")
+				if(WLSplitFS[0]!="RTH 1"){
+					document.getElementsByTagName("textarea")[0].value="RTH 1\n"+document.getElementsByTagName("textarea")[0].value
+				}
+				if(WLSplitFS[WLSplitFS.length-1]!=""){
+					document.getElementsByTagName("textarea")[0].value+="\n"
+				}
+				WLSplitFS=document.getElementsByTagName("textarea")[0].value.split("\n")
+				if(name=="save"){
+					if(isElectron()&&!isLinux()){
+						require("electron").remote.dialog.showSaveDialog({
+							defaultPath:document.title,
+							filters:[{name:"RTH Toolbox Files",extensions:["rth"]}]
+						},function(filename){
+							if(filename){
+								require("fs").writeFileSync(filename,document.getElementsByTagName("textarea")[0].value)
+							}
+						})
+						apply(0)
+					}else{
+						if(currentItem==null||currentItem=="WordList"){
+							for(let i=1;i<10000;i++){
+								if(localStorage.getItem("WordList"+i)==null||localStorage.getItem("WordList"+i)==""){
+									currentItem="WordList"+i
+									i=10000
+								}
+							}
+							if(currentItem==null){
+								return false
+							}
+						}
+						localStorage.setItem(currentItem,document.getElementsByTagName("textarea")[0].value)
+						switch(language){
+							case "SimplifiedChinese":
+								mui.toast("已保存单词表")
+								break
+							default:
+								mui.toast("The word list has been saved")
+								break
+						}
+						if(!isMobile()&&!isLinux()){
+							showConfirm([
+								"Do you want to download this document?",
+								"您想要下载此文档吗？"
+							],[
+								"Save",
+								"保存"
+							],function(){
+								let filename
+								switch(language){
+									case "SimplifiedChinese":
+										filename="单词表.rth"
+										break
+									default:
+										filename="Word List.rth"
+										break
+								}
+								const dl=document.createElement("a")
+								dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(document.getElementsByTagName("textarea")[0].value))
+								dl.setAttribute("download",filename)
+								dl.click()
+							})
+						}
+						apply(currentItem.replace("WordList",""))
+					}
+				}else{
+					const wordCount=(WLSplitFS.length-2)/2
+					let wordMin
+					switch(name){
+						case "flashcard":
+						case "share":
+							wordMin=1
+							break
+						case "quiz":
+							wordMin=4
+							break
+						default:break
+					}
+					if(wordCount<wordMin){
+						showAlert([
+							"Too few words ("+wordCount+"/"+wordMin+")",
+							"单词太少 ("+wordCount+"/"+wordMin+")"
+						])
+					}else if(name=="share"){
+						openWebPage('http://t.rths.tk/wordlist.html?list='+escape(document.getElementsByTagName('textarea')[0].value))
+					}else{
+						localStorage.setItem("WordList",document.getElementsByTagName("textarea")[0].value)
+						openWindow(name)
+					}
+				}
+			}
+			function closeTrue(){
+				document.getElementsByTagName("textarea")[0].value=""
+				localStorage.removeItem("WordList")
+				currentItem="WordList"
+				localStorage.removeItem("WordListCurrentItem")
+				reload()
+			}
+			function edit(){
+				document.getElementById("OWLUl").style.display="none"
+				document.getElementById("OptionUl1").style.display=""
+				document.getElementById("WordListUl").style.display=""
+				document.getElementsByTagName("textarea")[0].style.display=""
+				if(!list){
+					document.getElementById("Close").style.display=""
+					document.getElementById("OptionUl2").style.display=""
+				}
+			}
 			function load(){
+				document.getElementById("NewWL").onclick=edit
+				document.getElementById("OpenLWL").onclick=openDialog
+				document.getElementById("OpenSWL").onclick=function(){
+					showPrompt([
+						"Enter the URL",
+						"输入网址"
+					],[
+						"Open",
+						"打开"
+					],function(e){
+						e=searchURL("list",e)
+						if(e){
+							document.getElementsByTagName("textarea")[0].value=e
+							currentItem="WordList"
+							apply(0)
+						}
+					})
+				}
 				currentItem=localStorage.getItem("WordListCurrentItem")
 				documentsCount=0
 				list=searchURL("list",window.location.search)
 				if(list){
 					document.getElementsByTagName("textarea")[0].value=list
-					if(language=="SimplifiedChinese"){document.title="\""+list.split("\n")[1]+"\" 和另外"+((list.split("\n").length-2)/2-1)+"个单词"}
-					else{document.title="\""+list.split("\n")[1]+"\" and other "+(list.split("\n").length-2)/2+" words"}
+					switch(language){
+						case "SimplifiedChinese":
+							document.title="\""+list.split("\n")[1]+"\" 和另外"+((list.split("\n").length-2)/2-1)+"个单词"
+							break
+						default:
+							document.title="\""+list.split("\n")[1]+"\" and other "+(list.split("\n").length-2)/2+" words"
+							break
+					}
 					const time=searchURL("time",window.location.search)
 					if(time&&(new Date).getTime()-time<10000){
-						if(language=="SimplifiedChinese"){mui.alert("请把当前页面的网址分享给您的好友","分享")}
-						else{mui.alert("Please share the URL of the current page with your friends","Share","OK")}
+						showAlert([
+							"Please share the URL of the current page with your friends",
+							"请把当前页面的网址分享给您的好友"
+						],[
+							"Share",
+							"分享"
+						])
 					}
 					currentItem="WordList"
 					localStorage.removeItem("WordListCurrentItem")
@@ -128,7 +213,9 @@
 						newIframe.style.display="none"
 						document.body.appendChild(newIframe)
 					}
-				}else if(localStorage.getItem("WordList")!=null){document.getElementsByTagName("textarea")[0].value=localStorage.getItem("WordList")}
+				}else if(localStorage.getItem("WordList")!=null){
+					document.getElementsByTagName("textarea")[0].value=localStorage.getItem("WordList")
+				}
 				if(document.getElementsByTagName("textarea")[0].value!=""){
 					let WLTSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
 					if(WLTSplit[0]!="RTH 1"){
@@ -136,24 +223,22 @@
 						WLTSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
 					}
 					for(let i=1;i<WLTSplit.length-1;i+=2){
-						const newA=document.createElement("a"),
-						newWord=WLTSplit[i],
+						const newWord=WLTSplit[i],
 						newDefinition=WLTSplit[i+1],
 						newLabel=document.createElement("label"),
 						newP=document.createElement("p"),
-						newDiv=document.createElement("div"),
 						newLi=document.createElement("li")
-						newA.setAttribute("class","mui-navigate-right")
-						newA.setAttribute("id",newWord)
-						newA.href="javascript:lookUp('"+newWord+"')"
+						newLi.setAttribute("class","menu")
+						newLi.setAttribute("id",newWord)
+						newLi.onclick=function(){lookUp(newWord)}
 						newLabel.innerText=newWord
 						newP.innerText=newDefinition
-						newDiv.appendChild(newLabel)
-						newDiv.appendChild(newP)
-						newA.appendChild(newDiv)
-						newLi.setAttribute("class","mui-table-view-cell")
-						newLi.appendChild(newA)
+						newLi.appendChild(newLabel)
+						newLi.appendChild(newP)
 						document.getElementById("WordListUl").appendChild(newLi)
+						if(document.getElementById("WordListUl").getElementsByTagName("li").length>0){
+							document.getElementById("WordListUl").style.marginTop="20px"
+						}
 					}
 					edit()
 				}else{
@@ -161,65 +246,62 @@
 						const savedWL=localStorage.getItem("WordList"+i)
 						if(savedWL!=null&&savedWL!=""){
 							documentsCount+=1
-							const newA=document.createElement("a"),newLi=document.createElement("li")
-							newA.setAttribute("class","mui-navigate-right")
+							const newLi=document.createElement("li")
 							let Item
-							if(language=="SimplifiedChinese"){Item="\""+savedWL.split("\n")[1]+"\" 和另外"+((savedWL.split("\n").length-2)/2-1)+"个单词"}
-							else{Item="\""+savedWL.split("\n")[1]+"\" and other "+(savedWL.split("\n").length-2)/2+" words"}
-							newA.innerText=Item
-							newA.href="javascript:openWL("+i+")"
-							newLi.setAttribute("class","mui-table-view-cell")
-							newLi.appendChild(newA)
+							switch(language){
+								case "SimplifiedChinese":
+									Item="\""+savedWL.split("\n")[1]+"\" 和另外"+((savedWL.split("\n").length-2)/2-1)+"个单词"
+									break
+								default:
+									Item="\""+savedWL.split("\n")[1]+"\" and other "+(savedWL.split("\n").length-2)/2+" words"
+									break
+							}
+							newLi.innerText=Item
+							newLi.onclick=function(){openWL(i)}
+							newLi.setAttribute("class","menu")
 							document.getElementById("OWLUl").appendChild(newLi)
 						}
 					}
 					request("http://t.rths.tk/wordlist/index.html",function(e){
 						OWLTSplit=e.replace(/<br \/>/g,"").split("\n")
 						for(let i=OWLTSplit.length-1;i>=0;i-=1){
-							const newA=document.createElement("a"),newLi=document.createElement("li")
-							newA.setAttribute("class","mui-navigate-right")
-							newA.innerText=OWLTSplit[i]
-							newA.href="javascript:openOWL("+(i+1)+")"
-							newLi.setAttribute("class","mui-table-view-cell")
-							newLi.appendChild(newA)
+							const newLi=document.createElement("li")
+							newLi.innerText=OWLTSplit[i]
+							newLi.onclick=function(){openOWL((i+1))}
+							newLi.setAttribute("class","menu")
 							document.getElementById("OWLUl").appendChild(newLi)
 						}
 					})
 				}
-				if(currentItem==null||currentItem=="WordList"){document.getElementById("DeleteLi").style.display="none"}
-				else{document.getElementById("DeleteLi").style.display=""}
-			}
-			function edit(){
-				document.getElementById("OWLUl").style.display="none"
-				document.getElementById("OptionUl1").style.display=""
-				if(!list){document.getElementById("CloseLi").style.display=""}
-				document.getElementById("WordListUl").style.display=""
-				document.getElementsByTagName("textarea")[0].style.display=""
-				document.getElementById("OptionUl2").style.display=""
-			}
-			window.onkeydown=function(e){
-				if(e.ctrlKey||e.metaKey){
-					if(e.keyCode==83){
-						arrange("save")
-						return false
-					}
+				if(currentItem==null||currentItem=="WordList"){
+					document.getElementById("Delete").style.display="none"
+				}else{
+					document.getElementById("Delete").style.display=""
 				}
 			}
-			function reload(){
-				window.scrollTo(0,0)
-				document.getElementById("OWLUl").style.display=""
-				document.getElementById("OWLUl").innerHTML=OWList
-				document.getElementById("OptionUl1").style.display="none"
-				document.getElementById("CloseLi").style.display="none"
-				document.getElementById("WordListUl").style.display="none"
-				document.getElementById("WordListUl").innerHTML=""
-				document.getElementsByTagName("textarea")[0].style.display="none"
-				document.getElementsByTagName("textarea")[0].value=""
-				document.getElementById("OptionUl2").style.display="none"
-				load()
+			function lookUp(word){
+				if(word==""){
+					if(document.getElementsByTagName("input")[0].value==""){
+						showAlert([
+							"Please enter the word you want to look up",
+							"请输入要查询的单词"
+						])
+						return false
+					}else{
+						word=document.getElementsByTagName("input")[0].value
+					}
+				}
+				if(navigator.onLine||localStorage.getItem(word.replace(/\s/g,"").toLowerCase()+"_CNDef")!=null){
+					openWindow(encodeURI("flashcard.html?word="+word))
+				}else{
+					showAlert([
+						"No Internet connection",
+						"没有互联网连接"
+					])
+				}
 			}
 			function openLWL(file){
-				if(file.name.split(".")[1]=="rth"||file.name.split(".")[1]=="txt"){
+				if(file.name.split(".")[1]=="rth"){
 					const reader=new FileReader()
 					reader.onload=function(e){
 						document.getElementsByTagName("textarea")[0].value=this.result.replace(/<br \/>/g,"")
@@ -228,21 +310,8 @@
 					}
 					reader.readAsText(file)
 				}else{
-					if(language=="SimplifiedChinese"){mui.alert("无法打开此类文件","单词表")}
-					else{mui.alert("Unable to open this type of file","Word List","OK")}
+					unsupportedType()
 				}
-			}
-			function openSWL(){
-				const openTrue=function(url){
-					const list=searchURL("list",url)
-					if(list){
-						document.getElementsByTagName("textarea")[0].value=list
-						currentItem="WordList"
-						apply(0)
-					}
-				}
-				if(language=="SimplifiedChinese"){mui.prompt("输入网址","","打开",function(e){if(e.index==1){openTrue(e.value)}})}
-				else{mui.prompt("Enter the URL","","Open",["Cancel","OK"],function(e){if(e.index==1){openTrue(e.value)}})}
 			}
 			function openOWL(serialNumber){
 				request("http://t.rths.tk/wordlist/"+addZero(serialNumber,3)+".html",function(e){
@@ -254,135 +323,177 @@
 				document.getElementsByTagName("textarea")[0].value=localStorage.getItem("WordList"+serialNumber)
 				apply(serialNumber)
 			}
-			function lookUp(word){
-				if(word==""){
-					if(document.getElementsByTagName("input")[0].value==""){
-						if(language=="SimplifiedChinese"){mui.alert("请输入要查询的单词","词典")}
-						else{mui.alert("Please enter the word you want to look up","Dictionary","OK")}
-						return false
-					}else{word=document.getElementsByTagName("input")[0].value}
-				}
-				if(navigator.onLine||localStorage.getItem(word.replace(/\s/g,"").toLowerCase()+"_CNDef")!=null){openWindow(encodeURI("flashcard.html?word="+word))}
-				else{
-					if(language=="SimplifiedChinese"){mui.alert("没有互联网连接","词典")}
-					else{mui.alert("No Internet connection","Dictionary","OK")}
-				}
-			}
-			function closeDocument(){
-				if(language=="SimplifiedChinese"){mui.confirm("您想要关闭文档吗？","关闭",["否","是"],function(e){if(e.index==1){closeTrue()}})}
-				else{mui.confirm("Do you want to close the document?","Close",["No","Yes"],function(e){if(e.index==1){closeTrue()}})}
-			}
-			function closeTrue(){
+			function reload(){
+				window.scrollTo(0,0)
+				document.getElementById("OWLUl").style.display=""
+				document.getElementById("OWLUl").innerHTML=OWList
+				document.getElementById("OptionUl1").style.display="none"
+				document.getElementById("Close").style.display="none"
+				document.getElementById("WordListUl").style.display="none"
+				document.getElementById("WordListUl").style.marginTop=""
+				document.getElementById("WordListUl").innerHTML=""
+				document.getElementsByTagName("textarea")[0].style.display="none"
 				document.getElementsByTagName("textarea")[0].value=""
-				localStorage.removeItem("WordList")
-				currentItem="WordList"
-				localStorage.removeItem("WordListCurrentItem")
-				reload()
+				document.getElementById("OptionUl2").style.display="none"
+				load()
 			}
-			function deleteDocument(){
-				const deleteTrue=function(){
-					localStorage.removeItem(currentItem)
-					closeTrue()
+			window.onkeydown=function(e){
+				if(e.ctrlKey||e.metaKey){
+					switch(e.keyCode){
+						case 79:
+							openDialog()
+							return false
+							break
+						case 83:
+							arrange("save")
+							return false
+							break
+						default:break
+					}
 				}
-				if(language=="SimplifiedChinese"){mui.confirm("您想要删除此单词表吗？","删除",["否","是"],function(e){if(e.index==1){deleteTrue()}})}
-				else{mui.confirm("Do you want to delete the word list?","Delete",["No","Yes"],function(e){if(e.index==1){deleteTrue()}})}
 			}
-			function addWord(){
+			document.getElementsByTagName("input")[0].onkeydown=function(e){
+				if(e.keyCode==13&&this.value!=""){
+					lookUp("")
+				}
+			}
+			document.getElementsByTagName("button")[0].onclick=function(){
+				lookUp("")
+			}
+			document.getElementById("Quiz").onclick=document.getElementById("Share").onclick=document.getElementById("FlashCard").onclick=document.getElementById("Save").onclick=function(){
+				arrange(this.id.toLowerCase())
+			}
+			document.getElementById("Close").onclick=function(){
+				showConfirm([
+					"Do you want to close the document?",
+					"您想要关闭文档吗？"
+				],[
+					"Close",
+					"关闭"
+				],closeTrue)
+			}
+			document.getElementById("AddWord").onclick=function(){
 				const WLTSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
-				if(WLTSplit[WLTSplit.length-1]!=""){document.getElementsByTagName("textarea")[0].value+="\n"}
-				const askForDefinition=function(newWord){
-					if(language=="SimplifiedChinese"){mui.prompt("输入新单词的释义","","添加",function(e){if(e.index==1&&e.value!=""){document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+e.value}})}
-					else{mui.prompt("Enter the definition of the new word","","Add",["Cancel","OK"],function(e){if(e.index==1&&e.value!=""){document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+e.value}})}
+				if(WLTSplit[WLTSplit.length-1]!=""){
+					document.getElementsByTagName("textarea")[0].value+="\n"
 				}
-				const getDefinition=function(newWord){
-					if(newWord==""){return false}
-					const translateWord=function(){translate(newWord,"en","zh",function(e){document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+e.trans_result[0].dst})},
+				showPrompt([
+					"Enter a new word",
+					"输入新单词"
+				],[
+					"Add",
+					"添加"
+				],function(newWord){
+					const askForDefinition=function(newWord){
+						showPrompt([
+							"Enter the definition of the new word",
+							"输入新单词的释义"
+						],[
+							"Add",
+							"添加"
+						],function(e){
+							document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+e
+						})
+					}
+					const translateWord=function(){
+						translate(newWord,"en","zh",function(e){
+							document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+e.trans_result[0].dst
+						})
+					},
 					wordWithoutSpace=newWord.replace(/\s/g,"").toLowerCase()
 					if(localStorage.getItem(wordWithoutSpace+"_CNDef")!=null){
 						const CNDef=localStorage.getItem(wordWithoutSpace+"_CNDef"),
 						ENDef=localStorage.getItem(wordWithoutSpace+"_ENDef")
-						if(language=="SimplifiedChinese"&&CNDef!=null){document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+CNDef.replace(/\n/g,"；")}
-						else if(ENDef!=null){document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+ENDef.replace(/\n/g,"; ")}
-						else{askForDefinition(newWord)}
-					}else if(!isApp()){translateWord()}
-					else if(navigator.onLine){
+						if(language=="SimplifiedChinese"&&CNDef!=null){
+							document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+CNDef.replace(/\n/g,"；")
+						}else if(ENDef!=null){
+							document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+ENDef.replace(/\n/g,"; ")
+						}else{
+							askForDefinition(newWord)
+						}
+					}else if(!isApp()){
+						translateWord()
+					}else if(navigator.onLine){
 						request("https://api.shanbay.com/bdc/search/?word="+newWord,function(e){
 							const json=JSON.parse(e)
 							if(json.msg=="SUCCESS"){
-								if(language=="SimplifiedChinese"&&json.data.cn_definition.defn!=null){document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+json.data.cn_definition.defn.replace(/\n/g,"；")}
-								else if(json.data.en_definition.defn!=null){document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+json.data.en_definition.defn.replace(/\n/g,"; ")}
-								else{askForDefinition(newWord)}
+								if(language=="SimplifiedChinese"&&json.data.cn_definition.defn!=null){
+									document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+json.data.cn_definition.defn.replace(/\n/g,"；")
+								}else if(json.data.en_definition.defn!=null){
+									document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+json.data.en_definition.defn.replace(/\n/g,"; ")
+								}else{
+									askForDefinition(newWord)
+								}
 								if(wordWithoutSpace.indexOf(" ")==-1){
 									localStorage.setItem(wordWithoutSpace+"_Pronunciation",json.data.pronunciation)
 									localStorage.setItem(wordWithoutSpace+"_Audio",json.data.audio)
 									localStorage.setItem(wordWithoutSpace+"_CNDef",json.data.cn_definition.defn)
 									localStorage.setItem(wordWithoutSpace+"_ENDef",json.data.en_definition.defn)
 								}
-							}else{translateWord()}
-						})
-					}else{askForDefinition(newWord)}
-				}
-				if(language=="SimplifiedChinese"){mui.prompt("输入新单词","","添加",function(e){if(e.index==1){getDefinition(e.value)}})}
-				else{mui.prompt("Enter a new word","","Add",["Cancel","OK"],function(e){if(e.index==1){getDefinition(e.value)}})}
-			}
-			function arrange(name){
-				const WLSplitFS=document.getElementsByTagName("textarea")[0].value.split("\n")
-				if(WLSplitFS[0]!="RTH 1"){document.getElementsByTagName("textarea")[0].value="RTH 1\n"+document.getElementsByTagName("textarea")[0].value}
-				if(WLSplitFS[WLSplitFS.length-1]!=""){document.getElementsByTagName("textarea")[0].value+="\n"}
-				if(name=="save"){
-					if(isElectron()&&!isLinux()){
-						require("electron").remote.dialog.showSaveDialog({
-							defaultPath:document.title,
-							filters:[{name:"RTH Toolbox Files",extensions:["rth"]}]
-						},function(filename){if(filename){require("fs").writeFileSync(filename,document.getElementsByTagName("textarea")[0].value)}})
-						apply(0)
-					}else{
-						if(currentItem==null||currentItem=="WordList"){
-							for(let i=1;i<10000;i++){
-								if(localStorage.getItem("WordList"+i)==null||localStorage.getItem("WordList"+i)==""){
-									currentItem="WordList"+i
-									i=10000
-								}
+							}else{
+								translateWord()
 							}
-							if(currentItem==null){return false}
-						}
-						localStorage.setItem(currentItem,document.getElementsByTagName("textarea")[0].value)
-						if(language=="SimplifiedChinese"){mui.toast("已保存单词表")}
-						else{mui.toast("The word list has been saved")}
-						if(!isMobile()&&!isLinux()){
-							let filename
-							if(language=="SimplifiedChinese"){filename="单词表.rth"}
-							else{filename="Word List.rth"}
-							const dl=document.createElement("a")
-							dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(document.getElementsByTagName("textarea")[0].value))
-							dl.setAttribute("download",filename)
-							if(document.createEvent){
-								const event=document.createEvent("MouseEvents")
-								event.initEvent("click",true,true)
-								dl.dispatchEvent(event)
-							}else{dl.click()}
-						}
-						apply(currentItem.replace("WordList",""))
-						if(searchURL("list",window.location.search)){window.location.search=""}
-					}
-				}else if(name=="share"){openWebPage('http://t.rths.tk/wordlist.html?list='+escape(document.getElementsByTagName('textarea')[0].value))}
-				else{
-					if(name=="quiz"&&(WLSplitFS.length-2)/2<4||name=="flashcard"&&(WLSplitFS.length-2)/2<1){
-						if(language=="SimplifiedChinese"){mui.alert("单词太少","单词表")}
-						else{mui.alert("Too few words","Word List","OK")}
+						})
 					}else{
-						localStorage.setItem("WordList",document.getElementsByTagName("textarea")[0].value)
-						openWindow(name)
+						askForDefinition(newWord)
 					}
-				}
+				})
 			}
-			function apply(serialNumber){
-				if(serialNumber==0){currentItem="WordList"}
-				else{currentItem="WordList"+serialNumber}
-				localStorage.setItem("WordList",document.getElementsByTagName("textarea")[0].value)
-				localStorage.setItem("WordListCurrentItem",currentItem)
-				reload()
+			document.getElementById("Delete").onclick=function(){
+				showConfirm([
+					"Do you want to delete the word list?",
+					"您想要删除此单词表吗？"
+				],[
+					"Delete",
+					"删除"
+				],function(){
+					localStorage.removeItem(currentItem)
+					closeTrue()
+				})
 			}
+			document.getElementById("OpenFileInput").onchange=function(e){
+				openLWL(e.target.files[0])
+			}
+			switch(language){
+				case "SimplifiedChinese":
+					document.title="单词表"
+					document.getElementsByTagName("input")[0].placeholder="输入要查询的单词"
+					document.getElementsByTagName("button")[0].innerText="查询"
+					document.getElementById("NewWL").innerText="新单词表"
+					document.getElementById("OpenLWL").innerText="打开本地的单词表"
+					document.getElementById("OpenSWL").innerText="打开共享的单词表"
+					document.getElementById("Quiz").innerText="测验"
+					document.getElementById("Share").innerText="分享"
+					document.getElementById("Close").innerText="关闭文档"
+					document.getElementById("FlashCard").innerText="学习卡"
+					document.getElementsByTagName("textarea")[0].placeholder="单词表为空"
+					document.getElementById("Save").innerText="保存"
+					document.getElementById("AddWord").innerText="添加单词"
+					document.getElementById("Delete").innerText="删除"
+					break
+				default:
+					document.title="Word List"
+					document.getElementsByTagName("input")[0].placeholder="Enter the word you want to look up"
+					document.getElementsByTagName("button")[0].innerText="Look Up"
+					document.getElementById("NewWL").innerText="New Word List"
+					document.getElementById("OpenLWL").innerText="Open Local Word List"
+					document.getElementById("OpenSWL").innerText="Open Shared Word List"
+					document.getElementById("Quiz").innerText="Quiz"
+					document.getElementById("Share").innerText="Share"
+					document.getElementById("Close").innerText="Close Document"
+					document.getElementById("FlashCard").innerText="Flash Card"
+					document.getElementsByTagName("textarea")[0].placeholder="The word list is empty"
+					document.getElementById("Save").innerText="Save"
+					document.getElementById("AddWord").innerText="Add Word"
+					document.getElementById("Delete").innerText="Delete"
+					break
+			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			const OWList=document.getElementById("OWLUl").innerHTML
+			if(isMobile()){
+				document.getElementById("OpenLWL").style.display="none"
+			}
+			load()
 		</script>
 		<!--<![endif]-->
 	</body>

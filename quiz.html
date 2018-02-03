@@ -7,8 +7,6 @@
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
 		<meta name="renderer" content="webkit">
-		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<style>
@@ -23,10 +21,7 @@
 		</style>
 	</head>
 	<body>
-		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-			<h1 class="mui-title"></h1>
-		</header>
+		<header class="mui-bar mui-bar-nav"></header>
 		<div class="mui-content">
 			<div class="show"></div>
 			<div id="EnterWordDiv" class="mui-input-row" style="margin-top:20px">
@@ -37,69 +32,55 @@
 				<label id="DefinitionLabel"></label>
 				<input id="EnteredDefinition" type="text" onkeydown="if(event.keyCode==13&&this.value!=''){Next()}">
 			</div>
-			<ul id="OptionsUl" class="mui-table-view" style="margin-top:20px;display:none">
-				<li class="mui-table-view-cell">
-					<a id="Option1" class="mui-navigate-right" href="javascript:OptionClicked(0)"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="Option2" class="mui-navigate-right" href="javascript:OptionClicked(1)"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="Option3" class="mui-navigate-right" href="javascript:OptionClicked(2)"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="Option4" class="mui-navigate-right" href="javascript:OptionClicked(3)"></a>
-				</li>
+			<ul id="OptionsUl" class="menu" style="margin-top:20px;display:none">
+				<li id="Option1" class="menu" onclick="OptionClicked(0)"></li>
+				<li id="Option2" class="menu" onclick="OptionClicked(1)"></li>
+				<li id="Option3" class="menu" onclick="OptionClicked(2)"></li>
+				<li id="Option4" class="menu" onclick="OptionClicked(3)"></li>
 			</ul>
 			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:20px" onclick="Next()"></button>
 			<textarea style="margin-top:20px;display:none" rows="10">RTH 1</textarea>
-			<ul id="OptionUl" class="mui-table-view" style="margin-top:20px">
-				<li class="mui-table-view-cell">
-					<a id="Restart" href="javascript:Restart()" class="mui-navigate-right"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="End" href="javascript:End()" class="mui-navigate-right"></a>
-				</li>
-				<li id="SpeakLi" class="mui-table-view-cell">
-					<a id="Speak" href="javascript:Speak()" class="mui-navigate-right"></a>
-				</li>
-				<li class="mui-table-view-cell">
+			<ul id="OptionUl" class="menu" style="margin-top:20px">
+				<li id="Restart" class="menu" onclick="Restart()"></li>
+				<li id="End" class="menu" onclick="End()"></li>
+				<li id="Speak" class="menu" onclick="Speak()"></li>
+				<li class="menu">
 					<span id="MultipleChoice"></span>
 					<div id="MultipleChoiceSwitch" class="mui-switch mui-switch-blue mui-switch-mini">
 						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
 				</li>
-				<li id="SpeakWordsLi" class="mui-table-view-cell">
+				<li id="SpeakWordsLi" class="menu">
 					<span id="SpeakWords"></span>
 					<div id="SpeakWordsSwitch" class="mui-switch mui-switch-blue mui-switch-mini">
 						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
 				</li>
-				<li id="SpeakDefinitionsLi" class="mui-table-view-cell">
+				<li id="SpeakDefinitionsLi" class="menu">
 					<span id="SpeakDefinitions"></span>
 					<div id="SpeakDefinitionsSwitch" class="mui-switch mui-switch-blue mui-switch-mini">
 						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="menu">
 					<span id="EnterWords"></span>
 					<div id="EnterWordsSwitch" class="mui-switch mui-switch-blue mui-switch-mini mui-active">
 						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="menu">
 					<span id="EnterDefinitions"></span>
 					<div id="EnterDefinitionsSwitch" class="mui-switch mui-switch-blue mui-switch-mini">
 						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="menu">
 					<span id="ShowWords"></span>
 					<div id="ShowWordsSwitch" class="mui-switch mui-switch-blue mui-switch-mini">
 						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
 					</div>
 				</li>
-				<li class="mui-table-view-cell">
+				<li class="menu">
 					<span id="ShowDefinitions"></span>
 					<div id="ShowDefinitionsSwitch" class="mui-switch mui-switch-blue mui-switch-mini mui-active">
 						<div class="mui-switch-handle" onclick="SettingsChanged=true"></div>
@@ -107,11 +88,7 @@
 				</li>
 			</ul>
 		</div>
-		<!--[if IE]>
-			<script type="text/javascript">
-				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
-			</script>
-		<![endif]-->
+		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
@@ -163,7 +140,7 @@
 				document.getElementById("ShowDefinitions").innerText="Show Definitions"
 			}
 			if(!window.speechSynthesis){
-				document.getElementById("SpeakLi").style.display="none"
+				document.getElementById("Speak").style.display="none"
 				document.getElementById("SpeakWordsLi").style.display="none"
 				document.getElementById("SpeakDefinitionsLi").style.display="none"
 			}
@@ -297,8 +274,8 @@
 						Next()
 					}else{
 						if(document.getElementsByTagName("textarea")[0].value.indexOf(CorrectWord)==-1){document.getElementsByTagName("textarea")[0].value+="\n"+CorrectWord+"\n"+CorrectDefinition}
-						if(language=="SimplifiedChinese"){mui.alert("不是这个","测验")}
-						else{mui.alert("Not this one","Quiz","OK")}
+						if(language=="SimplifiedChinese"){mui.alert("不是这个",document.title)}
+						else{mui.alert("Not this one",document.title,"OK")}
 					}
 				}
 			}
@@ -312,8 +289,8 @@
 			}
 			function Next(){
 				if(SettingsChanged){
-					if(language=="SimplifiedChinese"){mui.alert("单击重新开始使设置生效","测验")}
-					else{mui.alert("Click Restart to apply the settings","Quiz","OK")}
+					if(language=="SimplifiedChinese"){mui.alert("单击重新开始使设置生效",document.title)}
+					else{mui.alert("Click Restart to apply the settings",document.title,"OK")}
 				}else{
 					if(!ShowAnswer&&document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){if(document.getElementsByTagName("textarea")[0].value.indexOf(CorrectWord)==-1){document.getElementsByTagName("textarea")[0].value+="\n"+CorrectWord+"\n"+CorrectDefinition}}
 					if(!ShowAnswer&&!document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){
@@ -368,10 +345,8 @@
 				}
 			}
 			function End(){
-				if(document.getElementsByTagName("textarea")[0].style.display!="none"){
-					if(isElectron()){window.close()}
-					else{mui.back()}
-				}else{
+				if(document.getElementsByTagName("textarea")[0].style.display!="none"){mui.back()}
+				else{
 					ShowReport()
 					var MCount=(document.getElementsByTagName("textarea")[0].value.split("\n").length-1)/2,
 					WCount=(WLTSplit.length-2)/2

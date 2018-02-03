@@ -7,105 +7,127 @@
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
 		<meta name="renderer" content="webkit">
-		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 	</head>
 	<body>
-		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-			<h1 class="mui-title"></h1>
-		</header>
+		<header class="mui-bar mui-bar-nav"></header>
 		<div class="mui-content">
 			<div class="mui-input-row">
-				<input type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13&&this.value!=''){calculate()}">
+				<input type="text" class="mui-input-clear">
 			</div>
-			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" onclick="calculate()"></button>
-			<ul class="mui-table-view" style="margin-top:20px">
-				<li class="mui-table-view-cell">
-					<a id="CurrencyConversion" class="mui-navigate-right" href="javascript:openWindow('currency')"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="MoleConversion" class="mui-navigate-right" href="javascript:openWindow('mole')"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="Date" class="mui-navigate-right" href="javascript:openWindow('date')"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="Statistics" class="mui-navigate-right" class="mui-navigate-right" href="javascript:openWindow('statistics')"></a>
-				</li>
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
+			<ul class="menu" style="margin-top:20px">
+				<li id="Date" class="menu"></li>
+				<li id="Statistics" class="menu"></li>
 			</ul>
-			<ul class="mui-table-view" style="margin-top:20px">
-				<li class="mui-table-view-cell">
-					<a id="QuadraticEquationOneUnknown" class="mui-navigate-right" href="javascript:openWindow('equation12')"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="SystemLinearEquations2Unknowns" class="mui-navigate-right" href="javascript:openWindow('equation21')"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="SystemLinearEquations3Unknowns" class="mui-navigate-right" href="javascript:openWindow('equation31')"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="QuadraticFunction" class="mui-navigate-right" class="mui-navigate-right" href="javascript:openWindow('quadraticfunction')"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="FindLinearFunction" class="mui-navigate-right" href="javascript:openWindow('findlinearfunction')"></a>
-				</li>
-				<li class="mui-table-view-cell">
-					<a id="FindQuadraticFunction" class="mui-navigate-right" href="javascript:openWindow('findquadraticfunction')"></a>
-				</li>
+			<ul class="menu" style="margin-top:20px">
+				<li id="CurrencyConversion" class="menu"></li>
+				<li id="NumberBaseConversion" class="menu"></li>
+				<li id="MoleConversion" class="menu"></li>
+			</ul>
+			<ul class="menu" style="margin-top:20px">
+				<li id="QuadraticEquationOneUnknown" class="menu"></li>
+				<li id="SystemLinearEquations2Unknowns" class="menu"></li>
+				<li id="SystemLinearEquations3Unknowns" class="menu"></li>
+				<li id="QuadraticFunction" class="menu"></li>
+				<li id="FindLinearFunction" class="menu"></li>
+				<li id="FindQuadraticFunction" class="menu"></li>
 			</ul>
 		</div>
-		<!--[if IE]>
-			<script type="text/javascript">
-				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
-			</script>
-		<![endif]-->
+		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			if(language=="SimplifiedChinese"){
-				document.title="计算器"
-				document.getElementsByTagName("input")[0].placeholder="输入算式"
-				document.getElementsByTagName("button")[0].innerText="计算"
-				document.getElementById("CurrencyConversion").innerText="货币换算"
-				document.getElementById("MoleConversion").innerText="摩尔换算"
-				document.getElementById("Date").innerText="日期"
-				document.getElementById("Statistics").innerText="统计"
-				document.getElementById("QuadraticEquationOneUnknown").innerText="一元二次方程"
-				document.getElementById("SystemLinearEquations2Unknowns").innerText="二元一次方程组"
-				document.getElementById("SystemLinearEquations3Unknowns").innerText="三元一次方程组"
-				document.getElementById("QuadraticFunction").innerText="二次函数"
-				document.getElementById("FindLinearFunction").innerText="求一次函数解析式"
-				document.getElementById("FindQuadraticFunction").innerText="求二次函数解析式"
-			}else{
-				document.title="Calculator"
-				document.getElementsByTagName("input")[0].placeholder="Enter the formula"
-				document.getElementsByTagName("button")[0].innerText="Calculate"
-				document.getElementById("CurrencyConversion").innerText="Currency Conversion"
-				document.getElementById("MoleConversion").innerText="Mole Conversion"
-				document.getElementById("Date").innerText="Date"
-				document.getElementById("Statistics").innerText="Statistics"
-				document.getElementById("QuadraticEquationOneUnknown").innerText="Quadratic Equation in One Unknown"
-				document.getElementById("SystemLinearEquations2Unknowns").innerText="System of Linear Equations in 2 Unknowns"
-				document.getElementById("SystemLinearEquations3Unknowns").innerText="System of Linear Equations in 3 Unknowns"
-				document.getElementById("QuadraticFunction").innerText="Quadratic Function"
-				document.getElementById("FindLinearFunction").innerText="Find Analytic Formula of Linear Function"
-				document.getElementById("FindQuadraticFunction").innerText="Find Analytic Formula of Quadratic Function"
-			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			function calculate(){
 				let formula=document.getElementsByTagName("input")[0].value
 				if(formula==""){
-					if(language=="SimplifiedChinese"){mui.alert("请输入算式","计算器")}
-					else{mui.alert("Please enter the formula","Calculator","OK")}
+					showAlert([
+						"Please enter the formula",
+						"请输入算式"
+					])
 				}else{
-					if(formula.indexOf("=")!=-1){formula=formula.split("=")[0]}
+					if(formula.indexOf("=")!=-1){
+						formula=formula.split("=")[0]
+					}
 					document.getElementsByTagName("input")[0].value=formula+"="+eval(formula)
 				}
 			}
+			document.getElementsByTagName("input")[0].onkeydown=function(e){
+				if(e.keyCode==13&&this.value!=""){
+					calculate()
+				}
+			}
+			document.getElementsByTagName("button")[0].onclick=calculate
+			document.getElementById("Date").onclick=function(){
+				openWindow("date")
+			}
+			document.getElementById("Statistics").onclick=function(){
+				openWindow("statistics")
+			}
+			document.getElementById("CurrencyConversion").onclick=function(){
+				openWindow("currency")
+			}
+			document.getElementById("NumberBaseConversion").onclick=function(){
+				openWindow("numberbase")
+			}
+			document.getElementById("MoleConversion").onclick=function(){
+				openWindow("mole")
+			}
+			document.getElementById("QuadraticEquationOneUnknown").onclick=function(){
+				openWindow("equation12")
+			}
+			document.getElementById("SystemLinearEquations2Unknowns").onclick=function(){
+				openWindow("equation21")
+			}
+			document.getElementById("SystemLinearEquations3Unknowns").onclick=function(){
+				openWindow("equation31")
+			}
+			document.getElementById("QuadraticFunction").onclick=function(){
+				openWindow("quadraticfunction")
+			}
+			document.getElementById("FindLinearFunction").onclick=function(){
+				openWindow("findlinearfunction")
+			}
+			document.getElementById("FindQuadraticFunction").onclick=function(){
+				openWindow("findquadraticfunction")
+			}
+			switch(language){
+				case "SimplifiedChinese":
+					document.title="计算器"
+					document.getElementsByTagName("input")[0].placeholder="输入算式"
+					document.getElementsByTagName("button")[0].innerText="计算"
+					document.getElementById("Date").innerText="日期"
+					document.getElementById("Statistics").innerText="统计"
+					document.getElementById("CurrencyConversion").innerText="货币换算"
+					document.getElementById("NumberBaseConversion").innerText="进制换算"
+					document.getElementById("MoleConversion").innerText="摩尔换算"
+					document.getElementById("QuadraticEquationOneUnknown").innerText="一元二次方程"
+					document.getElementById("SystemLinearEquations2Unknowns").innerText="二元一次方程组"
+					document.getElementById("SystemLinearEquations3Unknowns").innerText="三元一次方程组"
+					document.getElementById("QuadraticFunction").innerText="二次函数"
+					document.getElementById("FindLinearFunction").innerText="求一次函数解析式"
+					document.getElementById("FindQuadraticFunction").innerText="求二次函数解析式"
+					break
+				default:
+					document.title="Calculator"
+					document.getElementsByTagName("input")[0].placeholder="Enter the formula"
+					document.getElementsByTagName("button")[0].innerText="Calculate"
+					document.getElementById("Date").innerText="Date"
+					document.getElementById("Statistics").innerText="Statistics"
+					document.getElementById("CurrencyConversion").innerText="Currency Conversion"
+					document.getElementById("NumberBaseConversion").innerText="Number Base Conversion"
+					document.getElementById("MoleConversion").innerText="Mole Conversion"
+					document.getElementById("QuadraticEquationOneUnknown").innerText="Quadratic Equation in One Unknown"
+					document.getElementById("SystemLinearEquations2Unknowns").innerText="System of Linear Equations in 2 Unknowns"
+					document.getElementById("SystemLinearEquations3Unknowns").innerText="System of Linear Equations in 3 Unknowns"
+					document.getElementById("QuadraticFunction").innerText="Quadratic Function"
+					document.getElementById("FindLinearFunction").innerText="Find Analytic Formula of Linear Function"
+					document.getElementById("FindQuadraticFunction").innerText="Find Analytic Formula of Quadratic Function"
+					break
+			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
 		</script>
 		<!--<![endif]-->
 	</body>

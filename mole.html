@@ -7,21 +7,16 @@
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
 		<meta name="renderer" content="webkit">
-		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 	</head>
 	<body>
-		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-			<h1 class="mui-title"></h1>
-		</header>
+		<header class="mui-bar mui-bar-nav"></header>
 		<div class="mui-content">
-			<select onchange="calculateBasedOnMole()"></select>
+			<select></select>
 			<div class="mui-input-row">
 				<label id="SearchLabel"></label>
-				<input id="Search" type="text" oninput="search(this.value.toLowerCase())">
+				<input id="Search" type="text">
 			</div>
 			<div class="mui-input-row">
 				<label id="ParticleLabel"></label>
@@ -29,55 +24,24 @@
 			</div>
 			<div class="mui-input-row">
 				<label id="MoleLabel"></label>
-				<input id="Mole" type="text" oninput="calculateBasedOnMole()">
+				<input id="Mole" type="text">
 			</div>
 			<div class="mui-input-row">
 				<label id="MassLabel"></label>
-				<input id="Mass" type="text" oninput="calculateBasedOnMass()">
+				<input id="Mass" type="text">
 			</div>
 			<div class="mui-input-row">
 				<label id="VolumeLabel"></label>
 				<input id="Volume" type="text">
 			</div>
-			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:15px" onclick="recordMass()"></button>
-			<div class="card" style="display:none" onclick="addOption()"></div>
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:15px"></button>
+			<div class="card" style="display:none"></div>
 		</div>
-		<!--[if IE]>
-			<script type="text/javascript">
-				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
-			</script>
-		<![endif]-->
+		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let enterNum
-			if(language=="SimplifiedChinese"){
-				document.title="计算器"
-				document.getElementById("SearchLabel").innerText="搜索"
-				document.getElementById("Search").placeholder="输入搜索词"
-				document.getElementById("ParticleLabel").innerText="粒子"
-				document.getElementById("MoleLabel").innerText="摩尔"
-				document.getElementById("MassLabel").innerText="质量"
-				document.getElementById("VolumeLabel").innerText="体积"
-				enterNum="输入数字"
-				document.getElementsByTagName("button")[0].innerText="记录质量"
-			}else{
-				document.title="Calculator"
-				document.getElementById("SearchLabel").innerText="Search"
-				document.getElementById("Search").placeholder="Enter a search term"
-				document.getElementById("ParticleLabel").innerText="Particle"
-				document.getElementById("MoleLabel").innerText="Mole"
-				document.getElementById("MassLabel").innerText="Mass"
-				document.getElementById("VolumeLabel").innerText="Volume"
-				enterNum="Enter the number"
-				document.getElementsByTagName("button")[0].innerText="Record Mass"
-			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			document.getElementById("Particle").placeholder=enterNum
-			document.getElementById("Mole").placeholder=enterNum
-			document.getElementById("Mass").placeholder=enterNum
-			document.getElementById("Volume").placeholder=enterNum
 			const elements=[{
 				"symbol":"H",
 				"name":"Hydrogen",
@@ -669,17 +633,71 @@
 				"name_cn":"Oganesson",
 				"mass":294
 			}]
-			for(let i=0;i<elements.length;i++){
-				let name
-				if(language=="SimplifiedChinese"){name=elements[i].name_cn}
-				else{name=elements[i].name}
-				document.getElementsByTagName("select")[0].options.add(new Option(i+1+". "+elements[i].symbol+" ("+name+")",elements[i].mass))
+			function addOption(){
+				const record=document.getElementsByClassName("card")[0].innerHTML.split("-")
+				document.getElementsByTagName("select")[0].options.add(new Option(record[0].replace(/<sub>|<\/sub>/g,""),record[1]))
+				document.getElementsByTagName("select")[0].selectedIndex=document.getElementsByTagName("select")[0].options.length-1
+				document.getElementById("Mass").value=record[1]
+				calculateBasedOnMass()
+				document.getElementsByClassName("card")[0].style.display="none"
+				document.getElementsByClassName("card")[0].innerHTML=""
+			}
+			function calculateBasedOnMass(){
+				const mass=document.getElementById("Mass").value*1
+				if(mass!=0){
+					const mole=mass/document.getElementsByTagName("select")[0].value
+					document.getElementById("Mole").value=mole
+					document.getElementById("Particle").value=mole*(6.022*Math.pow(10,23))
+					document.getElementById("Volume").value=mole*22.4
+				}else{
+					clear()
+				}
+			}
+			function calculateBasedOnMole(){
+				const mole=document.getElementById("Mole").value*1
+				if(mole!=0){
+					document.getElementById("Particle").value=mole*(6.022*Math.pow(10,23))
+					document.getElementById("Mass").value=mole*document.getElementsByTagName("select")[0].value
+					document.getElementById("Volume").value=mole*22.4
+				}else{
+					clear()
+				}
 			}
 			function clear(){
 				document.getElementById("Particle").value=""
 				document.getElementById("Mole").value=""
 				document.getElementById("Mass").value=""
 				document.getElementById("Volume").value=""
+			}
+			function recordMass(){
+				document.getElementById("Search").value=""
+				let mole=document.getElementById("Mole").value*1,symbol
+				mole=Math.round(mole)
+				if(mole<=0){
+					mole=1
+				}
+				document.getElementById("Mole").value=mole
+				calculateBasedOnMole()
+				const select=document.getElementsByTagName("select")[0]
+				if(select.selectedIndex>=elements.length){
+					if(mole>1){
+						symbol="("+select.options[select.selectedIndex].text+")"
+					}else{
+						symbol=select.options[select.selectedIndex].text
+					}
+				}else{
+					symbol=elements[select.selectedIndex].symbol
+				}
+				if(mole>1){
+					symbol+="<sub>"+document.getElementById("Mole").value+"</sub>"
+				}
+				if(document.getElementsByClassName("card")[0].innerHTML==""){
+					document.getElementsByClassName("card")[0].innerHTML=symbol+"-"+document.getElementById("Mass").value
+					document.getElementsByClassName("card")[0].style.display=""
+				}else{
+					const record=document.getElementsByClassName("card")[0].innerHTML.split("-")
+					document.getElementsByClassName("card")[0].innerHTML=record[0]+symbol+"-"+(record[1]*1+document.getElementById("Mass").value*1)*1
+				}
 			}
 			function search(searchTerm){
 				for(let i=0;i<elements.length;i++){
@@ -750,9 +768,15 @@
 						document.getElementById("Mole").value="10"
 						searchTerm=searchTerm.replace("十","")
 					}
-					if(searchTerm.length<=2&&elements[i].symbol.toLowerCase()==searchTerm||searchTerm.length>2&&elements[i].name.toLowerCase().indexOf(searchTerm)!=-1||elements[i].name_cn==searchTerm||i+1==searchTerm||Math.round(elements[i].mass)==Math.round(searchTerm)){document.getElementsByTagName("select")[0].selectedIndex=i}
+					if(searchTerm.length<=2&&elements[i].symbol.toLowerCase()==searchTerm||searchTerm.length>2&&elements[i].name.toLowerCase().indexOf(searchTerm)!=-1||elements[i].name_cn==searchTerm||i+1==searchTerm||Math.round(elements[i].mass)==Math.round(searchTerm)){
+						document.getElementsByTagName("select")[0].selectedIndex=i
+					}
 				}
 				calculateBasedOnMole()
+			}
+			document.getElementsByTagName("select")[0].onchange=calculateBasedOnMole
+			document.getElementById("Search").oninput=function(){
+				search(this.value.toLowerCase())
 			}
 			document.getElementById("Search").onkeydown=function(e){
 				let searchTerm=this.value.toLowerCase().replace(/^\s+|\s+$/g,"")
@@ -784,7 +808,9 @@
 							search(characters[0])
 							recordMass()
 							addOption()
-						}else{recordMass()}
+						}else{
+							recordMass()
+						}
 					}
 				}
 			}
@@ -795,25 +821,12 @@
 					document.getElementById("Mole").value=mole
 					document.getElementById("Mass").value=mole*document.getElementsByTagName("select")[0].value
 					document.getElementById("Volume").value=mole*22.4
-				}else{clear()}
+				}else{
+					clear()
+				}
 			}
-			function calculateBasedOnMole(){
-				const mole=document.getElementById("Mole").value*1
-				if(mole!=0){
-					document.getElementById("Particle").value=mole*(6.022*Math.pow(10,23))
-					document.getElementById("Mass").value=mole*document.getElementsByTagName("select")[0].value
-					document.getElementById("Volume").value=mole*22.4
-				}else{clear()}
-			}
-			function calculateBasedOnMass(){
-				const mass=document.getElementById("Mass").value*1
-				if(mass!=0){
-					const mole=mass/document.getElementsByTagName("select")[0].value
-					document.getElementById("Mole").value=mole
-					document.getElementById("Particle").value=mole*(6.022*Math.pow(10,23))
-					document.getElementById("Volume").value=mole*22.4
-				}else{clear()}
-			}
+			document.getElementById("Mole").oninput=calculateBasedOnMole
+			document.getElementById("Mass").oninput=calculateBasedOnMass
 			document.getElementById("Volume").oninput=function(){
 				const volume=this.value*1
 				if(volume!=0){
@@ -821,37 +834,53 @@
 					document.getElementById("Mole").value=mole
 					document.getElementById("Particle").value=mole*(6.022*Math.pow(10,23))
 					document.getElementById("Mass").value=mole*document.getElementsByTagName("select")[0].value
-				}else{clear()}
-			}
-			function recordMass(){
-				document.getElementById("Search").value=""
-				let mole=document.getElementById("Mole").value*1,symbol
-				mole=Math.round(mole)
-				if(mole<=0){mole=1}
-				document.getElementById("Mole").value=mole
-				calculateBasedOnMole()
-				const select=document.getElementsByTagName("select")[0]
-				if(select.selectedIndex>=elements.length){
-					if(mole>1){symbol="("+select.options[select.selectedIndex].text+")"}
-					else{symbol=select.options[select.selectedIndex].text}
-				}else{symbol=elements[select.selectedIndex].symbol}
-				if(mole>1){symbol+="<sub>"+document.getElementById("Mole").value+"</sub>"}
-				if(document.getElementsByClassName("card")[0].innerHTML==""){
-					document.getElementsByClassName("card")[0].innerHTML=symbol+"-"+document.getElementById("Mass").value
-					document.getElementsByClassName("card")[0].style.display=""
 				}else{
-					const record=document.getElementsByClassName("card")[0].innerHTML.split("-")
-					document.getElementsByClassName("card")[0].innerHTML=record[0]+symbol+"-"+(record[1]*1+document.getElementById("Mass").value*1)*1
+					clear()
 				}
 			}
-			function addOption(){
-				const record=document.getElementsByClassName("card")[0].innerHTML.split("-")
-				document.getElementsByTagName("select")[0].options.add(new Option(record[0].replace(/<sub>|<\/sub>/g,""),record[1]))
-				document.getElementsByTagName("select")[0].selectedIndex=document.getElementsByTagName("select")[0].options.length-1
-				document.getElementById("Mass").value=record[1]
-				calculateBasedOnMass()
-				document.getElementsByClassName("card")[0].style.display="none"
-				document.getElementsByClassName("card")[0].innerHTML=""
+			document.getElementsByTagName("button")[0].onclick=recordMass
+			document.getElementsByClassName("card")[0].onclick=addOption
+			let enterNum
+			switch(language){
+				case "SimplifiedChinese":
+					document.title="计算器"
+					document.getElementById("SearchLabel").innerText="搜索"
+					document.getElementById("Search").placeholder="输入搜索词"
+					document.getElementById("ParticleLabel").innerText="粒子"
+					document.getElementById("MoleLabel").innerText="摩尔"
+					document.getElementById("MassLabel").innerText="质量"
+					document.getElementById("VolumeLabel").innerText="体积"
+					enterNum="输入数字"
+					document.getElementsByTagName("button")[0].innerText="记录质量"
+					break
+				default:
+					document.title="Calculator"
+					document.getElementById("SearchLabel").innerText="Search"
+					document.getElementById("Search").placeholder="Enter a search term"
+					document.getElementById("ParticleLabel").innerText="Particle"
+					document.getElementById("MoleLabel").innerText="Mole"
+					document.getElementById("MassLabel").innerText="Mass"
+					document.getElementById("VolumeLabel").innerText="Volume"
+					enterNum="Enter the number"
+					document.getElementsByTagName("button")[0].innerText="Record Mass"
+					break
+			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			document.getElementById("Particle").placeholder=enterNum
+			document.getElementById("Mole").placeholder=enterNum
+			document.getElementById("Mass").placeholder=enterNum
+			document.getElementById("Volume").placeholder=enterNum
+			for(let i=0;i<elements.length;i++){
+				let name
+				switch(language){
+					case "SimplifiedChinese":
+						name=elements[i].name_cn
+						break
+					default:
+						name=elements[i].name
+						break
+				}
+				document.getElementsByTagName("select")[0].options.add(new Option(i+1+". "+elements[i].symbol+" ("+name+")",elements[i].mass))
 			}
 		</script>
 		<!--<![endif]-->

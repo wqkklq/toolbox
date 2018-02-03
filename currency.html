@@ -7,36 +7,17 @@
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
 		<meta name="renderer" content="webkit">
-		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
-		<style>
-			td{padding:0px 5px}
-			footer{
-				background-color:#FAFAFA;
-				bottom:0px;
-				color:#007AFF;
-				height:45px;
-				line-height:45px;
-				position:fixed;
-				text-align:center;
-				width:100%;
-			}
-			footer:active{background-color:#F2F2F2}
-		</style>
 	</head>
 	<body>
-		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-			<h1 class="mui-title"></h1>
-		</header>
+		<header class="mui-bar mui-bar-nav"></header>
 		<div class="mui-content">
 			<table style="width:100%;display:none">
 				<tbody>
 					<tr>
 						<td width="30%">
-							<select onchange="calculate2()">
+							<select>
 								<option value="AUD">AUD</option>
 								<option value="CAD">CAD</option>
 								<option value="CNY">CNY</option>
@@ -54,13 +35,13 @@
 						</td>
 						<td width="70%">
 							<div class="mui-input-row">
-								<input type="text" oninput="calculate1()">
+								<input type="text">
 							</div>
 						</td>
 					</tr>
 					<tr>
 						<td width="30%">
-							<select onchange="calculate1()">
+							<select>
 								<option value="AUD">AUD</option>
 								<option value="CAD">CAD</option>
 								<option value="CNY">CNY</option>
@@ -78,46 +59,22 @@
 						</td>
 						<td width="70%">
 							<div class="mui-input-row">
-								<input type="text" oninput="calculate2()">
+								<input type="text">
 							</div>
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
-		<footer onclick="updateRate()"></footer>
-		<!--[if IE]>
-			<script type="text/javascript">
-				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
-			</script>
-		<![endif]-->
+		<footer>
+			<div id="UpdateRate" style="width:100%"></div>
+		</footer>
+		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			if(language=="SimplifiedChinese"){
-				document.title="计算器"
-				document.getElementsByTagName("footer")[0].innerText="更新汇率"
-			}else{
-				document.title="Calculator"
-				document.getElementsByTagName("footer")[0].innerText="Update the exchange rate"
-			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			document.getElementsByTagName("select")[0].value="CNY"
-			document.getElementsByTagName("select")[1].value="USD"
 			let rate=localStorage.getItem("Rate")
-			if(rate){document.getElementsByTagName("table")[0].style.display=""}
-			else{updateRate()}
-			function updateRate(){
-				request("http://www.apilayer.net/api/live?access_key=305f5a80f4da12a238c9ebfe5479c648",function(e){
-					const json=JSON.parse(e)
-					if(json.success){
-						rate=e
-						localStorage.setItem("Rate",rate)
-						document.getElementsByTagName("table")[0].style.display=""
-					}
-				})
-			}
 			function calculate1(){
 				if(document.getElementsByTagName("input")[0].value!=""){
 					if(document.getElementsByTagName("select")[0].value=="USD"){
@@ -125,7 +82,9 @@
 					}else{
 						document.getElementsByTagName("input")[1].value=eval("const rate="+rate+";"+document.getElementsByTagName("input")[0].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[0].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
 					}
-				}else{document.getElementsByTagName("input")[1].value=""}
+				}else{
+					document.getElementsByTagName("input")[1].value=""
+				}
 			}
 			function calculate2(){
 				if(document.getElementsByTagName("input")[1].value!=""){
@@ -134,7 +93,48 @@
 					}else{
 						document.getElementsByTagName("input")[0].value=eval("const rate="+rate+";"+document.getElementsByTagName("input")[1].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[1].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
 					}
-				}else{document.getElementsByTagName("input")[0].value=""}
+				}else{
+					document.getElementsByTagName("input")[0].value=""
+				}
+			}
+			function updateRate(){
+				if(isPlus()){
+					plus.nativeUI.showWaiting()
+				}
+				request("http://www.apilayer.net/api/live?access_key=305f5a80f4da12a238c9ebfe5479c648",function(e){
+					if(isPlus()){
+						plus.nativeUI.closeWaiting()
+					}
+					const json=JSON.parse(e)
+					if(json.success){
+						rate=e
+						localStorage.setItem("Rate",rate)
+						document.getElementsByTagName("table")[0].style.display=""
+					}
+				})
+			}
+			document.getElementsByTagName("select")[0].onchange=calculate2
+			document.getElementsByTagName("input")[0].oninput=calculate1
+			document.getElementsByTagName("select")[1].onchange=calculate1
+			document.getElementsByTagName("input")[1].oninput=calculate2
+			document.getElementById("UpdateRate").onclick=updateRate
+			switch(language){
+				case "SimplifiedChinese":
+					document.title="计算器"
+					document.getElementById("UpdateRate").innerText="更新汇率"
+					break
+				default:
+					document.title="Calculator"
+					document.getElementById("UpdateRate").innerText="Update the exchange rate"
+					break
+			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			document.getElementsByTagName("select")[0].value="CNY"
+			document.getElementsByTagName("select")[1].value="USD"
+			if(rate){
+				document.getElementsByTagName("table")[0].style.display=""
+			}else{
+				updateRate()
 			}
 		</script>
 		<!--<![endif]-->

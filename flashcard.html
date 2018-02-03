@@ -7,56 +7,29 @@
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
 		<meta name="renderer" content="webkit">
-		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
-		<style>
-			footer{
-				background-color:#FAFAFA;
-				bottom:0px;
-				color:#007AFF;
-				height:45px;
-				line-height:45px;
-				position:fixed;
-				text-align:center;
-				width:100%;
-			}
-			footer div{
-				float:left;
-				height:100%;
-				width:50%;
-			}
-			footer div:active{background-color:#F2F2F2}
-		</style>
 	</head>
 	<body>
-		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-			<h1 class="mui-title"></h1>
-		</header>
+		<header class="mui-bar mui-bar-nav"></header>
 		<div class="mui-content">
 			<div class="mui-input-row">
-				<input type="text" class="mui-input-clear" onkeydown="if(event.keyCode==13&&this.value!=''){lookUp(this.value)}">
+				<input type="text" class="mui-input-clear">
 			</div>
-			<div id="Pronunciation" class="card" style="display:none" onclick="new Audio(audioURL).play()"></div>
+			<div id="Pronunciation" class="card" style="display:none"></div>
 			<div id="CNDefinition" class="card" style="display:none"></div>
 			<div id="ENDefinition" class="card" style="display:none"></div>
-			<div id="Translate" class="card" style="display:none" onclick="openWebPage('http://fanyi.baidu.com/#en/zh/'+document.getElementsByTagName('input')[0].value)"></div>
-			<div id="Download" class="card" style="display:none" onclick="getToolbox()"></div>
+			<div id="Translate" class="card" style="display:none"></div>
+			<div id="Download" class="card" style="display:none"></div>
 		</div>
 		<div style="position:fixed;width:100%;bottom:45px">
 			<button id="ShowDefinition" type="button" class="mui-btn mui-btn-link mui-btn-block"></button>
 		</div>
 		<footer>
-			<div id="Previous"></div>
-			<div id="Next"></div>
+			<div id="Previous" style="width:50%"></div>
+			<div id="Next" style="width:50%"></div>
 		</footer>
-		<!--[if IE]>
-			<script type="text/javascript">
-				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
-			</script>
-		<![endif]-->
+		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
@@ -66,37 +39,15 @@
 			showDefinition,
 			WordListText=localStorage.getItem("WordList"),
 			WLTSplit
-			if(WordListText!=""&&WordListText!=null){WLTSplit=WordListText.split("\n")}
-			if(language=="SimplifiedChinese"){
-				document.getElementsByTagName("input")[0].placeholder="输入要查询的单词"
-				document.getElementById("Download").innerText="下载 RTH 工具箱查看详细内容"
-				document.getElementById("ShowDefinition").innerText="显示释义"
-				document.getElementById("Previous").innerText="上一个"
-				document.getElementById("Next").innerText="下一个"
-			}else{
-				document.getElementsByTagName("input")[0].placeholder="Enter the word you want to look up"
-				document.getElementById("Download").innerText="Download RTH Toolbox to view the details"
-				document.getElementById("ShowDefinition").innerText="Show Definition"
-				document.getElementById("Previous").innerText="Previous"
-				document.getElementById("Next").innerText="Next"
-			}
 			const wordURL=searchURL("word",window.location.search)
-			if(wordURL){lookUp(wordURL)}
-			else{
-				if(language=="SimplifiedChinese"){document.title="学习卡"}
-				else{document.title="Flash Card"}
-				document.getElementsByClassName("mui-title")[0].innerText=document.title
-				loadWord()
-			}
-			function loadTitle(){
-				document.getElementsByClassName("mui-title")[0].innerText=document.title
-				if(!isApp()){document.getElementById("Download").style.display=""}
-			}
 			function dictChanged(){
 				let dictBox
 				const changeDisplay=function(alwaysShow){
-					if(dictBox.innerText==""||dictBox.innerText=="undefined"){dictBox.style.display="none"}
-					else if(showDefinition||alwaysShow){dictBox.style.display=""}
+					if(dictBox.innerText==""||dictBox.innerText=="undefined"){
+						dictBox.style.display="none"
+					}else if(showDefinition||alwaysShow){
+						dictBox.style.display=""
+					}
 				}
 				dictBox=document.getElementById("Pronunciation")
 				changeDisplay(true)
@@ -107,65 +58,16 @@
 				dictBox=document.getElementById("Translate")
 				changeDisplay(false)
 			}
-			function translateWord(word){
-				translate(word,"auto","auto",function(e){
-					loadTitle()
-					document.getElementById("Translate").innerText=e.trans_result[0].dst
-					dictChanged()
-				})
-			}
-			function reset(){
-				document.getElementById("Pronunciation").innerText=""
-				audioURL=""
-				document.getElementById("CNDefinition").innerText=""
-				document.getElementById("ENDefinition").innerText=""
-				document.getElementById("Translate").innerText=""
-				dictChanged()
-			}
-			function lookUp(word){
-				if(language=="SimplifiedChinese"){
-					document.title="词典"
-					document.getElementsByClassName("mui-title")[0].innerText="正在加载"
-				}else{
-					document.title="Dictionary"
-					document.getElementsByClassName("mui-title")[0].innerText="Loading"
-				}
-				reset()
-				showDefinition=true
-				document.getElementById("ShowDefinition").style.display="none"
-				document.getElementsByTagName("footer")[0].style.display="none"
-				document.getElementsByTagName("input")[0].value=word
-				const wordWithoutSpace=word.replace(/\s/g,"").toLowerCase()
-				if(localStorage.getItem(wordWithoutSpace+"_CNDef")!=null){
-					loadTitle()
-					document.getElementById("Pronunciation").innerText=localStorage.getItem(wordWithoutSpace+"_Pronunciation")
-					audioURL=localStorage.getItem(wordWithoutSpace+"_Audio")
-					document.getElementById("CNDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_CNDef")
-					document.getElementById("ENDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_ENDef")
-					dictChanged()
-				}else if(!isApp()){translateWord(word)}
-				else{
-					request("https://api.shanbay.com/bdc/search/?word="+word,function(e){
-						const json=JSON.parse(e)
-						if(json.msg=="SUCCESS"){
-							loadTitle()
-							document.getElementById("Pronunciation").innerText=json.data.pronunciation
-							audioURL=json.data.audio
-							document.getElementById("CNDefinition").innerText=json.data.cn_definition.defn
-							document.getElementById("ENDefinition").innerText=json.data.en_definition.defn
-							dictChanged()
-							if(wordWithoutSpace.indexOf(" ")==-1){
-								localStorage.setItem(wordWithoutSpace+"_Pronunciation",json.data.pronunciation)
-								localStorage.setItem(wordWithoutSpace+"_Audio",json.data.audio)
-								localStorage.setItem(wordWithoutSpace+"_CNDef",json.data.cn_definition.defn)
-								localStorage.setItem(wordWithoutSpace+"_ENDef",json.data.en_definition.defn)
-							}
-						}else{translateWord(word)}
-					})
+			function loadTitle(){
+				document.getElementsByClassName("mui-title")[0].innerText=document.title
+				if(!isApp()){
+					document.getElementById("Download").style.display=""
 				}
 			}
 			function loadWord(){
-				if(WLTSplit[progress*2-1]==null||WLTSplit[progress*2]==null){return false}
+				if(WLTSplit[progress*2-1]==null||WLTSplit[progress*2]==null){
+					return false
+				}
 				document.getElementsByTagName("input")[0].value=WLTSplit[progress*2-1]
 				document.getElementById("CNDefinition").style.display="none"
 				document.getElementById("ENDefinition").style.display="none"
@@ -200,6 +102,77 @@
 					})
 				}
 			}
+			function lookUp(word){
+				switch(language){
+					case "SimplifiedChinese":
+						document.title="词典"
+						document.getElementsByClassName("mui-title")[0].innerText="正在加载"
+						break
+					default:
+						document.title="Dictionary"
+						document.getElementsByClassName("mui-title")[0].innerText="Loading"
+						break
+				}
+				reset()
+				showDefinition=true
+				document.getElementById("ShowDefinition").style.display="none"
+				document.getElementsByTagName("footer")[0].style.display="none"
+				document.getElementsByTagName("input")[0].value=word
+				const wordWithoutSpace=word.replace(/\s/g,"").toLowerCase()
+				if(localStorage.getItem(wordWithoutSpace+"_CNDef")!=null){
+					loadTitle()
+					document.getElementById("Pronunciation").innerText=localStorage.getItem(wordWithoutSpace+"_Pronunciation")
+					audioURL=localStorage.getItem(wordWithoutSpace+"_Audio")
+					document.getElementById("CNDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_CNDef")
+					document.getElementById("ENDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_ENDef")
+					dictChanged()
+				}else if(!isApp()){
+					translateWord(word)
+				}else{
+					request("https://api.shanbay.com/bdc/search/?word="+word,function(e){
+						const json=JSON.parse(e)
+						if(json.msg=="SUCCESS"){
+							loadTitle()
+							document.getElementById("Pronunciation").innerText=json.data.pronunciation
+							audioURL=json.data.audio
+							document.getElementById("CNDefinition").innerText=json.data.cn_definition.defn
+							document.getElementById("ENDefinition").innerText=json.data.en_definition.defn
+							dictChanged()
+							if(wordWithoutSpace.indexOf(" ")==-1){
+								localStorage.setItem(wordWithoutSpace+"_Pronunciation",json.data.pronunciation)
+								localStorage.setItem(wordWithoutSpace+"_Audio",json.data.audio)
+								localStorage.setItem(wordWithoutSpace+"_CNDef",json.data.cn_definition.defn)
+								localStorage.setItem(wordWithoutSpace+"_ENDef",json.data.en_definition.defn)
+							}
+						}else{
+							translateWord(word)
+						}
+					})
+				}
+			}
+			function reset(){
+				document.getElementById("Pronunciation").innerText=""
+				audioURL=""
+				document.getElementById("CNDefinition").innerText=""
+				document.getElementById("ENDefinition").innerText=""
+				document.getElementById("Translate").innerText=""
+				dictChanged()
+			}
+			function translateWord(word){
+				translate(word,"auto","auto",function(e){
+					loadTitle()
+					document.getElementById("Translate").innerText=e.trans_result[0].dst
+					dictChanged()
+				})
+			}
+			document.getElementsByTagName("input")[0].onkeydown=function(e){
+				if(e.keyCode==13&&this.value!=""){
+					lookUp(this.value)
+				}
+			}
+			document.getElementById("Pronunciation").onclick=function(){
+				new Audio(audioURL).play()
+			}
 			document.getElementById("ENDefinition").onclick=function(){
 				if(document.getElementById("Translate").innerText==""){
 					translate(document.getElementById("ENDefinition").innerText,"en","zh",function(e){
@@ -208,16 +181,25 @@
 					})
 				}
 			}
+			document.getElementById("Translate").onclick=function(){
+				openWebPage("http://fanyi.baidu.com/#en/zh/"+document.getElementsByTagName("input")[0].value)
+			}
+			document.getElementById("Download").onclick=getToolbox
 			document.getElementById("ShowDefinition").onclick=function(){
-				if(showDefinition){showDefinition=false}
-				else{showDefinition=true}
+				if(showDefinition){
+					showDefinition=false
+				}else{
+					showDefinition=true
+				}
 				document.getElementById("ShowDefinition").style.display="none"
 				dictChanged()
 			}
 			document.getElementById("Previous").onclick=function(){
 				if(progress<=1){
-					if(language=="SimplifiedChinese"){mui.alert("这是第一个单词","学习卡")}
-					else{mui.alert("This is the first word","Flash Card","OK")}
+					showAlert([
+						"This is the first word",
+						"这是第一个单词"
+					])
 				}else{
 					showDefinition=false
 					document.getElementById("ShowDefinition").style.display=""
@@ -228,8 +210,10 @@
 			}
 			document.getElementById("Next").onclick=function(){
 				if(progress>=(WLTSplit.length-2)/2){
-					if(language=="SimplifiedChinese"){mui.alert("这是最后一个单词","学习卡")}
-					else{mui.alert("This is the last word","Flash Card","OK")}
+					showAlert([
+						"This is the last word",
+						"这是最后一个单词"
+					])
 				}else{
 					showDefinition=false
 					document.getElementById("ShowDefinition").style.display=""
@@ -237,6 +221,47 @@
 					progress+=1
 					loadWord()
 				}
+			}
+			if(WordListText!=""&&WordListText!=null){
+				WLTSplit=WordListText.split("\n")
+			}
+			switch(language){
+				case "SimplifiedChinese":
+					document.getElementsByTagName("input")[0].placeholder="输入要查询的单词"
+					document.getElementById("Download").innerText="下载 RTH 工具箱查看详细内容"
+					document.getElementById("ShowDefinition").innerText="显示释义"
+					document.getElementById("Previous").innerText="上一个"
+					document.getElementById("Next").innerText="下一个"
+					break
+				default:
+					document.getElementsByTagName("input")[0].placeholder="Enter the word you want to look up"
+					document.getElementById("Download").innerText="Download RTH Toolbox to view the details"
+					document.getElementById("ShowDefinition").innerText="Show Definition"
+					document.getElementById("Previous").innerText="Previous"
+					document.getElementById("Next").innerText="Next"
+					break
+			}
+			if(localStorage.length>40){
+				for(let i=0;i<localStorage.length;i++){
+					const key=localStorage.key(i)
+					if(/Pronunciation|Audio|CNDef|ENDef/.test(key)){
+						localStorage.removeItem(key)
+					}
+				}
+			}
+			if(wordURL){
+				lookUp(wordURL)
+			}else{
+				switch(language){
+					case "SimplifiedChinese":
+						document.title="学习卡"
+						break
+					default:
+						document.title="Flash Card"
+						break
+				}
+				document.getElementsByClassName("mui-title")[0].innerText=document.title
+				loadWord()
 			}
 		</script>
 		<!--<![endif]-->

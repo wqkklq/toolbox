@@ -7,8 +7,6 @@
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
 		<meta name="renderer" content="webkit">
-		<title>RTH Toolbox</title>
-		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<style>
@@ -22,57 +20,62 @@
 		</style>
 	</head>
 	<body>
-		<header class="mui-bar mui-bar-nav title">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left back"></a>
-			<h1 class="mui-title"></h1>
-		</header>
+		<header class="mui-bar mui-bar-nav"></header>
 		<div class="mui-content">
 			<fieldset>
 				<legend></legend>
 				<div class="mui-input-row">
 					<label id="StartDateLabel"></label>
-					<input id="StartDate" type="date" oninput="calculate()">
+					<input id="StartDate" type="date">
 				</div>
 				<div class="mui-input-row">
 					<label id="EndDateLabel"></label>
-					<input id="EndDate" type="date" oninput="calculate()">
+					<input id="EndDate" type="date">
 				</div>
 				<div class="result"></div>
 			</fieldset>
 		</div>
-		<!--[if IE]>
-			<script type="text/javascript">
-				window.location.href="http://t.rths.tk/web/toolbox/download.html?time="+(new Date).getTime()
-			</script>
-		<![endif]-->
+		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			if(language=="SimplifiedChinese"){
-				document.title="计算器"
-				document.getElementsByTagName("legend")[0].innerText="日期之间的差异"
-				document.getElementById("StartDateLabel").innerText="起始日期"
-				document.getElementById("EndDateLabel").innerText="结束日期"
-				document.getElementsByClassName("result")[0].innerText="距离 0 天"
-			}else{
-				document.title="Calculator"
-				document.getElementsByTagName("legend")[0].innerText="Date Diff"
-				document.getElementById("StartDateLabel").innerText="Start Date"
-				document.getElementById("EndDateLabel").innerText="End Date"
-				document.getElementsByClassName("result")[0].innerText="0 Day"
-			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			function calculate(){
 				const startDateValue=new Date(document.getElementById("StartDate").value),
 				endDateValue=new Date(document.getElementById("EndDate").value)
 				const dateDiff=parseInt(Math.abs(endDateValue-startDateValue)/1000/60/60/24)
-				if(language=="SimplifiedChinese"){document.getElementsByClassName("result")[0].innerText="距离 "+dateDiff+" 天"}
-				else{
-					if(Math.abs(dateDiff>1)){document.getElementsByClassName("result")[0].innerText=dateDiff+" Days"}
-					else{document.getElementsByClassName("result")[0].innerText=dateDiff+" Day"}
+				switch(language){
+					case "SimplifiedChinese":
+						document.getElementsByClassName("result")[0].innerText="距离 "+dateDiff+" 天"
+						break
+					default:
+						if(Math.abs(dateDiff>1)){
+							document.getElementsByClassName("result")[0].innerText=dateDiff+" Days"
+						}else{
+							document.getElementsByClassName("result")[0].innerText=dateDiff+" Day"
+						}
+						break
 				}
 			}
+			document.getElementById("StartDate").oninput=calculate
+			document.getElementById("EndDate").oninput=calculate
+			switch(language){
+				case "SimplifiedChinese":
+					document.title="计算器"
+					document.getElementsByTagName("legend")[0].innerText="日期之间的差异"
+					document.getElementById("StartDateLabel").innerText="起始日期"
+					document.getElementById("EndDateLabel").innerText="结束日期"
+					document.getElementsByClassName("result")[0].innerText="距离 0 天"
+					break
+				default:
+					document.title="Calculator"
+					document.getElementsByTagName("legend")[0].innerText="Date Diff"
+					document.getElementById("StartDateLabel").innerText="Start Date"
+					document.getElementById("EndDateLabel").innerText="End Date"
+					document.getElementsByClassName("result")[0].innerText="0 Day"
+					break
+			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
 		</script>
 		<!--<![endif]-->
 	</body>
