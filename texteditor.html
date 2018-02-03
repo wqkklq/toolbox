@@ -80,7 +80,7 @@
 					}
 				}
 			}
-			function enableCodeEditor(){
+			function enableCodeEditor(callback){
 				if(myCodeMirror==null){
 					loadCSS("css/codemirror.css")
 					loadJS(["js/codemirror.js","js/javascript.js","js/matchbrackets.js"],function(){
@@ -97,7 +97,10 @@
 						}
 						myCodeMirror.on("change",count)
 						textChanged()
+						callback()
 					})
+				}else{
+					callback()
 				}
 			}
 			function isEmpty(){
@@ -327,7 +330,7 @@
 			}
 			function setText(text){
 				if(myCodeMirror!=null){
-					return myCodeMirror.setValue(text)
+					myCodeMirror.setValue(text)
 				}else{
 					document.getElementById("Text").value=text
 				}
@@ -425,15 +428,17 @@
 								type="html"
 							}
 							if(type=="html"||type=="css"||type=="js"){
-								url=addTime(url)
-								if(url.indexOf("http")==-1){
-									url="http://"+url
-								}
-								request(url,function(e){
-									setText(e)
-									apply(0)
+								enableCodeEditor(function(){
+									url=addTime(url)
+									if(url.indexOf("http")==-1){
+										url="http://"+url
+									}
+									request(url,function(e){
+										setText(e)
+										apply(0)
+									})
+									readMode(type)
 								})
-								readMode(type)
 							}else{
 								unsupportedType()
 							}
@@ -511,9 +516,8 @@
 			}
 			if(isMobile()){
 				document.getElementById("OpenLocalDocument").style.display="none"
-			}
-			if(isAndroid()||!isMobile()){
-				enableCodeEditor()
+			}else{
+				enableCodeEditor(null)
 			}
 			load()
 		</script>
