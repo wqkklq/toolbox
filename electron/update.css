@@ -1,5 +1,6 @@
 /*Code written by Shangzhen Yang*/
 body{
+	background-color:black;
 	color:white;
 	font-family:"Helvetica Neue",Helvetica,sans-serif,"等线";
 	user-select:none;
@@ -48,13 +49,11 @@ body{
 	color:rgb(0,102,204);
 }
 .content{
-	background-color:black;
 	font-family:Consolas;
-	height:calc(100% - 40px);
+	height:100%;
 	left:0px;
 	overflow:auto;
-	padding:15px;
+	padding:55px 15px 15px 15px;
 	position:fixed;
-	top:40px;
 	width:100%;
 }
