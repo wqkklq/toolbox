@@ -195,20 +195,18 @@
 					plus.navigator.setStatusBarBackground("rgb(0,102,204)")
 					plus.navigator.setStatusBarStyle("light")
 					if(isAndroid()){
-						let wgtVer
 						plus.runtime.getProperty(plus.runtime.appid,function(inf){
-							wgtVer=inf.version
-						})
-						request("http://t.rths.tk/web/toolbox/update/check.php",function(newVer){
-							if(wgtVer&&newVer&&(wgtVer!=newVer)){
-								plus.downloader.createDownload("http://t.rths.tk/web/toolbox/update/H58039057.wgt",{
-									filename:"_doc/update/"
-								},function(d,status){
-									if(status==200){
-										plus.runtime.install(d.filename)
-									}
-								}).start()
-							}
+							request("http://t.rths.tk/web/toolbox/update/check.php",function(e){
+								if(inf.version&&e&&inf.version!=e){
+									showAlert([
+										"Going to the download page",
+										"即将前往下载页面"
+									],[
+										"Update Available",
+										"有更新可用"
+									],getToolbox)
+								}
+							})
 						})
 					}else if(!isOnline()){
 						plus.webview.create("about.html","about",{"popGesture":"hide"})

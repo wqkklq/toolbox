@@ -20,14 +20,14 @@ function addZero(num,length){
 function getToolbox(){
 	if(isAndroid()){
 		if(navigator.language=="zh-CN"){
-			window.location.href="https://www.coolapk.com/apk/163867"
+			openWebPage("https://www.coolapk.com/apk/163867")
 		}else{
-			window.location.href="https://play.google.com/store/apps/details?id=shangzhenyang.rthtoolbox"
+			openWebPage("https://play.google.com/store/apps/details?id=shangzhenyang.rthtoolbox")
 		}
 	}else if(isiOS()){
 		window.location.href="https://itunes.apple.com/app/rth-toolbox/id1294479577"
 	}else{
-		window.location.href=addTime("http://t.rths.tk/web/toolbox/download.html")
+		openWebPage("http://t.rths.tk/web/toolbox/download.html")
 	}
 }
 function initCalculator(max,calculate){
