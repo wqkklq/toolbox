@@ -12,7 +12,7 @@ body{
 .drag{
 	background-color:rgb(30,30,30);
 	cursor:default;
-	height:40px;
+	height:20px;
 	left:0%;
 	line-height:20px;
 	padding:10px;
