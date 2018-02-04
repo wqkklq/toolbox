@@ -106,15 +106,16 @@
 						case "SimplifiedChinese":
 							newDiv.innerText=botText
 							document.getElementsByClassName("mui-title")[0].innerText="康康"
+							document.getElementById("ChatbotDiv").appendChild(newDiv)
 							break
 						default:
 							translate(botText,"zh","en",function(e){
 								newDiv.innerText=e.trans_result[0].dst
 								document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
+								document.getElementById("ChatbotDiv").appendChild(newDiv)
 							})
 							break
 					}
-					document.getElementById("ChatbotDiv").appendChild(newDiv)
 				})
 			}
 			function hitokoto(){
@@ -138,7 +139,9 @@
 								break
 							default:
 								document.getElementsByClassName("mui-title")[0].innerText="Typing"
-								translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){chatbotReply(e.trans_result[0].dst)})
+								translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
+									chatbotReply(e.trans_result[0].dst)
+								})
 								break
 						}
 					}else{
