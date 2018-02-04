@@ -229,8 +229,9 @@
 						newP=document.createElement("p"),
 						newLi=document.createElement("li")
 						newLi.setAttribute("class","menu")
-						newLi.setAttribute("id",newWord)
-						newLi.onclick=function(){lookUp(newWord)}
+						newLi.onclick=function(){
+							lookUp(newWord)
+						}
 						newLabel.innerText=newWord
 						newP.innerText=newDefinition
 						newLi.appendChild(newLabel)
@@ -257,7 +258,9 @@
 									break
 							}
 							newLi.innerText=Item
-							newLi.onclick=function(){openWL(i)}
+							newLi.onclick=function(){
+								openWL(i)
+							}
 							newLi.setAttribute("class","menu")
 							document.getElementById("OWLUl").appendChild(newLi)
 						}
@@ -489,10 +492,10 @@
 					break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			const OWList=document.getElementById("OWLUl").innerHTML
 			if(isMobile()){
 				document.getElementById("OpenLWL").style.display="none"
 			}
+			const OWList=document.getElementById("OWLUl").innerHTML
 			load()
 		</script>
 		<!--<![endif]-->
