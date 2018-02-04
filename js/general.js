@@ -317,7 +317,6 @@ function showPrompt(text,title,callback){
 	}
 }
 function translate(query,from,to,callback){
-	if(isPlus()){plus.nativeUI.showWaiting()}
 	loadJS(["js/jquery.min.js","js/md5.min.js"],function(){
 		const appid="20171109000093780",key="ZR6EGbP8ZzwU7GookTvy",salt=(new Date).getTime()
 		if(to=="auto"){
@@ -343,11 +342,6 @@ function translate(query,from,to,callback){
 			},
 			success:function(data){
 				callback(data)
-			},
-			complete:function(){
-				if(isPlus()){
-					plus.nativeUI.closeWaiting()
-				}
 			}
 		})
 	})
