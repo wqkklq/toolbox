@@ -16,7 +16,9 @@
 			<div class="mui-input-row">
 				<input type="text" class="mui-input-clear">
 			</div>
-			<textarea id="Text" rows="10"></textarea>
+			<div id="TextDiv">
+				<textarea id="Text" rows="10"></textarea>
+			</div>
 			<ul class="menu">
 				<li id="CreateMessageBox" class="menu"></li>
 				<li id="OpenLocalDocument" class="menu"></li>
@@ -96,6 +98,7 @@
 							myCodeMirror.setOption("theme","seti")
 						}
 						myCodeMirror.on("change",count)
+						document.getElementById("TextDiv").style.marginBottom="15px"
 						textChanged()
 						if(callback){
 							callback()

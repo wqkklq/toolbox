@@ -35,9 +35,11 @@ td div,
 textarea,
 .card,
 .menu li,
+.msg-bot,
 .mui-input-row input,
 .show{
 	background-color:rgb(31,33,34);
+	color:whitesmoke;
 }
 fieldset,
 hr{
@@ -57,10 +59,6 @@ hr{
 .menu{
 	background-color:rgb(31,33,34);
 	border-color:rgb(14,17,18);
-}
-.msg-bot{
-	background-color:rgb(31,33,34);
-	color:whitesmoke;
 }
 .msg-me{
 	background-color:rgb(0,68,136);
