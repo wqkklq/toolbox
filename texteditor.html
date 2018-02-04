@@ -252,7 +252,7 @@
 					if(code.indexOf("answer=")!=-1){
 						code+=";setText(readText()+'/* ='+answer+' */')"
 					}
-					if(code.indexOf("language==\"SimplifiedChinese\"")==-1){
+					if(code.indexOf("switch(language)")==-1){
 						if(/clearData|eval|plus|require/.test(code)){
 							showConfirm([
 								"This code can harm your device. Do you want to continue?",

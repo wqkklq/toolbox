@@ -90,6 +90,10 @@ hr{
 	background-color:rgb(14,17,18);
 	color:whitesmoke;
 }
+.mui-popup-input input{
+	background-color:white;
+	color:black;
+}
 .mui-switch-blue{
 	background-color:rgb(31,33,34);
 	border-color:rgb(109,109,114);
