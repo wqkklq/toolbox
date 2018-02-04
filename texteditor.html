@@ -195,7 +195,7 @@
 						loadJS(["http://codemirror.net/mode/xml/xml.js","http://codemirror.net/mode/css/css.js"],function(){setMode(type)})
 					}else if(type=="js"){
 						type="javascript"
-					}else if(type.indexOf("c")!=-1){
+					}else if(type.indexOf("c")!=-1&&type.indexOf("css")==-1){
 						type="clike"
 					}
 					if(type!="txt"&&type!="rth"&&myCodeMirror.getOption("mode")!=type){
