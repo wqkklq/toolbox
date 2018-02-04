@@ -220,6 +220,7 @@
 			}
 			function runJSCode(fromShortcut){
 				if(!isEmpty()){
+					let code=readText().replace(/coin|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast").replace(/设|let\s/gi,"let ").replace(/答|answer/gi,"const answer=").replace(/answer==/gi,"answer=")
 					const runTrue=function(){
 						const clearData=function(){
 							localStorage.clear()
@@ -228,6 +229,9 @@
 								plus.navigator.removeAllCookie()
 							}
 							restart()
+						}
+						const log=function(content){
+							setText(readText()+"/* "+eval(content)+" */")
 						}
 						const setTheme=function(themeName){
 							loadCSS("http://codemirror.net/theme/"+themeName+".css")
@@ -248,7 +252,6 @@
 							setMode("javascript")
 						}
 					}
-					let code=readText().replace(/coin|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast").replace(/设|let\s/gi,"let ").replace(/答|answer/gi,"const answer=").replace(/answer==/gi,"answer=")
 					if(code.indexOf("answer=")!=-1){
 						code+=";setText(readText()+'/* ='+answer+' */')"
 					}
@@ -425,7 +428,7 @@
 						}else{
 							let type=url.split(".")
 							type=type[type.length-1]
-							if(type.indexOf("c")!=-1){
+							if(type.indexOf("c")!=-1&&type.indexOf("css")==-1){
 								if(type.indexOf("/")==-1){
 									url+="/"
 								}
