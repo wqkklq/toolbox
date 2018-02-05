@@ -36,7 +36,7 @@
 				<li id="Delete" class="menu"></li>
 			</ul>
 		</div>
-		<input id="OpenFileInput" type="file" accept=".rth" style="display:none">
+		<input id="OpenFileInput" type="file" accept=".rth">
 		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
@@ -63,7 +63,7 @@
 				}
 				WLSplitFS=document.getElementsByTagName("textarea")[0].value.split("\n")
 				if(name=="save"){
-					if(isElectron()&&!isLinux()){
+					if(isElectron&&!isLinux){
 						require("electron").remote.dialog.showSaveDialog({
 							defaultPath:document.title,
 							filters:[{name:"RTH Toolbox Files",extensions:["rth"]}]
@@ -94,7 +94,7 @@
 								mui.toast("The word list has been saved")
 								break
 						}
-						if(!isMobile()&&!isLinux()){
+						if(!isMobile&&!isLinux){
 							showConfirm([
 								"Do you want to download this document?",
 								"您想要下载此文档吗？"
@@ -207,7 +207,7 @@
 					currentItem="WordList"
 					localStorage.removeItem("WordListCurrentItem")
 					edit()
-					if(isMac()&&!isElectron()){
+					if(isMac&&!isElectron){
 						const newIframe=document.createElement("iframe")
 						newIframe.setAttribute("src","rthtoolbox://"+window.location.search)
 						newIframe.style.display="none"
@@ -270,7 +270,9 @@
 						for(let i=OWLTSplit.length-1;i>=0;i-=1){
 							const newLi=document.createElement("li")
 							newLi.innerText=OWLTSplit[i]
-							newLi.onclick=function(){openOWL((i+1))}
+							newLi.onclick=function(){
+								openOWL(i+1)
+							}
 							newLi.setAttribute("class","menu")
 							document.getElementById("OWLUl").appendChild(newLi)
 						}
@@ -414,7 +416,7 @@
 						}else{
 							askForDefinition(newWord)
 						}
-					}else if(!isApp()){
+					}else if(!isApp){
 						translateWord()
 					}else if(navigator.onLine){
 						request("https://api.shanbay.com/bdc/search/?word="+newWord,function(e){
@@ -492,7 +494,7 @@
 					break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			if(isMobile()){
+			if(isMobile){
 				document.getElementById("OpenLWL").style.display="none"
 			}
 			const OWList=document.getElementById("OWLUl").innerHTML

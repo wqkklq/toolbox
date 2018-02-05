@@ -6,6 +6,16 @@ language=localStorage.getItem("Language"),
 recentInput=0,
 theme=localStorage.getItem("Theme")
 const header=document.getElementsByTagName("header")[0]
+const isAndroid=/Android/i.test(navigator.userAgent),
+isElectron=/Electron/i.test(navigator.userAgent),
+isiOS=/iPhone/i.test(navigator.userAgent)||/iPad/i.test(navigator.userAgent),
+isLinux=/Linux/i.test(navigator.userAgent),
+isMac=/Macintosh/i.test(navigator.userAgent),
+isOnline=/t.rths.tk/.test(window.location.href),
+isPlus=/Html5Plus/i.test(navigator.userAgent)
+const isApp=isElectron||isPlus,
+isAndroidApp=isAndroid&&isPlus,
+isMobile=isAndroid||isiOS
 function addTime(url){
 	if(url.indexOf("?")!=-1){
 		url+="&time="+(new Date).getTime()
@@ -18,13 +28,13 @@ function addZero(num,length){
 	return (Array(length).join("0")+num).slice(-length)
 }
 function getToolbox(){
-	if(isAndroid()){
+	if(isAndroid){
 		if(navigator.language=="zh-CN"){
 			openWebPage("https://www.coolapk.com/apk/163867")
 		}else{
 			openWebPage("https://play.google.com/store/apps/details?id=shangzhenyang.rthtoolbox")
 		}
-	}else if(isiOS()){
+	}else if(isiOS){
 		window.location.href="https://itunes.apple.com/app/rth-toolbox/id1294479577"
 	}else{
 		openWebPage("http://t.rths.tk/web/toolbox/download.html")
@@ -83,38 +93,8 @@ function initCalculator(max,calculate){
 		calculate()
 	}
 }
-function isAndroid(){
-	return /Android/i.test(navigator.userAgent)
-}
-function isAndroidApp(){
-	return isAndroid()&&isPlus()
-}
-function isApp(){
-	return isElectron()||isPlus()
-}
-function isElectron(){
-	return /Electron/i.test(navigator.userAgent)
-}
 function isEnglish(text){
 	return(new RegExp("[A-Za-z]+")).test(text)
-}
-function isiOS(){
-	return /iPhone/i.test(navigator.userAgent)||/iPad/i.test(navigator.userAgent)
-}
-function isLinux(){
-	return /Linux/i.test(navigator.userAgent)
-}
-function isMac(){
-	return /Macintosh/i.test(navigator.userAgent)
-}
-function isMobile(){
-	return isAndroid()||isiOS()
-}
-function isOnline(){
-	return /t.rths.tk/.test(window.location.href)
-}
-function isPlus(){
-	return /Html5Plus/i.test(navigator.userAgent)
 }
 function loadCSS(href){
 	if(addedStyle.indexOf(href)==-1){
@@ -162,9 +142,9 @@ function openWebPage(href){
 		href=addTime(href)
 	}
 	if(href.length<=2048){
-		if(isPlus()){
+		if(isPlus){
 			plus.runtime.openURL(href)
-		}else if(isElectron()){
+		}else if(isElectron){
 			require("electron").shell.openExternal(href)
 		}else{
 			window.open(href)
@@ -185,11 +165,11 @@ function openWindow(name){
 		suffix=""
 	}
 	let url=name+suffix
-	if(isPlus()){
-		if(isOnline()){
+	if(isPlus){
+		if(isOnline){
 			url=addTime(url)
 		}
-		if(/http|\?|flashcard|quiz/.test(url)||isAndroid()){
+		if(/http|\?|flashcard|quiz/.test(url)||isAndroid){
 			plus.webview.open(url,name,{"popGesture":"close"},"fade-in")
 		}else{
 			plus.webview.create(url,name,{"popGesture":"hide"})
@@ -218,8 +198,8 @@ function request(url,callback){
 	xhr.send()
 }
 function restart(){
-	if(isPlus()){
-		if(isOnline()){
+	if(isPlus){
+		if(isOnline){
 			loadOnline()
 		}else{
 			plus.runtime.restart()
@@ -284,7 +264,7 @@ function showConfirm(text,title,positiveCallback,negativeCallback){
 	}
 }
 function showPrompt(text,title,callback){
-	if(isApp()){
+	if(isApp){
 		switch(language){
 			case "SimplifiedChinese":
 				mui.prompt(text[1],"",title[1],null,function(e){
@@ -356,12 +336,12 @@ function unsupportedType(){
 	])
 }
 document.addEventListener("keydown",function(e){
-	if(isElectron()){
+	if(isElectron){
 		const win=require("electron").remote.getCurrentWindow()
 		if(e.ctrlKey||e.metaKey){
 			switch(e.keyCode){
 				case 73:
-					if(isElectron()){
+					if(isElectron){
 						win.toggleDevTools()
 					}
 					break
@@ -411,18 +391,18 @@ if(header!=null){
 	newH1.setAttribute("class","mui-title")
 	header.appendChild(newA)
 	header.appendChild(newH1)
-	if(isAndroidApp()){
+	if(isAndroidApp){
 		mui.init({swipeBack:true})
 	}else{
 		mui.init({swipeBack:false})
 	}
-	if(!isApp()||isMac()){
+	if(!isApp||isMac){
 		document.getElementsByClassName("mui-content")[0].style.marginTop="20px"
 		header.style.height="65px"
 		header.style.paddingTop="20px"
 	}
 }
-if(isElectron()){
+if(isElectron){
 	const{remote,webFrame}=require("electron")
 	webFrame.setZoomLevelLimits(1,1)
 	if(process.platform!=="darwin"){
@@ -433,7 +413,9 @@ if(isElectron()){
 		newDiv.setAttribute("class","win")
 		newMinimizeDiv.style.right="80px"
 		newMinimizeDiv.innerText="-"
-		newMinimizeDiv.onclick=function(){remote.getCurrentWindow().minimize()}
+		newMinimizeDiv.onclick=function(){
+			remote.getCurrentWindow().minimize()
+		}
 		newDiv.appendChild(newMinimizeDiv)
 		newMaximizeDiv.style.right="40px"
 		newMaximizeDiv.innerText="+"

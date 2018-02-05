@@ -52,7 +52,8 @@ td div{
 	top:-7px;
 	width:100%;
 }
-::-webkit-scrollbar{
+::-webkit-scrollbar,
+#OpenFileInput{
 	display:none;
 }
 .back{

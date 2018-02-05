@@ -63,7 +63,7 @@
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			const ver="6.4",
-			date=new Date("2018/2/5").toLocaleDateString()
+			date=new Date("2018/2/6").toLocaleDateString()
 			function showImage(src){
 				document.getElementsByClassName("donate")[0].style.opacity="0"
 				document.getElementsByTagName("img")[0].src=src
@@ -71,7 +71,7 @@
 					document.getElementsByClassName("image")[0].style.display=""
 					document.getElementsByClassName("image")[0].style.opacity="0.8"
 				}
-				if(src.indexOf("alipay")!=-1&&isMobile()){
+				if(src.indexOf("alipay")!=-1&&isMobile){
 					openWebPage("HTTPS://QR.ALIPAY.COM/FKX04965KXP0C8G3MUVK28")
 				}
 			}
@@ -92,7 +92,7 @@
 				document.getElementsByClassName("donate")[0].style.opacity="1"
 			}
 			document.getElementById("Feedback").onclick=function(){
-				if(isOnline()){
+				if(isOnline){
 					openWindow("http://m.rths.tk/feedback")
 				}else{
 					openWindow("feedback")

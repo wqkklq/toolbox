@@ -36,10 +36,6 @@
 					<input id="Maximum" type="text" value="60">
 				</div>
 				<div class="mui-input-row mui-checkbox ">
-					<label id="ScrollLabel"></label>
-					<input id="ScrollCheck" name="Checkbox" type="checkbox" checked="checked">
-				</div>
-				<div class="mui-input-row mui-checkbox ">
 					<label id="OddNumberOnlyLabel"></label>
 					<input id="OddNumberOnlyCheck" name="Checkbox" type="checkbox">
 				</div>
@@ -115,27 +111,7 @@
 						count()
 					}
 				}
-				if(document.getElementById("ScrollCheck").checked==true){
-					if(scrolling==false){
-						intervalId=setInterval(function(){
-							RScrolling()
-						},10)
-						scrolling=true
-					}else{
-						clearInterval(intervalId)
-						scrolling=false
-						if(document.getElementsByClassName("number")[0].innerText=="?"){
-							random()
-						}
-						selected()
-					}
-				}else{
-					random()
-					selected()
-				}
-			}
-			document.getElementById("ScrollCheck").onchange=function(){
-				if(document.getElementById("ScrollCheck").checked==true){
+				if(scrolling==false){
 					intervalId=setInterval(function(){
 						RScrolling()
 					},10)
@@ -143,6 +119,10 @@
 				}else{
 					clearInterval(intervalId)
 					scrolling=false
+					if(document.getElementsByClassName("number")[0].innerText=="?"){
+						random()
+					}
+					selected()
 				}
 			}
 			document.getElementById("OddNumberOnlyCheck").onchange=function(){
@@ -213,7 +193,6 @@
 					document.getElementById("Settings").innerText="设置"
 					document.getElementById("MinimumLabel").innerText="最小值"
 					document.getElementById("MaximumLabel").innerText="最大值"
-					document.getElementById("ScrollLabel").innerText="滚动"
 					document.getElementById("OddNumberOnlyLabel").innerText="仅奇数"
 					document.getElementById("EvenNumberOnlyLabel").innerText="仅偶数"
 					document.getElementById("History").innerText="历史记录"
@@ -232,7 +211,6 @@
 					document.getElementById("Settings").innerText="Settings"
 					document.getElementById("MinimumLabel").innerText="Minimum"
 					document.getElementById("MaximumLabel").innerText="Maximum"
-					document.getElementById("ScrollLabel").innerText="Scroll"
 					document.getElementById("OddNumberOnlyLabel").innerText="Odd Number Only"
 					document.getElementById("EvenNumberOnlyLabel").innerText="Even Number Only"
 					document.getElementById("History").innerText="History"

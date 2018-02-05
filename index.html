@@ -191,11 +191,15 @@
 			window.onresize=onResize
 			load()
 			onResize()
-			if(isPlus()){
+			mui.init({swipeBack:false})
+			if(isPlus){
 				const plusReady=function(){
 					plus.navigator.setStatusBarBackground("rgb(0,102,204)")
 					plus.navigator.setStatusBarStyle("light")
-					if(isAndroid()){
+					if(isAndroid){
+						mui.back=function(){
+							plus.runtime.quit()
+						}
 						plus.runtime.getProperty(plus.runtime.appid,function(inf){
 							request("http://t.rths.tk/package.json",function(e){
 								const json=JSON.parse(e)
@@ -210,7 +214,7 @@
 								}
 							})
 						})
-					}else if(!isOnline()){
+					}else if(!isOnline){
 						plus.webview.create("about.html","about",{"popGesture":"hide"})
 						plus.webview.create("calculator.html","calculator",{"popGesture":"hide"})
 						plus.webview.create("chatbot.html","chatbot",{"popGesture":"hide"})
@@ -244,12 +248,12 @@
 				}else{
 					document.addEventListener("plusready",plusReady,false)
 				}
-			}else if(!isApp()||isMac()){
+			}else if(!isApp||isMac){
 				document.getElementsByClassName("icon")[0].style.top="45px"
 				document.getElementsByClassName("home-title")[0].style.top="85px"
 				document.getElementsByClassName("home-menu")[0].style.top="175px"
 				document.getElementsByClassName("home-menu")[0].style.height="calc(100% - 230px)"
-				if(!isApp()){
+				if(!isApp){
 					document.getElementsByClassName("get")[0].style.display=""
 				}
 			}
@@ -288,13 +292,7 @@
 				document.title="RTH"
 				document.getElementsByClassName("home-title")[0].innerText="RTH"
 			}
-			mui.init({swipeBack:false})
-			if(isAndroidApp()){
-				mui.back=function(){
-					plus.runtime.quit()
-				}
-			}
-			if(isElectron()){
+			if(isElectron){
 				const{remote}=require("electron")
 				let path
 				if(process.platform=="darwin"){

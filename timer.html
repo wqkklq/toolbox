@@ -122,7 +122,7 @@
 					document.getElementsByClassName("time")[0].style.fontSize=""
 					document.getElementsByClassName("time")[0].style.height=""
 				}
-				if(isElectron()){
+				if(isElectron){
 					require("electron").remote.getCurrentWindow().setAlwaysOnTop(false)
 				}
 			}
@@ -211,7 +211,7 @@
 					window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementById("SpeakInput").value))
 				}
 				if(document.getElementById("PushNotificationCheck").checked==true){
-					if(isPlus()){
+					if(isPlus){
 						plus.push.createMessage(document.getElementById("PushNotificationInput").value)
 					}else if(window.Notification){
 						if(Notification.permission=="granted"){
@@ -266,7 +266,7 @@
 			document.getElementById("Clear").onclick=function(){
 				document.getElementById("HistoryText").value=""
 			}
-			if(isElectron()){
+			if(isElectron){
 				document.addEventListener("visibilitychange",function(){
 					if(document.hidden){
 						window.scrollTo(0,0)
@@ -343,7 +343,7 @@
 				document.getElementById("SpeakDiv1").style.display="none"
 				document.getElementById("SpeakDiv2").style.display="none"
 			}
-			if(!isPlus()){
+			if(!isPlus){
 				if(window.Notification){
 					Notification.requestPermission(function(){
 						if(Notification.permission!="granted"){

@@ -35,7 +35,7 @@
 			<div id="Save" style="width:50%"></div>
 			<div id="RunJSCode" style="width:50%"></div>
 		</footer>
-		<input id="OpenFileInput" type="file" style="display:none">
+		<input id="OpenFileInput" type="file">
 		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
@@ -192,7 +192,9 @@
 				if(myCodeMirror!=null){
 					if(type=="html"){
 						type="htmlmixed"
-						loadJS(["http://codemirror.net/mode/xml/xml.js","http://codemirror.net/mode/css/css.js"],function(){setMode(type)})
+						loadJS(["http://codemirror.net/mode/xml/xml.js","http://codemirror.net/mode/css/css.js"],function(){
+							setMode(type)
+						})
 					}else if(type=="js"){
 						type="javascript"
 					}else if(type.indexOf("c")!=-1&&type.indexOf("css")==-1){
@@ -224,7 +226,7 @@
 					const runTrue=function(){
 						const clearData=function(){
 							localStorage.clear()
-							if(isPlus()){
+							if(isPlus){
 								plus.cache.clear()
 								plus.navigator.removeAllCookie()
 							}
@@ -273,7 +275,7 @@
 				}
 			}
 			function save(){
-				if(isElectron()){
+				if(isElectron){
 					require("electron").remote.dialog.showSaveDialog({
 						defaultPath:document.getElementsByTagName("input")[0].value,
 						filters:[{name:"Text Documents",extensions:["txt"]}]
@@ -282,7 +284,7 @@
 							require("fs").writeFileSync(filename,readText())
 						}
 					})
-				}else if(isMobile()){
+				}else if(isMobile){
 					if(currentItem==null||currentItem=="Text"){
 						for(let i=1;i<10000;i++){
 							if(localStorage.getItem("Text"+i)==null||localStorage.getItem("Text"+i)==""){
@@ -435,18 +437,21 @@
 								url+="index.html"
 								type="html"
 							}
-							if(type=="html"||type=="css"||type=="js"){
-								enableCodeEditor(function(){
-									url=addTime(url)
-									if(url.indexOf("http")==-1){
-										url="http://"+url
-									}
-									request(url,function(e){
-										setText(e)
-										apply(0)
-									})
-									readMode(type)
+							const openTrue=function(){
+								url=addTime(url)
+								if(url.indexOf("http")==-1){
+									url="http://"+url
+								}
+								request(url,function(e){
+									setText(e)
+									apply(0)
 								})
+								readMode(type)
+							}
+							if(type=="txt"){
+								openTrue()
+							}else if(/html|css|js/.test(type)){
+								enableCodeEditor(openTrue)
 							}else{
 								unsupportedType()
 							}
@@ -522,7 +527,7 @@
 			if(!window.speechSynthesis){
 				document.getElementById("Speak").style.display="none"
 			}
-			if(isMobile()){
+			if(isMobile){
 				document.getElementById("OpenLocalDocument").style.display="none"
 			}else{
 				enableCodeEditor()
