@@ -36,7 +36,7 @@
 				<li id="Delete" class="menu"></li>
 			</ul>
 		</div>
-		<input id="OpenFileInput" type="file" accept=".rth">
+		<input class="open-file" type="file" accept=".rth">
 		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
@@ -94,7 +94,7 @@
 								mui.toast("The word list has been saved")
 								break
 						}
-						if(!isMobile&&!isLinux){
+						if(!isEdge&&!isLinux&&!isMobile){
 							showConfirm([
 								"Do you want to download this document?",
 								"您想要下载此文档吗？"
@@ -114,7 +114,13 @@
 								const dl=document.createElement("a")
 								dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(document.getElementsByTagName("textarea")[0].value))
 								dl.setAttribute("download",filename)
-								dl.click()
+								if(document.createEvent){
+									const event=document.createEvent("MouseEvents")
+									event.initEvent("click",true,true)
+									dl.dispatchEvent(event)
+								}else{
+									dl.click()
+								}
 							})
 						}
 						apply(currentItem.replace("WordList",""))
@@ -454,7 +460,7 @@
 					closeTrue()
 				})
 			}
-			document.getElementById("OpenFileInput").onchange=function(e){
+			document.getElementsByClassName("open-file")[0].onchange=function(e){
 				openLWL(e.target.files[0])
 			}
 			switch(language){

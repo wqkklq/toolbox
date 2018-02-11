@@ -44,7 +44,7 @@
 			<div id="Save" style="width:50%"></div>
 			<div id="RunJSCode" style="width:50%"></div>
 		</footer>
-		<input id="OpenFileInput" type="file">
+		<input class="open-file" type="file">
 		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
@@ -287,7 +287,7 @@
 				}
 			}
 			function save(){
-				if(isElectron){
+				if(isElectron&&!isLinux){
 					require("electron").remote.dialog.showSaveDialog({
 						defaultPath:document.getElementsByTagName("input")[0].value,
 						filters:[{name:"Text Documents",extensions:["txt"]}]
@@ -296,7 +296,7 @@
 							require("fs").writeFileSync(filename,readText())
 						}
 					})
-				}else if(isMobile){
+				}else if(isEdge||isLinux||isMobile){
 					if(currentItem==null||currentItem=="Text"){
 						for(let i=1;i<10000;i++){
 							if(localStorage.getItem("Text"+i)==null||localStorage.getItem("Text"+i)==""){
@@ -338,10 +338,19 @@
 									break
 							}
 						}
+						if(filename.indexOf(".")==-1){
+							filename+=".txt"
+						}
 						const dl=document.createElement("a")
 						dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(readText()))
 						dl.setAttribute("download",filename)
-						dl.click()
+						if(document.createEvent){
+							const event=document.createEvent("MouseEvents")
+							event.initEvent("click",true,true)
+							dl.dispatchEvent(event)
+						}else{
+							dl.click()
+						}
 					})
 				}
 			}
@@ -375,9 +384,11 @@
 					switch(e.keyCode){
 						case 13:
 							runJSCode(true)
+							return false
 							break
 						case 78:
 							newDoc()
+							return false
 							break
 						case 79:
 							openDialog()
@@ -550,7 +561,7 @@
 					window.scrollTo(0,0)
 				}
 			}
-			document.getElementById("OpenFileInput").onchange=function(e){
+			document.getElementsByClassName("open-file")[0].onchange=function(e){
 				openLText(e.target.files[0])
 			}
 			switch(language){

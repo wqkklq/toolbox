@@ -49,10 +49,6 @@ td div{
 	top:-7px;
 	width:100%;
 }
-::-webkit-scrollbar,
-#OpenFileInput{
-	display:none;
-}
 .back{
 	color:white;
 	-webkit-app-region:no-drag;
@@ -166,6 +162,9 @@ td div{
 	font-size:20px;
 	text-align:left;
 }
+.open-file{
+	display:none;
+}
 .result{
 	line-height:30px;
 	user-select:text;
@@ -202,4 +201,7 @@ td div{
 	position:fixed;
 	transition:all 0.25s;
 	width:40px;
+}
+::-webkit-scrollbar{
+	display:none;
 }

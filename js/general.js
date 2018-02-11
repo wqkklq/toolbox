@@ -8,6 +8,7 @@ theme=localStorage.getItem("Theme")
 const header=document.getElementsByTagName("header")[0]
 const isAndroid=/Android/i.test(navigator.userAgent),
 isChinese=new RegExp("[\u4E00-\u9FA5]+"),
+isEdge=/Edge/i.test(navigator.userAgent),
 isElectron=/Electron/i.test(navigator.userAgent),
 isEnglish=new RegExp("[A-Za-z]+"),
 isiOS=/iPhone/i.test(navigator.userAgent)||/iPad/i.test(navigator.userAgent),
@@ -134,8 +135,8 @@ function loadOnline(){
 	openWindow("http://t.rths.tk/index")
 }
 function openDialog(){
-	document.getElementById("OpenFileInput").value=""
-	document.getElementById("OpenFileInput").click()
+	document.getElementsByClassName("open-file")[0].value=""
+	document.getElementsByClassName("open-file")[0].click()
 }
 function openWebPage(href){
 	href=encodeURI(href)
