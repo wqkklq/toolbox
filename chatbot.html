@@ -22,6 +22,7 @@
 				padding:10px 15px;
 				user-select:text;
 				width:fit-content;
+				word-break:break-word;
 				-webkit-user-select:text;
 			}
 			.msg-bot{
@@ -102,11 +103,8 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let lastBotInfo,removeIframe
+			let lastBotInfo
 			function chatbotReply(botInfo){
-				if(removeIframe){
-					removeIframe()
-				}
 				request("http://www.tuling123.com/openapi/api?key=42cff502574d42e996841e655fecd78a&info="+botInfo,function(e){
 					const json=JSON.parse(e)
 					const botText=json.text
@@ -116,26 +114,10 @@
 					newChildDiv.setAttribute("class","msg msg-bot")
 					newDiv.appendChild(newChildDiv)
 					const appendMsg=function(){
-						document.getElementById("ChatbotDiv").appendChild(newDiv)
 						if(json.code==200000){
-							mui.back=function(){
-								if(isPlus){
-									restart()
-								}else{
-									history.go(window.history.length*(-1)+1)
-								}
-							}
-							const newIframe=document.createElement("iframe")
-							newIframe.src=json.url
-							newIframe.frameBorder="0"
-							newIframe.width="100%"
-							newIframe.height="300px"
-							newChildDiv.appendChild(newIframe)
-							removeIframe=function(){
-								newChildDiv.removeChild(newIframe)
-								removeIframe=null
-							}
+							newChildDiv.innerHTML+="<br><a href=\"javascript:openWebPage('"+json.url+"')\">"+json.url.split("/")[2]+"</a>"
 						}
+						document.getElementById("ChatbotDiv").appendChild(newDiv)
 						window.scrollTo(0,document.body.scrollHeight)
 					}
 					switch(language){
