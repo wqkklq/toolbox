@@ -494,10 +494,11 @@
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(isMobile){
 				document.getElementById("OpenLWL").style.display="none"
+			}else{
+				document.getElementsByTagName("input")[0].focus()
 			}
 			const OWList=document.getElementById("OWLUl").innerHTML
 			load()
-			document.getElementsByTagName("input")[0].focus()
 		</script>
 		<!--<![endif]-->
 	</body>

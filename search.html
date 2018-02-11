@@ -241,7 +241,9 @@
 			document.getElementById("EngineSelect1").value="Web"
 			categoryChanged()
 			document.getElementById("EngineSelect2").value="Automatic"
-			document.getElementsByTagName("input")[0].focus()
+			if(!isMobile){
+				document.getElementsByTagName("input")[0].focus()
+			}
 		</script>
 		<!--<![endif]-->
 	</body>

@@ -185,9 +185,7 @@
 					document.getElementsByTagName("button")[0].innerText="Send"
 					break
 			}
-			if(navigator.onLine){
-				document.getElementsByTagName("input")[0].focus()
-			}else{
+			if(!navigator.onLine){
 				switch(language){
 					case "SimplifiedChinese":
 						document.getElementById("Welcome").innerText="我需要连接到互联网才能和你聊天。"
@@ -197,6 +195,8 @@
 						break
 				}
 				document.getElementsByClassName("new-msg")[0].style.display="none"
+			}else if(!isMobile){
+				document.getElementsByTagName("input")[0].focus()
 			}
 			document.getElementById("Welcome").style.display=""
 		</script>

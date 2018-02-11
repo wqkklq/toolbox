@@ -128,7 +128,9 @@
 					break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			document.getElementsByTagName("input")[0].focus()
+			if(!isMobile){
+				document.getElementsByTagName("input")[0].focus()
+			}
 		</script>
 		<!--<![endif]-->
 	</body>
