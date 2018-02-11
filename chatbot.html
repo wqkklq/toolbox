@@ -10,67 +10,72 @@
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<style>
+			html{
+				margin:0 auto;
+				max-width:600px;
+			}
 			.msg{
 				border-radius:10px;
-				line-height:30px;
-				margin-top:10px;
-				padding:10px;
-				width:70%;
+				box-shadow:0 0 3px rgb(109,109,114);
+				line-height:25px;
+				max-width:70%;
+				padding:10px 15px;
 				user-select:text;
+				width:fit-content;
 				-webkit-user-select:text;
 			}
 			.msg-bot{
 				background-color:white;
+				border-left:10px solid rgba(0,0,0,0.25);
 				color:black;
 			}
 			.msg-me{
 				background-color:rgb(0,102,204);
+				border-right:10px solid rgba(0,0,0,0.25);
 				color:white;
-				margin-left:30%;
-				text-align:right;
+				margin:0 0 0 auto;
+			}
+			.msg-row{
+				padding:5px 0px;
 			}
 			.new-msg{
 				background-color:white;
-				border:solid 1px rgb(239,239,244);
 				border-radius:20px;
 				bottom:30px;
-				box-shadow:0 0 5px rgb(239,239,244);
-				height:52px;
-				left:0px;
-				margin-left:5%;
+				box-shadow:0 0 10px rgb(109,109,114);
+				height:50px;
+				left:5%;
 				padding:5px 85px 5px 5px;
 				position:fixed;
 				width:90%;
 			}
-			.send{
-				height:40px;
+			.new-msg-background{
+				background-color:rgba(239,239,244,0.9);
+				bottom:0px;
+				box-shadow:0 -5px 10px rgb(239,239,244);
+				height:80px;
+				left:0px;
+				position:fixed;
+				width:100%;
 			}
 			.send input{
 				background:white;
 				border:solid 1px rgb(239,239,244);
 				border-radius:15px;
 				font-size:16px;
-				height:100%;
+				height:40px;
 				line-height:18px;
 				padding:10px;
 				width:100%;
 			}
-			.send-right{
+			.send-btn{
+				border-radius:15px;
 				bottom:0px;
+				height:40px;
+				margin:5px;
 				position:absolute;
-				display:inline-block;
-				height:50px;
-				line-height:100%;
-				padding:0px;
 				right:0px;
 				text-align:center;
-				vertical-align:middle;
-				width:80px;
-			}
-			.send-right button{
-				border-radius:15px;
-				height:40px;
-				margin:5px 5px 0px 0px;
 				width:75px;
 			}
 		</style>
@@ -78,89 +83,106 @@
 	<body>
 		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
-			<div id="ChatbotDiv" style="padding-bottom:87px">
-				<div id="Welcome" class="msg msg-bot"></div>
-				<div id="Hitokoto" class="msg msg-bot" style="display:none"></div>
+			<div id="ChatbotDiv" style="padding-bottom:80px">
+				<div class="msg-row">
+					<div id="Welcome" class="msg msg-bot" style="display:none"></div>
+				</div>
 			</div>
 		</div>
-		<div class="new-msg">
-			<div class="send">
-				<input type="text">
+		<div class="new-msg-background">
+			<div class="new-msg">
+				<div class="send">
+					<input type="text">
+				</div>
+				<button type="button" class="mui-btn mui-btn-blue send-btn"></button>
 			</div>
-			<div class="send-right">
-				<button type="button" class="mui-btn mui-btn-blue"></button>
-			</div>
-		</footer>
+		</div>
 		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
+			let lastBotInfo,removeIframe
 			function chatbotReply(botInfo){
+				if(removeIframe){
+					removeIframe()
+				}
 				request("http://www.tuling123.com/openapi/api?key=42cff502574d42e996841e655fecd78a&info="+botInfo,function(e){
 					const json=JSON.parse(e)
 					const botText=json.text
-					const newDiv=document.createElement("div")
-					newDiv.setAttribute("class","msg msg-bot")
+					const newDiv=document.createElement("div"),
+					newChildDiv=document.createElement("div")
+					newDiv.setAttribute("class","msg-row")
+					newChildDiv.setAttribute("class","msg msg-bot")
+					newDiv.appendChild(newChildDiv)
+					const appendMsg=function(){
+						document.getElementById("ChatbotDiv").appendChild(newDiv)
+						if(json.code==200000){
+							mui.back=function(){
+								if(isPlus){
+									restart()
+								}else{
+									history.go(window.history.length*(-1)+1)
+								}
+							}
+							const newIframe=document.createElement("iframe")
+							newIframe.src=json.url
+							newIframe.frameBorder="0"
+							newIframe.width="100%"
+							newIframe.height="300px"
+							newChildDiv.appendChild(newIframe)
+							removeIframe=function(){
+								newChildDiv.removeChild(newIframe)
+								removeIframe=null
+							}
+						}
+						window.scrollTo(0,document.body.scrollHeight)
+					}
 					switch(language){
 						case "SimplifiedChinese":
-							newDiv.innerText=botText
+							newChildDiv.innerText=botText
 							document.getElementsByClassName("mui-title")[0].innerText="康康"
-							document.getElementById("ChatbotDiv").appendChild(newDiv)
+							appendMsg()
 							break
 						default:
 							translate(botText,"zh","en",function(e){
-								newDiv.innerText=e.trans_result[0].dst
+								newChildDiv.innerText=e.trans_result[0].dst
 								document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
-								document.getElementById("ChatbotDiv").appendChild(newDiv)
+								appendMsg()
 							})
 							break
 					}
 				})
 			}
-			function hitokoto(){
-				request("https://sslapi.hitokoto.cn/",function(e){
-					const json=JSON.parse(e)
-					document.getElementById("Hitokoto").innerText=json.hitokoto
-					document.getElementById("Hitokoto").style.display=""
-				})
-			}
 			function send(){
 				if(document.getElementsByTagName("input")[0].value!=""){
-					const newMyDiv=document.createElement("div")
-					newMyDiv.setAttribute("class","msg msg-me")
-					newMyDiv.innerText=document.getElementsByTagName("input")[0].value
+					lastBotInfo=document.getElementsByTagName("input")[0].value
+					const newMyDiv=document.createElement("div"),
+					newMyChildDiv=document.createElement("div")
+					newMyDiv.setAttribute("class","msg-row")
+					newMyChildDiv.setAttribute("class","msg msg-me")
+					newMyChildDiv.innerText=document.getElementsByTagName("input")[0].value
+					newMyDiv.appendChild(newMyChildDiv)
 					document.getElementById("ChatbotDiv").appendChild(newMyDiv)
-					if(navigator.onLine){
-						switch(language){
-							case "SimplifiedChinese":
-								document.getElementsByClassName("mui-title")[0].innerText="对方正在输入"
-								chatbotReply(document.getElementsByTagName("input")[0].value)
-								break
-							default:
-								document.getElementsByClassName("mui-title")[0].innerText="Typing"
-								translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
-									chatbotReply(e.trans_result[0].dst)
-								})
-								break
-						}
-					}else{
-						const newErrorDiv=document.createElement("div")
-						newErrorDiv.setAttribute("class","msg msg-bot")
-						switch(language){
-							case "SimplifiedChinese":
-								newErrorDiv.innerText="我需要连接到互联网才能和你聊天。"
-								break
-							default:
-								newErrorDiv.innerText="I cannot chat with you without connecting to the Internet."
-								break
-						}
-						document.getElementById("ChatbotDiv").appendChild(newErrorDiv)
+					window.scrollTo(0,document.body.scrollHeight)
+					switch(language){
+						case "SimplifiedChinese":
+							document.getElementsByClassName("mui-title")[0].innerText="对方正在输入"
+							chatbotReply(document.getElementsByTagName("input")[0].value)
+							break
+						default:
+							document.getElementsByClassName("mui-title")[0].innerText="Typing"
+							translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
+								chatbotReply(e.trans_result[0].dst)
+							})
+							break
 					}
 					document.getElementsByTagName("input")[0].value=""
+				}else if(lastBotInfo){
+					document.getElementsByTagName("input")[0].value=lastBotInfo
+					send()
 				}
 			}
-			document.getElementById("Hitokoto").onclick=hitokoto
 			document.getElementsByTagName("input")[0].onkeydown=function(e){
 				if(e.keyCode==13){
 					send()
@@ -173,7 +195,6 @@
 					document.getElementsByClassName("mui-title")[0].innerText="康康"
 					document.getElementById("Welcome").innerText="我们一起来聊天吧！"
 					document.getElementsByTagName("button")[0].innerText="发送"
-					hitokoto()
 					break
 				default:
 					document.title="Chatbot"
@@ -182,6 +203,20 @@
 					document.getElementsByTagName("button")[0].innerText="Send"
 					break
 			}
+			if(navigator.onLine){
+				document.getElementsByTagName("input")[0].focus()
+			}else{
+				switch(language){
+					case "SimplifiedChinese":
+						document.getElementById("Welcome").innerText="我需要连接到互联网才能和你聊天。"
+						break
+					default:
+						document.getElementById("Welcome").innerText="I cannot chat with you without connecting to the Internet."
+						break
+				}
+				document.getElementsByClassName("new-msg")[0].style.display="none"
+			}
+			document.getElementById("Welcome").style.display=""
 		</script>
 		<!--<![endif]-->
 	</body>

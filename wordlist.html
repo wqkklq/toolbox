@@ -17,19 +17,19 @@
 				<input type="text" class="mui-input-clear">
 			</div>
 			<button type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
-			<ul id="OWLUl" class="menu" style="margin-top:20px">
+			<ul id="OWLUl" class="menu" style="margin-top:15px">
 				<li id="NewWL" class="menu"></li>
 				<li id="OpenLWL" class="menu"></li>
 				<li id="OpenSWL" class="menu"></li>
 			</ul>
-			<ul id="OptionUl1" class="menu" style="margin-top:20px;display:none">
+			<ul id="OptionUl1" class="menu" style="margin-top:15px;display:none">
 				<li id="Quiz" class="menu"></li>
 				<li id="Share" class="menu"></li>
 				<li id="Close" class="menu" style="display:none"></li>
 				<li id="FlashCard" class="menu"></li>
 			</ul>
 			<ul id="WordListUl" class="menu" style="display:none"></ul>
-			<textarea rows="10" style="margin-top:20px;display:none"></textarea>
+			<textarea rows="10" style="margin-top:15px;display:none"></textarea>
 			<ul id="OptionUl2" class="menu" style="display:none">
 				<li id="Save" class="menu"></li>
 				<li id="AddWord" class="menu"></li>
@@ -42,7 +42,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let currentItem,documentsCount,list
+			let currentItem,list
 			function apply(serialNumber){
 				if(serialNumber==0){
 					currentItem="WordList"
@@ -182,7 +182,6 @@
 					})
 				}
 				currentItem=localStorage.getItem("WordListCurrentItem")
-				documentsCount=0
 				list=searchURL("list",window.location.search)
 				if(list){
 					document.getElementsByTagName("textarea")[0].value=list
@@ -209,7 +208,7 @@
 					edit()
 					if(isMac&&!isElectron){
 						const newIframe=document.createElement("iframe")
-						newIframe.setAttribute("src","rthtoolbox://"+window.location.search)
+						newIframe.src="rthtoolbox://"+window.location.search
 						newIframe.style.display="none"
 						document.body.appendChild(newIframe)
 					}
@@ -237,16 +236,15 @@
 						newLi.appendChild(newLabel)
 						newLi.appendChild(newP)
 						document.getElementById("WordListUl").appendChild(newLi)
-						if(document.getElementById("WordListUl").getElementsByTagName("li").length>0){
-							document.getElementById("WordListUl").style.marginTop="20px"
-						}
+					}
+					if(document.getElementById("WordListUl").getElementsByTagName("li").length>0){
+						document.getElementById("WordListUl").style.marginTop="15px"
 					}
 					edit()
 				}else{
 					for(let i=9999;i>0;i-=1){
 						const savedWL=localStorage.getItem("WordList"+i)
 						if(savedWL!=null&&savedWL!=""){
-							documentsCount+=1
 							const newLi=document.createElement("li")
 							let Item
 							switch(language){
@@ -499,6 +497,7 @@
 			}
 			const OWList=document.getElementById("OWLUl").innerHTML
 			load()
+			document.getElementsByTagName("input")[0].focus()
 		</script>
 		<!--<![endif]-->
 	</body>

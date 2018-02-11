@@ -24,23 +24,25 @@
 		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
 			<div class="show"></div>
-			<div id="EnterWordDiv" class="mui-input-row" style="margin-top:20px">
-				<label id="WordLabel"></label>
-				<input id="EnteredWord" type="text" onkeydown="if(event.keyCode==13&&this.value!=''){Next()}">
+			<div style="margin-top:15px">
+				<div id="EnterWordDiv" class="mui-input-row">
+					<label id="WordLabel"></label>
+					<input id="EnteredWord" type="text" onkeydown="if(event.keyCode==13&&this.value!=''){Next()}">
+				</div>
+				<div id="EnterDefinitionDiv" class="mui-input-row">
+					<label id="DefinitionLabel"></label>
+					<input id="EnteredDefinition" type="text" onkeydown="if(event.keyCode==13&&this.value!=''){Next()}">
+				</div>
+				<ul id="OptionsUl" class="menu" style="display:none">
+					<li id="Option1" class="menu" onclick="OptionClicked(0)"></li>
+					<li id="Option2" class="menu" onclick="OptionClicked(1)"></li>
+					<li id="Option3" class="menu" onclick="OptionClicked(2)"></li>
+					<li id="Option4" class="menu" onclick="OptionClicked(3)"></li>
+				</ul>
+				<textarea style="margin:0px;display:none" rows="10">RTH 1</textarea>
 			</div>
-			<div id="EnterDefinitionDiv" class="mui-input-row">
-				<label id="DefinitionLabel"></label>
-				<input id="EnteredDefinition" type="text" onkeydown="if(event.keyCode==13&&this.value!=''){Next()}">
-			</div>
-			<ul id="OptionsUl" class="menu" style="margin-top:20px;display:none">
-				<li id="Option1" class="menu" onclick="OptionClicked(0)"></li>
-				<li id="Option2" class="menu" onclick="OptionClicked(1)"></li>
-				<li id="Option3" class="menu" onclick="OptionClicked(2)"></li>
-				<li id="Option4" class="menu" onclick="OptionClicked(3)"></li>
-			</ul>
-			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:20px" onclick="Next()"></button>
-			<textarea style="margin-top:20px;display:none" rows="10">RTH 1</textarea>
-			<ul id="OptionUl" class="menu" style="margin-top:20px">
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:15px" onclick="Next()"></button>
+			<ul id="OptionUl" class="menu" style="margin-top:15px">
 				<li id="Restart" class="menu" onclick="Restart()"></li>
 				<li id="End" class="menu" onclick="End()"></li>
 				<li id="Speak" class="menu" onclick="Speak()"></li>
@@ -173,7 +175,6 @@
 				}
 				document.getElementsByTagName("button")[0].style.display=""
 				document.getElementsByTagName("textarea")[0].style.display="none"
-				document.getElementById("OptionUl").style.marginTop="20px"
 			}
 			function GenerateOrder(){
 				var Min=1,
@@ -285,7 +286,6 @@
 				document.getElementById("OptionsUl").style.display="none"
 				document.getElementsByTagName("button")[0].style.display="none"
 				document.getElementsByTagName("textarea")[0].style.display=""
-				document.getElementById("OptionUl").style.marginTop="0px"
 			}
 			function Next(){
 				if(SettingsChanged){

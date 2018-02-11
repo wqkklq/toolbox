@@ -140,7 +140,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let backStr,menu
+			let backStr
 			function liBack(){
 				if(window.history.length>1&&window.location.search.indexOf("more=1")!=-1){
 					history.go(-1)
@@ -151,6 +151,7 @@
 				}
 			}
 			function load(){
+				document.getElementsByClassName("home-title")[0].innerText=document.title.replace("RTH ","")
 				document.getElementById("WordList").onclick=function(){
 					openWindow("wordlist")
 				}
@@ -176,8 +177,15 @@
 			}
 			function more(){
 				request("http://t.rths.tk/web/toolbox/more_"+language+".html",function(e){
+					switch(language){
+						case "SimplifiedChinese":
+							document.getElementsByClassName("home-title")[0].innerText="友情链接"
+							break
+						default:
+							document.getElementsByClassName("home-title")[0].innerText="Links"
+							break
+					}
 					document.getElementsByClassName("more")[0].style.opacity="0"
-					menu=document.getElementsByTagName("ul")[0].innerHTML
 					document.getElementsByTagName("ul")[0].innerHTML="<li onclick='liBack()'>"+backStr+"</li>"+e
 				})
 			}
@@ -189,7 +197,6 @@
 				}
 			}
 			window.onresize=onResize
-			load()
 			onResize()
 			mui.init({swipeBack:false})
 			if(isPlus){
@@ -260,7 +267,6 @@
 			switch(language){
 				case "SimplifiedChinese":
 					document.title="RTH 工具箱"
-					document.getElementsByClassName("home-title")[0].innerText="工具箱"
 					document.getElementById("WordList").innerText="单词表"
 					document.getElementById("Timer").innerText="计时器"
 					document.getElementById("Calculator").innerText="计算器"
@@ -273,7 +279,6 @@
 					break
 				default:
 					document.title="RTH Toolbox"
-					document.getElementsByClassName("home-title")[0].innerText="Toolbox"
 					document.getElementById("WordList").innerText="Word List"
 					document.getElementById("Timer").innerText="Timer"
 					document.getElementById("Calculator").innerText="Calculator"
@@ -285,12 +290,12 @@
 					document.getElementsByClassName("get")[0].innerText="Get RTH Toolbox"
 					break
 			}
+			const menu=document.getElementsByTagName("ul")[0].innerHTML
+			load()
 			if(!navigator.onLine){
 				document.getElementsByClassName("more")[0].style.display="none"
 			}else if(window.location.search.indexOf("more=1")!=-1){
 				more()
-				document.title="RTH"
-				document.getElementsByClassName("home-title")[0].innerText="RTH"
 			}
 			if(isElectron){
 				const{remote}=require("electron")

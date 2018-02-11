@@ -7,12 +7,16 @@ recentInput=0,
 theme=localStorage.getItem("Theme")
 const header=document.getElementsByTagName("header")[0]
 const isAndroid=/Android/i.test(navigator.userAgent),
+isChinese=new RegExp("[\u4E00-\u9FA5]+"),
 isElectron=/Electron/i.test(navigator.userAgent),
+isEnglish=new RegExp("[A-Za-z]+"),
 isiOS=/iPhone/i.test(navigator.userAgent)||/iPad/i.test(navigator.userAgent),
 isLinux=/Linux/i.test(navigator.userAgent),
 isMac=/Macintosh/i.test(navigator.userAgent),
+isNumber=new RegExp("[0-9]+"),
 isOnline=/t.rths.tk/.test(window.location.href),
-isPlus=/Html5Plus/i.test(navigator.userAgent)
+isPlus=/Html5Plus/i.test(navigator.userAgent),
+isUpperCase=new RegExp("[A-Z]+")
 const isApp=isElectron||isPlus,
 isAndroidApp=isAndroid&&isPlus,
 isMobile=isAndroid||isiOS
@@ -63,8 +67,8 @@ function initCalculator(max,calculate){
 		input[i].oninput=function(){
 			const name=input[i].id.replace("Input","")
 			const num=name.replace(/[A-Za-z]+/g,"")
-			const display=name.replace(num,"")+"<sub>"+num+"</sub>"
-			const label=document.getElementById(name+"Label")
+			const display=name.replace(num,"")+"<sub>"+num+"</sub>",
+			label=document.getElementById(name+"Label")
 			if(input[i].value==""){
 				label.innerHTML=display
 			}else{
@@ -92,9 +96,6 @@ function initCalculator(max,calculate){
 		label.innerHTML=input[recentInput].value
 		calculate()
 	}
-}
-function isEnglish(text){
-	return(new RegExp("[A-Za-z]+")).test(text)
 }
 function loadCSS(href){
 	if(addedStyle.indexOf(href)==-1){
@@ -138,7 +139,7 @@ function openDialog(){
 }
 function openWebPage(href){
 	href=encodeURI(href)
-	if(/t.rths.tk|rthsoftware.tk/.test(href)){
+	if(/t.rths.tk|rthsoftware.tk/.test(href)&&href.indexOf("jpg")==-1){
 		href=addTime(href)
 	}
 	if(href.length<=2048){
@@ -263,6 +264,69 @@ function showConfirm(text,title,positiveCallback,negativeCallback){
 			break
 	}
 }
+function showImage(src){
+	const addedImageDiv=document.getElementsByClassName("image")[0]
+	if(addedImageDiv){
+		document.body.removeChild(addedImageDiv)
+	}
+	const newDiv=document.createElement("div"),
+	newTitleDiv=document.createElement("div"),
+	newContentDiv=document.createElement("div"),
+	newLoadDiv=document.createElement("div"),
+	newImg=document.createElement("img"),
+	newButtonDiv=document.createElement("div"),
+	newCloseDiv=document.createElement("div"),
+	newSaveDiv=document.createElement("div")
+	newDiv.setAttribute("class","image")
+	newTitleDiv.setAttribute("class","image-title")
+	newContentDiv.setAttribute("class","image-content")
+	newLoadDiv.setAttribute("class","image-load")
+	newImg.onload=function(){
+		newContentDiv.removeChild(newLoadDiv)
+		const frameHeight=this.height+80
+		newDiv.style.height=frameHeight+"px"
+		newDiv.style.top="calc(50% - "+frameHeight/2+"px)"
+		setTimeout(function(){
+			newImg.style.opacity="1"
+		},250)
+	}
+	newButtonDiv.setAttribute("class","image-button")
+	newCloseDiv.onclick=function(){
+		newDiv.style.opacity="0"
+		setTimeout(function(){
+			document.body.removeChild(newDiv)
+		},250)
+	}
+	newSaveDiv.onclick=function(){
+		openWebPage(src)
+	}
+	switch(language){
+		case "SimplifiedChinese":
+			newTitleDiv.innerText="图片查看"
+			newLoadDiv.innerText="正在加载"
+			newCloseDiv.innerText="关闭"
+			newSaveDiv.innerText="保存"
+			break
+		default:
+			newTitleDiv.innerText="Image View"
+			newLoadDiv.innerText="Loading"
+			newCloseDiv.innerText="Close"
+			newSaveDiv.innerText="Save"
+			break
+	}
+	newDiv.appendChild(newTitleDiv)
+	newContentDiv.appendChild(newLoadDiv)
+	newContentDiv.appendChild(newImg)
+	newDiv.appendChild(newContentDiv)
+	newButtonDiv.appendChild(newCloseDiv)
+	newButtonDiv.appendChild(newSaveDiv)
+	newDiv.appendChild(newButtonDiv)
+	document.body.appendChild(newDiv)
+	newImg.src=src
+	setTimeout(function(){
+		newDiv.style.opacity="1"
+	},25)
+}
 function showPrompt(text,title,callback){
 	if(isApp){
 		switch(language){
@@ -300,7 +364,7 @@ function translate(query,from,to,callback){
 	loadJS(["js/jquery.min.js","js/md5.min.js"],function(){
 		const appid="20171109000093780",key="ZR6EGbP8ZzwU7GookTvy",salt=(new Date).getTime()
 		if(to=="auto"){
-			if(isEnglish(query)){
+			if(isEnglish.test(query)){
 				to="zh"
 			}else{
 				to="en"
@@ -397,7 +461,7 @@ if(header!=null){
 		mui.init({swipeBack:false})
 	}
 	if(!isApp||isMac){
-		document.getElementsByClassName("mui-content")[0].style.marginTop="20px"
+		document.getElementsByClassName("mui-content")[0].style.marginTop="40px"
 		header.style.height="65px"
 		header.style.paddingTop="20px"
 	}

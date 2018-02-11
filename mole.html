@@ -35,7 +35,9 @@
 				<input id="Volume" type="text">
 			</div>
 			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:15px"></button>
-			<div class="card" style="display:none"></div>
+			<ul class="menu card">
+				<li id="RecordedMass" class="menu" style="display:none"></li>
+			</ul>
 		</div>
 		<script src="js/check.js"></script>
 		<!--[if !IE]><!-->
@@ -634,13 +636,13 @@
 				"mass":294
 			}]
 			function addOption(){
-				const record=document.getElementsByClassName("card")[0].innerHTML.split("-")
+				const record=document.getElementById("RecordedMass").innerHTML.split("-")
 				document.getElementsByTagName("select")[0].options.add(new Option(record[0].replace(/<sub>|<\/sub>/g,""),record[1]))
 				document.getElementsByTagName("select")[0].selectedIndex=document.getElementsByTagName("select")[0].options.length-1
 				document.getElementById("Mass").value=record[1]
 				calculateBasedOnMass()
-				document.getElementsByClassName("card")[0].style.display="none"
-				document.getElementsByClassName("card")[0].innerHTML=""
+				document.getElementById("RecordedMass").style.display="none"
+				document.getElementById("RecordedMass").innerHTML=""
 			}
 			function calculateBasedOnMass(){
 				const mass=document.getElementById("Mass").value*1
@@ -691,12 +693,12 @@
 				if(mole>1){
 					symbol+="<sub>"+document.getElementById("Mole").value+"</sub>"
 				}
-				if(document.getElementsByClassName("card")[0].innerHTML==""){
-					document.getElementsByClassName("card")[0].innerHTML=symbol+"-"+document.getElementById("Mass").value
-					document.getElementsByClassName("card")[0].style.display=""
+				if(document.getElementById("RecordedMass").innerHTML==""){
+					document.getElementById("RecordedMass").innerHTML=symbol+"-"+document.getElementById("Mass").value
+					document.getElementById("RecordedMass").style.display=""
 				}else{
-					const record=document.getElementsByClassName("card")[0].innerHTML.split("-")
-					document.getElementsByClassName("card")[0].innerHTML=record[0]+symbol+"-"+(record[1]*1+document.getElementById("Mass").value*1)*1
+					const record=document.getElementById("RecordedMass").innerHTML.split("-")
+					document.getElementById("RecordedMass").innerHTML=record[0]+symbol+"-"+(record[1]*1+document.getElementById("Mass").value*1)*1
 				}
 			}
 			function search(searchTerm){
@@ -768,6 +770,9 @@
 						document.getElementById("Mole").value="10"
 						searchTerm=searchTerm.replace("十","")
 					}
+					if(isNumber.test(searchTerm)){
+						document.getElementById("Mole").value=isNumber.exec(searchTerm)
+					}
 					if(searchTerm.length<=2&&elements[i].symbol.toLowerCase()==searchTerm||searchTerm.length>2&&elements[i].name.toLowerCase().indexOf(searchTerm)!=-1||elements[i].name_cn==searchTerm||i+1==searchTerm||Math.round(elements[i].mass)==Math.round(searchTerm)){
 						document.getElementsByTagName("select")[0].selectedIndex=i
 					}
@@ -779,18 +784,18 @@
 				search(this.value.toLowerCase())
 			}
 			document.getElementById("Search").onkeydown=function(e){
-				let searchTerm=this.value.toLowerCase().replace(/^\s+|\s+$/g,"")
 				if(e.keyCode==13){
+					let searchTerm=this.value.trim()
 					if(searchTerm!=""){
-						if(searchTerm.indexOf(" ")!=-1){
+						if(searchTerm.indexOf(" ")!=-1||isUpperCase.test(searchTerm)){
 							const letters=searchTerm.split("")
-							document.getElementsByClassName("card")[0].innerHTML=""
+							document.getElementById("RecordedMass").innerHTML=""
 							document.getElementById("Mole").value="1"
 							searchTerm=""
 							for(let i=0;i<letters.length;i++){
 								searchTerm+=letters[i]
-								search(searchTerm)
-								if(letters[i]==" "){
+								search(searchTerm.toLowerCase())
+								if(letters[i]==" "||isUpperCase.test(letters[i+1])){
 									recordMass()
 									document.getElementById("Mole").value="1"
 									searchTerm=""
@@ -800,7 +805,7 @@
 							addOption()
 						}else if(searchTerm.indexOf("化")!=-1){
 							const characters=searchTerm.split("化")
-							document.getElementsByClassName("card")[0].innerHTML=""
+							document.getElementById("RecordedMass").innerHTML=""
 							document.getElementById("Mole").value="1"
 							search(characters[1])
 							recordMass()
@@ -839,7 +844,7 @@
 				}
 			}
 			document.getElementsByTagName("button")[0].onclick=recordMass
-			document.getElementsByClassName("card")[0].onclick=addOption
+			document.getElementById("RecordedMass").onclick=addOption
 			let enterNum
 			switch(language){
 				case "SimplifiedChinese":

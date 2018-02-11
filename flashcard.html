@@ -16,11 +16,13 @@
 			<div class="mui-input-row">
 				<input type="text" class="mui-input-clear">
 			</div>
-			<div id="Pronunciation" class="card" style="display:none"></div>
-			<div id="CNDefinition" class="card" style="display:none"></div>
-			<div id="ENDefinition" class="card" style="display:none"></div>
-			<div id="Translate" class="card" style="display:none"></div>
-			<div id="Download" class="card" style="display:none"></div>
+			<ul class="menu card">
+				<li id="Pronunciation" class="menu" style="display:none"></li>
+				<li id="CNDefinition" class="menu" style="display:none"></li>
+				<li id="ENDefinition" class="menu" style="display:none"></li>
+				<li id="Translate" class="menu" style="display:none"></li>
+				<li id="Download" class="menu" style="display:none"></li>
+			</ul>
 		</div>
 		<div style="position:fixed;width:100%;bottom:45px">
 			<button id="ShowDefinition" type="button" class="mui-btn mui-btn-link mui-btn-block"></button>
@@ -228,7 +230,7 @@
 			switch(language){
 				case "SimplifiedChinese":
 					document.getElementsByTagName("input")[0].placeholder="输入要查询的单词"
-					document.getElementById("Download").innerText="下载 RTH 工具箱查看详细内容"
+					document.getElementById("Download").innerText="下载「RTH 工具箱」查看详细内容"
 					document.getElementById("ShowDefinition").innerText="显示释义"
 					document.getElementById("Previous").innerText="上一个"
 					document.getElementById("Next").innerText="下一个"

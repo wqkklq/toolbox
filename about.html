@@ -22,17 +22,6 @@
 				position:fixed;
 				width:calc(100% - 30px);
 			}
-			.image{
-				bottom:60px;
-				opacity:0;
-				position:fixed;
-				right:15px;
-				transition:opacity 0.25s;
-				width:225px;
-			}
-			.image img{
-				border-radius:15px;
-			}
 		</style>
 	</head>
 	<body>
@@ -44,14 +33,12 @@
 				<li id="LastUpdated" class="menu"></li>
 				<li id="Developer" class="menu"></li>
 			</ul>
-			<ul class="menu donate" style="opacity:0">
+			<ul class="menu donate" style="opacity:0;display:none">
 				<li id="Alipay" class="menu"></li>
 				<li id="WeChatPay" class="menu"></li>
+				<li id="QQWallet" class="menu"></li>
 				<li id="PayPal" class="menu">PayPal</li>
 			</ul>
-			<div class="image" style="display:none">
-				<img width="100%"></img>
-			</div>
 		</div>
 		<footer>
 			<div id="Feedback" style="width:50%"></div>
@@ -63,40 +50,41 @@
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			const ver="6.4",
-			date=new Date("2018/2/6").toLocaleDateString()
-			function showImage(src){
-				document.getElementsByClassName("donate")[0].style.opacity="0"
-				document.getElementsByTagName("img")[0].src=src
-				document.getElementsByTagName("img")[0].onload=function(){
-					document.getElementsByClassName("image")[0].style.display=""
-					document.getElementsByClassName("image")[0].style.opacity="0.8"
-				}
-				if(src.indexOf("alipay")!=-1&&isMobile){
-					openWebPage("HTTPS://QR.ALIPAY.COM/FKX04965KXP0C8G3MUVK28")
-				}
-			}
-			document.getElementById("Alipay").onclick=function(){
-				showImage("http://t.rths.tk/img/alipay.jpg")
-			}
-			document.getElementById("WeChatPay").onclick=function(){
-				showImage("http://t.rths.tk/img/wechatpay.jpg")
-			}
-			document.getElementById("PayPal").onclick=function(){
-				openWebPage("https://www.paypal.me/ShangzhenY/")
-			}
-			document.getElementsByClassName("image")[0].onclick=function(){
-				this.style.opacity="0"
-				this.style.display="none"
-			}
-			document.getElementById("Donate").onclick=function(){
-				document.getElementsByClassName("donate")[0].style.opacity="1"
-			}
+			date=new Date("2018/2/11").toLocaleDateString()
 			document.getElementById("Feedback").onclick=function(){
 				if(isOnline){
 					openWindow("http://m.rths.tk/feedback")
 				}else{
 					openWindow("feedback")
 				}
+			}
+			document.getElementById("Donate").onclick=function(){
+				if(document.getElementsByClassName("donate")[0].style.opacity!="1"){
+					document.getElementsByClassName("donate")[0].style.display=""
+					setTimeout(function(){
+						document.getElementsByClassName("donate")[0].style.opacity="1"
+					},25)
+				}else{
+					document.getElementsByClassName("donate")[0].style.opacity="0"
+					setTimeout(function(){
+						document.getElementsByClassName("donate")[0].style.display="none"
+					},250)
+				}
+			}
+			document.getElementById("Alipay").onclick=function(){
+				if(isMobile){
+					openWebPage("HTTPS://QR.ALIPAY.COM/FKX04965KXP0C8G3MUVK28")
+				}
+				showImage("http://t.rths.tk/img/alipay.jpg")
+			}
+			document.getElementById("WeChatPay").onclick=function(){
+				showImage("http://t.rths.tk/img/wechatpay.jpg")
+			}
+			document.getElementById("QQWallet").onclick=function(){
+				showImage("http://t.rths.tk/img/qqwallet.jpg")
+			}
+			document.getElementById("PayPal").onclick=function(){
+				openWebPage("https://www.paypal.me/ShangzhenY/")
 			}
 			switch(language){
 				case "SimplifiedChinese":
@@ -109,6 +97,7 @@
 					document.getElementById("Donate").innerText="捐赠"
 					document.getElementById("Alipay").innerText="支付宝"
 					document.getElementById("WeChatPay").innerText="微信支付"
+					document.getElementById("QQWallet").innerText="QQ 钱包"
 					break
 				default:
 					document.title="About"
@@ -120,6 +109,7 @@
 					document.getElementById("Donate").innerText="Donate"
 					document.getElementById("Alipay").innerText="Alipay"
 					document.getElementById("WeChatPay").innerText="WeChat Pay"
+					document.getElementById("QQWallet").innerText="QQ Wallet"
 					break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title

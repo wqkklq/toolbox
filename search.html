@@ -32,7 +32,7 @@
 				"Google":"https://www.google.com/search?q=",
 				"Sogou":"https://www.sogou.com/web?query=",
 				"Yahoo":"https://search.yahoo.com/search?p=",
-				"360SearchEngine":"https://www.so.com/s?q=",
+				"Q360SearchEngine":"https://www.so.com/s?q=",
 				"BaiduEncyclopedia":"http://baike.baidu.com/search?word=",
 				"HudongEncyclopedia":"http://www.baike.com/wiki/",
 				"Wikipedia":"https://en.wikipedia.org/wiki/",
@@ -51,7 +51,7 @@
 				"Youku":"http://www.soku.com/search_video/q_",
 				"YouTube":"https://www.youtube.com/results?search_query=",
 				"YinYueTai":"http://so.yinyuetai.com/?keyword=",
-				"QRCode":"http://qr.topscan.com/api.php?text=",
+				"Q360Image":"http://image.so.com/i?q=",
 				"QQMusic":"http://y.qq.com/portal/search.html#w=",
 				"NetEaseCloudMusic":"http://music.163.com/#/search/m/?s="
 			}
@@ -68,7 +68,7 @@
 								document.getElementById("EngineSelect2").options.add(new Option("谷歌","Google"))
 								document.getElementById("EngineSelect2").options.add(new Option("搜狗","Sogou"))
 								document.getElementById("EngineSelect2").options.add(new Option("雅虎","Yahoo"))
-								document.getElementById("EngineSelect2").options.add(new Option("360搜索","360SearchEngine"))
+								document.getElementById("EngineSelect2").options.add(new Option("360搜索","Q360SearchEngine"))
 								break
 							default:
 								document.getElementById("EngineSelect2").options.add(new Option("Automatic","Automatic"))
@@ -78,7 +78,7 @@
 								document.getElementById("EngineSelect2").options.add(new Option("Google","Google"))
 								document.getElementById("EngineSelect2").options.add(new Option("Sogou","Sogou"))
 								document.getElementById("EngineSelect2").options.add(new Option("Yahoo","Yahoo"))
-								document.getElementById("EngineSelect2").options.add(new Option("360 Search Engine","360SearchEngine"))
+								document.getElementById("EngineSelect2").options.add(new Option("360 Search Engine","Q360SearchEngine"))
 								break
 						}
 						break
@@ -154,10 +154,10 @@
 					case "Picture":
 						switch(language){
 							case "SimplifiedChinese":
-								document.getElementById("EngineSelect2").options.add(new Option("二维码","QRCode"))
+								document.getElementById("EngineSelect2").options.add(new Option("360 图片","Q360Image"))
 								break
 							default:
-								document.getElementById("EngineSelect2").options.add(new Option("QR Code","QRCode"))
+								document.getElementById("EngineSelect2").options.add(new Option("360 Image","Q360Image"))
 								break
 						}
 						break
@@ -180,7 +180,7 @@
 				let engine
 				const searchTerm=document.getElementsByTagName("input")[0].value
 				if(document.getElementById("EngineSelect2").value=="Automatic"){
-					if(isEnglish(searchTerm)){
+					if(isEnglish.test(searchTerm)){
 						switch(language){
 							case "SimplifiedChinese":
 								engine=engines.Bing
@@ -241,6 +241,7 @@
 			document.getElementById("EngineSelect1").value="Web"
 			categoryChanged()
 			document.getElementById("EngineSelect2").value="Automatic"
+			document.getElementsByTagName("input")[0].focus()
 		</script>
 		<!--<![endif]-->
 	</body>
