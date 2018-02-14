@@ -135,7 +135,6 @@
 				currentItem=localStorage.getItem("TextEditorCurrentItem")
 				if(localStorage.getItem("Text")!=null){
 					setText(localStorage.getItem("Text"))
-					textChanged()
 				}
 				if(localStorage.getItem("Title")!=null){
 					document.getElementsByTagName("input")[0].value=localStorage.getItem("Title")
@@ -195,7 +194,6 @@
 			}
 			function openText(serialNumber){
 				setText(localStorage.getItem("Text"+serialNumber))
-				textChanged()
 				document.getElementsByTagName("input")[0].value=localStorage.getItem("Text"+serialNumber+"Title")
 				apply(serialNumber)
 			}
@@ -229,7 +227,6 @@
 				setText("")
 				document.getElementById("SavedTextUl").style.marginBottom="45px"
 				document.getElementById("SavedTextUl").innerHTML=""
-				textChanged()
 				load()
 			}
 			function runJSCode(fromShortcut){
@@ -365,6 +362,7 @@
 				}else{
 					document.getElementById("Text").value=text
 				}
+				textChanged()
 			}
 			function speak(){
 				if(!isEmpty()&&window.speechSynthesis){
@@ -512,7 +510,6 @@
 					window.scrollTo(0,0)
 					translate(readText().replace(/\s/g," "),"auto","auto",function(e){
 						setText(readText()+"/* "+e.trans_result[0].dst+" */")
-						textChanged()
 					})
 				}
 			}
