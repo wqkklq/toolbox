@@ -209,6 +209,8 @@ function restart(){
 		}else{
 			plus.runtime.restart()
 		}
+	}else if(isUWP){
+		mui.back()
 	}else{
 		window.location.href="index.html"
 	}
