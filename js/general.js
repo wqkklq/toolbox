@@ -150,7 +150,7 @@ function openWebPage(href){
 		}else if(isElectron){
 			require("electron").shell.openExternal(href)
 		}else if(isUWP){
-			window.location.href=href
+			Windows.System.Launcher.launchUriAsync(new Windows.Foundation.Uri(href))
 		}else{
 			window.open(href)
 		}
