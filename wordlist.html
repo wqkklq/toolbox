@@ -420,7 +420,7 @@
 						}else{
 							askForDefinition(newWord)
 						}
-					}else if(!isApp){
+					}else if(isOnline){
 						translateWord()
 					}else if(navigator.onLine){
 						request("https://api.shanbay.com/bdc/search/?word="+newWord,function(e){
