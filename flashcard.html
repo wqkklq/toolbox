@@ -81,7 +81,7 @@
 					document.getElementById("CNDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_CNDef")
 					document.getElementById("ENDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_ENDef")
 					dictChanged()
-				}else if(isApp){
+				}else if(!isOnline){
 					document.getElementById("Previous").style.display="none"
 					document.getElementById("Next").style.display="none"
 					request("https://api.shanbay.com/bdc/search/?word="+WLTSplit[progress*2-1],function(e){
@@ -128,7 +128,7 @@
 					document.getElementById("CNDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_CNDef")
 					document.getElementById("ENDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_ENDef")
 					dictChanged()
-				}else if(!isApp){
+				}else if(isOnline){
 					translateWord(word)
 				}else{
 					request("https://api.shanbay.com/bdc/search/?word="+word,function(e){

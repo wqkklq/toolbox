@@ -464,7 +464,7 @@ if(header!=null){
 	}else{
 		mui.init({swipeBack:false})
 	}
-	if(!isApp||isMac){
+	if(!isApp||isMac||isUWP){
 		document.getElementsByClassName("mui-content")[0].style.marginTop="40px"
 		header.style.height="65px"
 		header.style.paddingTop="20px"
