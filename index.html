@@ -255,13 +255,45 @@
 				}else{
 					document.addEventListener("plusready",plusReady,false)
 				}
-			}else if(!isApp||isMac){
+			}else if(!isApp||isMac||isUWP){
 				document.getElementsByClassName("icon")[0].style.top="45px"
 				document.getElementsByClassName("home-title")[0].style.top="85px"
 				document.getElementsByClassName("home-menu")[0].style.top="175px"
 				document.getElementsByClassName("home-menu")[0].style.height="calc(100% - 230px)"
 				if(!isApp){
 					document.getElementsByClassName("get")[0].style.display=""
+				}else if(isUWP){
+					const titleBar=Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar
+					let titleBarColor
+					if(appliedTheme=="Dark"){
+						titleBarColor={
+							a:255,
+							b:136,
+							g:68,
+							r:0
+						}
+					}else{
+						titleBarColor={
+							a:255,
+							b:204,
+							g:102,
+							r:0
+						}
+					}
+					titleBar.backgroundColor=titleBar.inactiveBackgroundColor=titleBar.buttonBackgroundColor=titleBar.buttonInactiveBackgroundColor=titleBarColor
+					titleBar.buttonHoverBackgroundColor={
+						a:255,
+						b:244,
+						g:122,
+						r:0
+					}
+					titleBar.buttonPressedBackgroundColor={
+						a:255,
+						b:34,
+						g:33,
+						r:31
+					}
+					titleBar.foregroundColor=titleBar.inactiveForegroundColor=titleBar.buttonForegroundColor=titleBar.buttonInactiveForegroundColor=titleBar.buttonHoverForegroundColor=titleBar.buttonPressedForegroundColor=Windows.UI.Colors.white
 				}
 			}
 			switch(language){

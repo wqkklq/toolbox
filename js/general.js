@@ -17,8 +17,9 @@ isMac=/Macintosh/i.test(navigator.userAgent),
 isNumber=new RegExp("[0-9]+"),
 isOnline=/t.rths.tk/.test(window.location.href),
 isPlus=/Html5Plus/i.test(navigator.userAgent),
-isUpperCase=new RegExp("[A-Z]+")
-const isApp=isElectron||isPlus,
+isUpperCase=new RegExp("[A-Z]+"),
+isUWP=/MSAppHost/i.test(navigator.userAgent)
+const isApp=isElectron||isPlus||isUWP,
 isAndroidApp=isAndroid&&isPlus,
 isMobile=isAndroid||isiOS
 function addTime(url){
@@ -148,6 +149,8 @@ function openWebPage(href){
 			plus.runtime.openURL(href)
 		}else if(isElectron){
 			require("electron").shell.openExternal(href)
+		}else if(isUWP){
+			window.location.href=href
 		}else{
 			window.open(href)
 		}
