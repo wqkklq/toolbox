@@ -122,9 +122,6 @@
 					document.getElementsByClassName("time")[0].style.fontSize=""
 					document.getElementsByClassName("time")[0].style.height=""
 				}
-				if(isElectron){
-					require("electron").remote.getCurrentWindow().setAlwaysOnTop(false)
-				}
 			}
 			function pause(){
 				clearInterval(intervalId)
@@ -194,6 +191,12 @@
 				timeChanged()
 			}
 			function task(){
+				if(isElectron){
+					const win=require("electron").remote.getCurrentWindow()
+					if(win.getSize()=="200,160"){
+						win.setSize(1000,700)
+					}
+				}
 				if(document.getElementById("RunCodeCheck").checked==true){
 					try{
 						eval(document.getElementById("RunCodeInput").value.replace(/coin|eval|task/gi,""))
@@ -342,6 +345,15 @@
 			if(!window.speechSynthesis){
 				document.getElementById("SpeakDiv1").style.display="none"
 				document.getElementById("SpeakDiv2").style.display="none"
+			}
+			if(isElectron){
+				window.onbeforeunload=function(){
+					const win=require("electron").remote.getCurrentWindow()
+					if(win.getSize()=="200,160"){
+						win.setSize(1000,700)
+					}
+					win.setAlwaysOnTop(false)
+				}
 			}
 			if(!isPlus){
 				if(window.Notification){
