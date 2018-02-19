@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+		<title>Error: 404</title>
+		<style>
+			body {
+				color:#0066CC;
+				cursor:default;
+				font-family:"Microsoft Yahei Light","Helvetica Neue",Helvetica,sans-serif,"Microsoft Yahei";
+				width: 100%;
+				overflow: hidden;
+				user-select: none;
+				-webkit-user-select: none;
+			}
+			.banner {
+				background: linear-gradient(to right, rgb(0,102,204), rgb(0,68,136));
+				width: 100%;
+				height: 40%;
+				position: absolute;
+				top: 0px;
+				left: 0px;
+			}
+			h1 {
+				font-size: 10em;
+				font-weight: normal;
+				color: white;
+				text-align: center;
+				position: absolute;
+				bottom: -0.95em;
+				width: 100%;
+			}
+			.description {
+				position: absolute;
+				width: 100%;
+				top: 40%;
+				text-align: center;
+				font-size: 1.35em;
+				padding-top: 20px;
+			}
+			.tip {
+				position: absolute;
+				width: 100%;
+				top: 50%;
+				text-align: center;
+				color: rgba(0,0,0,0.5);
+				padding-top: 10px;
+			}
+			@media screen and (max-width: 600px){
+				h1 {
+					font-size: 8em;
+				}
+				.description {
+					width: 80%;
+					left: 50%;
+					margin-left: -40%;
+					font-size: 1.2em;
+				}
+				.tip {
+					width: 80%;
+					left: 50%;
+					margin-left: -40%;
+					font-size: small;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="banner">
+			<h1>404</h1>
+		</div>
+		<div class="description">
+			Page not found or the server is currently under maintenance.
+		</div>
+		<div class="tip">
+			<p>Please make sure the URL is correct and then go back to check this page later.</p><p>You may contact us if this error continuingly occurs.</p>
+		</div>
+		<script type="text/javascript">
+			if(navigator.language.indexOf("zh")!=-1){
+				document.title="错误：404"
+				document.getElementsByClassName("description")[0].innerHTML="页面不存在或服务器正在维护。"
+				document.getElementsByClassName("tip")[0].innerHTML="<p>请您确认网址无误并稍后刷新重试。</p><p>如果该页面仍然无法访问，请联系 RTH 软件工作室。</p>"
+			}
+		</script>
+	</body>
+</html>
