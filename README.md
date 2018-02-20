@@ -1,8 +1,8 @@
-# RTH-Toolbox
+# rth-toolbox
 
-It is an app built with Electron and HBuilder.
+It is an app built with Electron.
 
-这是一个使用 Electron 和 HBuilder 构建的应用。
+这是一个使用 Electron 构建的应用。
 
 ---
 
