@@ -109,12 +109,14 @@
 				document.getElementsByTagName("button")[0].innerHTML="立即下载";
 			}
 			function download(){
-				if (/Windows/i.test(navigator.userAgent)) {
-					window.location.href="http://8770160.s21d-8.faiusrd.com/0/ABUIABBPGAAgp7Oh0gUorJLcrwQ?f=RTHToolbox_Windows_2.zip&v=1514690983";
+				if (/Windows\sNT\s10\.0/.test(navigator.userAgent)) {
+					window.location.href="https://www.microsoft.com/store/apps/9PBT29R7W8DJ"
+				} else if (/Windows/i.test(navigator.userAgent)) {
+					window.location.href="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Windows_2.zip";
 				} else if (/Macintosh/i.test(navigator.userAgent)) {
-					window.location.href="http://8770160.s21d-8.faiusrd.com/0/ABUIABBPGAAguNGg0gUol_uEpwQ?f=RTHToolbox_macOS.zip&v=1514678457";
+					window.location.href="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_macOS.zip";
 				} else if (/Linux/i.test(navigator.userAgent)) {
-					window.location.href="http://8770160.s21d-8.faiusrd.com/0/ABUIABBPGAAgjaDg0gUooLzCywQ?f=RTHToolbox_Linux.zip&v=1515720718";
+					window.location.href="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Linux.zip";
 				}
 			}
 		</script>
