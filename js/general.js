@@ -109,24 +109,28 @@ function loadCSS(href){
 	}
 }
 function loadJS(src,callback){
-	if(addedScript.indexOf(src)==-1){
-		const loadScript=function(i){
+	const loadScript=function(i){
+		if(addedScript.indexOf(src[i])==-1){
 			const newScript=document.createElement("script")
 			newScript.src=src[i]
 			if(i<src.length-1){
 				newScript.onload=function(){
 					loadScript(i+1)
 				}
-			}else{
+			}else if(callback){
 				newScript.onload=callback
 			}
 			document.body.appendChild(newScript)
 			addedScript+=src[i]+","
+		}else{
+			if(i<src.length-1){
+				loadScript(i+1)
+			}else if(callback){
+				callback()
+			}
 		}
-		loadScript(0)
-	}else{
-		callback()
 	}
+	loadScript(0)
 }
 function loadOnline(){
 	const wvs=plus.webview.all()
@@ -426,9 +430,6 @@ document.addEventListener("keydown",function(e){
 		mui.back()
 	}
 })
-if(window.location.href.indexOf("rthsoftware.tk")!=-1&&window.location.href.indexOf("sharedtext")==-1){
-	window.location.href="http://rths.tk/"
-}
 if(language==null){
 	if(navigator.language.indexOf("zh")!=-1){
 		language="SimplifiedChinese"

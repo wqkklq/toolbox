@@ -199,6 +199,9 @@
 							document.title="\""+list.split("\n")[1]+"\" and other "+(list.split("\n").length-2)/2+" words"
 							break
 					}
+					if(window.location.href.length<=2048){
+						showImage("http://qr.topscan.com/api.php?text="+window.location.href)
+					}
 					const time=searchURL("time",window.location.search)
 					if(time&&(new Date).getTime()-time<10000){
 						showAlert([
@@ -393,7 +396,7 @@
 					"Add",
 					"添加"
 				],function(newWord){
-					const askForDefinition=function(newWord){
+					const askForDefinition=function(){
 						showPrompt([
 							"Enter the definition of the new word",
 							"输入新单词的释义"
@@ -418,10 +421,14 @@
 						}else if(ENDef!=null){
 							document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+ENDef.replace(/\n/g,"; ")
 						}else{
-							askForDefinition(newWord)
+							askForDefinition()
 						}
 					}else if(isOnline){
-						translateWord()
+						if(language=="SimplifiedChinese"){
+							translateWord()
+						}else{
+							askForDefinition()
+						}
 					}else if(navigator.onLine){
 						request("https://api.shanbay.com/bdc/search/?word="+newWord,function(e){
 							const json=JSON.parse(e)
@@ -431,7 +438,7 @@
 								}else if(json.data.en_definition.defn!=null){
 									document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+json.data.en_definition.defn.replace(/\n/g,"; ")
 								}else{
-									askForDefinition(newWord)
+									askForDefinition()
 								}
 								if(wordWithoutSpace.indexOf(" ")==-1){
 									localStorage.setItem(wordWithoutSpace+"_Pronunciation",json.data.pronunciation)
@@ -444,7 +451,7 @@
 							}
 						})
 					}else{
-						askForDefinition(newWord)
+						askForDefinition()
 					}
 				})
 			}
