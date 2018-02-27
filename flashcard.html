@@ -243,14 +243,6 @@
 					document.getElementById("Next").innerText="Next"
 					break
 			}
-			if(localStorage.length>40){
-				for(let i=0;i<localStorage.length;i++){
-					const key=localStorage.key(i)
-					if(/Pronunciation|Audio|CNDef|ENDef/.test(key)){
-						localStorage.removeItem(key)
-					}
-				}
-			}
 			if(wordURL){
 				lookUp(wordURL)
 			}else{
