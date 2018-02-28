@@ -9,18 +9,12 @@
 		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
-		<style>
-			.show{
-				font-size:20px;
-				text-align:center;
-			}
-		</style>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
 			<ul class="menu card">
-				<li class="menu show"></li>
+				<li id="Show" class="menu"></li>
 			</ul>
 			<div style="margin-top:15px">
 				<div id="EnterWordDiv" class="mui-input-row">
@@ -233,11 +227,11 @@
 						else{OptionsStr+="["+(OptionInt+1)+"]\n"}
 					}
 				}
-				if(document.getElementById("ShowWordsSwitch").classList.contains("mui-active")){document.getElementsByClassName("show")[0].innerText=CorrectWord}
-				else if(document.getElementById("ShowDefinitionsSwitch").classList.contains("mui-active")){document.getElementsByClassName("show")[0].innerText=CorrectDefinition}
+				if(document.getElementById("ShowWordsSwitch").classList.contains("mui-active")){document.getElementById("Show").innerText=CorrectWord}
+				else if(document.getElementById("ShowDefinitionsSwitch").classList.contains("mui-active")){document.getElementById("Show").innerText=CorrectDefinition}
 				else{
-					if(language=="SimplifiedChinese"){document.getElementsByClassName("show")[0].innerText="没有可显示的内容"}
-					else{document.getElementsByClassName("show")[0].innerText="There is nothing to show"}
+					if(language=="SimplifiedChinese"){document.getElementById("Show").innerText="没有可显示的内容"}
+					else{document.getElementById("Show").innerText="There is nothing to show"}
 				}
 				Speak()
 			}
@@ -333,8 +327,8 @@
 							var MCount=(document.getElementsByTagName("textarea")[0].value.split("\n").length-1)/2,
 							WCount=(WLTSplit.length-2)/2
 							var CorrectRate=100-(MCount/WCount)*100
-							if(language=="SimplifiedChinese"){document.getElementsByClassName("show")[0].innerText="正确率："+CorrectRate+"%"}
-							else{document.getElementsByClassName("show")[0].innerText="Correct rate: "+CorrectRate+"%"}
+							if(language=="SimplifiedChinese"){document.getElementById("Show").innerText="正确率："+CorrectRate+"%"}
+							else{document.getElementById("Show").innerText="Correct rate: "+CorrectRate+"%"}
 						}else{
 							Progress+=1
 							LoadQuestion()
@@ -350,8 +344,8 @@
 					WCount=(WLTSplit.length-2)/2
 					var CorrectRate1=Math.round(100-((MCount+WCount-Progress)/WCount)*100),
 					CorrectRate2=Math.round(100-(MCount/Progress)*100)
-					if(language=="SimplifiedChinese"){document.getElementsByClassName("show")[0].innerText="正确率："+CorrectRate1+"% ~ "+CorrectRate2+"%"}
-					else{document.getElementsByClassName("show")[0].innerText="Correct rate: "+CorrectRate1+"% ~ "+CorrectRate2+"%"}
+					if(language=="SimplifiedChinese"){document.getElementById("Show").innerText="正确率："+CorrectRate1+"% ~ "+CorrectRate2+"%"}
+					else{document.getElementById("Show").innerText="Correct rate: "+CorrectRate1+"% ~ "+CorrectRate2+"%"}
 				}
 			}
 		</script>
