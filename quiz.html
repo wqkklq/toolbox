@@ -340,12 +340,10 @@
 				if(document.getElementsByTagName("textarea")[0].style.display!="none"){mui.back()}
 				else{
 					ShowReport()
-					var MCount=(document.getElementsByTagName("textarea")[0].value.split("\n").length-1)/2,
-					WCount=(WLTSplit.length-2)/2
-					var CorrectRate1=Math.round(100-((MCount+WCount-Progress)/WCount)*100),
-					CorrectRate2=Math.round(100-(MCount/Progress)*100)
-					if(language=="SimplifiedChinese"){document.getElementById("Show").innerText="正确率："+CorrectRate1+"% ~ "+CorrectRate2+"%"}
-					else{document.getElementById("Show").innerText="Correct rate: "+CorrectRate1+"% ~ "+CorrectRate2+"%"}
+					var MCount=(document.getElementsByTagName("textarea")[0].value.split("\n").length-1)/2
+					var CorrectRate=Math.round(100-(MCount/Progress)*100)
+					if(language=="SimplifiedChinese"){document.getElementById("Show").innerText="正确率："+CorrectRate+"%"}
+					else{document.getElementById("Show").innerText="Correct rate: "+CorrectRate+"%"}
 				}
 			}
 		</script>

@@ -67,7 +67,7 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let namesValue=localStorage.getItem("Names"),
+			let namesValue,
 			scrolling=true,
 			multipleTimes=true,
 			intervalId
@@ -225,7 +225,10 @@
 					break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			document.getElementById("NamesText").value=namesValue
+			if(localStorage.getItem("Names")!=null){
+				namesValue=localStorage.getItem("Names")
+				document.getElementById("NamesText").value=namesValue
+			}
 			count()
 			intervalId=setInterval(function(){
 				RScrolling()

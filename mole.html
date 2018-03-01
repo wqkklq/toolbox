@@ -649,7 +649,6 @@
 				}
 			}
 			function clear(){
-				document.getElementById("Search").value=""
 				document.getElementById("Mole").value=""
 				document.getElementById("Particle").value=""
 				document.getElementById("Mass").value=""
@@ -836,6 +835,7 @@
 			window.onkeydown=function(e){
 				if(e.keyCode==13){
 					record()
+					document.getElementById("Search").value=""
 					clear()
 				}
 			}
