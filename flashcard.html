@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 	</head>
@@ -31,20 +29,18 @@
 			<div id="Previous" style="width:50%"></div>
 			<div id="Next" style="width:50%"></div>
 		</footer>
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let audioURL,
+			var audioURL,
 			progress=1,
 			showDefinition,
 			WordListText=localStorage.getItem("WordList"),
 			WLTSplit
-			const wordURL=searchURL("word",window.location.search)
+			var wordURL=searchURL("word",window.location.search)
 			function dictChanged(){
-				let dictBox
-				const changeDisplay=function(alwaysShow){
+				var dictBox
+				var changeDisplay=function(alwaysShow){
 					if(dictBox.innerText==""||dictBox.innerText=="undefined"){
 						dictBox.style.display="none"
 					}else if(showDefinition||alwaysShow){
@@ -74,7 +70,7 @@
 				document.getElementById("CNDefinition").style.display="none"
 				document.getElementById("ENDefinition").style.display="none"
 				document.getElementById("ENDefinition").innerText=WLTSplit[progress*2]
-				const wordWithoutSpace=WLTSplit[progress*2-1].replace(/\s/g,"").toLowerCase()
+				var wordWithoutSpace=WLTSplit[progress*2-1].replace(/\s/g,"").toLowerCase()
 				if(localStorage.getItem(wordWithoutSpace+"_CNDef")!=null){
 					document.getElementById("Pronunciation").innerText=localStorage.getItem(wordWithoutSpace+"_Pronunciation")
 					audioURL=localStorage.getItem(wordWithoutSpace+"_Audio")
@@ -85,7 +81,7 @@
 					document.getElementById("Previous").style.display="none"
 					document.getElementById("Next").style.display="none"
 					request("https://api.shanbay.com/bdc/search/?word="+WLTSplit[progress*2-1],function(e){
-						const json=JSON.parse(e)
+						var json=JSON.parse(e)
 						if(json.msg=="SUCCESS"){
 							document.getElementById("Pronunciation").innerText=json.data.pronunciation
 							audioURL=json.data.audio
@@ -120,7 +116,7 @@
 				document.getElementById("ShowDefinition").style.display="none"
 				document.getElementsByTagName("footer")[0].style.display="none"
 				document.getElementsByTagName("input")[0].value=word
-				const wordWithoutSpace=word.replace(/\s/g,"").toLowerCase()
+				var wordWithoutSpace=word.replace(/\s/g,"").toLowerCase()
 				if(localStorage.getItem(wordWithoutSpace+"_CNDef")!=null){
 					loadTitle()
 					document.getElementById("Pronunciation").innerText=localStorage.getItem(wordWithoutSpace+"_Pronunciation")
@@ -132,7 +128,7 @@
 					translateWord(word)
 				}else{
 					request("https://api.shanbay.com/bdc/search/?word="+word,function(e){
-						const json=JSON.parse(e)
+						var json=JSON.parse(e)
 						if(json.msg=="SUCCESS"){
 							loadTitle()
 							document.getElementById("Pronunciation").innerText=json.data.pronunciation
@@ -258,6 +254,5 @@
 				loadWord()
 			}
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>

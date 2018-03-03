@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 	</head>
@@ -45,12 +43,10 @@
 			<div id="RunJSCode" style="width:50%"></div>
 		</footer>
 		<input class="open-file" type="file">
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let currentItem,myCodeMirror
+			var currentItem,myCodeMirror
 			function apply(serialNumber){
 				if(serialNumber==0){
 					currentItem="Text"
@@ -70,7 +66,7 @@
 				reload()
 			}
 			function count(){
-				const wordCount=(readText().match(/[a-z]+|[\u4E00-\uFA29]/ig)||[]).length
+				var wordCount=(readText().match(/[a-z]+|[\u4E00-\uFA29]/ig)||[]).length
 				if(wordCount<=0){
 					switch(language){
 						case "SimplifiedChinese":
@@ -139,18 +135,19 @@
 				if(localStorage.getItem("Title")!=null){
 					document.getElementsByTagName("input")[0].value=localStorage.getItem("Title")
 				}
-				for(let i=9999;i>0;i-=1){
-					const savedText=localStorage.getItem("Text"+i)
+				for(var i=9999;i>0;i-=1){
+					var savedText=localStorage.getItem("Text"+i)
 					if(savedText!=null&&savedText!=""){
-						const newLi=document.createElement("li")
+						var newLi=document.createElement("li")
 						newLi.setAttribute("class","menu")
 						if(localStorage.getItem("Text"+i+"Title")!=null&&localStorage.getItem("Text"+i+"Title")!=""){
 							newLi.innerText=localStorage.getItem("Text"+i+"Title")
 						}else{
 							newLi.innerText=savedText
 						}
+						newLi.setAttribute("number",i)
 						newLi.onclick=function(){
-							openText(i)
+							openText(this.getAttribute("number"))
 						}
 						if("Text"+i==currentItem){
 							newLi.style.color="rgb(0,122,255)"
@@ -179,14 +176,14 @@
 			}
 			function openLText(file){
 				if(file.type.indexOf("text")!=-1){
-					const reader=new FileReader()
+					var reader=new FileReader()
 					reader.onload=function(e){
 						document.getElementsByTagName("input")[0].value=file.name
 						setText(this.result)
 						apply(0)
 					}
 					reader.readAsText(file)
-					const filenameSplit=file.name.split(".")
+					var filenameSplit=file.name.split(".")
 					readMode(filenameSplit[filenameSplit.length-1])
 				}else{
 					unsupportedType()
@@ -231,9 +228,9 @@
 			}
 			function runJSCode(fromShortcut){
 				if(!isEmpty()){
-					let code=readText().replace(/coin|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast").replace(/设|let\s/gi,"let ").replace(/答|answer/gi,"const answer=").replace(/answer==/gi,"answer=")
-					const runTrue=function(){
-						const clearData=function(){
+					var code=readText().replace(/coin|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast").replace(/设|let\s/gi,"var ").replace(/答|answer/gi,"var answer=").replace(/answer==/gi,"answer=")
+					var runTrue=function(){
+						var clearData=function(){
 							localStorage.clear()
 							if(isPlus){
 								plus.cache.clear()
@@ -241,10 +238,10 @@
 							}
 							restart()
 						}
-						const log=function(content){
+						var log=function(content){
 							setText(readText()+"/* "+eval(content)+" */")
 						}
-						const setTheme=function(themeName){
+						var setTheme=function(themeName){
 							loadCSS("http://codemirror.net/theme/"+themeName+".css")
 							myCodeMirror.setOption("theme",themeName)
 						}
@@ -296,7 +293,7 @@
 					})
 				}else if(isEdge||isLinux||isMobile){
 					if(currentItem==null||currentItem=="Text"){
-						for(let i=1;i<10000;i++){
+						for(var i=1;i<10000;i++){
 							if(localStorage.getItem("Text"+i)==null||localStorage.getItem("Text"+i)==""){
 								currentItem="Text"+i
 								i=10000
@@ -325,7 +322,7 @@
 						"Save",
 						"保存"
 					],function(){
-						let filename=document.getElementsByTagName("input")[0].value
+						var filename=document.getElementsByTagName("input")[0].value
 						if(filename==""){
 							switch(language){
 								case "SimplifiedChinese":
@@ -339,11 +336,11 @@
 						if(filename.indexOf(".")==-1){
 							filename+=".txt"
 						}
-						const dl=document.createElement("a")
+						var dl=document.createElement("a")
 						dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(readText()))
 						dl.setAttribute("download",filename)
 						if(document.createEvent){
-							const event=document.createEvent("MouseEvents")
+							var event=document.createEvent("MouseEvents")
 							event.initEvent("click",true,true)
 							dl.dispatchEvent(event)
 						}else{
@@ -418,17 +415,17 @@
 					if(url!=null&&url!=""){
 						clear()
 						if(url.indexOf("?")!=-1&&url.indexOf("text=")!=-1&&url.indexOf("title=")!=-1){
-							const title=searchURL("title",url)
+							var title=searchURL("title",url)
 							if(title){
 								document.getElementsByTagName("input")[0].value=title
 							}
-							const text=searchURL("text",url)
+							var text=searchURL("text",url)
 							if(text){
 								setText(text)
 							}
 							apply(0)
 						}else{
-							let type=url.split(".")
+							var type=url.split(".")
 							type=type[type.length-1]
 							if(type.indexOf("c")!=-1&&type.indexOf("css")==-1){
 								if(type.indexOf("/")==-1){
@@ -437,7 +434,7 @@
 								url+="index.html"
 								type="html"
 							}
-							const openTrue=function(){
+							var openTrue=function(){
 								url=addTime(url)
 								if(url.indexOf("http")==-1){
 									url="http://"+url
@@ -477,7 +474,7 @@
 					if(navigator.onLine){
 						openWebPage("http://rthsoftware.tk/sharedtext.html?alert=1&title="+escape(document.getElementsByTagName("input")[0].value)+"&text="+escape(readText()))
 					}else{
-						let title=document.getElementsByTagName("input")[0].value
+						var title=document.getElementsByTagName("input")[0].value
 						if(title==""){
 							switch(language){
 								case "SimplifiedChinese":
@@ -619,6 +616,5 @@
 			}
 			load()
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>

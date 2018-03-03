@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 	</head>
@@ -37,12 +35,10 @@
 			</ul>
 		</div>
 		<input class="open-file" type="file" accept=".rth">
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let currentItem,list
+			var currentItem,list
 			function apply(serialNumber){
 				if(serialNumber==0){
 					currentItem="WordList"
@@ -54,7 +50,7 @@
 				reload()
 			}
 			function arrange(name){
-				let WLSplitFS=document.getElementsByTagName("textarea")[0].value.split("\n")
+				var WLSplitFS=document.getElementsByTagName("textarea")[0].value.split("\n")
 				if(WLSplitFS[0]!="RTH 1"){
 					document.getElementsByTagName("textarea")[0].value="RTH 1\n"+document.getElementsByTagName("textarea")[0].value
 				}
@@ -75,7 +71,7 @@
 						apply(0)
 					}else{
 						if(currentItem==null||currentItem=="WordList"){
-							for(let i=1;i<10000;i++){
+							for(var i=1;i<10000;i++){
 								if(localStorage.getItem("WordList"+i)==null||localStorage.getItem("WordList"+i)==""){
 									currentItem="WordList"+i
 									i=10000
@@ -102,7 +98,7 @@
 								"Save",
 								"保存"
 							],function(){
-								let filename
+								var filename
 								switch(language){
 									case "SimplifiedChinese":
 										filename="单词表.rth"
@@ -111,11 +107,11 @@
 										filename="Word List.rth"
 										break
 								}
-								const dl=document.createElement("a")
+								var dl=document.createElement("a")
 								dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(document.getElementsByTagName("textarea")[0].value))
 								dl.setAttribute("download",filename)
 								if(document.createEvent){
-									const event=document.createEvent("MouseEvents")
+									var event=document.createEvent("MouseEvents")
 									event.initEvent("click",true,true)
 									dl.dispatchEvent(event)
 								}else{
@@ -126,8 +122,7 @@
 						apply(currentItem.replace("WordList",""))
 					}
 				}else{
-					const wordCount=(WLSplitFS.length-2)/2
-					let wordMin
+					var wordCount=(WLSplitFS.length-2)/2,wordMin
 					switch(name){
 						case "flashcard":
 						case "share":
@@ -202,7 +197,7 @@
 					if(window.location.href.length<=1500){
 						showImage("http://qr.topscan.com/api.php?text="+window.location.href)
 					}
-					const time=searchURL("time",window.location.search)
+					var time=searchURL("time",window.location.search)
 					if(time&&(new Date).getTime()-time<10000){
 						showAlert([
 							"Please share the URL of the current page with your friends",
@@ -216,7 +211,7 @@
 					localStorage.removeItem("WordListCurrentItem")
 					edit()
 					if(isMac&&!isElectron){
-						const newIframe=document.createElement("iframe")
+						var newIframe=document.createElement("iframe")
 						newIframe.src="rthtoolbox://"+window.location.search
 						newIframe.style.display="none"
 						document.body.appendChild(newIframe)
@@ -225,20 +220,20 @@
 					document.getElementsByTagName("textarea")[0].value=localStorage.getItem("WordList")
 				}
 				if(document.getElementsByTagName("textarea")[0].value!=""){
-					let WLTSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
+					var WLTSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
 					if(WLTSplit[0]!="RTH 1"){
 						document.getElementsByTagName("textarea")[0].value="RTH 1\n"+document.getElementsByTagName("textarea")[0].value
 						WLTSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
 					}
-					for(let i=1;i<WLTSplit.length-1;i+=2){
-						const newWord=WLTSplit[i],
+					for(var i=1;i<WLTSplit.length-1;i+=2){
+						var newWord=WLTSplit[i],
 						newDefinition=WLTSplit[i+1],
 						newLabel=document.createElement("label"),
 						newP=document.createElement("p"),
 						newLi=document.createElement("li")
 						newLi.setAttribute("class","menu")
 						newLi.onclick=function(){
-							lookUp(newWord)
+							lookUp(this.getElementsByTagName("label")[0].innerText)
 						}
 						newLabel.innerText=newWord
 						newP.innerText=newDefinition
@@ -251,11 +246,10 @@
 					}
 					edit()
 				}else{
-					for(let i=9999;i>0;i-=1){
-						const savedWL=localStorage.getItem("WordList"+i)
+					for(var i=9999;i>0;i-=1){
+						var savedWL=localStorage.getItem("WordList"+i)
 						if(savedWL!=null&&savedWL!=""){
-							const newLi=document.createElement("li")
-							let Item
+							var Item,newLi=document.createElement("li")
 							switch(language){
 								case "SimplifiedChinese":
 									Item="\""+savedWL.split("\n")[1]+"\" 和另外"+((savedWL.split("\n").length-2)/2-1)+"个单词"
@@ -265,8 +259,9 @@
 									break
 							}
 							newLi.innerText=Item
+							newLi.setAttribute("number",i)
 							newLi.onclick=function(){
-								openWL(i)
+								openWL(this.getAttribute("number"))
 							}
 							newLi.setAttribute("class","menu")
 							document.getElementById("OWLUl").appendChild(newLi)
@@ -274,11 +269,12 @@
 					}
 					request("http://t.rths.tk/wordlist/index.html",function(e){
 						OWLTSplit=e.replace(/<br \/>/g,"").split("\n")
-						for(let i=OWLTSplit.length-1;i>=0;i-=1){
-							const newLi=document.createElement("li")
+						for(var i=OWLTSplit.length-1;i>=0;i-=1){
+							var newLi=document.createElement("li")
 							newLi.innerText=OWLTSplit[i]
+							newLi.setAttribute("number",i+1)
 							newLi.onclick=function(){
-								openOWL(i+1)
+								openOWL(this.getAttribute("number"))
 							}
 							newLi.setAttribute("class","menu")
 							document.getElementById("OWLUl").appendChild(newLi)
@@ -314,7 +310,7 @@
 			}
 			function openLWL(file){
 				if(file.name.split(".")[1]=="rth"){
-					const reader=new FileReader()
+					var reader=new FileReader()
 					reader.onload=function(e){
 						document.getElementsByTagName("textarea")[0].value=this.result.replace(/<br \/>/g,"")
 						currentItem="WordList"
@@ -385,7 +381,7 @@
 				],closeTrue)
 			}
 			document.getElementById("AddWord").onclick=function(){
-				const WLTSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
+				var WLTSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
 				if(WLTSplit[WLTSplit.length-1]!=""){
 					document.getElementsByTagName("textarea")[0].value+="\n"
 				}
@@ -396,7 +392,7 @@
 					"Add",
 					"添加"
 				],function(newWord){
-					const askForDefinition=function(){
+					var askForDefinition=function(){
 						showPrompt([
 							"Enter the definition of the new word",
 							"输入新单词的释义"
@@ -407,14 +403,14 @@
 							document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+e
 						})
 					}
-					const translateWord=function(){
+					var translateWord=function(){
 						translate(newWord,"en","zh",function(e){
 							document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+e.trans_result[0].dst
 						})
 					},
 					wordWithoutSpace=newWord.replace(/\s/g,"").toLowerCase()
 					if(localStorage.getItem(wordWithoutSpace+"_CNDef")!=null){
-						const CNDef=localStorage.getItem(wordWithoutSpace+"_CNDef"),
+						var CNDef=localStorage.getItem(wordWithoutSpace+"_CNDef"),
 						ENDef=localStorage.getItem(wordWithoutSpace+"_ENDef")
 						if(language=="SimplifiedChinese"&&CNDef!=null){
 							document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+CNDef.replace(/\n/g,"；")
@@ -431,7 +427,7 @@
 						}
 					}else if(navigator.onLine){
 						request("https://api.shanbay.com/bdc/search/?word="+newWord,function(e){
-							const json=JSON.parse(e)
+							var json=JSON.parse(e)
 							if(json.msg=="SUCCESS"){
 								if(language=="SimplifiedChinese"&&json.data.cn_definition.defn!=null){
 									document.getElementsByTagName("textarea")[0].value+=newWord+"\n"+json.data.cn_definition.defn.replace(/\n/g,"；")
@@ -510,9 +506,8 @@
 			}else{
 				document.getElementsByTagName("input")[0].focus()
 			}
-			const OWList=document.getElementById("OWLUl").innerHTML
+			var OWList=document.getElementById("OWLUl").innerHTML
 			load()
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>

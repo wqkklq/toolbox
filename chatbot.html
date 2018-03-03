@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<style>
@@ -98,22 +96,20 @@
 				<button type="button" class="mui-btn mui-btn-blue send-btn"></button>
 			</div>
 		</div>
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let lastBotInfo
+			var lastBotInfo
 			function chatbotReply(botInfo){
 				request("http://www.tuling123.com/openapi/api?key=42cff502574d42e996841e655fecd78a&info="+botInfo,function(e){
-					const json=JSON.parse(e)
-					const botText=json.text
-					const newDiv=document.createElement("div"),
+					var json=JSON.parse(e)
+					var botText=json.text,
+					newDiv=document.createElement("div"),
 					newChildDiv=document.createElement("div")
 					newDiv.setAttribute("class","msg-row")
 					newChildDiv.setAttribute("class","msg msg-bot")
 					newDiv.appendChild(newChildDiv)
-					const appendMsg=function(){
+					var appendMsg=function(){
 						if(json.code==200000){
 							newChildDiv.innerHTML+="<br><a href=\"javascript:openWebPage('"+json.url+"')\">"+json.url.split("/")[2]+"</a>"
 						}
@@ -139,7 +135,7 @@
 			function send(){
 				if(document.getElementsByTagName("input")[0].value!=""){
 					lastBotInfo=document.getElementsByTagName("input")[0].value
-					const newMyDiv=document.createElement("div"),
+					var newMyDiv=document.createElement("div"),
 					newMyChildDiv=document.createElement("div")
 					newMyDiv.setAttribute("class","msg-row")
 					newMyChildDiv.setAttribute("class","msg msg-me")
@@ -200,6 +196,5 @@
 			}
 			document.getElementById("Welcome").style.display=""
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>

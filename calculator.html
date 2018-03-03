@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 	</head>
@@ -35,13 +33,11 @@
 				<li id="FindQuadraticFunction" class="menu"></li>
 			</ul>
 		</div>
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			function calculate(){
-				let formula=document.getElementsByTagName("input")[0].value
+				var formula=document.getElementsByTagName("input")[0].value
 				if(formula==""){
 					showAlert([
 						"Please enter the formula",
@@ -132,6 +128,5 @@
 				document.getElementsByTagName("input")[0].focus()
 			}
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>

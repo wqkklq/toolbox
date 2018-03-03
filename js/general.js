@@ -1,16 +1,14 @@
 /*Code written by Shangzhen Yang*/
-let addedScript="",
+var addedScript="",
 addedStyle="",
 appliedTheme,
-language=localStorage.getItem("Language"),
-recentInput=0,
-theme=localStorage.getItem("Theme")
-const header=document.getElementsByTagName("header")[0]
-const isAndroid=/Android/i.test(navigator.userAgent),
+header=document.getElementsByTagName("header")[0],
+isAndroid=/Android/i.test(navigator.userAgent),
 isChinese=new RegExp("[\u4E00-\u9FA5]+"),
 isEdge=/Edge/i.test(navigator.userAgent),
 isElectron=/Electron/i.test(navigator.userAgent),
 isEnglish=new RegExp("[A-Za-z]+"),
+isIE=/MSIE|Trident/i.test(navigator.userAgent),
 isiOS=/iPhone/i.test(navigator.userAgent)||/iPad/i.test(navigator.userAgent),
 isLinux=/Linux/i.test(navigator.userAgent),
 isMac=/Macintosh/i.test(navigator.userAgent),
@@ -18,8 +16,13 @@ isNumber=new RegExp("[0-9]+"),
 isOnline=/t.rths.tk/.test(window.location.href),
 isPlus=/Html5Plus/i.test(navigator.userAgent),
 isUpperCase=new RegExp("[A-Z]+"),
-isUWP=/MSAppHost/i.test(navigator.userAgent)
-const isApp=isElectron||isPlus||isUWP,
+isUWP=/MSAppHost/i.test(navigator.userAgent),
+isWindows=/Windows/i.test(navigator.userAgent),
+isWin10=/Windows\sNT\s10\.0/i.test(navigator.userAgent),
+language=localStorage.getItem("Language"),
+recentInput=0,
+theme=localStorage.getItem("Theme")
+var isApp=isElectron||isPlus||isUWP,
 isAndroidApp=isAndroid&&isPlus,
 isMobile=isAndroid||isiOS
 function addTime(url){
@@ -42,8 +45,14 @@ function getToolbox(){
 		}
 	}else if(isiOS){
 		window.location.href="https://itunes.apple.com/app/rth-toolbox/id1294479577"
-	}else{
-		openWebPage("http://t.rths.tk/web/toolbox/download.html")
+	}else if(isWin10){
+		openWebPage("https://www.microsoft.com/store/apps/9PBT29R7W8DJ")
+	}else if(isWindows){
+		window.location.href="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Windows_2.zip"
+	}else if(isMac){
+		window.location.href="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_macOS.zip"
+	}else if(isLinux){
+		window.location.href="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Linux.zip"
 	}
 }
 function initCalculator(max,calculate){
@@ -56,8 +65,8 @@ function initCalculator(max,calculate){
 			break
 	}
 	document.getElementsByClassName("mui-title")[0].innerText=document.title
-	const input=document.getElementsByTagName("input")
-	for(let i=0;i<=max;i++){
+	var input=document.getElementsByTagName("input")
+	for(var i=0;i<=max;i++){
 		switch(language){
 			case "SimplifiedChinese":
 				input[i].placeholder="输入数字"
@@ -67,23 +76,24 @@ function initCalculator(max,calculate){
 				break
 		}
 		input[i].oninput=function(){
-			const name=input[i].id.replace("Input","")
-			const num=name.replace(/[A-Za-z]+/g,"")
-			const display=name.replace(num,"")+"<sub>"+num+"</sub>",
+			var name=this.id.replace("Input","")
+			var num=name.replace(/[A-Za-z]+/g,"")
+			var display=name.replace(num,"")+"<sub>"+num+"</sub>",
 			label=document.getElementById(name+"Label")
-			if(input[i].value==""){
+			if(this.value==""){
 				label.innerHTML=display
 			}else{
-				label.innerHTML=input[i].value
+				label.innerHTML=this.value
 			}
 			calculate()
 		}
+		input[i].setAttribute("number",i)
 		input[i].onclick=function(){
-			recentInput=i
+			recentInput=this.getAttribute("number")
 		}
 	}
 	document.getElementsByClassName("sign")[0].onclick=function(){
-		let value=input[recentInput].value
+		var value=input[recentInput].value
 		if(value!=""&&value!=null){
 			if(value.indexOf("-")!=-1){
 				value=value.replace("-","")
@@ -94,14 +104,14 @@ function initCalculator(max,calculate){
 			value="-0"
 		}
 		input[recentInput].value=value
-		const label=document.getElementById(input[recentInput].id.replace("Input","")+"Label")
+		var label=document.getElementById(input[recentInput].id.replace("Input","")+"Label")
 		label.innerHTML=input[recentInput].value
 		calculate()
 	}
 }
 function loadCSS(href){
 	if(addedStyle.indexOf(href)==-1){
-		const newLink=document.createElement("link")
+		var newLink=document.createElement("link")
 		newLink.href=href
 		newLink.rel="stylesheet"
 		document.getElementsByTagName("head")[0].appendChild(newLink)
@@ -109,13 +119,14 @@ function loadCSS(href){
 	}
 }
 function loadJS(src,callback){
-	const loadScript=function(i){
+	var loadScript=function(i){
 		if(addedScript.indexOf(src[i])==-1){
-			const newScript=document.createElement("script")
+			var newScript=document.createElement("script")
 			newScript.src=src[i]
 			if(i<src.length-1){
+				newScript.setAttribute("number",i*1+1)
 				newScript.onload=function(){
-					loadScript(i+1)
+					loadScript(this.getAttribute("number"))
 				}
 			}else if(callback){
 				newScript.onload=callback
@@ -124,7 +135,7 @@ function loadJS(src,callback){
 			addedScript+=src[i]+","
 		}else{
 			if(i<src.length-1){
-				loadScript(i+1)
+				loadScript(i*1+1)
 			}else if(callback){
 				callback()
 			}
@@ -133,8 +144,8 @@ function loadJS(src,callback){
 	loadScript(0)
 }
 function loadOnline(){
-	const wvs=plus.webview.all()
-	for(let i=0;i<wvs.length;i++){
+	var wvs=plus.webview.all()
+	for(var i=0;i<wvs.length;i++){
 		plus.webview.close(wvs[i].id)
 	}
 	openWindow("http://t.rths.tk/index")
@@ -169,21 +180,16 @@ function openWebPage(href){
 	}
 }
 function openWindow(name){
-	let suffix=".html"
+	var suffix=".html"
 	if(name.indexOf(suffix)!=-1){
 		suffix=""
 	}
-	let url=name+suffix
+	var url=name+suffix
 	if(isPlus){
 		if(isOnline){
 			url=addTime(url)
 		}
-		if(/http|\?|flashcard|quiz/.test(url)||isAndroid){
-			plus.webview.open(url,name,{"popGesture":"close"},"fade-in")
-		}else{
-			plus.webview.create(url,name,{"popGesture":"hide"})
-			plus.webview.show(name,"pop-in")
-		}
+		plus.webview.open(url,name,{"popGesture":"close"},"fade-in")
 	}else{
 		window.location.href=url
 	}
@@ -192,7 +198,7 @@ function request(url,callback){
 	if(/t.rths.tk/.test(url)){
 		url=addTime(url)
 	}
-	const xhr=new XMLHttpRequest()
+	var xhr=new XMLHttpRequest()
 	xhr.onreadystatechange=function(){
 		switch(xhr.readyState){
 			case 4:
@@ -221,12 +227,12 @@ function restart(){
 }
 function searchURL(key,url){
 	if(url.indexOf("http")!=-1){
-		const urlSplit=url.split("?")
+		var urlSplit=url.split("?")
 		url=url.replace(urlSplit[0],"")
 	}
-	const match=url.substr(1).match(new RegExp("(^|&)"+key+"=([^&]*)(&|$)"))
+	var match=url.substr(1).match(new RegExp("(^|&)"+key+"=([^&]*)(&|$)"))
 	if(match!=null){
-		const value=unescape(decodeURI(match[2]))
+		var value=unescape(decodeURI(match[2]))
 		if(value!=null&value!=""){
 			return value
 		}else{
@@ -237,49 +243,78 @@ function searchURL(key,url){
 	}
 }
 function showAlert(text,title,callback){
-	if(title==null){
-		title=[document.title,document.title]
-	}
-	switch(language){
-		case "SimplifiedChinese":
-			mui.alert(text[1],title[1],null,callback)
-			break
-		default:
-			mui.alert(text[0],title[0],"OK",callback)
-			break
+	if(isIE){
+		switch(language){
+			case "SimplifiedChinese":
+				alert(text[1])
+				break
+			default:
+				alert(text[0])
+				break
+		}
+		callback()
+	}else{
+		if(title==null){
+			title=[document.title,document.title]
+		}
+		switch(language){
+			case "SimplifiedChinese":
+				mui.alert(text[1],title[1],null,callback)
+				break
+			default:
+				mui.alert(text[0],title[0],"OK",callback)
+				break
+		}
 	}
 }
 function showConfirm(text,title,positiveCallback,negativeCallback){
-	if(title==null){
-		title=[document.title,document.title]
-	}
-	switch(language){
-		case "SimplifiedChinese":
-			mui.confirm(text[1],title[1],["否","是"],function(e){
-				if(e.index==1){
-					positiveCallback()
-				}else if(negativeCallback){
-					negativeCallback()
-				}
-			})
-			break
-		default:
-			mui.confirm(text[0],title[0],["No","Yes"],function(e){
-				if(e.index==1){
-					positiveCallback()
-				}else if(negativeCallback){
-					negativeCallback()
-				}
-			})
-			break
+	if(isIE){
+		var value
+		switch(language){
+			case "SimplifiedChinese":
+				value=confirm(text[1])
+				break
+			default:
+				value=confirm(text[0])
+				break
+		}
+		if(value){
+			positiveCallback()
+		}else{
+			negativeCallback()
+		}
+	}else{
+		if(title==null){
+			title=[document.title,document.title]
+		}
+		switch(language){
+			case "SimplifiedChinese":
+				mui.confirm(text[1],title[1],["否","是"],function(e){
+					if(e.index==1){
+						positiveCallback()
+					}else if(negativeCallback){
+						negativeCallback()
+					}
+				})
+				break
+			default:
+				mui.confirm(text[0],title[0],["No","Yes"],function(e){
+					if(e.index==1){
+						positiveCallback()
+					}else if(negativeCallback){
+						negativeCallback()
+					}
+				})
+				break
+		}
 	}
 }
 function showImage(src){
-	const addedImageDiv=document.getElementsByClassName("image")[0]
+	var addedImageDiv=document.getElementsByClassName("image")[0]
 	if(addedImageDiv){
 		document.body.removeChild(addedImageDiv)
 	}
-	const newDiv=document.createElement("div"),
+	var newDiv=document.createElement("div"),
 	newTitleDiv=document.createElement("div"),
 	newContentDiv=document.createElement("div"),
 	newLoadDiv=document.createElement("div"),
@@ -293,7 +328,7 @@ function showImage(src){
 	newLoadDiv.setAttribute("class","image-load")
 	newImg.onload=function(){
 		newContentDiv.removeChild(newLoadDiv)
-		const frameHeight=this.height+80
+		var frameHeight=this.height+80
 		newDiv.style.height=frameHeight+"px"
 		newDiv.style.top="calc(50% - "+frameHeight/2+"px)"
 		setTimeout(function(){
@@ -356,13 +391,13 @@ function showPrompt(text,title,callback){
 				break
 		}
 	}else{
-		let value
+		var value
 		switch(language){
 			case "SimplifiedChinese":
-				value=prompt(text[1])
+				value=prompt(text[1],"")
 				break
 			default:
-				value=prompt(text[0])
+				value=prompt(text[0],"")
 				break
 		}
 		if(value!=null&&value!=""){
@@ -372,7 +407,7 @@ function showPrompt(text,title,callback){
 }
 function translate(query,from,to,callback){
 	loadJS(["js/jquery.min.js","js/md5.min.js"],function(){
-		const appid="20171109000093780",key="ZR6EGbP8ZzwU7GookTvy",salt=(new Date).getTime()
+		var appid="20171109000093780",key="ZR6EGbP8ZzwU7GookTvy",salt=(new Date).getTime()
 		if(to=="auto"){
 			if(isEnglish.test(query)){
 				to="zh"
@@ -380,8 +415,8 @@ function translate(query,from,to,callback){
 				to="en"
 			}
 		}
-		const str1=appid+query+salt+key
-		const sign=MD5(str1)
+		var str1=appid+query+salt+key
+		var sign=MD5(str1)
 		$.ajax({
 			url:"http://api.fanyi.baidu.com/api/trans/vip/translate",
 			type:"get",
@@ -411,7 +446,7 @@ function unsupportedType(){
 }
 document.addEventListener("keydown",function(e){
 	if(isElectron){
-		const win=require("electron").remote.getCurrentWindow()
+		var win=require("electron").remote.getCurrentWindow()
 		if(e.ctrlKey||e.metaKey){
 			switch(e.keyCode){
 				case 73:
@@ -443,7 +478,7 @@ if(theme==null){
 	theme="Automatic"
 }
 if(theme=="Automatic"){
-	const currentHour=(new Date).getHours()
+	var currentHour=(new Date).getHours()
 	if(currentHour>=21||currentHour<=6){
 		appliedTheme="Dark"
 	}else{
@@ -456,9 +491,14 @@ if(appliedTheme=="Dark"){
 	loadCSS("css/dark.css")
 }
 if(header!=null){
-	const newA=document.createElement("a"),
+	var newA=document.createElement("a"),
 	newH1=document.createElement("h1")
 	newA.setAttribute("class","mui-action-back mui-icon mui-icon-left-nav mui-pull-left back")
+	if(isIE){
+		newA.onclick=function(){
+			history.go(-1)
+		}
+	}
 	newH1.setAttribute("class","mui-title")
 	header.appendChild(newA)
 	header.appendChild(newH1)
@@ -474,10 +514,11 @@ if(header!=null){
 	}
 }
 if(isElectron){
-	const{remote,webFrame}=require("electron")
-	webFrame.setZoomLevelLimits(1,1)
+	var electron=require("electron")
+	var remote=electron.remote
+	electron.webFrame.setZoomLevelLimits(1,1)
 	if(process.platform!=="darwin"){
-		const newDiv=document.createElement("div"),
+		var newDiv=document.createElement("div"),
 		newMinimizeDiv=document.createElement("div")
 		newMaximizeDiv=document.createElement("div")
 		newCloseDiv=document.createElement("div")
@@ -491,7 +532,7 @@ if(isElectron){
 		newMaximizeDiv.style.right="40px"
 		newMaximizeDiv.innerText="+"
 		newMaximizeDiv.onclick=function(){
-			const win=remote.getCurrentWindow()
+			var win=remote.getCurrentWindow()
 			if(win.isMaximized()){
 				win.unmaximize()
 			}else{

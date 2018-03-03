@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<link href="unpackage/res/icons/512x512.png" rel="apple-touch-icon">
@@ -135,12 +133,10 @@
 			<button class="mui-btn mui-btn-blue get" style="display:none"></button>
 			<a class="mui-icon mui-icon-settings settings" href="javascript:openWindow('settings')"></a>
 		</div>
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let backStr
+			var backStr
 			function liBack(){
 				if(window.history.length>1&&window.location.search.indexOf("more=1")!=-1){
 					history.go(-1)
@@ -200,7 +196,7 @@
 			onResize()
 			mui.init({swipeBack:false})
 			if(isPlus){
-				const plusReady=function(){
+				var plusReady=function(){
 					plus.navigator.setStatusBarBackground("rgb(0,102,204)")
 					plus.navigator.setStatusBarStyle("light")
 					if(isAndroid){
@@ -209,7 +205,7 @@
 						}
 						plus.runtime.getProperty(plus.runtime.appid,function(inf){
 							request("http://t.rths.tk/package.json",function(e){
-								const json=JSON.parse(e)
+								var json=JSON.parse(e)
 								if(inf.version!=json.version){
 									showAlert([
 										"Going to the download page",
@@ -222,30 +218,9 @@
 							})
 						})
 					}else if(!isOnline){
-						plus.webview.create("about.html","about",{"popGesture":"hide"})
-						plus.webview.create("calculator.html","calculator",{"popGesture":"hide"})
-						plus.webview.create("chatbot.html","chatbot",{"popGesture":"hide"})
-						plus.webview.create("currency.html","currency",{"popGesture":"hide"})
-						plus.webview.create("date.html","date",{"popGesture":"hide"})
-						plus.webview.create("equation12.html","equation12",{"popGesture":"hide"})
-						plus.webview.create("equation21.html","equation21",{"popGesture":"hide"})
-						plus.webview.create("equation31.html","equation31",{"popGesture":"hide"})
-						plus.webview.create("feedback.html","feedback",{"popGesture":"hide"})
-						plus.webview.create("findlinearfunction.html","findlinearfunction",{"popGesture":"hide"})
-						plus.webview.create("findquadraticfunction.html","findquadraticfunction",{"popGesture":"hide"})
-						plus.webview.create("mole.html","mole",{"popGesture":"hide"})
-						plus.webview.create("numberbase.html","numberbase",{"popGesture":"hide"})
-						plus.webview.create("quadraticfunction.html","quadraticfunction",{"popGesture":"hide"})
-						plus.webview.create("randomnumber.html","randomnumber",{"popGesture":"hide"})
-						plus.webview.create("search.html","search",{"popGesture":"hide"})
-						plus.webview.create("settings.html","settings",{"popGesture":"hide"})
-						plus.webview.create("statistics.html","statistics",{"popGesture":"hide"})
-						plus.webview.create("texteditor.html","texteditor",{"popGesture":"hide"})
-						plus.webview.create("timer.html","timer",{"popGesture":"hide"})
-						plus.webview.create("wordlist.html","wordlist",{"popGesture":"hide"})
 						if(plus.runtime.launcher=="shortcut"){
-							const cmd=JSON.parse(plus.runtime.arguments)
-							const type=cmd&&cmd.type
+							var cmd=JSON.parse(plus.runtime.arguments)
+							var type=cmd&&cmd.type
 							openWindow(type)
 						}
 					}
@@ -263,8 +238,7 @@
 				if(!isApp){
 					document.getElementsByClassName("get")[0].style.display=""
 				}else if(isUWP){
-					const titleBar=Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar
-					let titleBarColor
+					var titleBar=Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar,titleBarColor
 					if(appliedTheme=="Dark"){
 						titleBarColor={
 							a:255,
@@ -319,10 +293,10 @@
 					document.getElementById("Search").innerText="Search"
 					document.getElementById("TextEditor").innerText="Text Editor"
 					backStr="Back"
-					document.getElementsByClassName("get")[0].innerText="Get RTH Toolbox"
+					document.getElementsByClassName("get")[0].innerText="Download RTH Toolbox"
 					break
 			}
-			const menu=document.getElementsByTagName("ul")[0].innerHTML
+			var menu=document.getElementsByTagName("ul")[0].innerHTML
 			load()
 			if(!navigator.onLine){
 				document.getElementsByClassName("more")[0].style.display="none"
@@ -330,15 +304,14 @@
 				more()
 			}
 			if(isElectron){
-				const{remote}=require("electron")
-				let path
+				var path,remote=require("electron").remote
 				if(process.platform=="darwin"){
 					path=remote.getGlobal("sharedObj").path
 				}else if(process.platform=="win32"){
 					path=remote.getGlobal("sharedObj").path[1]
 				}
 				if(path){
-					let list
+					var list
 					if(path.indexOf("://")!=-1){
 						list=searchURL("list",path.replace("rthtoolbox://",""))
 					}else{
@@ -350,9 +323,9 @@
 						openWindow("wordlist")
 					}
 				}else{
-					const package=require("./package.json")
+					var package=require("./package.json")
 					request("http://t.rths.tk/package.json",function(e){
-						const json=JSON.parse(e)
+						var json=JSON.parse(e)
 						if(package.version!=json.version){
 							window.location.href="electron/update.html"
 						}
@@ -360,6 +333,5 @@
 				}
 			}
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>

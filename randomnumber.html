@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<style>
@@ -62,12 +60,10 @@
 				</ul>
 			</fieldset>
 		</div>
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let namesValue,
+			var namesValue,
 			scrolling=true,
 			multipleTimes=true,
 			intervalId
@@ -81,9 +77,9 @@
 				}
 			}
 			function random(){
-				const min=parseInt(document.getElementById("Minimum").value),
+				var min=parseInt(document.getElementById("Minimum").value),
 				max=parseInt(document.getElementById("Maximum").value)
-				const RandomNumberValue=min+Math.round(Math.random()*(max-min))
+				var RandomNumberValue=min+Math.round(Math.random()*(max-min))
 				if(document.getElementById("OddNumberOnlyCheck").checked==true&&RandomNumberValue%2==0||document.getElementById("EvenNumberOnlyCheck").checked==true&&RandomNumberValue%2!=0){
 					random()
 					return false
@@ -95,7 +91,7 @@
 				}
 			}
 			function RScrolling(){
-				const min=parseInt(document.getElementById("Minimum").value),
+				var min=parseInt(document.getElementById("Minimum").value),
 				max=parseInt(document.getElementById("Maximum").value)
 				if(min==max){
 					document.getElementsByClassName("number")[0].innerText="?"
@@ -105,7 +101,7 @@
 				scrolling=true
 			}
 			document.getElementsByTagName("button")[0].onclick=function(){
-				const selected=function(){
+				var selected=function(){
 					if(multipleTimes==false){
 						namesValue=namesValue.replace(document.getElementsByClassName("number")[0].innerText+"\n","")
 						count()
@@ -132,7 +128,7 @@
 				document.getElementById("OddNumberOnlyCheck").checked=false
 			}
 			document.getElementById("Add").onclick=function(){
-				const historyValue=document.getElementById("HistoryText").value
+				var historyValue=document.getElementById("HistoryText").value
 				if(historyValue==""){
 					document.getElementById("HistoryText").value=document.getElementsByClassName("number")[0].innerText
 				}else{
@@ -146,7 +142,7 @@
 				multipleTimes=true
 				document.getElementById("NamesText").style.display=""
 				namesValue=document.getElementById("NamesText").value
-				const namesSplit=namesValue.split("\n")
+				var namesSplit=namesValue.split("\n")
 				if(namesSplit[namesSplit.length-1]!=""){
 					namesValue+="\n"
 				}
@@ -171,7 +167,7 @@
 					"Add",
 					"添加"
 				],function(e){
-					const namesSplit=document.getElementById("NamesText").value.split("\n")
+					var namesSplit=document.getElementById("NamesText").value.split("\n")
 					if(namesSplit[namesSplit.length-1]!=""){
 						document.getElementById("NamesText").value+="\n"
 					}
@@ -234,6 +230,5 @@
 				RScrolling()
 			},10)
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>

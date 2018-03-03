@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 	</head>
@@ -32,32 +30,30 @@
 			</div>
 			<hr>
 		</div>
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let enterNum
+			var enterNum
 			document.getElementById("Binary").oninput=function(){
-				const binary=parseInt(this.value,2)
+				var binary=parseInt(this.value,2)
 				document.getElementById("Octal").value=binary.toString(8)
 				document.getElementById("Decimal").value=binary.toString(10)
 				document.getElementById("Hexadecimal").value=binary.toString(16)
 			}
 			document.getElementById("Octal").oninput=function(){
-				const octal=parseInt(this.value,8)
+				var octal=parseInt(this.value,8)
 				document.getElementById("Binary").value=octal.toString(2)
 				document.getElementById("Decimal").value=octal.toString(10)
 				document.getElementById("Hexadecimal").value=octal.toString(16)
 			}
 			document.getElementById("Decimal").oninput=function(){
-				const decimal=parseInt(this.value,10)
+				var decimal=parseInt(this.value,10)
 				document.getElementById("Binary").value=decimal.toString(2)
 				document.getElementById("Octal").value=decimal.toString(8)
 				document.getElementById("Hexadecimal").value=decimal.toString(16)
 			}
 			document.getElementById("Hexadecimal").oninput=function(){
-				const hexadecimal=parseInt(this.value,16)
+				var hexadecimal=parseInt(this.value,16)
 				document.getElementById("Binary").value=hexadecimal.toString(2)
 				document.getElementById("Octal").value=hexadecimal.toString(8)
 				document.getElementById("Decimal").value=hexadecimal.toString(10)
@@ -86,6 +82,5 @@
 			document.getElementById("Decimal").placeholder=enterNum
 			document.getElementById("Hexadecimal").placeholder=enterNum
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>

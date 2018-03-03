@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<style>
@@ -35,15 +33,13 @@
 				<div class="result"></div>
 			</fieldset>
 		</div>
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			function calculate(){
-				const startDateValue=new Date(document.getElementById("StartDate").value),
+				var startDateValue=new Date(document.getElementById("StartDate").value),
 				endDateValue=new Date(document.getElementById("EndDate").value)
-				const dateDiff=parseInt(Math.abs(endDateValue-startDateValue)/1000/60/60/24)
+				var dateDiff=parseInt(Math.abs(endDateValue-startDateValue)/1000/60/60/24)
 				switch(language){
 					case "SimplifiedChinese":
 						document.getElementsByClassName("result")[0].innerText="距离 "+dateDiff+" 天"
@@ -77,6 +73,5 @@
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>

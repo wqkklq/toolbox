@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 	</head>
@@ -14,7 +12,7 @@
 		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
 			<div style="line-height:30px">
-				y = <label id="aLabel">a</label>x<sup>2</sup> + <label id="bLabel">b</label>x + <label id="cLabel">c</label> &#40;a ≠ 0&#41;
+				y = <span id="aLabel">a</span>x<sup>2</sup> + <span id="bLabel">b</span>x + <span id="cLabel">c</span> &#40;a ≠ 0&#41;
 			</div>
 			<hr>
 			<div class="mui-input-row">
@@ -31,15 +29,15 @@
 			</div>
 			<hr>
 			<div class="result">
-				<label id="VertexForm1"></label>y = <label id="VertexForm2">a</label> &#40;x - <label id="VertexForm3">h</label>&#41;<sup>2</sup> + <label id="VertexForm4">k</label><br>
-				<label id="AxisSymmetry1"></label> x = <label id="AxisSymmetry2">?</label><br>
-				<label id="VertexPointCoordinates1"></label> &#40;<label id="VertexPointCoordinates2">h</label>, <label id="VertexPointCoordinates3">k</label>&#41;<br>
-				<label id="ParabolaOpens1"></label><label id="ParabolaOpens2"></label><br>
-				<label id="xGreater1"></label> x &#62; <label id="xGreater2">?</label><label id="xGreater3"></label>y <label id="xGreater4"></label><label id="xGreater5"></label><label id="xGreater6"></label><br>
-				<label id="xLess1"></label> x &#60; <label id="xLess2">?</label><label id="xLess3"></label>y <label id="xLess4"></label><label id="xLess5"></label><label id="xLess6"></label><br>
-				<label id="MinimumMaximum1"></label>y = <label id="MinimumMaximum2">?</label><br>
-				<label id="xIntercept1"></label><label id="xIntercept2">?</label><br>
-				<label id="yIntercept1"></label>&#40;0, <label id="yIntercept2">c</label><label>&#41;</label>
+				<span id="VertexForm1"></span>y = <span id="VertexForm2">a</span> &#40;x - <span id="VertexForm3">h</span>&#41;<sup>2</sup> + <span id="VertexForm4">k</span><br>
+				<span id="AxisSymmetry1"></span> x = <span id="AxisSymmetry2">?</span><br>
+				<span id="VertexPointCoordinates1"></span> &#40;<span id="VertexPointCoordinates2">h</span>, <span id="VertexPointCoordinates3">k</span>&#41;<br>
+				<span id="ParabolaOpens1"></span><span id="ParabolaOpens2"></span><br>
+				<span id="xGreater1"></span> x &#62; <span id="xGreater2">?</span><span id="xGreater3"></span>y <span id="xGreater4"></span><span id="xGreater5"></span><span id="xGreater6"></span><br>
+				<span id="xLess1"></span> x &#60; <span id="xLess2">?</span><span id="xLess3"></span>y <span id="xLess4"></span><span id="xLess5"></span><span id="xLess6"></span><br>
+				<span id="MinimumMaximum1"></span>y = <span id="MinimumMaximum2">?</span><br>
+				<span id="xIntercept1"></span><span id="xIntercept2">?</span><br>
+				<span id="yIntercept1"></span>&#40;0, <span id="yIntercept2">c</span><span>&#41;</span>
 			</div>
 			<fieldset style="margin-top:20px">
 				<div class="mui-input-row">
@@ -53,12 +51,10 @@
 			</fieldset>
 		</div>
 		<button type="button" class="mui-btn mui-btn-blue sign">+/-</button>
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let upwards,
+			var upwards,
 			downwards,
 			NotExist,
 			increases,
@@ -69,10 +65,10 @@
 			and,
 			None
 			function calculate(){
-				const a=document.getElementById("aInput").value*1,
+				var a=document.getElementById("aInput").value*1,
 				b=document.getElementById("bInput").value*1,
 				c=document.getElementById("cInput").value*1
-				const h=-b/(2*a),
+				var h=-b/(2*a),
 				k=(4*a*c-Math.pow(b,2))/(4*a),
 				delta=Math.pow(b,2)-4*a*c
 				document.getElementById("xInput").value=h
@@ -103,7 +99,7 @@
 				}
 				document.getElementById("MinimumMaximum2").innerText=k
 				if(delta>0){
-					const x1=(-b+Math.sqrt(delta))/(2*a),
+					var x1=(-b+Math.sqrt(delta))/(2*a),
 					x2=(-b-Math.sqrt(delta))/(2*a)
 					document.getElementById("xIntercept2").innerText="("+x1+", 0) "+and+" ("+x2+", 0)"
 				}else if(delta==0){
@@ -114,7 +110,7 @@
 				document.getElementById("yIntercept2").innerText=c
 			}
 			function calculateY(){
-				const a=document.getElementById("aInput").value*1,
+				var a=document.getElementById("aInput").value*1,
 				b=document.getElementById("bInput").value*1,
 				c=document.getElementById("cInput").value*1,
 				x=document.getElementById("xInput").value*1
@@ -122,14 +118,14 @@
 			}
 			document.getElementById("xInput").oninput=calculateY
 			document.getElementById("yInput").oninput=function(){
-				const a=document.getElementById("aInput").value*1,
+				var a=document.getElementById("aInput").value*1,
 				b=document.getElementById("bInput").value*1,
 				y=document.getElementById("yInput").value*1
-				const c=document.getElementById("cInput").value-y
-				const delta=Math.pow(b,2)-4*a*c
-				const x1=(-b+Math.sqrt(delta))/(2*a)
+				var c=document.getElementById("cInput").value-y
+				var delta=Math.pow(b,2)-4*a*c
+				var x1=(-b+Math.sqrt(delta))/(2*a)
 				if(delta>0){
-					const x2=(-b-Math.sqrt(delta))/(2*a)
+					var x2=(-b-Math.sqrt(delta))/(2*a)
 					document.getElementById("xInput").value=x1+" "+and+" "+x2
 				}else if(delta==0){
 					document.getElementById("xInput").value=x1
@@ -195,6 +191,5 @@
 			document.getElementById("xLess5").innerText=decreases+" / "+increases
 			document.getElementById("MinimumMaximum1").innerText=MinimumMaximum
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>

@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 	</head>
@@ -14,8 +12,8 @@
 		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
 			<div style="line-height:30px">
-				a &#40;<label id="x1Label">x<sub>1</sub></label>&#44; <label id="y1Label">y<sub>1</sub></label>&#41;<br>
-				b &#40;<label id="x2Label">x<sub>2</sub></label>&#44; <label id="y2Label">y<sub>2</sub></label>&#41;
+				a &#40;<span id="x1Label">x<sub>1</sub></span>&#44; <span id="y1Label">y<sub>1</sub></span>&#41;<br>
+				b &#40;<span id="x2Label">x<sub>2</sub></span>&#44; <span id="y2Label">y<sub>2</sub></span>&#41;
 			</div>
 			<hr>
 			<div class="mui-input-row">
@@ -40,13 +38,11 @@
 			<hr>
 		</div>
 		<button type="button" class="mui-btn mui-btn-blue sign">+/-</button>
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			function calculate(){
-				const a=document.getElementById("x1Input").value*1,
+				var a=document.getElementById("x1Input").value*1,
 				c=document.getElementById("y1Input").value*(-1),
 				d=document.getElementById("x2Input").value*1,
 				f=document.getElementById("y2Input").value*(-1)
@@ -60,6 +56,5 @@
 			}
 			initCalculator(3,calculate)
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>

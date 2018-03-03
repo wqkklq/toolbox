@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<style>
@@ -85,12 +83,10 @@
 				</ul>
 			</fieldset>
 		</div>
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			let Hour,intervalId,Minute,Second
+			var Hour,intervalId,Minute,Second
 			function countdown(){
 				if(Hour==0&&Minute==0&&Second==0){
 					pause()
@@ -130,7 +126,7 @@
 				document.getElementById("PauseButton").disabled="disabled"
 			}
 			function timeChanged(){
-				let secondStr=addZero(document.getElementById("Second").value,2),
+				var secondStr=addZero(document.getElementById("Second").value,2),
 				minuteStr=addZero(document.getElementById("Minute").value,2),
 				hourStr=addZero(document.getElementById("Hour").value,2)
 				if(secondStr=="0"){
@@ -192,7 +188,7 @@
 			}
 			function task(){
 				if(isElectron){
-					const win=require("electron").remote.getCurrentWindow()
+					var win=require("electron").remote.getCurrentWindow()
 					if(win.getSize()=="200,160"){
 						win.setSize(1000,700)
 					}
@@ -218,7 +214,7 @@
 						plus.push.createMessage(document.getElementById("PushNotificationInput").value)
 					}else if(window.Notification){
 						if(Notification.permission=="granted"){
-							const notification=new Notification(document.title,{
+							var notification=new Notification(document.title,{
 								body:document.getElementById("PushNotificationInput").value,
 								icon:"unpackage/res/icons/512x512.png"
 							})
@@ -231,7 +227,7 @@
 			}
 			window.onresize=onResize
 			document.getElementsByClassName("time")[0].oninput=function(){
-				const timeSplit=document.getElementsByClassName("time")[0].value.split(":")
+				var timeSplit=document.getElementsByClassName("time")[0].value.split(":")
 				if(timeSplit.length<3){
 					document.getElementById("Second").value=0
 					document.getElementById("Minute").value=0
@@ -254,8 +250,8 @@
 			document.getElementById("PauseButton").onclick=pause
 			document.getElementById("PreviewButton").onclick=task
 			document.getElementById("Add").onclick=function(){
-				const dateValue=new Date()
-				const TimeStr=document.getElementsByClassName("time")[0].value+" ("+dateValue.getHours()+":"+dateValue.getMinutes()+":"+dateValue.getSeconds()+")",
+				var dateValue=new Date()
+				var TimeStr=document.getElementsByClassName("time")[0].value+" ("+dateValue.getHours()+":"+dateValue.getMinutes()+":"+dateValue.getSeconds()+")",
 				historyValue=document.getElementById("HistoryText").value
 				if(historyValue==""){
 					document.getElementById("HistoryText").value=TimeStr
@@ -270,7 +266,7 @@
 				document.addEventListener("visibilitychange",function(){
 					if(document.hidden){
 						window.scrollTo(0,0)
-						const win=require("electron").remote.getCurrentWindow()
+						var win=require("electron").remote.getCurrentWindow()
 						win.restore()
 						win.setSize(200,160)
 						win.setAlwaysOnTop(true)
@@ -345,7 +341,7 @@
 			}
 			if(isElectron){
 				window.onbeforeunload=function(){
-					const win=require("electron").remote.getCurrentWindow()
+					var win=require("electron").remote.getCurrentWindow()
 					if(win.getSize()=="200,160"){
 						win.setSize(1000,700)
 					}
@@ -366,6 +362,5 @@
 				}
 			}
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>

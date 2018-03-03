@@ -3,10 +3,8 @@
 	<head>
 		<!--Code written by Shangzhen Yang-->
 		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<meta name="renderer" content="webkit">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 	</head>
@@ -34,8 +32,6 @@
 				</div>
 			</fieldset>
 		</div>
-		<script src="js/check.js"></script>
-		<!--[if !IE]><!-->
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
@@ -47,7 +43,7 @@
 					"Add",
 					"添加"
 				],function(e){
-					const numSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
+					var numSplit=document.getElementsByTagName("textarea")[0].value.split("\n")
 					if(numSplit[numSplit.length-1]!=""){
 						document.getElementsByTagName("textarea")[0].value+="\n"
 					}
@@ -55,12 +51,12 @@
 				})
 			}
 			function calculate(){
-				const num=document.getElementsByTagName("textarea")[0].value
+				var num=document.getElementsByTagName("textarea")[0].value
 				if(num!=""&&num!=null){
-					const numSplit=num.split("\n")
-					let sumValue=0
+					var numSplit=num.split("\n")
+					var sumValue=0
 					document.getElementById("Count").value=numSplit.length
-					for(let i=0;i<numSplit.length;i++){
+					for(var i=0;i<numSplit.length;i++){
 						sumValue+=numSplit[i]*1
 					}
 					document.getElementById("Average").value=sumValue/numSplit.length
@@ -112,6 +108,5 @@
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 		</script>
-		<!--<![endif]-->
 	</body>
 </html>
