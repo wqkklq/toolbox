@@ -26,8 +26,10 @@
 			<ul class="menu" style="margin-top:15px">
 				<li id="CreateMessageBox" class="menu"></li>
 				<li id="TranslateFullText" class="menu"></li>
+				<li id="GetHitokoto" class="menu"></li>
 				<li id="Speak" class="menu"></li>
 				<li id="GenerateQRCode" class="menu"></li>
+				<li id="GenerateMD5Value" class="menu"></li>
 				<li id="GenerateWebPage" class="menu"></li>
 			</ul>
 			<ul class="menu" style="margin-top:15px">
@@ -47,6 +49,25 @@
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var currentItem,myCodeMirror
+			function addNote(note){
+				if(note==null){
+					switch(language){
+						case "SimplifiedChinese":
+							note="正在加载"
+							if(!navigator.onLine){
+								note+="（没有互联网连接）"
+							}
+							break
+						default:
+							note="Loading"
+							if(!navigator.onLine){
+								note+=" (No Internet connection)"
+							}
+							break
+					}
+				}
+				setText(readText()+"/* "+note+" */")
+			}
 			function apply(serialNumber){
 				if(serialNumber==0){
 					currentItem="Text"
@@ -219,7 +240,6 @@
 				}
 			}
 			function reload(){
-				window.scrollTo(0,0)
 				document.getElementsByTagName("input")[0].value=""
 				setText("")
 				document.getElementById("SavedTextUl").style.marginBottom="45px"
@@ -239,13 +259,12 @@
 							restart()
 						}
 						var log=function(content){
-							setText(readText()+"/* "+eval(content)+" */")
+							addNote(eval(content))
 						}
 						var setTheme=function(themeName){
 							loadCSS("http://codemirror.net/theme/"+themeName+".css")
 							myCodeMirror.setOption("theme",themeName)
 						}
-						window.scrollTo(0,0)
 						try{
 							eval(code)
 						}catch(e){
@@ -262,7 +281,7 @@
 						}
 					}
 					if(code.indexOf("answer=")!=-1){
-						code+=";setText(readText()+'/* ='+answer+' */')"
+						code+=";addNote('='+answer)"
 					}
 					if(code.indexOf("switch(language)")==-1){
 						if(/clearData|eval|plus|require/.test(code)){
@@ -361,6 +380,7 @@
 					document.getElementById("Text").value=text
 				}
 				textChanged()
+				window.scrollTo(0,0)
 			}
 			function speak(){
 				if(!isEmpty()&&window.speechSynthesis){
@@ -497,24 +517,31 @@
 			}
 			document.getElementById("TranslateFullText").onclick=function(){
 				if(!isEmpty()){
-					switch(language){
-						case "SimplifiedChinese":
-							setText(readText()+"/* 正在翻译 */")
-							break
-						default:
-							setText(readText()+"/* Translating */")
-							break
-					}
-					window.scrollTo(0,0)
+					addNote()
 					translate(readText().replace(/\s/g," "),"auto","auto",function(e){
-						setText(readText()+"/* "+e.trans_result[0].dst+" */")
+						addNote(e.trans_result[0].dst)
 					})
 				}
+			}
+			document.getElementById("GetHitokoto").onclick=function(){
+				addNote()
+				request("https://sslapi.hitokoto.cn/",function(e){
+					var json=JSON.parse(e)
+					addNote("「"+json.hitokoto+"」——"+json.from)
+				})
 			}
 			document.getElementById("Speak").onclick=speak
 			document.getElementById("GenerateQRCode").onclick=function(){
 				if(!isEmpty()){
 					showImage("http://qr.topscan.com/api.php?text="+readText())
+				}
+			}
+			document.getElementById("GenerateMD5Value").onclick=function(){
+				if(!isEmpty()){
+					addNote()
+					loadJS(["js/md5.min.js"],function(){
+						addNote(MD5(readText()))
+					})
 				}
 			}
 			document.getElementById("GenerateWebPage").onclick=function(){
@@ -525,14 +552,12 @@
 			document.getElementById("Base64Encode").onclick=function(){
 				if(!isEmpty()){
 					setText(btoa(encodeURI(readText())))
-					window.scrollTo(0,0)
 				}
 			}
 			document.getElementById("Base64Decode").onclick=function(){
 				if(!isEmpty()){
 					try{
 						setText(decodeURI(atob(readText())))
-						window.scrollTo(0,0)
 					}catch(e){
 						showAlert([
 							"The string to be decoded is not correctly encoded",
@@ -547,13 +572,11 @@
 			document.getElementById("URLEncode").onclick=function(){
 				if(!isEmpty()){
 					setText(encodeURI(readText()))
-					window.scrollTo(0,0)
 				}
 			}
 			document.getElementById("URLDecode").onclick=function(){
 				if(!isEmpty()){
 					setText(decodeURI(readText()))
-					window.scrollTo(0,0)
 				}
 			}
 			document.getElementsByClassName("open-file")[0].onchange=function(e){
@@ -572,8 +595,10 @@
 					document.getElementById("NewDocument").innerText="新建文档"
 					document.getElementById("CreateMessageBox").innerText="创建消息框"
 					document.getElementById("TranslateFullText").innerText="翻译全文"
+					document.getElementById("GetHitokoto").innerText="获取一言"
 					document.getElementById("Speak").innerText="朗读"
 					document.getElementById("GenerateQRCode").innerText="生成二维码"
+					document.getElementById("GenerateMD5Value").innerText="生成 MD5 值"
 					document.getElementById("GenerateWebPage").innerText="生成网页"
 					document.getElementById("Base64Encode").innerText="Base64 编码"
 					document.getElementById("Base64Decode").innerText="Base64 解码"
@@ -592,8 +617,10 @@
 					document.getElementById("NewDocument").innerText="New Document"
 					document.getElementById("CreateMessageBox").innerText="Create Message Box"
 					document.getElementById("TranslateFullText").innerText="Translate Full Text"
+					document.getElementById("GetHitokoto").innerText="Get Hitokoto"
 					document.getElementById("Speak").innerText="Speak"
 					document.getElementById("GenerateQRCode").innerText="Generate QR Code"
+					document.getElementById("GenerateMD5Value").innerText="Generate MD5 Value"
 					document.getElementById("GenerateWebPage").innerText="Generate Web Page"
 					document.getElementById("Base64Encode").innerText="Base64 Encode"
 					document.getElementById("Base64Decode").innerText="Base64 Decode"
