@@ -159,14 +159,25 @@
 			}
 			function isEmpty(){
 				if(readText()==""){
-					showAlert([
-						"The text cannot be empty",
-						"文本不能为空"
-					],[
-						"Error",
-						"错误"
-					])
-					return true
+					var text
+					if(myCodeMirror!=null){
+						text=myCodeMirror.getValue()
+					}else{
+						text=document.getElementById("Text").value
+					}
+					setText(text.replace(/\/\*|\*\//g,"").trim())
+					if(readText()==""){
+						showAlert([
+							"The text cannot be empty",
+							"文本不能为空"
+						],[
+							"Error",
+							"错误"
+						])
+						return true
+					}else{
+						return false
+					}
 				}else{
 					return false
 				}
