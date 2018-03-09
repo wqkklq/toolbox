@@ -112,16 +112,17 @@
 					}
 				}
 			}
-			function decodeUnicode(text){
-				if(text.indexOf("\\u")!=-1){
-					var str="",
-					unicode=text.split("\\u")
-					for(var i=1;i<unicode.length;i++){
-						str+=String.fromCharCode(parseInt(unicode[i],16))
+			function decodeUnicode(code){
+				if(code.indexOf("\\u")!=-1){
+					var escaped=code.replace(/\\u/g,"%u")
+					var text=unescape(escaped)
+					if(text==escaped){
+						return code
+					}else{
+						return text
 					}
-					return str
 				}else{
-					throw false
+					return code
 				}
 			}
 			function enableCodeEditor(callback){
@@ -153,7 +154,11 @@
 			function encodeUnicode(text){
 				var unicode=""
 				for(var i=0;i<text.length;i++){
-					unicode+="\\u"+text.charCodeAt(i).toString(16)
+					var charCode=text.charCodeAt(i).toString(16)
+					if(charCode.length<4){
+						charCode=addZero(charCode,4)
+					}
+					unicode+="\\u"+charCode
 				}
 				return unicode
 			}
@@ -229,6 +234,20 @@
 					clear()
 				}
 			}
+			function only(regExp,text){
+				var array=text.split(""),
+				passed=""
+				for(var i=0;i<array.length;i++){
+					if(regExp.test(array[i])){
+						passed+=array[i]
+					}
+				}
+				if(passed==text){
+					return true
+				}else{
+					return false
+				}
+			}
 			function openLText(file){
 				if(file.type.indexOf("text")!=-1){
 					var reader=new FileReader()
@@ -260,6 +279,8 @@
 						type="javascript"
 					}else if(type.indexOf("c")!=-1&&type.indexOf("css")==-1){
 						type="clike"
+					}else if(type=="md"){
+						type="markdown"
 					}
 					if(type!="txt"&&type!="rth"&&myCodeMirror.getOption("mode")!=type){
 						setMode(type)
@@ -576,7 +597,7 @@
 						addNote()
 						loadJS(["js/md5.min.js"],function(){
 							var encrypted="",
-							text=readText().replace(/丨/g," | ")+"丨"+MD5(e)
+							text=readText().replace(/丨/g,"｜")+"丨"+MD5(e)
 							for(var i=0;i<text.length;i++){
 								encrypted+=(text.charCodeAt(i)*8).toString(8)+"9"
 							}
@@ -589,96 +610,66 @@
 				if(!isEmpty()){
 					var encoded=readText()
 					var decoded=encoded
-					var notEncoded=function(){
-						if(decoded==encoded){
-							showAlert([
-								"The string to be decoded is not correctly encoded",
-								"要解码的字符串编码不正确"
-							],[
-								"Error",
-								"错误"
-							])
-						}else{
-							setText(decoded)
-						}
-					}
-					while(true){
-						try{
-							var binary="",decodedArray=decoded.split("")
-							for(var i=0;i<decodedArray.length;i++){
-								if(decodedArray[i]=="0"||decodedArray[i]=="1"||decodedArray[i]==" "){
-									binary+=decodedArray[i]
-								}
-							}
-							if(binary==decoded){
-								var binaries=decoded.split(" "),
-								str=""
-								for(var i=0;i<binaries.length;i++){
-									str+=String.fromCharCode(parseInt(binaries[i],2))
-								}
-								decoded=str
-							}else if(decoded.indexOf(" ")!=-1){
-								notEncoded()
-								return false
-							}else{
-								decoded=atob(decoded)
-							}
-							if(isNumber.test(decoded)&&decoded.indexOf(" ")==-1&&!isChinese.test(decoded)&&!isEnglish.test(decoded)){
-								var encrypted=decoded.split("9"),
-								str=""
-								for(var i=0;i<encrypted.length;i++){
-									str+=String.fromCharCode(parseInt(encrypted[i],8)/8)
-								}
-								if(str.indexOf("丨")!=-1){
-									showPrompt([
-										"Please enter the password",
-										"请输入密码"
-									],[
-										"Decrypt",
-										"解密"
-									],function(e){
-										addNote()
-										loadJS(["js/md5.min.js"],function(){
-											if(MD5(e)==str.substr(str.indexOf("丨")+1,32)){
-												setText(str.substr(0,str.indexOf("丨")))
-											}else{
-												setText(encoded)
-												showAlert([
-													"Incorrect password",
-													"密码错误"
-												],[
-													"Error",
-													"错误"
-												])
-											}
-										})
-									})
-								}else{
-									notEncoded()
-								}
-								return false
-							}
-						}catch(e){
+					try{
+						if(decoded.indexOf(" ")==-1){
 							if(decoded.indexOf("%")!=-1){
-								try{
-									decoded=decodeURIComponent(decoded)
-								}catch(e){
-									notEncoded()
-									return false
-								}
+								decoded=decodeURIComponent(decoded)
 							}else if(decoded.indexOf("\\u")!=-1){
-								if(encodeUnicode(decodeUnicode(decoded)).indexOf("\\u0")!=-1){
-									notEncoded()
-									return false
-								}else{
-									decoded=decodeUnicode(decoded)
-								}
+								decoded=decodeUnicode(decoded)
 							}else{
-								notEncoded()
-								return false
+								decoded=decodeUnicode(atob(decoded))
+								if(only(isNumber,decoded)){
+									var encrypted=decoded.split("9"),
+									str=""
+									for(var i=0;i<encrypted.length;i++){
+										str+=String.fromCharCode(parseInt(encrypted[i],8)/8)
+									}
+									if(str.indexOf("丨")!=-1){
+										showPrompt([
+											"Please enter the password",
+											"请输入密码"
+										],[
+											"Decrypt",
+											"解密"
+										],function(e){
+											addNote()
+											loadJS(["js/md5.min.js"],function(){
+												if(MD5(e)==str.substr(str.indexOf("丨")+1,32)){
+													setText(str.substr(0,str.indexOf("丨")))
+												}else{
+													setText(encoded)
+													showAlert([
+														"Incorrect password",
+														"密码错误"
+													],[
+														"Error",
+														"错误"
+													])
+												}
+											})
+										})
+										return false
+									}
+								}
 							}
+						}else if(only(/0|1|\s/,decoded)){
+							var binaries=decoded.split(" "),
+							str=""
+							for(var i=0;i<binaries.length;i++){
+								str+=String.fromCharCode(parseInt(binaries[i],2))
+							}
+							decoded=str
 						}
+					}catch(e){
+						showAlert([
+							e.message,
+							e.message
+						],[
+							"Error",
+							"错误"
+						])
 					}
+					setText(decoded)
 				}
 			}
 			document.getElementById("Speak").onclick=speak
