@@ -614,7 +614,9 @@
 					var decoded=encoded
 					try{
 						if(decoded.indexOf(" ")==-1){
-							if(decoded.indexOf("%")!=-1){
+							if(decoded.indexOf("%u")!=-1){
+								decoded=unescape(decoded)
+							}else if(decoded.indexOf("%")!=-1){
 								decoded=decodeURIComponent(decoded)
 							}else if(decoded.indexOf("\\u")!=-1){
 								decoded=decodeUnicode(decoded)
