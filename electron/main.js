@@ -78,6 +78,10 @@ let template=[{
 	label:"Window",
 	role:"window",
 	submenu:[{
+		label:"New",
+		accelerator:"CmdOrCtrl+N",
+		click:createWindow
+	},{
 		label:"Minimize",
 		accelerator:"CmdOrCtrl+M",
 		role:"minimize"
