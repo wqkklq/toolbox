@@ -335,6 +335,9 @@
 					break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			if(!isMobile){
+				document.getElementsByClassName("time")[0].focus()
+			}
 			if(!window.speechSynthesis){
 				document.getElementById("SpeakDiv1").style.display="none"
 				document.getElementById("SpeakDiv2").style.display="none"

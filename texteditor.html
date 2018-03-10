@@ -141,6 +141,9 @@
 							myCodeMirror.setOption("theme","seti")
 						}
 						myCodeMirror.on("change",count)
+						if(!isMobile){
+							myCodeMirror.focus()
+						}
 						document.getElementById("TextDiv").style.marginBottom="15px"
 						document.getElementsByClassName("CodeMirror-lines")[0].style.minHeight="300px"
 						document.getElementsByClassName("CodeMirror")[0].style.height="100%"
