@@ -239,7 +239,7 @@ function searchURL(key,url){
 	}
 }
 function showAlert(text,title,callback){
-	if(isMobile){
+	if(isMobile||isUWP){
 		if(title==null){
 			title=[document.title,document.title]
 		}
@@ -264,7 +264,7 @@ function showAlert(text,title,callback){
 	}
 }
 function showConfirm(text,title,positiveCallback,negativeCallback){
-	if(isMobile){
+	if(isMobile||isUWP){
 		if(title==null){
 			title=[document.title,document.title]
 		}
