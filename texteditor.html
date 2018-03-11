@@ -549,7 +549,7 @@
 			document.getElementById("CreateMessageBox").onclick=function(){
 				if(!isEmpty()){
 					if(navigator.onLine){
-						openWebPage("http://rthsoftware.tk/sharedtext.html?alert=1&title="+escape(document.getElementsByTagName("input")[0].value)+"&text="+escape(readText()))
+						openWebPage("http://rthsoftware.tk/sharedtext?alert=1&title="+escape(document.getElementsByTagName("input")[0].value)+"&text="+escape(readText()))
 					}else{
 						var title=document.getElementsByTagName("input")[0].value
 						if(title==""){
@@ -721,7 +721,7 @@
 			}
 			document.getElementById("GenerateWebPage").onclick=function(){
 				if(!isEmpty()){
-					openWebPage("http://rthsoftware.tk/sharedtext.html?title="+escape(document.getElementsByTagName("input")[0].value)+"&text="+escape(readText()))
+					openWebPage("http://rthsoftware.tk/sharedtext?title="+escape(document.getElementsByTagName("input")[0].value)+"&text="+escape(readText()))
 				}
 			}
 			document.getElementsByClassName("open-file")[0].onchange=function(e){

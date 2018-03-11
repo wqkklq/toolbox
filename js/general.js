@@ -144,10 +144,6 @@ function loadJS(src,callback){
 	loadScript(0)
 }
 function loadOnline(){
-	var wvs=plus.webview.all()
-	for(var i=0;i<wvs.length;i++){
-		plus.webview.close(wvs[i].id)
-	}
 	openWindow("http://t.rths.tk/index")
 }
 function openDialog(){
@@ -181,7 +177,7 @@ function openWebPage(href){
 }
 function openWindow(name){
 	var suffix=".html"
-	if(name.indexOf(suffix)!=-1){
+	if(name.indexOf(suffix)!=-1||isOnline){
 		suffix=""
 	}
 	var url=name+suffix
@@ -222,7 +218,7 @@ function restart(){
 	}else if(isUWP){
 		mui.back()
 	}else{
-		window.location.href="index.html"
+		openWindow("index")
 	}
 }
 function searchURL(key,url){
@@ -243,17 +239,7 @@ function searchURL(key,url){
 	}
 }
 function showAlert(text,title,callback){
-	if(isIE){
-		switch(language){
-			case "SimplifiedChinese":
-				alert(text[1])
-				break
-			default:
-				alert(text[0])
-				break
-		}
-		callback()
-	}else{
+	if(isMobile){
 		if(title==null){
 			title=[document.title,document.title]
 		}
@@ -265,25 +251,20 @@ function showAlert(text,title,callback){
 				mui.alert(text[0],title[0],"OK",callback)
 				break
 		}
+	}else{
+		switch(language){
+			case "SimplifiedChinese":
+				alert(text[1])
+				break
+			default:
+				alert(text[0])
+				break
+		}
+		callback()
 	}
 }
 function showConfirm(text,title,positiveCallback,negativeCallback){
-	if(isIE){
-		var value
-		switch(language){
-			case "SimplifiedChinese":
-				value=confirm(text[1])
-				break
-			default:
-				value=confirm(text[0])
-				break
-		}
-		if(value){
-			positiveCallback()
-		}else{
-			negativeCallback()
-		}
-	}else{
+	if(isMobile){
 		if(title==null){
 			title=[document.title,document.title]
 		}
@@ -306,6 +287,21 @@ function showConfirm(text,title,positiveCallback,negativeCallback){
 					}
 				})
 				break
+		}
+	}else{
+		var value
+		switch(language){
+			case "SimplifiedChinese":
+				value=confirm(text[1])
+				break
+			default:
+				value=confirm(text[0])
+				break
+		}
+		if(value){
+			positiveCallback()
+		}else{
+			negativeCallback()
 		}
 	}
 }

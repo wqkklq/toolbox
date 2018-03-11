@@ -139,7 +139,7 @@
 							"单词太少 ("+wordCount+"/"+wordMin+")"
 						])
 					}else if(name=="share"){
-						openWebPage('http://t.rths.tk/wordlist.html?list='+escape(document.getElementsByTagName('textarea')[0].value))
+						openWebPage('http://t.rths.tk/wordlist?list='+escape(document.getElementsByTagName('textarea')[0].value))
 					}else{
 						localStorage.setItem("WordList",document.getElementsByTagName("textarea")[0].value)
 						openWindow(name)
@@ -267,7 +267,7 @@
 							document.getElementById("OWLUl").appendChild(newLi)
 						}
 					}
-					request("http://t.rths.tk/wordlist/index.html",function(e){
+					request("http://t.rths.tk/wordlist/",function(e){
 						OWLTSplit=e.replace(/<br \/>/g,"").split("\n")
 						for(var i=OWLTSplit.length-1;i>=0;i-=1){
 							var newLi=document.createElement("li")
@@ -322,7 +322,7 @@
 				}
 			}
 			function openOWL(serialNumber){
-				request("http://t.rths.tk/wordlist/"+addZero(serialNumber,3)+".html",function(e){
+				request("http://t.rths.tk/wordlist/"+addZero(serialNumber,3),function(e){
 					document.getElementsByTagName("textarea")[0].value=e.replace(/<br \/>/g,"")
 					apply(0)
 				})
