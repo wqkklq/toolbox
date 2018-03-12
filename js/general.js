@@ -198,7 +198,7 @@ function request(url,callback){
 	xhr.onreadystatechange=function(){
 		switch(xhr.readyState){
 			case 4:
-				if(xhr.status==200){
+				if(xhr.status==200&&callback){
 					callback(xhr.responseText)
 				}
 				break
@@ -260,7 +260,9 @@ function showAlert(text,title,callback){
 				alert(text[0])
 				break
 		}
-		callback()
+		if(callback){
+			callback()
+		}
 	}
 }
 function showConfirm(text,title,positiveCallback,negativeCallback){
@@ -272,7 +274,9 @@ function showConfirm(text,title,positiveCallback,negativeCallback){
 			case "SimplifiedChinese":
 				mui.confirm(text[1],title[1],["否","是"],function(e){
 					if(e.index==1){
-						positiveCallback()
+						if(positiveCallback){
+							positiveCallback()
+						}
 					}else if(negativeCallback){
 						negativeCallback()
 					}
@@ -281,7 +285,9 @@ function showConfirm(text,title,positiveCallback,negativeCallback){
 			default:
 				mui.confirm(text[0],title[0],["No","Yes"],function(e){
 					if(e.index==1){
-						positiveCallback()
+						if(positiveCallback){
+							positiveCallback()
+						}
 					}else if(negativeCallback){
 						negativeCallback()
 					}
@@ -299,8 +305,10 @@ function showConfirm(text,title,positiveCallback,negativeCallback){
 				break
 		}
 		if(value){
-			positiveCallback()
-		}else{
+			if(positiveCallback){
+				positiveCallback()
+			}
+		}else if(negativeCallback){
 			negativeCallback()
 		}
 	}
@@ -373,14 +381,14 @@ function showPrompt(text,title,callback){
 		switch(language){
 			case "SimplifiedChinese":
 				mui.prompt(text[1],"",title[1],null,function(e){
-					if(e.index==1&&e.value!=""){
+					if(e.index==1&&e.value!=""&&callback){
 						callback(e.value)
 					}
 				})
 				break
 			default:
 				mui.prompt(text[0],"",title[0],["Cancel","OK"],function(e){
-					if(e.index==1&&e.value!=""){
+					if(e.index==1&&e.value!=""&&callback){
 						callback(e.value)
 					}
 				})
@@ -396,7 +404,7 @@ function showPrompt(text,title,callback){
 				value=prompt(text[0],"")
 				break
 		}
-		if(value!=null&&value!=""){
+		if(value!=null&&value!=""&&callback){
 			callback(value)
 		}
 	}
@@ -426,7 +434,9 @@ function translate(query,from,to,callback){
 				sign:sign
 			},
 			success:function(data){
-				callback(data)
+				if(callback){
+					callback(data)
+				}
 			}
 		})
 	})
