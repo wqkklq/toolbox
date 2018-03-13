@@ -1,7 +1,7 @@
 {
 	"name": "rthtoolbox",
 	"productName": "RTH Toolbox",
-	"version": "6.8",
+	"version": "7.1",
 	"description": "A Product of RTH Software Studio",
 	"main": "electron/main.js",
 	"scripts": {
