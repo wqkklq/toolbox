@@ -194,11 +194,11 @@
 							document.title="\""+list.split("\n")[1]+"\" and other "+(list.split("\n").length-2)/2+" words"
 							break
 					}
-					if(window.location.href.length<=1500){
-						showImage("http://qr.topscan.com/api.php?text="+window.location.href)
-					}
 					var time=searchURL("time",window.location.search)
 					if(time&&(new Date).getTime()-time<10000){
+						if(window.location.href.length<=1500){
+							showImage("http://qr.topscan.com/api.php?text="+window.location.href)
+						}
 						showAlert([
 							"Please share the URL of the current page with your friends",
 							"请把当前页面的网址分享给您的好友"
