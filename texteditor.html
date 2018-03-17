@@ -90,6 +90,14 @@
 				localStorage.removeItem("TextEditorCurrentItem")
 				reload()
 			}
+			function clearData(){
+				localStorage.clear()
+				if(isPlus){
+					plus.cache.clear()
+					plus.navigator.removeAllCookie()
+				}
+				restart()
+			}
 			function count(){
 				var wordCount=(readText().match(/[a-z]+|[\u4E00-\uFA29]/ig)||[]).length
 				if(wordCount<=0){
@@ -310,18 +318,6 @@
 				if(!isEmpty()){
 					var code=readText().replace(/coin|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast")
 					var runTrue=function(){
-						var clearData=function(){
-							localStorage.clear()
-							if(isPlus){
-								plus.cache.clear()
-								plus.navigator.removeAllCookie()
-							}
-							restart()
-						}
-						var setTheme=function(themeName){
-							loadCSS("http://codemirror.net/theme/"+themeName+".css")
-							myCodeMirror.setOption("theme",themeName)
-						}
 						try{
 							var result=calc(code)
 							if(result!=undefined){
@@ -438,6 +434,10 @@
 				}
 				textChanged()
 				window.scrollTo(0,0)
+			}
+			function setTheme(){
+				loadCSS("http://codemirror.net/theme/"+themeName+".css")
+				myCodeMirror.setOption("theme",themeName)
 			}
 			function speak(){
 				if(!isEmpty()&&window.speechSynthesis){
