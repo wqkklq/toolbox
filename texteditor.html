@@ -308,7 +308,7 @@
 			}
 			function runJSCode(fromShortcut){
 				if(!isEmpty()){
-					var code=readText().replace(/coin|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast").replace(/设|let\s/gi,"var ").replace(/答|answer/gi,"var answer=").replace(/answer==/gi,"answer=")
+					var code=readText().replace(/coin|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast")
 					var runTrue=function(){
 						var clearData=function(){
 							localStorage.clear()
@@ -323,7 +323,10 @@
 							myCodeMirror.setOption("theme",themeName)
 						}
 						try{
-							eval(code)
+							var result=calc(code)
+							if(result!=undefined){
+								addNote(result)
+							}
 						}catch(e){
 							if(fromShortcut){
 								speak()
@@ -336,9 +339,6 @@
 						if(myCodeMirror.getOption("mode")!="javascript"){
 							setMode("javascript")
 						}
-					}
-					if(code.indexOf("answer=")!=-1){
-						code+=";addNote('='+answer)"
 					}
 					if(code.indexOf("switch(language)")==-1){
 						if(/clearData|eval|plus|require/.test(code)){
@@ -614,7 +614,9 @@
 					var decoded=encoded
 					try{
 						if(decoded.indexOf(" ")==-1){
-							if(decoded.indexOf("%u")!=-1){
+							if(only(/0|1/,decoded)){
+								decoded=String.fromCharCode(parseInt(decoded,2))
+							}else if(decoded.indexOf("%u")!=-1){
 								decoded=unescape(decoded)
 							}else if(decoded.indexOf("%")!=-1){
 								decoded=decodeURIComponent(decoded)

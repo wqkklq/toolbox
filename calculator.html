@@ -37,7 +37,7 @@
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			function calculate(){
-				var formula=document.getElementsByTagName("input")[0].value
+				var formula=document.getElementsByTagName("input")[0].value.replace(/coin|eval|plus|require/gi,"")
 				if(formula==""){
 					showAlert([
 						"Please enter the formula",
@@ -47,7 +47,22 @@
 					if(formula.indexOf("=")!=-1){
 						formula=formula.split("=")[0]
 					}
-					document.getElementsByTagName("input")[0].value=formula+"="+eval(formula)
+					try{
+						var result=calc(formula)
+						if(result!=undefined&&!isEnglish.test(result)){
+							document.getElementsByTagName("input")[0].value=formula+"="+result
+						}else{
+							document.getElementsByTagName("input")[0].value=""
+						}
+					}catch(e){
+						showAlert([
+							e.message,
+							e.message
+						],[
+							"Error",
+							"错误"
+						])
+					}
 				}
 			}
 			document.getElementsByTagName("input")[0].onkeydown=function(e){

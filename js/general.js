@@ -36,6 +36,54 @@ function addTime(url){
 function addZero(num,length){
 	return (Array(length).join("0")+num).slice(-length)
 }
+function calc(code){
+	var abs=Math.abs,
+	arccos=Math.acos,
+	arccosh=Math.acosh,
+	arccot=function(x){
+		return Math.atan(1/x)
+	},
+	arccsc=function(x){
+		return Math.asin(1/x)
+	},
+	arcsec=function(x){
+		return Math.acos(1/x)
+	},
+	arcsin=Math.asin,
+	arcsinh=Math.asinh,
+	arctan=Math.atan,
+	arctanh=Math.atanh,
+	cbrt=Math.cbrt,
+	ceil=Math.ceil,
+	cos=Math.cos,
+	cosh=Math.cosh,
+	cot=function(x){
+		return 1/Math.tan(x)
+	},
+	csc=function(x){
+		return 1/Math.sin(x)
+	},
+	e=Math.E,
+	exp=Math.exp,
+	floor=Math.floor,
+	ln=Math.log,
+	log10=Math.log10,
+	log2=Math.log2,
+	pi=Math.PI,
+	pow=Math.pow,
+	random=Math.random,
+	round=Math.round,
+	sec=function(x){
+		return 1/Math.cos(x)
+	},
+	sin=Math.sin,
+	sinh=Math.sinh,
+	sqrt=Math.sqrt,
+	tan=Math.tan,
+	tanh=Math.tanh,
+	trunc=Math.trunc
+	return eval(code)
+}
 function getToolbox(){
 	if(isAndroid){
 		if(navigator.language=="zh-CN"){

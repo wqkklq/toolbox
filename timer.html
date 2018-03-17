@@ -200,12 +200,6 @@
 						mui.toast(e.message)
 					}
 				}
-				if(document.getElementById("CreateMessageBoxCheck").checked==true){
-					showAlert([
-						document.getElementById("CreateMessageBoxInput").value,
-						document.getElementById("CreateMessageBoxInput").value
-					])
-				}
 				if(document.getElementById("SpeakCheck").checked==true&&window.speechSynthesis){
 					window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementById("SpeakInput").value))
 				}
@@ -223,6 +217,12 @@
 				}
 				if(document.getElementById("OpenWebPageCheck").checked==true){
 					openWebPage(document.getElementById("OpenWebPageInput").value)
+				}
+				if(document.getElementById("CreateMessageBoxCheck").checked==true){
+					showAlert([
+						document.getElementById("CreateMessageBoxInput").value,
+						document.getElementById("CreateMessageBoxInput").value
+					])
 				}
 			}
 			window.onresize=onResize
