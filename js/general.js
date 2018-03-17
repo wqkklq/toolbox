@@ -81,8 +81,33 @@ function calc(code){
 	sqrt=Math.sqrt,
 	tan=Math.tan,
 	tanh=Math.tanh,
-	trunc=Math.trunc
-	return eval(code)
+	trunc=Math.trunc,
+	x=Math.random(),
+	y=Math.random(),
+	z=Math.random()
+	var calcResult=eval(code),
+	falseCount=0,
+	trueCount=0
+	if(calcResult==false||calcResult==true){
+		if(/==|<|>/.test(code)&&/x|y|z/.test(code)&&!/for|if|while/.test(code)){
+			for(var i=0;i<10;i++){
+				x=Math.random()
+				y=Math.random()
+				z=Math.random()
+				if(eval(code)){
+					trueCount+=1
+				}else{
+					falseCount+=1
+				}
+			}
+			if(trueCount>falseCount){
+				calcResult=true
+			}else if(trueCount<falseCount){
+				calcResult=false
+			}
+		}
+	}
+	return calcResult
 }
 function getToolbox(){
 	if(isAndroid){

@@ -44,16 +44,14 @@
 						"请输入算式"
 					])
 				}else{
-					if(formula.indexOf("=")!=-1){
-						formula=formula.split("=")[0]
+					if(formula.indexOf(" = ")!=-1){
+						formula=formula.split(" = ")[0]
+					}
+					if(formula.indexOf("=")!=-1&&formula.indexOf("==")==-1){
+						formula=formula.replace("=","==")
 					}
 					try{
-						var result=calc(formula)
-						if(result!=undefined&&!isEnglish.test(result)){
-							document.getElementsByTagName("input")[0].value=formula+"="+result
-						}else{
-							document.getElementsByTagName("input")[0].value=""
-						}
+						document.getElementsByTagName("input")[0].value=formula+" = "+calc(formula)
 					}catch(e){
 						showAlert([
 							e.message,
