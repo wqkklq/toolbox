@@ -203,22 +203,24 @@
 						mui.back=function(){
 							plus.runtime.quit()
 						}
-						plus.runtime.getProperty(plus.runtime.appid,function(inf){
-							request("http://t.rths.tk/package.json",function(e){
-								var json=JSON.parse(e)
-								if(inf.version!=json.version){
-									showAlert([
-										"Going to the download page",
-										"即将前往下载页面"
-									],[
-										"Update Available",
-										"有更新可用"
-									],getToolbox)
-								}
+					}
+					if(!isOnline){
+						if(isAndroid){
+							plus.runtime.getProperty(plus.runtime.appid,function(inf){
+								request("http://t.rths.tk/package.json",function(e){
+									var json=JSON.parse(e)
+									if(inf.version!=json.version){
+										showAlert([
+											"Going to the download page",
+											"即将前往下载页面"
+										],[
+											"Update Available",
+											"有更新可用"
+										],getToolbox)
+									}
+								})
 							})
-						})
-					}else if(!isOnline){
-						if(plus.runtime.launcher=="shortcut"){
+						}else if(plus.runtime.launcher=="shortcut"){
 							var cmd=JSON.parse(plus.runtime.arguments)
 							var type=cmd&&cmd.type
 							openWindow(type)
