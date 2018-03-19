@@ -5,6 +5,7 @@ appliedTheme,
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
 isChinese=new RegExp("[\u4E00-\u9FA5]+"),
+isCordova=!!window.cordova,
 isEdge=/Edge/i.test(navigator.userAgent),
 isElectron=/Electron/i.test(navigator.userAgent),
 isEnglish=new RegExp("[A-Za-z]+"),
@@ -21,8 +22,9 @@ isWindows=/Windows/i.test(navigator.userAgent),
 isWin10=/Windows\sNT\s10\.0/i.test(navigator.userAgent),
 language=localStorage.getItem("Language"),
 recentInput=0,
-theme=localStorage.getItem("Theme")
-var isApp=isElectron||isPlus||isUWP,
+theme=localStorage.getItem("Theme"),
+ver="8.0"
+var isApp=isCordova||isElectron||isPlus||isUWP,
 isAndroidApp=isAndroid&&isPlus,
 isMobile=isAndroid||isiOS
 function addTime(url){
@@ -312,7 +314,7 @@ function searchURL(key,url){
 	}
 }
 function showAlert(text,title,callback){
-	if(isMobile||isUWP){
+	if(isMobile&&!isCordova||isUWP){
 		if(title==null){
 			title=[document.title,document.title]
 		}
@@ -339,7 +341,7 @@ function showAlert(text,title,callback){
 	}
 }
 function showConfirm(text,title,positiveCallback,negativeCallback){
-	if(isMobile||isUWP){
+	if(isMobile&&!isCordova||isUWP){
 		if(title==null){
 			title=[document.title,document.title]
 		}
@@ -450,7 +452,7 @@ function showImage(src){
 	},25)
 }
 function showPrompt(text,title,callback){
-	if(isApp){
+	if(isApp&&!isCordova){
 		switch(language){
 			case "SimplifiedChinese":
 				mui.prompt(text[1],"",title[1],null,function(e){

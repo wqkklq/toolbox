@@ -133,6 +133,7 @@
 			<button class="mui-btn mui-btn-blue get" style="display:none"></button>
 			<a class="mui-icon mui-icon-settings settings" href="javascript:openWindow('settings')"></a>
 		</div>
+		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
@@ -204,23 +205,8 @@
 							plus.runtime.quit()
 						}
 					}
-					if(!isOnline){
-						if(isAndroid){
-							plus.runtime.getProperty(plus.runtime.appid,function(inf){
-								request("http://t.rths.tk/package.json",function(e){
-									var json=JSON.parse(e)
-									if(inf.version!=json.version){
-										showAlert([
-											"Going to the download page",
-											"即将前往下载页面"
-										],[
-											"Update Available",
-											"有更新可用"
-										],getToolbox)
-									}
-								})
-							})
-						}else if(plus.runtime.launcher=="shortcut"){
+					if(isiOS&&!isOnline){
+						if(plus.runtime.launcher=="shortcut"){
 							var cmd=JSON.parse(plus.runtime.arguments)
 							var type=cmd&&cmd.type
 							openWindow(type)
@@ -305,6 +291,38 @@
 			}else if(window.location.search.indexOf("more=1")!=-1){
 				more()
 			}
+			if(isAndroid&&isCordova||isElectron){
+				request("http://t.rths.tk/package.json",function(e){
+					var json=JSON.parse(e)
+					if((function(){
+						var newVer=json.version.split("."),
+						currentVer=ver.split(".")
+						if(newVer[0]*1>currentVer[0]*1){
+							return true
+						}else if(newVer[0]*1==currentVer[0]*1){
+							if(newVer[1]*1>currentVer[1]*1){
+								return true
+							}else{
+								return false
+							}
+						}else{
+							return false
+						}
+					})()){
+						if(isCordova){
+							showConfirm([
+								"Going to the download page",
+								"即将前往下载页面"
+							],[
+								"Update Available",
+								"有更新可用"
+							],getToolbox)
+						}else if(isElectron){
+							window.location.href="electron/update.html"
+						}
+					}
+				})
+			}
 			if(isElectron){
 				var path,remote=require("electron").remote
 				if(process.platform=="darwin"){
@@ -324,14 +342,6 @@
 						localStorage.removeItem("WordListCurrentItem")
 						openWindow("wordlist")
 					}
-				}else{
-					var package=require("./package.json")
-					request("http://t.rths.tk/package.json",function(e){
-						var json=JSON.parse(e)
-						if(package.version!=json.version){
-							window.location.href="electron/update.html"
-						}
-					})
 				}
 			}
 		</script>

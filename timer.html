@@ -83,6 +83,7 @@
 				</ul>
 			</fieldset>
 		</div>
+		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
@@ -219,10 +220,14 @@
 					openWebPage(document.getElementById("OpenWebPageInput").value)
 				}
 				if(document.getElementById("CreateMessageBoxCheck").checked==true){
-					showAlert([
-						document.getElementById("CreateMessageBoxInput").value,
-						document.getElementById("CreateMessageBoxInput").value
-					])
+					if(isCordova&&document.hidden&&navigator.onLine){
+						openWebPage("http://rthsoftware.tk/sharedtext?alert=1&title="+escape(document.title)+"&text="+escape(document.getElementById("CreateMessageBoxInput").value))
+					}else{
+						showAlert([
+							document.getElementById("CreateMessageBoxInput").value,
+							document.getElementById("CreateMessageBoxInput").value
+						])
+					}
 				}
 			}
 			window.onresize=onResize
