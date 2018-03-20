@@ -284,7 +284,9 @@ function request(url,callback){
 	xhr.send()
 }
 function restart(){
-	if(isPlus){
+	if(isCordova){
+		navigator.app.backHistory()
+	}else if(isPlus){
 		if(isOnline){
 			loadOnline()
 		}else{
