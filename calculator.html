@@ -7,6 +7,35 @@
 		<meta name="theme-color" content="#0066cc">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
+		<style>
+			button{
+				height:100%;
+				width:100%;
+			}
+			table{
+				margin:0 auto;
+				max-width:400px;
+				width:100%;
+			}
+			td{
+				height:55px;
+				padding:5px;
+			}
+			.function{
+				background-color:transparent;
+				border:1px solid #ccc;
+				height:100%;
+				margin:12px 0px -2px 0px;
+				overflow:auto;
+				padding:0px;
+				width:100%;
+			}
+			.function li{
+				border:1px solid white;
+				height:40px;
+				padding:0px 10px;
+			}
+		</style>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title"></header>
@@ -14,7 +43,126 @@
 			<div class="mui-input-row">
 				<input type="text" class="mui-input-clear">
 			</div>
-			<button type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
+			<table>
+				<tbody>
+					<tr>
+						<td width="25%">
+							<button id="C" type="button" class="mui-btn mui-btn-blue">C</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">,</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">(</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">)</button>
+						</td>
+					</tr>
+					<tr>
+						<td width="25%">
+							<button id="Backspace" type="button" class="mui-btn mui-btn-blue">←</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">7</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">8</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">9</button>
+						</td>
+					</tr>
+					<tr>
+						<td rowspan="5" width="25%">
+							<div class="function">
+								<ul class="menu">
+									<li class="menu">abs()</li>
+									<li class="menu">arc</li>
+									<li class="menu">cbrt()</li>
+									<li class="menu">ceil()</li>
+									<li class="menu">cos()</li>
+									<li class="menu">cosh()</li>
+									<li class="menu">cot()</li>
+									<li class="menu">csc()</li>
+									<li class="menu">e</li>
+									<li class="menu">exp()</li>
+									<li class="menu">floor()</li>
+									<li class="menu">ln()</li>
+									<li class="menu">log10()</li>
+									<li class="menu">log2()</li>
+									<li class="menu">π</li>
+									<li class="menu">pow()</li>
+									<li class="menu">random()</li>
+									<li class="menu">round()</li>
+									<li class="menu">sec()</li>
+									<li class="menu">sin()</li>
+									<li class="menu">sinh()</li>
+									<li class="menu">sqrt()</li>
+									<li class="menu">tan()</li>
+									<li class="menu">tanh()</li>
+									<li class="menu">trunc()</li>
+									<li class="menu">y</li>
+									<li class="menu">z</li>
+								</ul>
+							</div>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">4</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">5</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">6</button>
+						</td>
+					</tr>
+					<tr>
+						<td width="25%">
+							<button type="button" class="mui-btn">1</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">2</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">3</button>
+						</td>
+					</tr>
+					<tr>
+						<td width="25%">
+							<button type="button" class="mui-btn">0</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">.</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">-</button>
+						</td>
+					</tr>
+					<tr>
+						<td width="25%">
+							<button type="button" class="mui-btn">×</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">÷</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">+</button>
+						</td>
+					</tr>
+					<tr>
+						<td width="25%">
+							<button type="button" class="mui-btn">&lt;</button>
+						</td>
+						<td width="25%">
+							<button type="button" class="mui-btn">&gt;</button>
+						</td>
+						<td width="25%">
+							<button id="Equal" type="button" class="mui-btn mui-btn-blue">=</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			<ul class="menu" style="margin-top:15px">
 				<li id="Date" class="menu"></li>
 				<li id="Statistics" class="menu"></li>
@@ -37,30 +185,35 @@
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
+			var calcBtn=document.getElementsByTagName("button"),
+			functionList=document.getElementsByClassName("function")[0].getElementsByTagName("ul")[0].getElementsByTagName("li")
 			function calculate(){
-				var formula=document.getElementsByTagName("input")[0].value.replace(/coin|eval|plus|require/gi,"").toLowerCase()
+				var formula=document.getElementsByTagName("input")[0].value.replace(/coin|eval|plus|require/gi,"").replace(/×/g,"*").replace(/÷/g,"/").replace(/π/g,"pi").toLowerCase()
 				if(formula==""){
 					showAlert([
 						"Please enter the formula",
 						"请输入算式"
 					])
 				}else{
-					if(formula.indexOf(" = ")!=-1){
-						formula=formula.split(" = ")[0]
-					}
-					if(formula.indexOf("=")!=-1&&formula.indexOf("==")==-1){
-						formula=formula.replace("=","==")
-					}
-					try{
-						document.getElementsByTagName("input")[0].value=formula+" = "+calc(formula)
-					}catch(e){
-						showAlert([
-							e.message,
-							e.message
-						],[
-							"Error",
-							"错误"
-						])
+					if(/x|y|z/.test(formula)&&formula.indexOf("=")==-1&&formula.indexOf("exp")==-1){
+						document.getElementsByTagName("input")[0].value+=" == "
+					}else{
+						if(formula.indexOf(" = ")!=-1){
+							formula=formula.split(" = ")[0]
+						}
+						if(formula.indexOf("=")!=-1&&formula.indexOf("==")==-1){
+							formula=formula.replace("=","==")
+						}
+						try{
+							document.getElementsByTagName("input")[0].value=formula+" = "+calc(formula)
+						}catch(e){
+							if(e.message.indexOf(")")!=-1){
+								document.getElementsByTagName("input")[0].value+=")"
+								calculate()
+							}else{
+								mui.toast(e.message)
+							}
+						}
 					}
 				}
 			}
@@ -69,7 +222,14 @@
 					calculate()
 				}
 			}
-			document.getElementsByTagName("button")[0].onclick=calculate
+			document.getElementById("C").onclick=function(){
+				document.getElementsByTagName("input")[0].value=""
+			}
+			document.getElementById("Backspace").onclick=function(){
+				var value=document.getElementsByTagName("input")[0].value
+				document.getElementsByTagName("input")[0].value=value.substr(0,value.length-1)
+			}
+			document.getElementById("Equal").onclick=calculate
 			document.getElementById("Date").onclick=function(){
 				openWindow("date")
 			}
@@ -107,7 +267,6 @@
 				case "SimplifiedChinese":
 					document.title="计算器"
 					document.getElementsByTagName("input")[0].placeholder="输入算式"
-					document.getElementsByTagName("button")[0].innerText="计算"
 					document.getElementById("Date").innerText="日期"
 					document.getElementById("Statistics").innerText="统计"
 					document.getElementById("CurrencyConversion").innerText="货币换算"
@@ -123,7 +282,6 @@
 				default:
 					document.title="Calculator"
 					document.getElementsByTagName("input")[0].placeholder="Enter the formula"
-					document.getElementsByTagName("button")[0].innerText="Calculate"
 					document.getElementById("Date").innerText="Date"
 					document.getElementById("Statistics").innerText="Statistics"
 					document.getElementById("CurrencyConversion").innerText="Currency Conversion"
@@ -136,6 +294,29 @@
 					document.getElementById("FindLinearFunction").innerText="Find Analytic Formula of Linear Function"
 					document.getElementById("FindQuadraticFunction").innerText="Find Analytic Formula of Quadratic Function"
 					break
+			}
+			for(var i=0;i<calcBtn.length;i++){
+				if(!calcBtn[i].classList.contains("mui-btn-blue")){
+					calcBtn[i].onclick=function(){
+						var btnText=this.innerText
+						if(btnText=="×"){
+							var value=document.getElementsByTagName("input")[0].value
+							if(value.substr(value.length-1,value.length)=="("||value.substr(value.length-1,value.length)=="*"||value==""){
+								btnText="x"
+							}else{
+								btnText="*"
+							}
+						}else if(btnText=="÷"){
+							btnText="/"
+						}
+						document.getElementsByTagName("input")[0].value+=btnText
+					}
+				}
+			}
+			for(var i=0;i<functionList.length;i++){
+				functionList[i].onclick=function(){
+					document.getElementsByTagName("input")[0].value+=this.innerText.replace(")","").replace("π","pi")
+				}
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(!isMobile){

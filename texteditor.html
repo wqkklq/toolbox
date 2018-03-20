@@ -189,9 +189,6 @@
 						showAlert([
 							"The text cannot be empty",
 							"文本不能为空"
-						],[
-							"Error",
-							"错误"
 						])
 						return true
 					}else{
@@ -243,7 +240,7 @@
 					showConfirm([
 						"Do you want to close the current document?",
 						"您想要关闭当前文档吗？"
-					],null,clear)
+					],clear)
 				}else{
 					clear()
 				}
@@ -342,9 +339,6 @@
 							showConfirm([
 								"This code can harm your device. Do you want to continue?",
 								"此代码可能会对您的设备有害。您想要继续吗？"
-							],[
-								"Warning",
-								"警告"
 							],runTrue)
 						}else{
 							runTrue()
@@ -391,9 +385,6 @@
 					showConfirm([
 						"Do you want to download this document?",
 						"您想要下载此文档吗？"
-					],[
-						"Save",
-						"保存"
 					],function(){
 						var filename=document.getElementsByTagName("input")[0].value
 						if(filename==""){
@@ -538,9 +529,6 @@
 				showConfirm([
 					"Do you want to delete the text document?",
 					"您想要删除此文本文档吗？"
-				],[
-					"Delete",
-					"删除"
 				],function(){
 					localStorage.removeItem(currentItem)
 					clear()
@@ -552,23 +540,9 @@
 					if(navigator.onLine){
 						openWebPage("http://rthsoftware.tk/sharedtext?alert=1&title="+escape(document.getElementsByTagName("input")[0].value)+"&text="+escape(readText()))
 					}else{
-						var title=document.getElementsByTagName("input")[0].value
-						if(title==""){
-							switch(language){
-								case "SimplifiedChinese":
-									title="无标题"
-									break
-								default:
-									title="Untitled"
-									break
-							}
-						}
 						showAlert([
 							readText(),
 							readText()
-						],[
-							title,
-							title
 						])
 					}
 				}
@@ -648,9 +622,6 @@
 													showAlert([
 														"Incorrect password",
 														"密码错误"
-													],[
-														"Error",
-														"错误"
 													])
 												}
 											})
@@ -671,9 +642,6 @@
 						showAlert([
 							e.message,
 							e.message
-						],[
-							"Error",
-							"错误"
 						])
 					}
 					setText(decoded)
@@ -792,6 +760,13 @@
 			}
 			if(isOnline){
 				document.getElementById("OpenOnlineDocument").style.display="none"
+			}
+			if(!navigator.onLine){
+				document.getElementById("OpenOnlineDocument").style.display="none"
+				document.getElementById("Translate").style.display="none"
+				document.getElementById("GetHitokoto").style.display="none"
+				document.getElementById("GenerateQRCode").style.display="none"
+				document.getElementById("GenerateWebPage").style.display="none"
 			}
 			load()
 		</script>

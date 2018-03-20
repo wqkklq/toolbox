@@ -264,8 +264,10 @@
 						Next()
 					}else{
 						if(document.getElementsByTagName("textarea")[0].value.indexOf(CorrectWord)==-1){document.getElementsByTagName("textarea")[0].value+="\n"+CorrectWord+"\n"+CorrectDefinition}
-						if(language=="SimplifiedChinese"){mui.alert("不是这个",document.title)}
-						else{mui.alert("Not this one",document.title,"OK")}
+						showAlert([
+							"Not this one",
+							"不是这个"
+						])
 					}
 				}
 			}
@@ -278,8 +280,10 @@
 			}
 			function Next(){
 				if(SettingsChanged){
-					if(language=="SimplifiedChinese"){mui.alert("单击重新开始使设置生效",document.title)}
-					else{mui.alert("Click Restart to apply the settings",document.title,"OK")}
+					showAlert([
+						"Click Restart to apply the settings",
+						"单击重新开始使设置生效"
+					])
 				}else{
 					if(!ShowAnswer&&document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){if(document.getElementsByTagName("textarea")[0].value.indexOf(CorrectWord)==-1){document.getElementsByTagName("textarea")[0].value+="\n"+CorrectWord+"\n"+CorrectDefinition}}
 					if(!ShowAnswer&&!document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){

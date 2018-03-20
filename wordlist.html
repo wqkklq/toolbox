@@ -95,9 +95,6 @@
 							showConfirm([
 								"Do you want to download this document?",
 								"您想要下载此文档吗？"
-							],[
-								"Save",
-								"保存"
 							],function(){
 								var filename
 								switch(language){
@@ -203,9 +200,6 @@
 						showAlert([
 							"Please share the URL of the current page with your friends",
 							"请把当前页面的网址分享给您的好友"
-						],[
-							"Share",
-							"分享"
 						])
 					}
 					currentItem="WordList"
@@ -376,9 +370,6 @@
 				showConfirm([
 					"Do you want to close the document?",
 					"您想要关闭文档吗？"
-				],[
-					"Close",
-					"关闭"
 				],closeTrue)
 			}
 			document.getElementById("AddWord").onclick=function(){
@@ -456,9 +447,6 @@
 				showConfirm([
 					"Do you want to delete the word list?",
 					"您想要删除此单词表吗？"
-				],[
-					"Delete",
-					"删除"
 				],function(){
 					localStorage.removeItem(currentItem)
 					closeTrue()

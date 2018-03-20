@@ -23,9 +23,9 @@ isWin10=/Windows\sNT\s10\.0/i.test(navigator.userAgent),
 language=localStorage.getItem("Language"),
 recentInput=0,
 theme=localStorage.getItem("Theme"),
-ver="8.0"
+ver="8.1"
 var isApp=isCordova||isElectron||isPlus||isUWP,
-isAndroidApp=isAndroid&&isPlus,
+isAndroidApp=isAndroid&&isCordova,
 isMobile=isAndroid||isiOS
 function addTime(url){
 	if(url.indexOf("?")!=-1){
@@ -218,9 +218,6 @@ function loadJS(src,callback){
 	}
 	loadScript(0)
 }
-function loadOnline(){
-	openWindow("http://t.rths.tk/index")
-}
 function openDialog(){
 	document.getElementsByClassName("open-file")[0].value=""
 	document.getElementsByClassName("open-file")[0].click()
@@ -244,9 +241,6 @@ function openWebPage(href){
 		showAlert([
 			"Length limit exceeded ("+href.length+"/2048)",
 			"超出长度限制 ("+href.length+"/2048)"
-		],[
-			"Error",
-			"错误"
 		])
 	}
 }
@@ -315,17 +309,14 @@ function searchURL(key,url){
 		return false
 	}
 }
-function showAlert(text,title,callback){
-	if(isMobile&&!isCordova||isUWP){
-		if(title==null){
-			title=[document.title,document.title]
-		}
+function showAlert(text,callback){
+	if(isUWP){
 		switch(language){
 			case "SimplifiedChinese":
-				mui.alert(text[1],title[1],null,callback)
+				mui.alert(text[1],document.title,null,callback)
 				break
 			default:
-				mui.alert(text[0],title[0],"OK",callback)
+				mui.alert(text[0],document.title,"OK",callback)
 				break
 		}
 	}else{
@@ -342,14 +333,11 @@ function showAlert(text,title,callback){
 		}
 	}
 }
-function showConfirm(text,title,positiveCallback,negativeCallback){
-	if(isMobile&&!isCordova||isUWP){
-		if(title==null){
-			title=[document.title,document.title]
-		}
+function showConfirm(text,positiveCallback,negativeCallback){
+	if(isUWP){
 		switch(language){
 			case "SimplifiedChinese":
-				mui.confirm(text[1],title[1],["否","是"],function(e){
+				mui.confirm(text[1],document.title,["否","是"],function(e){
 					if(e.index==1){
 						if(positiveCallback){
 							positiveCallback()
@@ -360,7 +348,7 @@ function showConfirm(text,title,positiveCallback,negativeCallback){
 				})
 				break
 			default:
-				mui.confirm(text[0],title[0],["No","Yes"],function(e){
+				mui.confirm(text[0],document.title,["No","Yes"],function(e){
 					if(e.index==1){
 						if(positiveCallback){
 							positiveCallback()
@@ -522,9 +510,6 @@ function unsupportedType(){
 	showAlert([
 		"Unable to open this type of file",
 		"无法打开此类文件"
-	],[
-		"Error",
-		"错误"
 	])
 }
 document.addEventListener("keydown",function(e){
@@ -585,11 +570,7 @@ if(header!=null){
 	newH1.setAttribute("class","mui-title")
 	header.appendChild(newA)
 	header.appendChild(newH1)
-	if(isAndroidApp){
-		mui.init({swipeBack:true})
-	}else{
-		mui.init({swipeBack:false})
-	}
+	mui.init({swipeBack:false})
 	if(!isApp||isMac||isUWP){
 		document.getElementsByClassName("mui-content")[0].style.marginTop="40px"
 		header.style.height="65px"

@@ -220,7 +220,7 @@
 					openWebPage(document.getElementById("OpenWebPageInput").value)
 				}
 				if(document.getElementById("CreateMessageBoxCheck").checked==true){
-					if(isCordova&&document.hidden&&navigator.onLine){
+					if(isAndroidApp&&document.hidden&&navigator.onLine){
 						openWebPage("http://rthsoftware.tk/sharedtext?alert=1&title="+escape(document.title)+"&text="+escape(document.getElementById("CreateMessageBoxInput").value))
 					}else{
 						showAlert([

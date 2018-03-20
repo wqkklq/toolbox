@@ -205,13 +205,6 @@
 							plus.runtime.quit()
 						}
 					}
-					if(isiOS&&!isOnline){
-						if(plus.runtime.launcher=="shortcut"){
-							var cmd=JSON.parse(plus.runtime.arguments)
-							var type=cmd&&cmd.type
-							openWindow(type)
-						}
-					}
 				}
 				if(window.plus){
 					plusReady()
@@ -269,7 +262,11 @@
 					document.getElementById("Search").innerText="搜索"
 					document.getElementById("TextEditor").innerText="文本编辑器"
 					backStr="返回"
-					document.getElementsByClassName("get")[0].innerText="下载 RTH 工具箱"
+					if(isAndroidApp){
+						document.getElementsByClassName("get")[0].innerText="更新 RTH 工具箱"
+					}else{
+						document.getElementsByClassName("get")[0].innerText="下载 RTH 工具箱"
+					}
 					break
 				default:
 					document.title="RTH Toolbox"
@@ -281,7 +278,11 @@
 					document.getElementById("Search").innerText="Search"
 					document.getElementById("TextEditor").innerText="Text Editor"
 					backStr="Back"
-					document.getElementsByClassName("get")[0].innerText="Download RTH Toolbox"
+					if(isAndroidApp){
+						document.getElementsByClassName("get")[0].innerText="Update RTH Toolbox"
+					}else{
+						document.getElementsByClassName("get")[0].innerText="Download RTH Toolbox"
+					}
 					break
 			}
 			var menu=document.getElementsByTagName("ul")[0].innerHTML
@@ -291,7 +292,7 @@
 			}else if(window.location.search.indexOf("more=1")!=-1){
 				more()
 			}
-			if(isAndroid&&isCordova||isElectron){
+			if(isAndroidApp||isElectron){
 				request("http://t.rths.tk/package.json",function(e){
 					var json=JSON.parse(e)
 					if((function(){
@@ -309,14 +310,8 @@
 							return false
 						}
 					})()){
-						if(isCordova){
-							showConfirm([
-								"Going to the download page",
-								"即将前往下载页面"
-							],[
-								"Update Available",
-								"有更新可用"
-							],getToolbox)
+						if(isAndroidApp){
+							document.getElementsByClassName("get")[0].style.display=""
 						}else if(isElectron){
 							window.location.href="electron/update.html"
 						}
