@@ -8,23 +8,21 @@
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<style>
-			button{
-				height:100%;
-				width:100%;
-			}
-			table{
+			.calc-table{
+				background-color:white;
 				margin:0 auto;
 				max-width:400px;
 				width:100%;
 			}
-			td{
-				height:55px;
-				padding:5px;
+			.calc-table td{
+				border:1px solid #ccc;
+				height:50px;
+				padding:0px;
+				width:25%;
 			}
 			.function{
-				background-color:transparent;
-				border:1px solid #ccc;
-				height:100%;
+				border-radius:0px;
+				height:350px;
 				margin:12px 0px -2px 0px;
 				overflow:auto;
 				padding:0px;
@@ -35,6 +33,15 @@
 				height:40px;
 				padding:0px 10px;
 			}
+			.function .menu{
+				border-style:none;
+			}
+			.mui-btn{
+				border-radius:0px;
+				border-style:none;
+				height:100%;
+				width:100%;
+			}
 		</style>
 	</head>
 	<body>
@@ -43,38 +50,10 @@
 			<div class="mui-input-row">
 				<input type="text" class="mui-input-clear">
 			</div>
-			<table>
+			<table class="calc-table">
 				<tbody>
 					<tr>
-						<td width="25%">
-							<button id="C" type="button" class="mui-btn mui-btn-blue">C</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">,</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">(</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">)</button>
-						</td>
-					</tr>
-					<tr>
-						<td width="25%">
-							<button id="Backspace" type="button" class="mui-btn mui-btn-blue">←</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">7</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">8</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">9</button>
-						</td>
-					</tr>
-					<tr>
-						<td rowspan="5" width="25%">
+						<td style="border-style:none;width:25%">
 							<div class="function">
 								<ul class="menu">
 									<li class="menu">abs()</li>
@@ -107,58 +86,88 @@
 								</ul>
 							</div>
 						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">4</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">5</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">6</button>
-						</td>
-					</tr>
-					<tr>
-						<td width="25%">
-							<button type="button" class="mui-btn">1</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">2</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">3</button>
-						</td>
-					</tr>
-					<tr>
-						<td width="25%">
-							<button type="button" class="mui-btn">0</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">.</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">-</button>
-						</td>
-					</tr>
-					<tr>
-						<td width="25%">
-							<button type="button" class="mui-btn">×</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">÷</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">+</button>
-						</td>
-					</tr>
-					<tr>
-						<td width="25%">
-							<button type="button" class="mui-btn">&lt;</button>
-						</td>
-						<td width="25%">
-							<button type="button" class="mui-btn">&gt;</button>
-						</td>
-						<td width="25%">
-							<button id="Equal" type="button" class="mui-btn mui-btn-blue">=</button>
+						<td style="border-style:none;padding-right:5px;width:75%">
+							<table class="calc-table">
+								<tbody>
+									<tr>
+										<td>
+											<button id="C" type="button" class="mui-btn">C</button>
+										</td>
+										<td>
+											<button type="button" class="mui-btn">,</button>
+										</td>
+										<td>
+											<button id="Backspace" type="button" class="mui-btn">←</button>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="mui-btn">7</button>
+										</td>
+										<td>
+											<button type="button" class="mui-btn">8</button>
+										</td>
+										<td>
+											<button type="button" class="mui-btn">9</button>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="mui-btn">4</button>
+										</td>
+										<td>
+											<button type="button" class="mui-btn">5</button>
+										</td>
+										<td>
+											<button type="button" class="mui-btn">6</button>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="mui-btn">1</button>
+										</td>
+										<td>
+											<button type="button" class="mui-btn">2</button>
+										</td>
+										<td>
+											<button type="button" class="mui-btn">3</button>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="mui-btn">0</button>
+										</td>
+										<td>
+											<button type="button" class="mui-btn">.</button>
+										</td>
+										<td>
+											<button type="button" class="mui-btn">-</button>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="mui-btn">×</button>
+										</td>
+										<td>
+											<button type="button" class="mui-btn">÷</button>
+										</td>
+										<td>
+											<button type="button" class="mui-btn">+</button>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<button type="button" class="mui-btn">(</button>
+										</td>
+										<td>
+											<button type="button" class="mui-btn">)</button>
+										</td>
+										<td>
+											<button id="Equal" type="button" class="mui-btn">=</button>
+										</td>
+									</tr>
+								</tbody>
+							</table>
 						</td>
 					</tr>
 				</tbody>
@@ -296,7 +305,7 @@
 					break
 			}
 			for(var i=0;i<calcBtn.length;i++){
-				if(!calcBtn[i].classList.contains("mui-btn-blue")){
+				if(calcBtn[i].onclick==null){
 					calcBtn[i].onclick=function(){
 						var btnText=this.innerText
 						if(btnText=="×"){
