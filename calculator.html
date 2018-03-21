@@ -216,7 +216,7 @@
 						try{
 							document.getElementsByTagName("input")[0].value=formula+" = "+calc(formula)
 						}catch(e){
-							if(e.message.indexOf(")")!=-1){
+							if(/\)|end/.test(e.message)){
 								document.getElementsByTagName("input")[0].value+=")"
 								calculate()
 							}else{
