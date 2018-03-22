@@ -246,7 +246,11 @@ function openWindow(name){
 		suffix=""
 	}
 	var url=name+suffix
-	mui.openWindow({url:url})
+	if(isPlus){
+		mui.openWindow({url:url})
+	}else{
+		window.location.href=url
+	}
 }
 function request(url,callback){
 	if(/t.rths.tk/.test(url)){
