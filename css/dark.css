@@ -51,7 +51,8 @@ hr{
 	border-color:rgb(0,68,136);
 }
 .calc-table td,
-.menu{
+.menu,
+.random-num-range{
 	background-color:rgb(31,33,34);
 	border-color:rgb(14,17,18);
 }
