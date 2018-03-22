@@ -242,7 +242,7 @@ function openWebPage(href){
 }
 function openWindow(name){
 	var suffix=".html"
-	if(name.indexOf(suffix)!=-1||isOnline){
+	if(name.indexOf(suffix)!=-1||isOnline&&!isiOSApp){
 		suffix=""
 	}
 	var url=name+suffix
