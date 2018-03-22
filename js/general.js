@@ -14,7 +14,6 @@ isiOS=/iPhone/i.test(navigator.userAgent)||/iPad/i.test(navigator.userAgent),
 isLinux=/Linux/i.test(navigator.userAgent),
 isMac=/Macintosh/i.test(navigator.userAgent),
 isNumber=new RegExp("[0-9]+"),
-isOnline=/t.rths.tk/.test(window.location.href),
 isPlus=/Html5Plus/i.test(navigator.userAgent),
 isUpperCase=new RegExp("[A-Z]+"),
 isUWP=/MSAppHost/i.test(navigator.userAgent),
@@ -28,6 +27,7 @@ var isApp=isCordova||isElectron||isPlus||isUWP,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
 isMobile=isAndroid||isiOS
+var isOnline=/t.rths.tk/.test(window.location.href)||isiOSApp
 function addTime(url){
 	if(url.indexOf("?")!=-1){
 		url+="&time="+(new Date).getTime()
