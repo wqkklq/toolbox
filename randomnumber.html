@@ -10,11 +10,9 @@
 		<style>
 			.number{
 				font-size:45px;
-				text-align:center;
-				line-height:60px;
 				height:60px;
-				-webkit-user-select:text;
-				user-select:text
+				line-height:60px;
+				text-align:center;
 			}
 		</style>
 	</head>
@@ -25,26 +23,36 @@
 			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:20px"></button>
 			<fieldset style="margin-top:20px">
 				<legend id="Settings"></legend>
-				<div class="mui-input-row">
-					<label id="MinimumLabel"></label>
-					<input id="Minimum" type="text" value="1">
-				</div>
-				<div class="mui-input-row">
-					<label id="MaximumLabel"></label>
-					<input id="Maximum" type="text" value="60">
-				</div>
-				<div class="mui-input-row mui-checkbox ">
-					<label id="OddNumberOnlyLabel"></label>
-					<input id="OddNumberOnlyCheck" name="Checkbox" type="checkbox">
-				</div>
-				<div class="mui-input-row mui-checkbox ">
-					<label id="EvenNumberOnlyLabel"></label>
-					<input id="EvenNumberOnlyCheck" name="Checkbox" type="checkbox">
+				<div class="width-limit">
+					<div class="mui-input-row">
+						<label id="MinimumLabel"></label>
+						<input id="Minimum" type="text" value="1">
+					</div>
+					<div class="mui-input-row">
+						<label id="MaximumLabel"></label>
+						<input id="Maximum" type="text" value="60">
+					</div>
+					<div class="mui-input-row mui-checkbox">
+						<label id="DuplicatesLabel"></label>
+						<input id="DuplicatesCheck" type="checkbox" checked="checked">
+					</div>
+					<div class="mui-input-row mui-checkbox">
+						<label id="OddNumberOnlyLabel"></label>
+						<input id="OddNumberOnlyCheck" type="checkbox">
+					</div>
+					<div class="mui-input-row mui-checkbox">
+						<label id="EvenNumberOnlyLabel"></label>
+						<input id="EvenNumberOnlyCheck" type="checkbox">
+					</div>
+					<div class="mui-input-row mui-checkbox">
+						<label id="ShowMoreLabel"></label>
+						<input id="ShowMoreCheck" type="checkbox" checked="checked">
+					</div>
 				</div>
 			</fieldset>
 			<fieldset style="margin-top:20px">
 				<legend id="History"></legend>
-				<textarea id="HistoryText" rows="5"></textarea>
+				<textarea id="HistoryText" readonly="readonly" rows="5"></textarea>
 				<ul class="menu">
 					<li id="Add" class="menu"></li>
 					<li id="Clear" class="menu"></li>
@@ -65,53 +73,81 @@
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var namesValue,
+			nameValue,
+			randomNumValue,
 			scrolling=true,
-			multipleTimes=true,
 			intervalId
+			function add(){
+				var histLength=0,
+				histValue="\n"+document.getElementById("HistoryText").value
+				if(document.getElementById("HistoryText").value==""){
+					histValue=""
+				}else{
+					histLength=document.getElementById("HistoryText").value.split("\n").length
+				}
+				document.getElementById("HistoryText").value="["+(histLength+1)+"] #"+randomNumValue+" "+nameValue+histValue
+			}
 			function count(){
 				if(namesValue==""||namesValue==null){
 					document.getElementById("Minimum").value="1"
 					document.getElementById("Maximum").value="60"
 				}else{
-					document.getElementById("Minimum").value="0"
-					document.getElementById("Maximum").value=namesValue.split("\n").length-2
+					document.getElementById("Minimum").value="1"
+					document.getElementById("Maximum").value=namesValue.split("\n").length-1
 				}
 			}
 			function random(){
-				var min=parseInt(document.getElementById("Minimum").value),
+				var hide=false,
+				min=parseInt(document.getElementById("Minimum").value),
 				max=parseInt(document.getElementById("Maximum").value)
-				var RandomNumberValue=min+Math.round(Math.random()*(max-min))
-				if(document.getElementById("OddNumberOnlyCheck").checked==true&&RandomNumberValue%2==0||document.getElementById("EvenNumberOnlyCheck").checked==true&&RandomNumberValue%2!=0){
-					random()
-					return false
-				}
+				nameValue=""
+				randomNumValue=min+Math.round(Math.random()*(max-min))
 				if(namesValue!=""&&namesValue!=null){
-					document.getElementsByClassName("number")[0].innerText=namesValue.split("\n")[RandomNumberValue]
+					nameValue=namesValue.split("\n")[randomNumValue-1]
+				}
+				if((function(){
+					if(document.getElementById("OddNumberOnlyCheck").checked&randomNumValue%2==0||document.getElementById("EvenNumberOnlyCheck").checked&&randomNumValue%2!=0){
+						return true
+					}else{
+						if(document.getElementById("HistoryText").value!=""&&!document.getElementById("DuplicatesCheck").checked){
+							var histLength=document.getElementById("HistoryText").value.split("\n").length,
+							range=max-min+1
+							if(histLength<range){
+								if(histLength==range-1){
+									hide=true
+								}
+								return document.getElementById("HistoryText").value.indexOf("#"+randomNumValue+" ")!=-1
+							}else if(histLength>=range){
+								document.getElementById("DuplicatesCheck").checked=true
+								return true
+							}else{
+								return false
+							}
+						}else{
+							return false
+						}
+					}
+				})()){
+					random()
 				}else{
-					document.getElementsByClassName("number")[0].innerText=RandomNumberValue
+					if(hide&&scrolling){
+						document.getElementsByClassName("number")[0].innerText="?"
+					}else{
+						if(nameValue!=""){
+							document.getElementsByClassName("number")[0].innerText=nameValue
+						}else{
+							document.getElementsByClassName("number")[0].innerText=randomNumValue
+						}
+					}
 				}
 			}
 			function RScrolling(){
-				var min=parseInt(document.getElementById("Minimum").value),
-				max=parseInt(document.getElementById("Maximum").value)
-				if(min==max){
-					document.getElementsByClassName("number")[0].innerText="?"
-				}else{
-					random()
-				}
+				random()
 				scrolling=true
 			}
 			document.getElementsByTagName("button")[0].onclick=function(){
-				var selected=function(){
-					if(multipleTimes==false){
-						namesValue=namesValue.replace(document.getElementsByClassName("number")[0].innerText+"\n","")
-						count()
-					}
-				}
 				if(scrolling==false){
-					intervalId=setInterval(function(){
-						RScrolling()
-					},10)
+					intervalId=setInterval(RScrolling,10)
 					scrolling=true
 				}else{
 					clearInterval(intervalId)
@@ -119,7 +155,7 @@
 					if(document.getElementsByClassName("number")[0].innerText=="?"){
 						random()
 					}
-					selected()
+					add()
 				}
 			}
 			document.getElementById("OddNumberOnlyCheck").onchange=function(){
@@ -128,20 +164,24 @@
 			document.getElementById("EvenNumberOnlyCheck").onchange=function(){
 				document.getElementById("OddNumberOnlyCheck").checked=false
 			}
-			document.getElementById("Add").onclick=function(){
-				var historyValue=document.getElementById("HistoryText").value
-				if(historyValue==""){
-					document.getElementById("HistoryText").value=document.getElementsByClassName("number")[0].innerText
+			document.getElementById("ShowMoreCheck").onchange=function(){
+				var fieldset=document.getElementsByTagName("fieldset")
+				if(this.checked){
+					for(var i=1;i<fieldset.length;i++){
+						fieldset[i].style.display=""
+					}
 				}else{
-					document.getElementById("HistoryText").value=document.getElementsByClassName("number")[0].innerText+"\n"+historyValue
+					for(var i=1;i<fieldset.length;i++){
+						fieldset[i].style.display="none"
+					}
 				}
 			}
+			document.getElementById("Add").onclick=add
 			document.getElementById("Clear").onclick=function(){
 				document.getElementById("HistoryText").value=""
 			}
 			document.getElementById("NamesSave").onclick=function(){
-				multipleTimes=true
-				document.getElementById("NamesText").style.display=""
+				document.getElementById("NamesText").value=document.getElementById("NamesText").value.replace(/#/g,"")
 				namesValue=document.getElementById("NamesText").value
 				var namesSplit=namesValue.split("\n")
 				if(namesSplit[namesSplit.length-1]!=""){
@@ -149,18 +189,8 @@
 				}
 				localStorage.setItem("Names",namesValue)
 				count()
-				window.scrollTo(0,0)
-				showConfirm([
-					"Do you want each name to be selected only once?",
-					"您想让每个名字都只被抽到一次吗？"
-				],function(){
-					multipleTimes=false
-					document.getElementById("NamesText").style.display="none"
-				})
 			}
 			document.getElementById("NamesAdd").onclick=function(){
-				multipleTimes=true
-				document.getElementById("NamesText").style.display=""
 				showPrompt([
 					"Enter a person's name",
 					"输入一个人的名字"
@@ -179,8 +209,6 @@
 				document.getElementById("NamesText").value=""
 				localStorage.removeItem("Names")
 				namesValue=""
-				multipleTimes=true
-				document.getElementById("NamesText").style.display=""
 				count()
 			}
 			switch(language){
@@ -190,8 +218,10 @@
 					document.getElementById("Settings").innerText="设置"
 					document.getElementById("MinimumLabel").innerText="最小值"
 					document.getElementById("MaximumLabel").innerText="最大值"
+					document.getElementById("DuplicatesLabel").innerText="重复"
 					document.getElementById("OddNumberOnlyLabel").innerText="仅奇数"
 					document.getElementById("EvenNumberOnlyLabel").innerText="仅偶数"
+					document.getElementById("ShowMoreLabel").innerText="显示更多"
 					document.getElementById("History").innerText="历史记录"
 					document.getElementById("HistoryText").placeholder="还没有历史记录"
 					document.getElementById("Add").innerText="添加"
@@ -208,8 +238,10 @@
 					document.getElementById("Settings").innerText="Settings"
 					document.getElementById("MinimumLabel").innerText="Minimum"
 					document.getElementById("MaximumLabel").innerText="Maximum"
+					document.getElementById("DuplicatesLabel").innerText="Duplicates"
 					document.getElementById("OddNumberOnlyLabel").innerText="Odd Number Only"
 					document.getElementById("EvenNumberOnlyLabel").innerText="Even Number Only"
+					document.getElementById("ShowMoreLabel").innerText="Show More"
 					document.getElementById("History").innerText="History"
 					document.getElementById("HistoryText").placeholder="The history is empty"
 					document.getElementById("Add").innerText="Add"

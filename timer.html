@@ -58,13 +58,6 @@
 				<div id="SpeakDiv2" class="mui-input-row">
 					<input id="SpeakInput" type="text" class="mui-input-clear">
 				</div>
-				<div id="PushNotificationDiv1" class="mui-input-row mui-checkbox">
-					<label id="PushNotificationLabel"></label>
-					<input id="PushNotificationCheck" type="checkbox" checked="checked">
-				</div>
-				<div id="PushNotificationDiv2" class="mui-input-row">
-					<input id="PushNotificationInput" type="text" class="mui-input-clear">
-				</div>
 				<div class="mui-input-row mui-checkbox">
 					<label id="RunCodeLabel"></label>
 					<input id="RunCodeCheck" type="checkbox">
@@ -194,39 +187,50 @@
 						win.setSize(1000,700)
 					}
 				}
-				if(document.getElementById("RunCodeCheck").checked==true){
+				if(document.getElementById("RunCodeCheck").checked){
 					try{
 						eval(document.getElementById("RunCodeInput").value.replace(/coin|eval|task/gi,""))
 					}catch(e){
 						mui.toast(e.message)
 					}
 				}
-				if(document.getElementById("SpeakCheck").checked==true&&window.speechSynthesis){
+				if(document.getElementById("SpeakCheck").checked&&window.speechSynthesis){
 					window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementById("SpeakInput").value))
 				}
-				if(document.getElementById("PushNotificationCheck").checked==true){
-					if(isPlus){
-						plus.push.createMessage(document.getElementById("PushNotificationInput").value)
-					}else if(window.Notification){
-						if(Notification.permission=="granted"){
-							var notification=new Notification(document.title,{
-								body:document.getElementById("PushNotificationInput").value,
-								icon:"unpackage/res/icons/512x512.png"
-							})
-						}
-					}
-				}
-				if(document.getElementById("OpenWebPageCheck").checked==true){
+				if(document.getElementById("OpenWebPageCheck").checked){
 					openWebPage(document.getElementById("OpenWebPageInput").value)
 				}
-				if(document.getElementById("CreateMessageBoxCheck").checked==true){
-					if(isAndroidApp&&document.hidden&&navigator.onLine){
-						openWebPage("http://rthsoftware.tk/sharedtext?alert=1&title="+escape(document.title)+"&text="+escape(document.getElementById("CreateMessageBoxInput").value))
+				if(document.getElementById("CreateMessageBoxCheck").checked){
+					if(document.hidden){
+						if((function(){
+							if(window.Notification){
+								return Notification.permission=="granted"
+							}else{
+								return false
+							}
+						})()){
+							new Notification(document.title,{
+								body:document.getElementById("CreateMessageBoxInput").value,
+								icon:"unpackage/res/icons/512x512.png"
+							})
+						}else if(isCordova){
+							if(isAndroid){
+								openWebPage("http://rthsoftware.tk/sharedtext?alert=1&title="+escape(document.title)+"&text="+escape(document.getElementById("CreateMessageBoxInput").value))
+							}else if(isiOS){
+								cordova.plugins.notification.local.schedule({
+									title:document.title,
+									text:document.getElementById("CreateMessageBoxInput").value,
+									foreground:true
+								})
+							}
+						}
 					}else{
-						showAlert([
-							document.getElementById("CreateMessageBoxInput").value,
-							document.getElementById("CreateMessageBoxInput").value
-						])
+						setTimeout(function(){
+							showAlert([
+								document.getElementById("CreateMessageBoxInput").value,
+								document.getElementById("CreateMessageBoxInput").value
+							])
+						},100)
 					}
 				}
 			}
@@ -298,9 +302,6 @@
 					document.getElementById("SpeakLabel").innerText="朗读"
 					document.getElementById("SpeakInput").placeholder="输入朗读的文本"
 					document.getElementById("SpeakInput").value="时间到！"
-					document.getElementById("PushNotificationLabel").innerText="推送通知"
-					document.getElementById("PushNotificationInput").placeholder="输入通知的内容"
-					document.getElementById("PushNotificationInput").value="时间到！"
 					document.getElementById("RunCodeLabel").innerText="运行代码";
 					document.getElementById("RunCodeInput").placeholder="输入 JS 代码";
 					document.getElementById("PreviewButton").innerText="预览"
@@ -327,9 +328,6 @@
 					document.getElementById("SpeakLabel").innerText="Speak"
 					document.getElementById("SpeakInput").placeholder="Enter the text"
 					document.getElementById("SpeakInput").value="Time out!"
-					document.getElementById("PushNotificationLabel").innerText="Push Notification"
-					document.getElementById("PushNotificationInput").placeholder="Enter the contents"
-					document.getElementById("PushNotificationInput").value="Time out!"
 					document.getElementById("RunCodeLabel").innerText="Run Code";
 					document.getElementById("RunCodeInput").placeholder="Enter the JS code";
 					document.getElementById("PreviewButton").innerText="Preview"
@@ -353,18 +351,8 @@
 					win.setAlwaysOnTop(false)
 				}
 			}
-			if(!isPlus){
-				if(window.Notification){
-					Notification.requestPermission(function(){
-						if(Notification.permission!="granted"){
-							document.getElementById("PushNotificationDiv1").style.display="none"
-							document.getElementById("PushNotificationDiv2").style.display="none"
-						}
-					})
-				}else{
-					document.getElementById("PushNotificationDiv1").style.display="none"
-					document.getElementById("PushNotificationDiv2").style.display="none"
-				}
+			if(window.Notification){
+				Notification.requestPermission()
 			}
 		</script>
 	</body>

@@ -192,6 +192,9 @@
 							document.title="\""+list.split("\n")[1]+"\" and other "+(list.split("\n").length-2)/2+" words"
 							break
 					}
+					currentItem="WordList"
+					localStorage.removeItem("WordListCurrentItem")
+					edit()
 					var time=searchURL("time",window.location.search)
 					if(time&&(new Date).getTime()-time<10000){
 						if(window.location.href.length<=1500){
@@ -201,11 +204,10 @@
 							"Please share the URL of the current page with your friends",
 							"请把当前页面的网址分享给您的好友"
 						])
+					}else if(isiOS){
+						window.location.href="rthtoolbox://"+window.location.search
 					}
-					currentItem="WordList"
-					localStorage.removeItem("WordListCurrentItem")
-					edit()
-					if(isMac&&!isElectron){
+					if(isMac){
 						var newIframe=document.createElement("iframe")
 						newIframe.src="rthtoolbox://"+window.location.search
 						newIframe.style.display="none"

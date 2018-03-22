@@ -10,8 +10,6 @@
 		<style>
 			.calc-table{
 				background-color:white;
-				margin:0 auto;
-				max-width:400px;
 				width:100%;
 			}
 			.calc-table td{
@@ -50,7 +48,7 @@
 			<div class="mui-input-row">
 				<input type="text" class="mui-input-clear">
 			</div>
-			<table class="calc-table">
+			<table class="calc-table width-limit">
 				<tbody>
 					<tr>
 						<td style="border-style:none;width:25%">
@@ -83,6 +81,7 @@
 									<li class="menu">trunc()</li>
 									<li class="menu">y</li>
 									<li class="menu">z</li>
+									<li class="menu">(π/180)</li>
 								</ul>
 							</div>
 						</td>
@@ -216,7 +215,7 @@
 						try{
 							document.getElementsByTagName("input")[0].value=formula+" = "+calc(formula)
 						}catch(e){
-							if(/\)|end/.test(e.message)){
+							if(e.message.indexOf(")")!=-1){
 								document.getElementsByTagName("input")[0].value+=")"
 								calculate()
 							}else{
@@ -310,7 +309,8 @@
 						var btnText=this.innerText
 						if(btnText=="×"){
 							var value=document.getElementsByTagName("input")[0].value
-							if(value.substr(value.length-1,value.length)=="("||value.substr(value.length-1,value.length)=="*"||value==""){
+							var last=value.substr(value.length-1,value.length)
+							if(last=="("||last=="*"||last=="-"||value==""){
 								btnText="x"
 							}else{
 								btnText="*"
@@ -324,7 +324,7 @@
 			}
 			for(var i=0;i<functionList.length;i++){
 				functionList[i].onclick=function(){
-					document.getElementsByTagName("input")[0].value+=this.innerText.replace(")","").replace("π","pi")
+					document.getElementsByTagName("input")[0].value+=this.innerText.replace("()","(").replace("π","pi")
 				}
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title

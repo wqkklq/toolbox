@@ -147,6 +147,9 @@
 					load()
 				}
 			}
+			function handleOpenURL(url){
+				openWordList(searchURL("list",url.replace("rthtoolbox://","")))
+			}
 			function load(){
 				document.getElementsByClassName("home-title")[0].innerText=document.title.replace("RTH ","")
 				document.getElementById("WordList").onclick=function(){
@@ -193,18 +196,18 @@
 					document.getElementsByClassName("home-title")[0].style.textAlign="center"
 				}
 			}
+			function openWordList(list){
+				if(list){
+					localStorage.setItem("WordList",list)
+					localStorage.removeItem("WordListCurrentItem")
+					openWindow("wordlist")
+				}
+			}
 			window.onresize=onResize
 			onResize()
-			mui.init({swipeBack:false})
 			if(isPlus){
 				var plusReady=function(){
-					plus.navigator.setStatusBarBackground("rgb(0,102,204)")
 					plus.navigator.setStatusBarStyle("light")
-					if(isAndroid){
-						mui.back=function(){
-							plus.runtime.quit()
-						}
-					}
 				}
 				if(window.plus){
 					plusReady()
@@ -326,16 +329,10 @@
 					path=remote.getGlobal("sharedObj").path[1]
 				}
 				if(path){
-					var list
 					if(path.indexOf("://")!=-1){
-						list=searchURL("list",path.replace("rthtoolbox://",""))
+						handleOpenURL(path)
 					}else{
-						list=require("fs").readFileSync(path,"utf8").replace(/<br \/>/g,"")
-					}
-					if(list){
-						localStorage.setItem("WordList",list)
-						localStorage.removeItem("WordListCurrentItem")
-						openWindow("wordlist")
+						openWordList(require("fs").readFileSync(path,"utf8").replace(/<br \/>/g,""))
 					}
 				}
 			}

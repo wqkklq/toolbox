@@ -26,6 +26,7 @@ theme=localStorage.getItem("Theme"),
 ver="8.1"
 var isApp=isCordova||isElectron||isPlus||isUWP,
 isAndroidApp=isAndroid&&isCordova,
+isiOSApp=isCordova&&isiOS,
 isMobile=isAndroid||isiOS
 function addTime(url){
 	if(url.indexOf("?")!=-1){
@@ -227,21 +228,16 @@ function openWebPage(href){
 	if(/t.rths.tk|rthsoftware.tk/.test(href)&&href.indexOf("jpg")==-1){
 		href=addTime(href)
 	}
-	if(href.length<=2048){
-		if(isPlus){
-			plus.runtime.openURL(href)
-		}else if(isElectron){
-			require("electron").shell.openExternal(href)
-		}else if(isUWP){
-			Windows.System.Launcher.launchUriAsync(new Windows.Foundation.Uri(href))
-		}else{
-			window.open(href)
-		}
+	if(isElectron){
+		require("electron").shell.openExternal(href)
+	}else if(isiOSApp){
+		OpenUrlExt.open(href)
+	}else if(isPlus){
+		plus.runtime.openURL(href)
+	}else if(isUWP){
+		Windows.System.Launcher.launchUriAsync(new Windows.Foundation.Uri(href))
 	}else{
-		showAlert([
-			"Length limit exceeded ("+href.length+"/2048)",
-			"超出长度限制 ("+href.length+"/2048)"
-		])
+		window.open(href)
 	}
 }
 function openWindow(name){
@@ -250,14 +246,7 @@ function openWindow(name){
 		suffix=""
 	}
 	var url=name+suffix
-	if(isPlus){
-		if(isOnline){
-			url=addTime(url)
-		}
-		plus.webview.open(url,name,{"popGesture":"close"},"fade-in")
-	}else{
-		window.location.href=url
-	}
+	mui.openWindow({url:url})
 }
 function request(url,callback){
 	if(/t.rths.tk/.test(url)){
@@ -278,16 +267,10 @@ function request(url,callback){
 	xhr.send()
 }
 function restart(){
-	if(isCordova){
-		navigator.app.backHistory()
-	}else if(isPlus){
-		if(isOnline){
-			loadOnline()
-		}else{
-			plus.runtime.restart()
-		}
-	}else if(isUWP){
+	if(isAndroidApp||isElectron||isUWP){
 		mui.back()
+	}else if(isPlus){
+		plus.runtime.restart()
 	}else{
 		openWindow("index")
 	}
@@ -558,6 +541,7 @@ if(theme=="Automatic"){
 if(appliedTheme=="Dark"){
 	loadCSS("css/dark.css")
 }
+mui.init({swipeBack:false})
 if(header!=null){
 	var newA=document.createElement("a"),
 	newH1=document.createElement("h1")
@@ -570,7 +554,6 @@ if(header!=null){
 	newH1.setAttribute("class","mui-title")
 	header.appendChild(newA)
 	header.appendChild(newH1)
-	mui.init({swipeBack:false})
 	if(!isApp||isMac||isUWP){
 		document.getElementsByClassName("mui-content")[0].style.marginTop="40px"
 		header.style.height="65px"
