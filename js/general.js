@@ -664,8 +664,14 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 		}
 	}
 	newInput.onkeydown=function(e){
-		if(e.keyCode==13){
+		switch(e.keyCode){
+			case 13:
 			newOKButton.click()
+			break
+			case 27:
+			newCancelButton.click()
+			break
+			default:break
 		}
 	}
 	newCancelButton.onclick=function(){
@@ -794,27 +800,6 @@ if(!isIE){
 		}
 	}
 }
-document.addEventListener("keydown",function(e){
-	if(isElectron){
-		var win=require("electron").remote.getCurrentWindow()
-		if(e.ctrlKey||e.metaKey){
-			switch(e.keyCode){
-				case 73:
-				if(isElectron){
-					win.toggleDevTools()
-				}
-				break
-				case 82:
-				win.reload()
-				break
-				default:break
-			}
-		}
-	}
-	if(e.keyCode==27){
-		mui.back()
-	}
-})
 if(language==null){
 	if(navigator.language.indexOf("zh")!=-1){
 		language="SimplifiedChinese"
@@ -892,6 +877,20 @@ if(appliedTheme=="Bing"){
 if(isElectron){
 	var electron=require("electron")
 	var remote=electron.remote
+	document.addEventListener("keydown",function(e){
+		var win=remote.getCurrentWindow()
+		if(e.ctrlKey||e.metaKey){
+			switch(e.keyCode){
+				case 73:
+				win.toggleDevTools()
+				break
+				case 82:
+				win.reload()
+				break
+				default:break
+			}
+		}
+	})
 	electron.webFrame.setZoomLevelLimits(1,1)
 	if(process.platform!=="darwin"){
 		var newDiv=document.createElement("div"),
