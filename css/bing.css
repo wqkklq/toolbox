@@ -4,13 +4,6 @@ footer div,
 .mui-btn:enabled:active{
 	color:white;
 }
-li:hover{
-	background-color:rgba(255,255,255,.25);
-}
-li:active{
-	background-color:white;
-	color:black;
-}
 .bg-img{
 	opacity:.5;
 }
@@ -29,9 +22,21 @@ li:active{
 .home{
 	background-color:black;
 }
-.home-menu li,
-.home-menu li:first-child{
+.home-menu li{
 	border-color:transparent;
+}
+.home-menu li:first-child{
+	border-top:1px solid rgba(255,255,255,.25);
+}
+.home-menu li:last-child{
+	border-bottom:1px solid rgba(255,255,255,.25);
+}
+.home-menu li:hover{
+	background-color:rgba(255,255,255,.25);
+}
+.home-menu li:active{
+	background-color:white;
+	color:black;
 }
 .mui-btn-blue{
 	background-attachment:fixed;
