@@ -661,7 +661,7 @@
 			document.getElementById("SaveAs").onclick=function(){
 				if(isElectron&&!isLinux){
 					require("electron").remote.dialog.showSaveDialog({
-						defaultPath:document.title,
+						defaultPath:document.getElementById("TitleInput").value,
 						filters:[{name:"RTH Toolbox Files",extensions:["rth"]}]
 					},function(filename){
 						if(filename){
@@ -672,16 +672,12 @@
 						}
 					})
 				}else{
-					var filename=document.getElementById("TitleInput").value+".rth"
+					var filename=document.getElementById("TitleInput").value
 					if(filename==""){
-						switch(language){
-							case "SimplifiedChinese":
-							filename="单词表.rth"
-							break
-							default:
-							filename="Word List.rth"
-							break
-						}
+						filename=document.title
+					}
+					if(filename.indexOf(".")==-1){
+						filename+=".rth"
 					}
 					var dl=document.createElement("a")
 					dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(JSON.stringify({
