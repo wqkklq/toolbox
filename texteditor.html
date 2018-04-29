@@ -203,7 +203,7 @@
 				return btoa(encrypted)
 			}
 			function find(){
-				setText(readText())
+				setText(readText(),true)
 				showPrompt([
 					"Find what",
 					"查找内容"
@@ -225,7 +225,6 @@
 						replace(/>/g,"&gt;").
 						replace(new RegExp(e,"g"),"<span class=\"highlight-find\">$&</span>").
 						replace(/\n/g,"<br>")
-						scrollTo(0,0)
 					}else{
 						setText(readText(),true)
 					}
