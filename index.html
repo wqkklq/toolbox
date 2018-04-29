@@ -216,6 +216,9 @@
 			}
 			function resize(){
 				if(!isApp||!isMac&&!isUWP){
+					if(!isApp){
+						document.getElementsByClassName("home-main")[0].style.top="30px"
+					}
 					document.getElementsByClassName("home-menu")[0].style.height="calc(100% - "+(210+document.getElementsByClassName("bottom")[0].offsetHeight)+"px)"
 				}else{
 					document.getElementsByClassName("home-main")[0].style.top="0px"

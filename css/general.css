@@ -168,7 +168,7 @@ td div{
 	margin-left:-40px;
 	overflow:hidden;
 	padding:10px 15px;
-	word-break:break-word;
+	word-break:break-all;
 }
 .menu p{
 	margin-bottom:0px;

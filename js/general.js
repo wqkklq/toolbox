@@ -638,8 +638,8 @@ function showMenu(e,menu){
 	newSpan.onclick=closeMenu
 	newDiv.appendChild(newSpan)
 	document.body.appendChild(newDiv)
-	newDiv.style.left=e.x+"px"
-	newDiv.style.top=(e.y-newDiv.offsetHeight/2)+"px"
+	newDiv.style.left=(e.x-newDiv.offsetWidth/2)+"px"
+	newDiv.style.top=(e.y-newDiv.offsetHeight)+"px"
 	setTimeout(function(){
 		newDiv.style.opacity="1"
 	},25)
