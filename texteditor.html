@@ -915,7 +915,8 @@
 					}])
 					return false
 				}
-			}else if(!isIE){
+			}
+			if(!isIE){
 				document.getElementsByClassName("text-editor")[0].setAttribute("contenteditable","plaintext-only")
 			}
 			if(!window.speechSynthesis){
