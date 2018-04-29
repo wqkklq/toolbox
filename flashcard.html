@@ -176,7 +176,7 @@
 				}
 			}
 			document.getElementById("Pronunciation").onclick=function(){
-				new Audio(audioURL).play()
+				new Audio(audioURL.replace("http:","https:")).play()
 			}
 			document.getElementById("Translate").onclick=function(){
 				openWebPage("https://fanyi.baidu.com/#en/zh/"+document.getElementsByTagName("input")[0].value)
