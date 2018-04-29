@@ -252,7 +252,17 @@
 						"dir":"names/",
 						"filename":login.username,
 						"text":JSON.stringify(savedNames)
-					},load)
+					},function(){
+						load()
+						switch(language){
+							case "SimplifiedChinese":
+							mui.toast("更改已保存")
+							break
+							default:
+							mui.toast("Changes are saved")
+							break
+						}
+					})
 				}else{
 					loginDialog()
 					load()

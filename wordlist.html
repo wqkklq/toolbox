@@ -522,7 +522,19 @@
 						"dir":"wordlist/",
 						"filename":login.username,
 						"text":JSON.stringify(savedWordList)
-					},callback)
+					},function(){
+						if(callback){
+							callback()
+						}
+						switch(language){
+							case "SimplifiedChinese":
+							mui.toast("更改已保存")
+							break
+							default:
+							mui.toast("Changes are saved")
+							break
+						}
+					})
 				}else{
 					switch(language){
 						case "SimplifiedChinese":
