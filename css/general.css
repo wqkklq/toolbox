@@ -183,11 +183,8 @@ td div{
 }
 .mui-btn{
 	border-color:transparent;
-	color:rgb(109,109,114);
-	transition:none;
-}
-.mui-btn-block{
 	color:rgb(0,122,244);
+	transition:none;
 }
 .mui-btn-blue{
 	border-color:transparent;

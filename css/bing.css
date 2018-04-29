@@ -1,4 +1,9 @@
 /*Code written by Shangzhen Yang*/
+footer div,
+.mui-btn,
+.mui-btn:enabled:active{
+	color:white;
+}
 li:hover{
 	background-color:rgba(255,255,255,.25);
 }
