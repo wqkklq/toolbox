@@ -409,7 +409,7 @@ function openWebPage(href){
 	}else if(isUWP){
 		Windows.System.Launcher.launchUriAsync(new Windows.Foundation.Uri(href))
 	}else{
-		window.open(href)
+		open(href)
 	}
 }
 function openWindow(name){
