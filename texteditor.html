@@ -608,29 +608,25 @@
 					"Enter the URL",
 					"输入网址"
 				],function(url){
-					if(url!=null&&url!=""){
-						reload()
-						var type=url.split(".")
-						type=type[type.length-1]
-						if(/c|tk/.test(type)&&type.indexOf("css")==-1){
-							type="html"
+					var type=url.split(".")
+					type=type[type.length-1]
+					if(/c|tk/.test(type)&&type.indexOf("css")==-1){
+						type="html"
+					}
+					if(/css|html|js|php|txt/.test(type)){
+						if(url.indexOf("http")==-1){
+							url="http://"+url
 						}
-						if(/css|html|js|php|txt/.test(type)){
-							url=addTime(url)
-							if(url.indexOf("http")==-1){
-								url="http://"+url
-							}
-							request("https://rthsoftware.azurewebsites.net/get.php?url="+encodeURIComponent(url),function(e){
-								setText(e.replace(/&lt;/g,"<").replace(/&gt;/g,">"))
-								document.getElementsByTagName("input")[0].value=url
-								applyItem(0)
-							})
-						}else{
-							showAlert([
-								"Unable to open this type of file",
-								"无法打开此类文件"
-							])
-						}
+						request("https://rthsoftware.azurewebsites.net/get.php?url="+encodeURIComponent(addTime(url)),function(e){
+							setText(e.replace(/&lt;/g,"<").replace(/&gt;/g,">"))
+							document.getElementsByTagName("input")[0].value=url
+							applyItem(0)
+						})
+					}else{
+						showAlert([
+							"Unable to open this type of file",
+							"无法打开此类文件"
+						])
 					}
 				})
 			}
