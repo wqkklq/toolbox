@@ -1,5 +1,8 @@
 /*Code written by Shangzhen Yang*/
 try{
+	if(location.href.indexOf("GitHub")!=-1){
+		location.href="../index.html"
+	}
 	if(navigator.language.indexOf("zh")!=-1){
 		document.title="RTH 工具箱更新器"
 		document.getElementsByClassName("drag")[0].innerText="RTH 工具箱更新器"
@@ -17,19 +20,19 @@ try{
 		xhr.onreadystatechange=function(){
 			switch(xhr.readyState){
 				case 4:
-					if(xhr.status==200){
-						const json=JSON.parse(xhr.responseText)
-						files=json.files
-						document.getElementsByClassName("content")[0].innerText+=" Done"
-						next()
-					}else{
-						document.getElementsByClassName("content")[0].innerText+=" Error ("+xhr.status+")\nFailed to update."
-					}
-					break
+				if(xhr.status==200){
+					const json=JSON.parse(xhr.responseText)
+					files=json.files
+					document.getElementsByClassName("content")[0].innerText+=" Done"
+					next()
+				}else{
+					document.getElementsByClassName("content")[0].innerText+=" Error ("+xhr.status+")\nFailed to update."
+				}
+				break
 				default:break
 			}
 		}
-		xhr.open("GET","http://t.rths.tk/web/toolbox/files.json?time="+(new Date).getTime())
+		xhr.open("GET","https://t.rths.tk/web/toolbox/files.json?time="+new Date().getTime())
 		xhr.send()
 	}
 	function next(){
@@ -37,7 +40,7 @@ try{
 			update(files[progress])
 		}else{
 			document.getElementsByClassName("content")[0].innerText+="\nUpdated successfully."
-			window.location.href="../index.html"
+			location.href="../index.html"
 		}
 	}
 	function update(file){
@@ -46,19 +49,19 @@ try{
 		xhr.onreadystatechange=function(){
 			switch(xhr.readyState){
 				case 4:
-					if(xhr.status==200){
-						require("fs").writeFileSync(require("path").join(__dirname,"../"+file.replace("web/toolbox/","")),xhr.responseText)
-						document.getElementsByClassName("content")[0].innerText+=" Done"
-						progress+=1
-						next()
-					}else{
-						document.getElementsByClassName("content")[0].innerText+=" Error ("+xhr.status+")\nFailed to update."
-					}
-					break
+				if(xhr.status==200){
+					require("fs").writeFileSync(require("path").join(__dirname,"../"+file.replace("web/toolbox/","")),xhr.responseText)
+					document.getElementsByClassName("content")[0].innerText+=" Done"
+					progress+=1
+					next()
+				}else{
+					document.getElementsByClassName("content")[0].innerText+=" Error ("+xhr.status+")\nFailed to update."
+				}
+				break
 				default:break
 			}
 		}
-		xhr.open("GET","http://t.rths.tk/"+file+"?time="+(new Date).getTime())
+		xhr.open("GET","https://t.rths.tk/"+file+"?time="+new Date().getTime())
 		xhr.send()
 	}
 }catch(e){

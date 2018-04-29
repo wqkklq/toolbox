@@ -1,0 +1,62 @@
+/*Code written by Shangzhen Yang*/
+li:hover{
+	background-color:rgba(255,255,255,.25);
+}
+li:active{
+	background-color:white;
+	color:black;
+}
+.bg-img{
+	opacity:.5;
+}
+.bottom{
+	border-color:rgba(255,255,255,.25);
+}
+.get,
+.icon{
+	background-color:transparent;
+	border-color:rgba(255,255,255,.25);
+}
+.get:enabled:active{
+	background-color:transparent;
+	border-color:white!important;
+}
+.home{
+	background-color:black;
+}
+.home-menu li,
+.home-menu li:first-child{
+	border-color:transparent;
+}
+.mui-btn-blue{
+	background-attachment:fixed;
+	background-color:rgb(21,23,24);
+	background-position:center center;
+	background-repeat:no-repeat;
+	background-size:cover;
+}
+.mui-checkbox input[type=checkbox]:checked:before,
+.mui-radio input[type=radio]:checked:before{
+	color:white;
+}
+.mui-input-range input[type=range]::-webkit-slider-thumb{
+	background-color:white;
+	border-color:white;
+}
+.mui-switch-blue.mui-active{
+	background-color:rgb(21,23,24);
+	border-color:rgb(109,109,114);
+}
+.popup button{
+	color:rgb(21,23,24);
+}
+.popup button.active{
+	background-color:rgb(21,23,24);
+}
+.title{
+	background-attachment:fixed;
+	background-color:rgb(21,23,24);
+	background-position:center top;
+	background-repeat:no-repeat;
+	background-size:cover;
+}

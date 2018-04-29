@@ -8,6 +8,9 @@
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<style>
+			ul.menu{
+				margin-top:15px;
+			}
 			.calc-table{
 				background-color:white;
 				width:100%;
@@ -27,18 +30,28 @@
 				width:100%;
 			}
 			.function li{
-				border:1px solid white;
+				border-style:none;
 				height:40px;
 				padding:0px 10px;
 			}
-			.function .menu{
+			.function ul.menu{
 				border-style:none;
+				margin-top:0px;
 			}
 			.mui-btn{
 				border-radius:0px;
 				border-style:none;
 				height:100%;
 				width:100%;
+			}
+			#FuncTd{
+				border-style:none;
+				width:25%;
+			}
+			#KeyTd{
+				border-style:none;
+				padding-right:5px;
+				width:75%;
 			}
 		</style>
 	</head>
@@ -48,139 +61,141 @@
 			<div class="mui-input-row">
 				<input type="text" class="mui-input-clear">
 			</div>
-			<table class="calc-table width-limit">
-				<tbody>
-					<tr>
-						<td style="border-style:none;width:25%">
-							<div class="function">
-								<ul class="menu">
-									<li class="menu">abs()</li>
-									<li class="menu">arc</li>
-									<li class="menu">cbrt()</li>
-									<li class="menu">ceil()</li>
-									<li class="menu">cos()</li>
-									<li class="menu">cosh()</li>
-									<li class="menu">cot()</li>
-									<li class="menu">csc()</li>
-									<li class="menu">e</li>
-									<li class="menu">exp()</li>
-									<li class="menu">floor()</li>
-									<li class="menu">ln()</li>
-									<li class="menu">log10()</li>
-									<li class="menu">log2()</li>
-									<li class="menu">π</li>
-									<li class="menu">pow()</li>
-									<li class="menu">random()</li>
-									<li class="menu">round()</li>
-									<li class="menu">sec()</li>
-									<li class="menu">sin()</li>
-									<li class="menu">sinh()</li>
-									<li class="menu">sqrt()</li>
-									<li class="menu">tan()</li>
-									<li class="menu">tanh()</li>
-									<li class="menu">trunc()</li>
-									<li class="menu">y</li>
-									<li class="menu">z</li>
-									<li class="menu">(π/180)</li>
-								</ul>
-							</div>
-						</td>
-						<td style="border-style:none;padding-right:5px;width:75%">
-							<table class="calc-table">
-								<tbody>
-									<tr>
-										<td>
-											<button id="C" type="button" class="mui-btn">C</button>
-										</td>
-										<td>
-											<button type="button" class="mui-btn">,</button>
-										</td>
-										<td>
-											<button id="Backspace" type="button" class="mui-btn">←</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<button type="button" class="mui-btn">7</button>
-										</td>
-										<td>
-											<button type="button" class="mui-btn">8</button>
-										</td>
-										<td>
-											<button type="button" class="mui-btn">9</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<button type="button" class="mui-btn">4</button>
-										</td>
-										<td>
-											<button type="button" class="mui-btn">5</button>
-										</td>
-										<td>
-											<button type="button" class="mui-btn">6</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<button type="button" class="mui-btn">1</button>
-										</td>
-										<td>
-											<button type="button" class="mui-btn">2</button>
-										</td>
-										<td>
-											<button type="button" class="mui-btn">3</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<button type="button" class="mui-btn">0</button>
-										</td>
-										<td>
-											<button type="button" class="mui-btn">.</button>
-										</td>
-										<td>
-											<button type="button" class="mui-btn">-</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<button type="button" class="mui-btn">×</button>
-										</td>
-										<td>
-											<button type="button" class="mui-btn">÷</button>
-										</td>
-										<td>
-											<button type="button" class="mui-btn">+</button>
-										</td>
-									</tr>
-									<tr>
-										<td>
-											<button type="button" class="mui-btn">(</button>
-										</td>
-										<td>
-											<button type="button" class="mui-btn">)</button>
-										</td>
-										<td>
-											<button id="Equal" type="button" class="mui-btn">=</button>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<ul class="menu" style="margin-top:15px">
+			<div class="calc-table">
+				<table class="calc-table width-limit">
+					<tbody>
+						<tr>
+							<td id="FuncTd">
+								<div class="function">
+									<ul class="menu">
+										<li class="menu">abs()</li>
+										<li class="menu">arc</li>
+										<li class="menu">cbrt()</li>
+										<li class="menu">ceil()</li>
+										<li class="menu">cos()</li>
+										<li class="menu">cosh()</li>
+										<li class="menu">cot()</li>
+										<li class="menu">csc()</li>
+										<li class="menu">e</li>
+										<li class="menu">exp()</li>
+										<li class="menu">floor()</li>
+										<li class="menu">ln()</li>
+										<li class="menu">log10()</li>
+										<li class="menu">log2()</li>
+										<li class="menu">π</li>
+										<li class="menu">pow()</li>
+										<li class="menu">random()</li>
+										<li class="menu">round()</li>
+										<li class="menu">sec()</li>
+										<li class="menu">sin()</li>
+										<li class="menu">sinh()</li>
+										<li class="menu">sqrt()</li>
+										<li class="menu">tan()</li>
+										<li class="menu">tanh()</li>
+										<li class="menu">trunc()</li>
+										<li class="menu">y</li>
+										<li class="menu">z</li>
+										<li class="menu">(π/180)</li>
+									</ul>
+								</div>
+							</td>
+							<td id="KeyTd">
+								<table class="calc-table">
+									<tbody>
+										<tr>
+											<td>
+												<button id="C" type="button" class="mui-btn">C</button>
+											</td>
+											<td>
+												<button type="button" class="mui-btn">,</button>
+											</td>
+											<td>
+												<button id="Backspace" type="button" class="mui-btn">←</button>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<button type="button" class="mui-btn">7</button>
+											</td>
+											<td>
+												<button type="button" class="mui-btn">8</button>
+											</td>
+											<td>
+												<button type="button" class="mui-btn">9</button>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<button type="button" class="mui-btn">4</button>
+											</td>
+											<td>
+												<button type="button" class="mui-btn">5</button>
+											</td>
+											<td>
+												<button type="button" class="mui-btn">6</button>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<button type="button" class="mui-btn">1</button>
+											</td>
+											<td>
+												<button type="button" class="mui-btn">2</button>
+											</td>
+											<td>
+												<button type="button" class="mui-btn">3</button>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<button type="button" class="mui-btn">0</button>
+											</td>
+											<td>
+												<button type="button" class="mui-btn">.</button>
+											</td>
+											<td>
+												<button type="button" class="mui-btn">-</button>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<button type="button" class="mui-btn">×</button>
+											</td>
+											<td>
+												<button type="button" class="mui-btn">÷</button>
+											</td>
+											<td>
+												<button type="button" class="mui-btn">+</button>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<button type="button" class="mui-btn">(</button>
+											</td>
+											<td>
+												<button type="button" class="mui-btn">)</button>
+											</td>
+											<td>
+												<button id="Equal" type="button" class="mui-btn">=</button>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<ul class="menu">
 				<li id="Date" class="menu"></li>
 				<li id="Statistics" class="menu"></li>
 			</ul>
-			<ul class="menu" style="margin-top:15px">
+			<ul class="menu">
 				<li id="CurrencyConversion" class="menu"></li>
 				<li id="NumberBaseConversion" class="menu"></li>
 				<li id="MoleConversion" class="menu"></li>
 			</ul>
-			<ul class="menu" style="margin-top:15px">
+			<ul class="menu">
 				<li id="QuadraticEquationOneUnknown" class="menu"></li>
 				<li id="SystemLinearEquations2Unknowns" class="menu"></li>
 				<li id="SystemLinearEquations3Unknowns" class="menu"></li>
@@ -191,12 +206,13 @@
 		</div>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var calcBtn=document.getElementsByTagName("button"),
 			functionList=document.getElementsByClassName("function")[0].getElementsByTagName("ul")[0].getElementsByTagName("li")
 			function calculate(){
-				var formula=document.getElementsByTagName("input")[0].value.replace(/coin|eval|plus|require/gi,"").replace(/×/g,"*").replace(/÷/g,"/").replace(/π/g,"pi").toLowerCase()
+				var formula=document.getElementsByTagName("input")[0].value.replace(/coin|cordova|eval|require/gi,"").replace(/×/g,"*").replace(/÷/g,"/").replace(/π/g,"pi").toLowerCase()
 				if(formula==""){
 					showAlert([
 						"Please enter the formula",
@@ -273,35 +289,35 @@
 			}
 			switch(language){
 				case "SimplifiedChinese":
-					document.title="计算器"
-					document.getElementsByTagName("input")[0].placeholder="输入算式"
-					document.getElementById("Date").innerText="日期"
-					document.getElementById("Statistics").innerText="统计"
-					document.getElementById("CurrencyConversion").innerText="货币换算"
-					document.getElementById("NumberBaseConversion").innerText="进制换算"
-					document.getElementById("MoleConversion").innerText="摩尔换算"
-					document.getElementById("QuadraticEquationOneUnknown").innerText="一元二次方程"
-					document.getElementById("SystemLinearEquations2Unknowns").innerText="二元一次方程组"
-					document.getElementById("SystemLinearEquations3Unknowns").innerText="三元一次方程组"
-					document.getElementById("QuadraticFunction").innerText="二次函数"
-					document.getElementById("FindLinearFunction").innerText="求一次函数解析式"
-					document.getElementById("FindQuadraticFunction").innerText="求二次函数解析式"
-					break
+				document.title="计算器"
+				document.getElementsByTagName("input")[0].placeholder="输入算式"
+				document.getElementById("Date").innerText="日期"
+				document.getElementById("Statistics").innerText="统计"
+				document.getElementById("CurrencyConversion").innerText="货币换算"
+				document.getElementById("NumberBaseConversion").innerText="进制换算"
+				document.getElementById("MoleConversion").innerText="摩尔换算"
+				document.getElementById("QuadraticEquationOneUnknown").innerText="一元二次方程"
+				document.getElementById("SystemLinearEquations2Unknowns").innerText="二元一次方程组"
+				document.getElementById("SystemLinearEquations3Unknowns").innerText="三元一次方程组"
+				document.getElementById("QuadraticFunction").innerText="二次函数"
+				document.getElementById("FindLinearFunction").innerText="求一次函数解析式"
+				document.getElementById("FindQuadraticFunction").innerText="求二次函数解析式"
+				break
 				default:
-					document.title="Calculator"
-					document.getElementsByTagName("input")[0].placeholder="Enter the formula"
-					document.getElementById("Date").innerText="Date"
-					document.getElementById("Statistics").innerText="Statistics"
-					document.getElementById("CurrencyConversion").innerText="Currency Conversion"
-					document.getElementById("NumberBaseConversion").innerText="Number Base Conversion"
-					document.getElementById("MoleConversion").innerText="Mole Conversion"
-					document.getElementById("QuadraticEquationOneUnknown").innerText="Quadratic Equation in One Unknown"
-					document.getElementById("SystemLinearEquations2Unknowns").innerText="System of Linear Equations in 2 Unknowns"
-					document.getElementById("SystemLinearEquations3Unknowns").innerText="System of Linear Equations in 3 Unknowns"
-					document.getElementById("QuadraticFunction").innerText="Quadratic Function"
-					document.getElementById("FindLinearFunction").innerText="Find Analytic Formula of Linear Function"
-					document.getElementById("FindQuadraticFunction").innerText="Find Analytic Formula of Quadratic Function"
-					break
+				document.title="Calculator"
+				document.getElementsByTagName("input")[0].placeholder="Enter the formula"
+				document.getElementById("Date").innerText="Date"
+				document.getElementById("Statistics").innerText="Statistics"
+				document.getElementById("CurrencyConversion").innerText="Currency Conversion"
+				document.getElementById("NumberBaseConversion").innerText="Number Base Conversion"
+				document.getElementById("MoleConversion").innerText="Mole Conversion"
+				document.getElementById("QuadraticEquationOneUnknown").innerText="Quadratic Equation in One Unknown"
+				document.getElementById("SystemLinearEquations2Unknowns").innerText="System of Linear Equations in 2 Unknowns"
+				document.getElementById("SystemLinearEquations3Unknowns").innerText="System of Linear Equations in 3 Unknowns"
+				document.getElementById("QuadraticFunction").innerText="Quadratic Function"
+				document.getElementById("FindLinearFunction").innerText="Find Analytic Formula of Linear Function"
+				document.getElementById("FindQuadraticFunction").innerText="Find Analytic Formula of Quadratic Function"
+				break
 			}
 			for(var i=0;i<calcBtn.length;i++){
 				if(calcBtn[i].onclick==null){

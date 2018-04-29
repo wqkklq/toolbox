@@ -8,9 +8,21 @@
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<style>
+			fieldset{
+				margin-top:20px;
+			}
+			select{
+				margin-top:15px;
+			}
 			.time{
 				text-align:center;
-				transition:font-size 0.75s,height 0.75s;
+				transition:font-size .75s,height .75s;
+			}
+			@media screen and (min-width:450px){
+				input[type=text].time{
+					font-size:45px;
+					height:90px;
+				}
 			}
 		</style>
 	</head>
@@ -32,10 +44,10 @@
 				<label id="SecondLabel"></label>
 				<input type="range" id="Second" value="0" min="0" max="59">
 			</div>
-			<select style="margin-top:15px"></select>
+			<select></select>
 			<button id="StartButton" type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
 			<button id="PauseButton" type="button" class="mui-btn mui-btn-block" disabled="disabled"></button>
-			<fieldset style="margin-top:20px">
+			<fieldset>
 				<legend id="TimedTask"></legend>
 				<div class="mui-input-row mui-checkbox">
 					<label id="CreateMessageBoxLabel"></label>
@@ -67,20 +79,21 @@
 				</div>
 				<button id="PreviewButton" type="button" class="mui-btn mui-btn-block"></button>
 			</fieldset>
-			<fieldset style="margin-top:20px">
+			<fieldset>
 				<legend id="History"></legend>
-				<textarea id="HistoryText" rows="5"></textarea>
 				<ul class="menu">
 					<li id="Add" class="menu"></li>
 					<li id="Clear" class="menu"></li>
 				</ul>
+				<ul id="HistoryUl" class="menu text-like"></ul>
 			</fieldset>
 		</div>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var Hour,intervalId,Minute,Second
+			var historyArray=[],Hour,intervalId,Minute,Second
 			function countdown(){
 				if(Hour==0&&Minute==0&&Second==0){
 					pause()
@@ -103,15 +116,6 @@
 					document.getElementById("Second").value=Second
 				}
 				timeChanged()
-			}
-			function onResize(){
-				if(document.documentElement.clientWidth>500){
-					document.getElementsByClassName("time")[0].style.fontSize="45px"
-					document.getElementsByClassName("time")[0].style.height="90px"
-				}else{
-					document.getElementsByClassName("time")[0].style.fontSize=""
-					document.getElementsByClassName("time")[0].style.height=""
-				}
 			}
 			function pause(){
 				clearInterval(intervalId)
@@ -189,7 +193,7 @@
 				}
 				if(document.getElementById("RunCodeCheck").checked){
 					try{
-						eval(document.getElementById("RunCodeInput").value.replace(/coin|eval|task/gi,""))
+						eval(document.getElementById("RunCodeInput").value.replace(/coin|eval|localStorage|task/gi,""))
 					}catch(e){
 						mui.toast(e.message)
 					}
@@ -211,11 +215,11 @@
 						})()){
 							new Notification(document.title,{
 								body:document.getElementById("CreateMessageBoxInput").value,
-								icon:"unpackage/res/icons/512x512.png"
+								icon:"electron/icon.png"
 							})
 						}else if(isCordova){
 							if(isAndroid){
-								openWebPage("http://rthsoftware.tk/sharedtext?alert=1&title="+escape(document.title)+"&text="+escape(document.getElementById("CreateMessageBoxInput").value))
+								openWebPage("http://rthshare.tk/?alert="+escape(document.getElementById("CreateMessageBoxInput").value)+"&title="+escape(document.title))
 							}else if(isiOS){
 								cordova.plugins.notification.local.schedule({
 									title:document.title,
@@ -229,11 +233,10 @@
 								document.getElementById("CreateMessageBoxInput").value,
 								document.getElementById("CreateMessageBoxInput").value
 							])
-						},100)
+						},1000)
 					}
 				}
 			}
-			window.onresize=onResize
 			document.getElementsByClassName("time")[0].oninput=function(){
 				var timeSplit=document.getElementsByClassName("time")[0].value.split(":")
 				if(timeSplit.length<3){
@@ -258,22 +261,31 @@
 			document.getElementById("PauseButton").onclick=pause
 			document.getElementById("PreviewButton").onclick=task
 			document.getElementById("Add").onclick=function(){
-				var dateValue=new Date()
-				var TimeStr=document.getElementsByClassName("time")[0].value+" ("+dateValue.getHours()+":"+dateValue.getMinutes()+":"+dateValue.getSeconds()+")",
-				historyValue=document.getElementById("HistoryText").value
-				if(historyValue==""){
-					document.getElementById("HistoryText").value=TimeStr
-				}else{
-					document.getElementById("HistoryText").value=TimeStr+"\n"+historyValue
+				var date=new Date()
+				document.getElementById("HistoryUl").innerHTML=""
+				historyArray.push(document.getElementsByClassName("time")[0].value+" ("+addZero(date.getHours(),2)+":"+addZero(date.getMinutes(),2)+":"+addZero(date.getSeconds(),2)+")")
+				for(var i=historyArray.length-1;i>=0;i--){
+					var newLi=document.createElement("li")
+					newLi.setAttribute("class","menu")
+					newLi.innerText=historyArray[i]
+					document.getElementById("HistoryUl").appendChild(newLi)
 				}
 			}
 			document.getElementById("Clear").onclick=function(){
-				document.getElementById("HistoryText").value=""
+				if(document.getElementById("HistoryUl").innerHTML!=""){
+					showConfirm([
+						"Do you want to clear the history?",
+						"您想要清空历史记录吗？"
+					],function(){
+						document.getElementById("HistoryUl").innerHTML=""
+						historyArray=[]
+					})
+				}
 			}
 			if(isElectron){
 				document.addEventListener("visibilitychange",function(){
 					if(document.hidden){
-						window.scrollTo(0,0)
+						scrollTo(0,0)
 						var win=require("electron").remote.getCurrentWindow()
 						win.restore()
 						win.setSize(200,160)
@@ -281,60 +293,57 @@
 					}
 				})
 			}
-			onResize()
 			switch(language){
 				case "SimplifiedChinese":
-					document.title="计时器"
-					document.getElementById("HourLabel").innerText="时"
-					document.getElementById("MinuteLabel").innerText="分"
-					document.getElementById("SecondLabel").innerText="秒"
-					document.getElementsByTagName("select")[0].options.add(new Option("倒计时","Countdown"))
-					document.getElementsByTagName("select")[0].options.add(new Option("秒表","Stopwatch"))
-					document.getElementById("StartButton").innerText="开始"
-					document.getElementById("PauseButton").innerText="暂停"
-					document.getElementById("TimedTask").innerText="定时任务"
-					document.getElementById("CreateMessageBoxLabel").innerText="创建消息框"
-					document.getElementById("CreateMessageBoxInput").placeholder="输入消息框的内容"
-					document.getElementById("CreateMessageBoxInput").value="时间到！"
-					document.getElementById("OpenWebPageLabel").innerText="打开网页"
-					document.getElementById("OpenWebPageInput").placeholder="输入网址"
-					document.getElementById("SpeakLabel").innerText="朗读"
-					document.getElementById("SpeakInput").placeholder="输入朗读的文本"
-					document.getElementById("SpeakInput").value="时间到！"
-					document.getElementById("RunCodeLabel").innerText="运行代码";
-					document.getElementById("RunCodeInput").placeholder="输入 JS 代码";
-					document.getElementById("PreviewButton").innerText="预览"
-					document.getElementById("History").innerText="历史记录"
-					document.getElementById("HistoryText").placeholder="还没有历史记录"
-					document.getElementById("Add").innerText="添加"
-					document.getElementById("Clear").innerText="清空"
-					break
+				document.title="计时器"
+				document.getElementById("HourLabel").innerText="时"
+				document.getElementById("MinuteLabel").innerText="分"
+				document.getElementById("SecondLabel").innerText="秒"
+				document.getElementsByTagName("select")[0].options.add(new Option("倒计时","Countdown"))
+				document.getElementsByTagName("select")[0].options.add(new Option("秒表","Stopwatch"))
+				document.getElementById("StartButton").innerText="开始"
+				document.getElementById("PauseButton").innerText="暂停"
+				document.getElementById("TimedTask").innerText="定时任务"
+				document.getElementById("CreateMessageBoxLabel").innerText="创建消息框"
+				document.getElementById("CreateMessageBoxInput").placeholder="输入消息框的内容"
+				document.getElementById("CreateMessageBoxInput").value="时间到！"
+				document.getElementById("OpenWebPageLabel").innerText="打开网页"
+				document.getElementById("OpenWebPageInput").placeholder="输入网址"
+				document.getElementById("SpeakLabel").innerText="朗读"
+				document.getElementById("SpeakInput").placeholder="输入朗读的文本"
+				document.getElementById("SpeakInput").value="时间到！"
+				document.getElementById("RunCodeLabel").innerText="运行代码";
+				document.getElementById("RunCodeInput").placeholder="输入 JS 代码";
+				document.getElementById("PreviewButton").innerText="预览"
+				document.getElementById("History").innerText="历史记录"
+				document.getElementById("Add").innerText="添加"
+				document.getElementById("Clear").innerText="清空"
+				break
 				default:
-					document.title="Timer"
-					document.getElementById("HourLabel").innerText="Hour"
-					document.getElementById("MinuteLabel").innerText="Minute"
-					document.getElementById("SecondLabel").innerText="Second"
-					document.getElementsByTagName("select")[0].options.add(new Option("Countdown","Countdown"))
-					document.getElementsByTagName("select")[0].options.add(new Option("Stopwatch","Stopwatch"))
-					document.getElementById("StartButton").innerText="Start"
-					document.getElementById("PauseButton").innerText="Pause"
-					document.getElementById("TimedTask").innerText="Timed Task"
-					document.getElementById("CreateMessageBoxLabel").innerText="Create Message Box"
-					document.getElementById("CreateMessageBoxInput").placeholder="Enter the contents"
-					document.getElementById("CreateMessageBoxInput").value="Time out!"
-					document.getElementById("OpenWebPageLabel").innerText="Open Web Page"
-					document.getElementById("OpenWebPageInput").placeholder="Enter the URL"
-					document.getElementById("SpeakLabel").innerText="Speak"
-					document.getElementById("SpeakInput").placeholder="Enter the text"
-					document.getElementById("SpeakInput").value="Time out!"
-					document.getElementById("RunCodeLabel").innerText="Run Code";
-					document.getElementById("RunCodeInput").placeholder="Enter the JS code";
-					document.getElementById("PreviewButton").innerText="Preview"
-					document.getElementById("History").innerText="History"
-					document.getElementById("HistoryText").placeholder="The history is empty"
-					document.getElementById("Add").innerText="Add"
-					document.getElementById("Clear").innerText="Clear"
-					break
+				document.title="Timer"
+				document.getElementById("HourLabel").innerText="Hour"
+				document.getElementById("MinuteLabel").innerText="Minute"
+				document.getElementById("SecondLabel").innerText="Second"
+				document.getElementsByTagName("select")[0].options.add(new Option("Countdown","Countdown"))
+				document.getElementsByTagName("select")[0].options.add(new Option("Stopwatch","Stopwatch"))
+				document.getElementById("StartButton").innerText="Start"
+				document.getElementById("PauseButton").innerText="Pause"
+				document.getElementById("TimedTask").innerText="Timed Task"
+				document.getElementById("CreateMessageBoxLabel").innerText="Create Message Box"
+				document.getElementById("CreateMessageBoxInput").placeholder="Enter the contents"
+				document.getElementById("CreateMessageBoxInput").value="Time out!"
+				document.getElementById("OpenWebPageLabel").innerText="Open Web Page"
+				document.getElementById("OpenWebPageInput").placeholder="Enter the URL"
+				document.getElementById("SpeakLabel").innerText="Speak"
+				document.getElementById("SpeakInput").placeholder="Enter the text"
+				document.getElementById("SpeakInput").value="Time out!"
+				document.getElementById("RunCodeLabel").innerText="Run Code";
+				document.getElementById("RunCodeInput").placeholder="Enter the JS code";
+				document.getElementById("PreviewButton").innerText="Preview"
+				document.getElementById("History").innerText="History"
+				document.getElementById("Add").innerText="Add"
+				document.getElementById("Clear").innerText="Clear"
+				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(!window.speechSynthesis){

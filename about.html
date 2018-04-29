@@ -8,8 +8,13 @@
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<style>
+			footer div{
+				width:50%;
+			}
+			ul.menu{
+				margin-top:15px;
+			}
 			.app-name{
-				color:rgb(0,102,204);
 				cursor:default;
 				font-size:25px;
 				line-height:50px;
@@ -17,6 +22,9 @@
 			}
 			.donate{
 				bottom:60px;
+				display:none;
+				margin-top:0px;
+				opacity:0;
 				position:fixed;
 				width:calc(100% - 30px);
 			}
@@ -26,12 +34,12 @@
 		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
 			<div class="app-name"></div>
-			<ul class="menu" style="margin-top:15px">
+			<ul class="menu">
 				<li id="Version" class="menu"></li>
 				<li id="LastUpdated" class="menu"></li>
 				<li id="Developer" class="menu"></li>
 			</ul>
-			<ul class="menu donate" style="opacity:0;display:none">
+			<ul class="menu donate">
 				<li id="Alipay" class="menu"></li>
 				<li id="WeChatPay" class="menu"></li>
 				<li id="QQWallet" class="menu"></li>
@@ -39,31 +47,28 @@
 			</ul>
 		</div>
 		<footer>
-			<div id="Feedback" style="width:50%"></div>
-			<div id="Donate" style="width:50%"></div>
+			<div id="Feedback"></div>
+			<div id="Donate"></div>
 		</footer>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var date=new Date("2018/3/22").toLocaleDateString()
+			var date=new Date("2018/4/29").toLocaleDateString()
 			document.getElementById("Feedback").onclick=function(){
-				if(isOnline){
-					openWindow("http://m.rths.tk/feedback.html")
-				}else{
-					openWindow("feedback")
-				}
+				openWindow("feedback")
 			}
 			document.getElementById("Donate").onclick=function(){
 				if(document.getElementsByClassName("donate")[0].style.opacity!="1"){
-					document.getElementsByClassName("donate")[0].style.display=""
+					document.getElementsByClassName("donate")[0].style.display="block"
 					setTimeout(function(){
 						document.getElementsByClassName("donate")[0].style.opacity="1"
 					},25)
 				}else{
-					document.getElementsByClassName("donate")[0].style.opacity="0"
+					document.getElementsByClassName("donate")[0].style.opacity=""
 					setTimeout(function(){
-						document.getElementsByClassName("donate")[0].style.display="none"
+						document.getElementsByClassName("donate")[0].style.display=""
 					},250)
 				}
 			}
@@ -71,42 +76,42 @@
 				if(isMobile){
 					openWebPage("HTTPS://QR.ALIPAY.COM/FKX04965KXP0C8G3MUVK28")
 				}
-				showImage("http://t.rths.tk/img/alipay.jpg")
+				showImage("https://t.rths.tk/img/alipay.jpg")
 			}
 			document.getElementById("WeChatPay").onclick=function(){
-				showImage("http://t.rths.tk/img/wechatpay.jpg")
+				showImage("https://t.rths.tk/img/wechatpay.jpg")
 			}
 			document.getElementById("QQWallet").onclick=function(){
-				showImage("http://t.rths.tk/img/qqwallet.jpg")
+				showImage("https://t.rths.tk/img/qqwallet.jpg")
 			}
 			document.getElementById("PayPal").onclick=function(){
 				openWebPage("https://www.paypal.me/ShangzhenY/")
 			}
 			switch(language){
 				case "SimplifiedChinese":
-					document.title="关于"
-					document.getElementsByClassName("app-name")[0].innerText="RTH 工具箱"
-					document.getElementById("Version").innerText="版本："+ver
-					document.getElementById("LastUpdated").innerText="更新日期："+date
-					document.getElementById("Developer").innerText="开发者：杨尚臻"
-					document.getElementById("Feedback").innerText="反馈"
-					document.getElementById("Donate").innerText="捐赠"
-					document.getElementById("Alipay").innerText="支付宝"
-					document.getElementById("WeChatPay").innerText="微信支付"
-					document.getElementById("QQWallet").innerText="QQ 钱包"
-					break
+				document.title="关于"
+				document.getElementsByClassName("app-name")[0].innerText="RTH 工具箱"
+				document.getElementById("Version").innerText="版本："+ver
+				document.getElementById("LastUpdated").innerText="更新日期："+date
+				document.getElementById("Developer").innerText="开发者：尚臻"
+				document.getElementById("Feedback").innerText="反馈"
+				document.getElementById("Donate").innerText="捐赠"
+				document.getElementById("Alipay").innerText="支付宝"
+				document.getElementById("WeChatPay").innerText="微信支付"
+				document.getElementById("QQWallet").innerText="QQ 钱包"
+				break
 				default:
-					document.title="About"
-					document.getElementsByClassName("app-name")[0].innerText="RTH Toolbox"
-					document.getElementById("Version").innerText="Version: "+ver
-					document.getElementById("LastUpdated").innerText="Last Updated: "+date
-					document.getElementById("Developer").innerText="Developer: Shangzhen Yang"
-					document.getElementById("Feedback").innerText="Feedback"
-					document.getElementById("Donate").innerText="Donate"
-					document.getElementById("Alipay").innerText="Alipay"
-					document.getElementById("WeChatPay").innerText="WeChat Pay"
-					document.getElementById("QQWallet").innerText="QQ Wallet"
-					break
+				document.title="About"
+				document.getElementsByClassName("app-name")[0].innerText="RTH Toolbox"
+				document.getElementById("Version").innerText="Version: "+ver
+				document.getElementById("LastUpdated").innerText="Last Updated: "+date
+				document.getElementById("Developer").innerText="Developer: Shangzhen"
+				document.getElementById("Feedback").innerText="Feedback"
+				document.getElementById("Donate").innerText="Donate"
+				document.getElementById("Alipay").innerText="Alipay"
+				document.getElementById("WeChatPay").innerText="WeChat Pay"
+				document.getElementById("QQWallet").innerText="QQ Wallet"
+				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 		</script>

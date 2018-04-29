@@ -19,10 +19,10 @@
 			</div>
 			<textarea rows="10"></textarea>
 			<button type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
-			<iframe src="http://m.rths.tk/cn/h-mb.html" style="display:none"></iframe>
 		</div>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			document.getElementsByTagName("button")[0].onclick=function(){
@@ -36,33 +36,45 @@
 				}else if(document.getElementsByTagName("textarea")[0].value==""){
 					document.getElementsByTagName("textarea")[0].style.background="rgb(255,192,203)"
 				}else{
-					document.getElementsByTagName("iframe")[0].contentDocument.getElementById("reqName").value=document.getElementById("Name").value
-					document.getElementsByTagName("iframe")[0].contentDocument.getElementById("reqEmail").value=document.getElementById("Email").value
-					document.getElementsByTagName("iframe")[0].contentDocument.getElementById("reqContent").value=document.getElementsByTagName("textarea")[0].value+" ("+navigator.userAgent+")"
-					document.getElementsByTagName("iframe")[0].contentDocument.getElementsByClassName("sendIcon")[0].click()
-					showAlert([
-						"Sent",
-						"已发送"
-					])
+					switch(language){
+						case "SimplifiedChinese":
+						mui.toast("正在发送")
+						break
+						default:
+						mui.toast("Sending")
+						break
+					}
+					$.post("https://rthsoftware.azurewebsites.net/feedback.php",{
+						"email":document.getElementById("Email").value,
+						"name":document.getElementById("Name").value,
+						"text":document.getElementsByTagName("textarea")[0].value,
+						"ver":ver
+					},function(){
+						showAlert([
+							"Thank you for your feedback",
+							"感谢您的反馈"
+						])
+					})
 				}
 			}
 			switch(language){
 				case "SimplifiedChinese":
-					document.title="反馈"
-					document.getElementById("Name").placeholder="名字"
-					document.getElementById("Email").placeholder="电子邮箱"
-					document.getElementsByTagName("textarea")[0].placeholder="正文"
-					document.getElementsByTagName("button")[0].innerText="发送"
-					break
+				document.title="反馈"
+				document.getElementById("Name").placeholder="名字"
+				document.getElementById("Email").placeholder="电子邮箱"
+				document.getElementsByTagName("textarea")[0].placeholder="正文"
+				document.getElementsByTagName("button")[0].innerText="发送"
+				break
 				default:
-					document.title="Feedback"
-					document.getElementById("Name").placeholder="Name"
-					document.getElementById("Email").placeholder="Email"
-					document.getElementsByTagName("textarea")[0].placeholder="Text"
-					document.getElementsByTagName("button")[0].innerText="Send"
-					break
+				document.title="Feedback"
+				document.getElementById("Name").placeholder="Name"
+				document.getElementById("Email").placeholder="Email"
+				document.getElementsByTagName("textarea")[0].placeholder="Text"
+				document.getElementsByTagName("button")[0].innerText="Send"
+				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			document.getElementById("Email").value=localStorage.getItem("Email")
 		</script>
 	</body>
 </html>

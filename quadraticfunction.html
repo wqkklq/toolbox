@@ -7,11 +7,18 @@
 		<meta name="theme-color" content="#0066cc">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
+		<style>
+			.input-bg{
+				background-color:transparent;
+				margin-top:20px;
+				padding:10px;
+			}
+		</style>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
-			<div style="line-height:30px">
+			<div class="formula">
 				y = <span id="aLabel">a</span>x<sup>2</sup> + <span id="bLabel">b</span>x + <span id="cLabel">c</span> &#40;a ≠ 0&#41;
 			</div>
 			<hr>
@@ -39,7 +46,7 @@
 				<span id="xIntercept1"></span><span id="xIntercept2">?</span><br>
 				<span id="yIntercept1"></span>&#40;0, <span id="yIntercept2">c</span><span>&#41;</span>
 			</div>
-			<fieldset style="margin-top:20px">
+			<div class="input-bg">
 				<div class="mui-input-row">
 					<label>x =</label>
 					<input id="xInput" type="text">
@@ -48,11 +55,12 @@
 					<label>y =</label>
 					<input id="yInput" type="text">
 				</div>
-			</fieldset>
+			</div>
 		</div>
 		<button type="button" class="mui-btn mui-btn-blue sign">+/-</button>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var upwards,
@@ -137,55 +145,55 @@
 			initCalculator(2,calculate)
 			switch(language){
 				case "SimplifiedChinese":
-					document.getElementById("VertexForm1").innerText="顶点式："
-					document.getElementById("AxisSymmetry1").innerText="对称轴：直线"
-					document.getElementById("VertexPointCoordinates1").innerText="顶点坐标："
-					document.getElementById("ParabolaOpens1").innerText="抛物线"
-					upwards="开口向上。"
-					downwards="开口向下。"
-					NotExist="不存在。"
-					document.getElementById("xGreater1").innerText="当"
-					document.getElementById("xGreater3").innerText=" 时，"
-					document.getElementById("xGreater4").innerText="随 x 的增大而"
-					increases="增大"
-					decreases="减小"
-					document.getElementById("xGreater6").innerText="。"
-					document.getElementById("xLess1").innerText="当"
-					document.getElementById("xLess3").innerText=" 时，"
-					document.getElementById("xLess4").innerText="随 x 的增大而"
-					document.getElementById("xLess6").innerText="。"
-					Minimum="最小值："
-					Maximum="最大值："
-					MinimumMaximum="最小值 / 最大值："
-					document.getElementById("xIntercept1").innerText="与 x 轴的交点："
-					and="和"
-					document.getElementById("yIntercept1").innerText="与 y 轴的交点："
-					None="无"
-					break
+				document.getElementById("VertexForm1").innerText="顶点式："
+				document.getElementById("AxisSymmetry1").innerText="对称轴：直线"
+				document.getElementById("VertexPointCoordinates1").innerText="顶点坐标："
+				document.getElementById("ParabolaOpens1").innerText="抛物线"
+				upwards="开口向上。"
+				downwards="开口向下。"
+				NotExist="不存在。"
+				document.getElementById("xGreater1").innerText="当"
+				document.getElementById("xGreater3").innerText=" 时，"
+				document.getElementById("xGreater4").innerText="随 x 的增大而"
+				increases="增大"
+				decreases="减小"
+				document.getElementById("xGreater6").innerText="。"
+				document.getElementById("xLess1").innerText="当"
+				document.getElementById("xLess3").innerText=" 时，"
+				document.getElementById("xLess4").innerText="随 x 的增大而"
+				document.getElementById("xLess6").innerText="。"
+				Minimum="最小值："
+				Maximum="最大值："
+				MinimumMaximum="最小值 / 最大值："
+				document.getElementById("xIntercept1").innerText="与 x 轴的交点："
+				and="和"
+				document.getElementById("yIntercept1").innerText="与 y 轴的交点："
+				None="无"
+				break
 				default:
-					document.getElementById("VertexForm1").innerText="Vertex Form: "
-					document.getElementById("AxisSymmetry1").innerText="Axis of Symmetry: Line"
-					document.getElementById("VertexPointCoordinates1").innerText="Vertex Point Coordinates: "
-					document.getElementById("ParabolaOpens1").innerText="The parabola "
-					upwards="opens upwards."
-					downwards="opens downwards."
-					NotExist="does not exist."
-					document.getElementById("xGreater1").innerText="When"
-					document.getElementById("xGreater3").innerText=", "
-					increases="increases"
-					decreases="decreases"
-					document.getElementById("xGreater6").innerText=" with the increase of x."
-					document.getElementById("xLess1").innerText="When"
-					document.getElementById("xLess3").innerText=", "
-					document.getElementById("xLess6").innerText=" with the increase of x."
-					Minimum="Minimum: "
-					Maximum="Maximum: "
-					MinimumMaximum="Minimum / Maximum: "
-					document.getElementById("xIntercept1").innerText="x-Intercept: "
-					and="and"
-					document.getElementById("yIntercept1").innerText="y-Intercept: "
-					None="None"
-					break
+				document.getElementById("VertexForm1").innerText="Vertex Form: "
+				document.getElementById("AxisSymmetry1").innerText="Axis of Symmetry: Line"
+				document.getElementById("VertexPointCoordinates1").innerText="Vertex Point Coordinates: "
+				document.getElementById("ParabolaOpens1").innerText="The parabola "
+				upwards="opens upwards."
+				downwards="opens downwards."
+				NotExist="does not exist."
+				document.getElementById("xGreater1").innerText="When"
+				document.getElementById("xGreater3").innerText=", "
+				increases="increases"
+				decreases="decreases"
+				document.getElementById("xGreater6").innerText=" with the increase of x."
+				document.getElementById("xLess1").innerText="When"
+				document.getElementById("xLess3").innerText=", "
+				document.getElementById("xLess6").innerText=" with the increase of x."
+				Minimum="Minimum: "
+				Maximum="Maximum: "
+				MinimumMaximum="Minimum / Maximum: "
+				document.getElementById("xIntercept1").innerText="x-Intercept: "
+				and="and"
+				document.getElementById("yIntercept1").innerText="y-Intercept: "
+				None="None"
+				break
 			}
 			document.getElementById("ParabolaOpens2").innerText=NotExist
 			document.getElementById("xGreater5").innerText=increases+" / "+decreases

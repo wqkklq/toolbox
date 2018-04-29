@@ -7,6 +7,11 @@
 		<meta name="theme-color" content="#0066cc">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
+		<style>
+			button{
+				margin-top:15px;
+			}
+		</style>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title"></header>
@@ -28,11 +33,12 @@
 				<label id="MassLabel"></label>
 				<input id="Mass" type="text">
 			</div>
-			<button type="button" class="mui-btn mui-btn-blue mui-btn-block" style="margin-top:15px"></button>
+			<button type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
 			<ul class="menu"></ul>
 		</div>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var elements=[{
@@ -879,37 +885,37 @@
 				var name
 				switch(language){
 					case "SimplifiedChinese":
-						name=elements[i].name_cn
-						break
+					name=elements[i].name_cn
+					break
 					default:
-						name=elements[i].name
-						break
+					name=elements[i].name
+					break
 				}
 				document.getElementsByTagName("select")[0].options.add(new Option(i+1+". "+elements[i].symbol+" ("+name+")",elements[i].mass))
 			}
 			switch(language){
 				case "SimplifiedChinese":
-					document.title="计算器"
-					document.getElementsByTagName("select")[0].options.add(new Option("未定义的化合物","0"))
-					document.getElementById("SearchLabel").innerText="搜索"
-					document.getElementById("Search").placeholder="输入搜索词"
-					document.getElementById("MoleLabel").innerText="摩尔"
-					document.getElementById("ParticleLabel").innerText="粒子"
-					document.getElementById("MassLabel").innerText="质量"
-					enterNum="输入数字"
-					document.getElementsByTagName("button")[0].innerText="记录"
-					break
+				document.title="计算器"
+				document.getElementsByTagName("select")[0].options.add(new Option("未定义的化合物","0"))
+				document.getElementById("SearchLabel").innerText="搜索"
+				document.getElementById("Search").placeholder="输入搜索词"
+				document.getElementById("MoleLabel").innerText="摩尔"
+				document.getElementById("ParticleLabel").innerText="粒子"
+				document.getElementById("MassLabel").innerText="质量"
+				enterNum="输入数字"
+				document.getElementsByTagName("button")[0].innerText="记录"
+				break
 				default:
-					document.title="Calculator"
-					document.getElementsByTagName("select")[0].options.add(new Option("Undefined Compound","0"))
-					document.getElementById("SearchLabel").innerText="Search"
-					document.getElementById("Search").placeholder="Enter a search term"
-					document.getElementById("MoleLabel").innerText="Mole"
-					document.getElementById("ParticleLabel").innerText="Particle"
-					document.getElementById("MassLabel").innerText="Mass"
-					enterNum="Enter the number"
-					document.getElementsByTagName("button")[0].innerText="Record"
-					break
+				document.title="Calculator"
+				document.getElementsByTagName("select")[0].options.add(new Option("Undefined Compound","0"))
+				document.getElementById("SearchLabel").innerText="Search"
+				document.getElementById("Search").placeholder="Enter a search term"
+				document.getElementById("MoleLabel").innerText="Mole"
+				document.getElementById("ParticleLabel").innerText="Particle"
+				document.getElementById("MassLabel").innerText="Mass"
+				enterNum="Enter the number"
+				document.getElementsByTagName("button")[0].innerText="Record"
+				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			document.getElementById("Mole").placeholder=enterNum

@@ -7,11 +7,19 @@
 		<meta name="theme-color" content="#0066cc">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
+		<style>
+			footer div{
+				width:100%;
+			}
+			table{
+				display:none;
+			}
+		</style>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
-			<table style="width:100%;display:none">
+			<table width="100%">
 				<tbody>
 					<tr>
 						<td width="30%">
@@ -61,10 +69,11 @@
 			</table>
 		</div>
 		<footer>
-			<div id="UpdateRate" style="width:100%"></div>
+			<div id="UpdateRate"></div>
 		</footer>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var rate=localStorage.getItem("Rate")
@@ -91,12 +100,12 @@
 				}
 			}
 			function updateRate(){
-				request("http://www.apilayer.net/api/live?access_key=305f5a80f4da12a238c9ebfe5479c648",function(e){
+				request("https://rthsoftware.azurewebsites.net/apilayer.php",function(e){
 					var json=JSON.parse(e)
 					if(json.success){
 						rate=e
 						localStorage.setItem("Rate",rate)
-						document.getElementsByTagName("table")[0].style.display=""
+						document.getElementsByTagName("table")[0].style.display="table"
 					}
 				})
 			}
@@ -107,19 +116,19 @@
 			document.getElementById("UpdateRate").onclick=updateRate
 			switch(language){
 				case "SimplifiedChinese":
-					document.title="计算器"
-					document.getElementById("UpdateRate").innerText="更新汇率"
-					break
+				document.title="计算器"
+				document.getElementById("UpdateRate").innerText="更新汇率"
+				break
 				default:
-					document.title="Calculator"
-					document.getElementById("UpdateRate").innerText="Update the exchange rate"
-					break
+				document.title="Calculator"
+				document.getElementById("UpdateRate").innerText="Update the exchange rate"
+				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			document.getElementsByTagName("select")[0].value="CNY"
 			document.getElementsByTagName("select")[1].value="USD"
 			if(rate){
-				document.getElementsByTagName("table")[0].style.display=""
+				document.getElementsByTagName("table")[0].style.display="table"
 			}else{
 				updateRate()
 			}

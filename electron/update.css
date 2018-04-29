@@ -3,11 +3,17 @@ body{
 	background-color:black;
 	color:white;
 	font-family:"Helvetica Neue",Helvetica,sans-serif,"等线";
-	user-select:none;
 	-webkit-user-select:none;
+	user-select:none;
 }
-::-webkit-scrollbar{
-	display:none;
+.content{
+	font-family:Consolas;
+	height:100%;
+	left:0px;
+	overflow:auto;
+	padding:55px 15px 15px 15px;
+	position:fixed;
+	width:100%;
 }
 .drag{
 	background-color:rgb(30,30,30);
@@ -38,7 +44,7 @@ body{
 .win div{
 	height:40px;
 	position:fixed;
-	transition:all 0.25s;
+	transition:all .25s;
 	width:40px;
 }
 .win div:hover{
@@ -48,12 +54,6 @@ body{
 	background-color:white;
 	color:rgb(0,102,204);
 }
-.content{
-	font-family:Consolas;
-	height:100%;
-	left:0px;
-	overflow:auto;
-	padding:55px 15px 15px 15px;
-	position:fixed;
-	width:100%;
+::-webkit-scrollbar{
+	display:none;
 }

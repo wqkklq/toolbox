@@ -7,11 +7,17 @@
 		<meta name="theme-color" content="#0066cc">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
+		<style>
+			.result{
+				font-size:20px;
+				text-align:center;
+			}
+		</style>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
-			<div style="line-height:30px">
+			<div class="formula">
 				a &#40;<span id="x1Label">x<sub>1</sub></span>&#44; <span id="y1Label">y<sub>1</sub></span>&#41;<br>
 				b &#40;<span id="x2Label">x<sub>2</sub></span>&#44; <span id="y2Label">y<sub>2</sub></span>&#41;
 			</div>
@@ -34,12 +40,13 @@
 				<input id="y2Input" type="number">
 			</div>
 			<hr>
-			<div class="result" style="text-align:center;font-size:16pt">y = <label id="kLabel">k</label>x + <label id="bLabel">b</label></div>
+			<div class="result">y = <label id="kLabel">k</label>x + <label id="bLabel">b</label></div>
 			<hr>
 		</div>
 		<button type="button" class="mui-btn mui-btn-blue sign">+/-</button>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			function calculate(){

@@ -13,24 +13,27 @@
 				line-height:25px;
 				max-width:70%;
 				padding:10px 15px;
+				-webkit-user-select:text;
 				user-select:text;
 				width:fit-content;
 				word-break:break-word;
-				-webkit-user-select:text;
 			}
 			.msg-bot{
 				background-color:white;
-				border-left:10px solid rgba(0,0,0,0.25);
+				border-left:10px solid rgba(0,0,0,.25);
 				color:black;
 			}
 			.msg-me{
 				background-color:rgb(0,102,204);
-				border-right:10px solid rgba(0,0,0,0.25);
+				border-right:10px solid rgba(0,0,0,.25);
 				color:white;
 				margin:0 0 0 auto;
 			}
 			.msg-row{
 				padding:5px 0px;
+			}
+			.mui-content{
+				padding-bottom:80px;
 			}
 			.new-msg{
 				background-color:white;
@@ -43,7 +46,7 @@
 				width:90%;
 			}
 			.new-msg-background{
-				background-color:rgba(239,239,244,0.9);
+				background-color:rgba(239,239,244,.9);
 				bottom:0px;
 				box-shadow:0 -5px 10px rgb(239,239,244);
 				height:80px;
@@ -76,10 +79,8 @@
 	<body>
 		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
-			<div id="ChatbotDiv" style="padding-bottom:80px">
-				<div class="msg-row">
-					<div id="Welcome" class="msg msg-bot" style="display:none"></div>
-				</div>
+			<div class="msg-row">
+				<div id="Welcome" class="msg msg-bot"></div>
 			</div>
 		</div>
 		<div class="new-msg-background">
@@ -92,11 +93,13 @@
 		</div>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var lastBotInfo
 			function chatbotReply(botInfo){
-				request("http://www.tuling123.com/openapi/api?key=42cff502574d42e996841e655fecd78a&info="+botInfo,function(e){
+				request("https://rthsoftware.azurewebsites.net/tuling.php?info="+botInfo,function(e){
 					var json=JSON.parse(e)
 					var botText=json.text,
 					newDiv=document.createElement("div"),
@@ -108,22 +111,22 @@
 						if(json.code==200000){
 							newChildDiv.innerHTML+="<br><a href=\"javascript:openWebPage('"+json.url+"')\">"+json.url.split("/")[2]+"</a>"
 						}
-						document.getElementById("ChatbotDiv").appendChild(newDiv)
-						window.scrollTo(0,document.body.scrollHeight)
+						document.getElementsByClassName("mui-content")[0].appendChild(newDiv)
+						scrollTo(0,document.body.scrollHeight)
 					}
 					switch(language){
 						case "SimplifiedChinese":
-							newChildDiv.innerText=botText
-							document.getElementsByClassName("mui-title")[0].innerText="康康"
-							appendMsg()
-							break
+						newChildDiv.innerText=botText
+						document.getElementsByClassName("mui-title")[0].innerText="康康"
+						appendMsg()
+						break
 						default:
-							translate(botText,"zh","en",function(e){
-								newChildDiv.innerText=e.trans_result[0].dst
-								document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
-								appendMsg()
-							})
-							break
+						translate(botText,"zh","en",function(e){
+							newChildDiv.innerText=e.trans_result[0].dst
+							document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
+							appendMsg()
+						})
+						break
 					}
 				})
 			}
@@ -136,19 +139,19 @@
 					newMyChildDiv.setAttribute("class","msg msg-me")
 					newMyChildDiv.innerText=document.getElementsByTagName("input")[0].value
 					newMyDiv.appendChild(newMyChildDiv)
-					document.getElementById("ChatbotDiv").appendChild(newMyDiv)
-					window.scrollTo(0,document.body.scrollHeight)
+					document.getElementsByClassName("mui-content")[0].appendChild(newMyDiv)
+					scrollTo(0,document.body.scrollHeight)
 					switch(language){
 						case "SimplifiedChinese":
-							document.getElementsByClassName("mui-title")[0].innerText="对方正在输入"
-							chatbotReply(document.getElementsByTagName("input")[0].value)
-							break
+						document.getElementsByClassName("mui-title")[0].innerText="对方正在输入"
+						chatbotReply(document.getElementsByTagName("input")[0].value)
+						break
 						default:
-							document.getElementsByClassName("mui-title")[0].innerText="Typing"
-							translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
-								chatbotReply(e.trans_result[0].dst)
-							})
-							break
+						document.getElementsByClassName("mui-title")[0].innerText="Typing"
+						translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
+							chatbotReply(e.trans_result[0].dst)
+						})
+						break
 					}
 					document.getElementsByTagName("input")[0].value=""
 				}else if(lastBotInfo){
@@ -164,32 +167,21 @@
 			document.getElementsByTagName("button")[0].onclick=send
 			switch(language){
 				case "SimplifiedChinese":
-					document.title="聊天机器人"
-					document.getElementsByClassName("mui-title")[0].innerText="康康"
-					document.getElementById("Welcome").innerText="我们一起来聊天吧！"
-					document.getElementsByTagName("button")[0].innerText="发送"
-					break
+				document.title="聊天机器人"
+				document.getElementsByClassName("mui-title")[0].innerText="康康"
+				document.getElementById("Welcome").innerText="我们一起来聊天吧！"
+				document.getElementsByTagName("button")[0].innerText="发送"
+				break
 				default:
-					document.title="Chatbot"
-					document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
-					document.getElementById("Welcome").innerText="Let's chat!"
-					document.getElementsByTagName("button")[0].innerText="Send"
-					break
+				document.title="Chatbot"
+				document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
+				document.getElementById("Welcome").innerText="Let's chat!"
+				document.getElementsByTagName("button")[0].innerText="Send"
+				break
 			}
-			if(!navigator.onLine){
-				switch(language){
-					case "SimplifiedChinese":
-						document.getElementById("Welcome").innerText="我需要连接到互联网才能和你聊天。"
-						break
-					default:
-						document.getElementById("Welcome").innerText="I cannot chat with you without connecting to the Internet."
-						break
-				}
-				document.getElementsByClassName("new-msg")[0].style.display="none"
-			}else if(!isMobile){
+			if(!isMobile){
 				document.getElementsByTagName("input")[0].focus()
 			}
-			document.getElementById("Welcome").style.display=""
 		</script>
 	</body>
 </html>

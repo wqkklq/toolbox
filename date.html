@@ -9,9 +9,9 @@
 		<link href="css/general.css" rel="stylesheet">
 		<style>
 			.result{
-				text-align:center;
-				font-size:16pt;
+				font-size:20px;
 				margin-top:15px;
+				text-align:center;
 				-webkit-user-select:text;
 				user-select:text
 			}
@@ -35,6 +35,7 @@
 		</div>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			function calculate(){
@@ -43,34 +44,34 @@
 				var dateDiff=parseInt(Math.abs(endDateValue-startDateValue)/1000/60/60/24)
 				switch(language){
 					case "SimplifiedChinese":
-						document.getElementsByClassName("result")[0].innerText="距离 "+dateDiff+" 天"
-						break
+					document.getElementsByClassName("result")[0].innerText="距离 "+dateDiff+" 天"
+					break
 					default:
-						if(Math.abs(dateDiff>1)){
-							document.getElementsByClassName("result")[0].innerText=dateDiff+" Days"
-						}else{
-							document.getElementsByClassName("result")[0].innerText=dateDiff+" Day"
-						}
-						break
+					if(Math.abs(dateDiff>1)){
+						document.getElementsByClassName("result")[0].innerText=dateDiff+" Days"
+					}else{
+						document.getElementsByClassName("result")[0].innerText=dateDiff+" Day"
+					}
+					break
 				}
 			}
 			document.getElementById("StartDate").oninput=calculate
 			document.getElementById("EndDate").oninput=calculate
 			switch(language){
 				case "SimplifiedChinese":
-					document.title="计算器"
-					document.getElementsByTagName("legend")[0].innerText="日期之间的差异"
-					document.getElementById("StartDateLabel").innerText="起始日期"
-					document.getElementById("EndDateLabel").innerText="结束日期"
-					document.getElementsByClassName("result")[0].innerText="距离 0 天"
-					break
+				document.title="计算器"
+				document.getElementsByTagName("legend")[0].innerText="日期之间的差异"
+				document.getElementById("StartDateLabel").innerText="起始日期"
+				document.getElementById("EndDateLabel").innerText="结束日期"
+				document.getElementsByClassName("result")[0].innerText="距离 0 天"
+				break
 				default:
-					document.title="Calculator"
-					document.getElementsByTagName("legend")[0].innerText="Date Diff"
-					document.getElementById("StartDateLabel").innerText="Start Date"
-					document.getElementById("EndDateLabel").innerText="End Date"
-					document.getElementsByClassName("result")[0].innerText="0 Day"
-					break
+				document.title="Calculator"
+				document.getElementsByTagName("legend")[0].innerText="Date Diff"
+				document.getElementById("StartDateLabel").innerText="Start Date"
+				document.getElementById("EndDateLabel").innerText="End Date"
+				document.getElementsByClassName("result")[0].innerText="0 Day"
+				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 		</script>

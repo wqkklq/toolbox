@@ -7,96 +7,116 @@
 		<meta name="theme-color" content="#0066cc">
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
+		<style>
+			footer{
+				display:none;
+			}
+			footer div{
+				width:50%;
+			}
+			.edit{
+				display:none;
+				margin-bottom:60px;
+			}
+			.edit ul.menu{
+				margin-top:15px
+			}
+			.text-editor{
+				background-color:white;
+				border:1px solid rgba(0,0,0,.2);
+				border-radius:5px;
+				font-size:16px;
+				line-height:24px;
+				min-height:230px;
+				padding:10px;
+				-webkit-user-select:text;
+				user-select:text;
+				word-break:break-word;
+			}
+		</style>
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
-			<div class="mui-input-row">
-				<input type="text" class="mui-input-clear">
+			<div class="start">
+				<ul class="menu">
+					<li id="NewDocument" class="menu"></li>
+					<li id="OpenLocalDocument" class="menu"></li>
+					<li id="OpenOnlineDocument" class="menu"></li>
+					<span id="SavedTextUl"></span>
+				</ul>
 			</div>
-			<div id="TextDiv">
-				<textarea id="Text" rows="10" style="display:none"></textarea>
+			<div class="edit">
+				<div class="mui-input-row">
+					<input type="text" class="mui-input-clear">
+				</div>
+				<div class="text-editor" contenteditable="true" draggable="true"></div>
+				<ul class="menu">
+					<li id="SaveAs" class="menu"></li>
+					<li id="Delete" class="menu"></li>
+				</ul>
+				<ul class="menu">
+					<li id="FindReplace" class="menu"></li>
+					<li id="SyntaxHighlighting" class="menu"></li>
+					<li id="Translate" class="menu"></li>
+					<li id="Decode" class="menu"></li>
+					<li id="Speak" class="menu"></li>
+				</ul>
+				<ul class="menu">
+					<li id="CreateMessageBox" class="menu"></li>
+					<li id="GenerateQRCode" class="menu"></li>
+					<li id="GenerateMD5Value" class="menu"></li>
+					<li id="GenerateWebPage" class="menu"></li>
+				</ul>
+				<ul class="menu">
+					<li id="Base64Encode" class="menu"></li>
+					<li id="BinaryEncode" class="menu"></li>
+					<li id="Encrypt" class="menu"></li>
+					<li id="UnicodeEncode" class="menu"></li>
+					<li id="URIComponentEncode" class="menu"></li>
+				</ul>
 			</div>
-			<ul class="menu">
-				<li id="OpenLocalDocument" class="menu"></li>
-				<li id="OpenOnlineDocument" class="menu"></li>
-				<li id="Delete" class="menu"></li>
-				<li id="NewDocument" class="menu"></li>
-			</ul>
-			<ul class="menu" style="margin-top:15px">
-				<li id="CreateMessageBox" class="menu"></li>
-				<li id="Translate" class="menu"></li>
-				<li id="GetHitokoto" class="menu"></li>
-				<li id="Encrypt" class="menu"></li>
-				<li id="Decode" class="menu"></li>
-				<li id="Speak" class="menu"></li>
-			</ul>
-			<ul class="menu" style="margin-top:15px">
-				<li id="Base64Encode" class="menu"></li>
-				<li id="BinaryEncode" class="menu"></li>
-				<li id="UnicodeEncode" class="menu"></li>
-				<li id="URIComponentEncode" class="menu"></li>
-			</ul>
-			<ul class="menu" style="margin-top:15px">
-				<li id="GenerateQRCode" class="menu"></li>
-				<li id="GenerateMD5Value" class="menu"></li>
-				<li id="GenerateWebPage" class="menu"></li>
-			</ul>
-			<ul id="SavedTextUl" class="menu" style="margin:15px 0px 45px"></ul>
 		</div>
 		<footer>
-			<div id="Save" style="width:50%"></div>
-			<div id="RunJSCode" style="width:50%"></div>
+			<div id="Save"></div>
+			<div id="RunJSCode"></div>
 		</footer>
 		<input class="open-file" type="file">
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var currentItem,myCodeMirror
-			function addNote(note){
-				if(note==null){
+			var currentItem,
+			encrypt=true,
+			fontSize=16,
+			note=/\/\*[^\*]+\*\//g,
+			savedText
+			function addNote(text){
+				if(text==null){
 					switch(language){
 						case "SimplifiedChinese":
-							note="正在加载"
-							if(!navigator.onLine){
-								note+="（没有互联网连接）"
-							}
-							break
+						text="正在加载"
+						break
 						default:
-							note="Loading"
-							if(!navigator.onLine){
-								note+=" (no Internet connection)"
-							}
-							break
+						text="Loading"
+						break
 					}
 				}
-				setText(readText()+"/* "+note+" */")
+				setText(readText()+"/* "+text+" */")
+				syntaxHighlighting()
 			}
-			function apply(serialNumber){
+			function applyItem(serialNumber){
 				if(serialNumber==0){
-					currentItem="Text"
+					save()
 				}else{
-					currentItem="Text"+serialNumber
+					currentItem=serialNumber
 				}
-				localStorage.setItem("Text",readText())
-				localStorage.setItem("Title",document.getElementsByTagName("input")[0].value)
-				localStorage.setItem("TextEditorCurrentItem",currentItem)
-				reload()
-			}
-			function clear(){
-				localStorage.removeItem("Text")
-				localStorage.removeItem("Title")
-				currentItem=="Text"
-				localStorage.removeItem("TextEditorCurrentItem")
-				reload()
+				edit(true)
 			}
 			function clearData(){
 				localStorage.clear()
-				if(isPlus){
-					plus.cache.clear()
-					plus.navigator.removeAllCookie()
-				}
 				restart()
 			}
 			function count(){
@@ -104,20 +124,20 @@
 				if(wordCount<=0){
 					switch(language){
 						case "SimplifiedChinese":
-							document.getElementsByTagName("input")[0].placeholder="标题"
-							break
+						document.getElementsByTagName("input")[0].placeholder="标题"
+						break
 						default:
-							document.getElementsByTagName("input")[0].placeholder="Title"
-							break
+						document.getElementsByTagName("input")[0].placeholder="Title"
+						break
 					}
 				}else{
 					switch(language){
 						case "SimplifiedChinese":
-							document.getElementsByTagName("input")[0].placeholder="字数："+wordCount
-							break
+						document.getElementsByTagName("input")[0].placeholder="字数："+wordCount
+						break
 						default:
-							document.getElementsByTagName("input")[0].placeholder="Word Count: "+wordCount
-							break
+						document.getElementsByTagName("input")[0].placeholder="Word Count: "+wordCount
+						break
 					}
 				}
 			}
@@ -134,35 +154,33 @@
 					return code
 				}
 			}
-			function enableCodeEditor(callback){
-				if(myCodeMirror==null){
-					loadCSS("css/codemirror.css")
-					loadJS(["js/codemirror.js","js/javascript.js","js/matchbrackets.js"],function(){
-						myCodeMirror=CodeMirror.fromTextArea(document.getElementById("Text"),{
-							indentUnit:4,
-							lineNumbers:true,
-							lineWrapping:true,
-							matchBrackets:true,
-							mode:"javascript"
-						})
-						if(appliedTheme=="Dark"){
-							loadCSS("css/seti.css")
-							myCodeMirror.setOption("theme","seti")
-						}
-						myCodeMirror.on("change",count)
-						if(!isMobile){
-							myCodeMirror.focus()
-						}
-						document.getElementById("TextDiv").style.marginBottom="15px"
-						document.getElementsByClassName("CodeMirror-lines")[0].style.minHeight="300px"
-						document.getElementsByClassName("CodeMirror")[0].style.height="100%"
-						textChanged()
-						if(callback){
-							callback()
-						}
-					})
-				}else if(callback){
-					callback()
+			function decrypt(text,password){
+				var encrypted=text.split("9"),
+				str=""
+				for(var i=0;i<encrypted.length;i++){
+					str+=String.fromCharCode(parseInt(encrypted[i],8)/8)
+				}
+				if(str.indexOf("丨")!=-1){
+					if(password&&MD5(password)==str.substr(str.indexOf("丨")+1,32)){
+						return str.substr(0,str.indexOf("丨"))
+					}else{
+						return text
+					}
+				}else{
+					return false
+				}
+			}
+			function edit(edit){
+				if(edit){
+					document.getElementsByClassName("start")[0].style.display="none"
+					document.getElementsByClassName("edit")[0].style.display="block"
+					document.getElementsByTagName("footer")[0].style.display="block"
+					document.getElementsByClassName("back")[0].onclick=newDoc
+				}else{
+					document.getElementsByClassName("start")[0].style.display=
+					document.getElementsByClassName("edit")[0].style.display=
+					document.getElementsByTagName("footer")[0].style.display=""
+					document.getElementsByClassName("back")[0].onclick=mui.back
 				}
 			}
 			function encodeUnicode(text){
@@ -176,15 +194,46 @@
 				}
 				return unicode
 			}
+			function encryptText(text,password){
+				var encrypted=""
+				text=text.replace(/丨/g,"｜")+"丨"+MD5(password)
+				for(var i=0;i<text.length;i++){
+					encrypted+=(text.charCodeAt(i)*8).toString(8)+"9"
+				}
+				return btoa(encrypted)
+			}
+			function find(){
+				setText(readText())
+				showPrompt([
+					"Find what",
+					"查找内容"
+				],function(e){
+					showPrompt([
+						"Replace with",
+						"替换为"
+					],function(replaceWith){
+						setText(readText().replace(new RegExp(e,"g"),replaceWith))
+					})
+				},"text",null,null,function(){
+					setText(readText(),true)
+				},function(e){
+					if(e&&e!=""){
+						e=e.replace(/</g,"&lt;").
+						replace(/>/g,"&gt;")
+						document.getElementsByClassName("text-editor")[0].innerHTML=readText().
+						replace(/</g,"&lt;").
+						replace(/>/g,"&gt;").
+						replace(new RegExp(e,"g"),"<span class=\"highlight-find\">$&</span>").
+						replace(/\n/g,"<br>")
+						scrollTo(0,0)
+					}else{
+						setText(readText(),true)
+					}
+				})
+			}
 			function isEmpty(){
 				if(readText()==""){
-					var text
-					if(myCodeMirror!=null){
-						text=myCodeMirror.getValue()
-					}else{
-						text=document.getElementById("Text").value
-					}
-					setText(text.replace(/\/\*|\*\//g,"").trim())
+					setText(document.getElementsByClassName("text-editor")[0].innerText.replace(/\/\*\s|\s\*\//g,"").trim())
 					if(readText()==""){
 						showAlert([
 							"The text cannot be empty",
@@ -199,50 +248,93 @@
 				}
 			}
 			function load(){
-				currentItem=localStorage.getItem("TextEditorCurrentItem")
-				if(localStorage.getItem("Text")!=null){
-					setText(localStorage.getItem("Text"))
-				}
-				if(localStorage.getItem("Title")!=null){
-					document.getElementsByTagName("input")[0].value=localStorage.getItem("Title")
-				}
-				for(var i=9999;i>0;i-=1){
-					var savedText=localStorage.getItem("Text"+i)
-					if(savedText!=null&&savedText!=""){
+				if(savedText&&savedText.text){
+					for(var i=savedText.text.length-1;i>=0;i--){
 						var newLi=document.createElement("li")
 						newLi.setAttribute("class","menu")
-						if(localStorage.getItem("Text"+i+"Title")!=null&&localStorage.getItem("Text"+i+"Title")!=""){
-							newLi.innerText=localStorage.getItem("Text"+i+"Title")
+						if(savedText.text[i].title!=null&&savedText.text[i].title!=""){
+							newLi.innerText=savedText.text[i].title
 						}else{
-							newLi.innerText=savedText
+							if(savedText.text[i].encrypt){
+								newLi.innerText=decrypt(atob(savedText.text[i].text),"RTH")
+							}else{
+								newLi.innerText=savedText.text[i].text
+							}
 						}
-						newLi.setAttribute("number",i)
+						newLi.setAttribute("number",i+1)
 						newLi.onclick=function(){
 							openText(this.getAttribute("number"))
-						}
-						if("Text"+i==currentItem){
-							newLi.style.color="rgb(0,122,255)"
 						}
 						document.getElementById("SavedTextUl").appendChild(newLi)
 					}
 				}
-				if(document.getElementById("SavedTextUl").getElementsByTagName("li").length>0){
-					document.getElementById("SavedTextUl").style.marginBottom="60px"
+			}
+			function loadSavedText(){
+				savedText=JSON.parse(localStorage.getItem("SavedText"))
+				if(!savedText){
+					savedText={
+						"text":[],
+						"time":new Date().getTime(),
+						"username":""
+					}
 				}
-				if(currentItem==null||currentItem=="Text"){
-					document.getElementById("Delete").style.display="none"
+				for(var i=0;i<9999;i++){
+					var oldText=localStorage.getItem("Text"+i)
+					if(oldText!=null&&oldText!=""){
+						savedText.text.push({
+							"encrypt":false,
+							"text":oldText,
+							"time":new Date().toLocaleString(),
+							"title":localStorage.getItem("Text"+i+"Title")
+						})
+						localStorage.removeItem("Text"+i)
+						localStorage.removeItem("Text"+i+"Title")
+					}
+				}
+				localStorage.setItem("SavedText",JSON.stringify(savedText))
+				if(login.username){
+					request("https://rthsoftware.azurewebsites.net/userdata/text/"+login.username+".txt",function(e){
+						var json=JSON.parse(e)
+						if(json.username==savedText.username){
+							if(json.time>savedText.time){
+								savedText=json
+							}
+						}else{
+							savedText.text=savedText.text.concat(json.text)
+							savedText.time=new Date().getTime()
+							savedText.username=login.username
+						}
+						if(JSON.stringify(savedText)!=e&&savedText.text.length>0){
+							submit(load)
+						}else if(savedText.text.length<=0){
+							savedText=json
+							load()
+						}else{
+							load()
+						}
+					},function(){
+						if(savedText.text.length>0){
+							submit(load)
+						}else{
+							load()
+						}
+					})
 				}else{
-					document.getElementById("Delete").style.display=""
+					load()
 				}
 			}
 			function newDoc(){
-				if(readText()!=""){
-					showConfirm([
-						"Do you want to close the current document?",
-						"您想要关闭当前文档吗？"
-					],clear)
+				if(document.getElementsByClassName("start")[0].style.display==""){
+					edit(true)
 				}else{
-					clear()
+					if(readText()!=""){
+						showConfirm([
+							"Do you want to close the current document?",
+							"您想要关闭当前文档吗？"
+						],reload)
+					}else{
+						reload()
+					}
 				}
 			}
 			function only(regExp,text){
@@ -265,80 +357,71 @@
 					reader.onload=function(e){
 						document.getElementsByTagName("input")[0].value=file.name
 						setText(this.result)
-						apply(0)
+						applyItem(0)
 					}
 					reader.readAsText(file)
-					var filenameSplit=file.name.split(".")
-					readMode(filenameSplit[filenameSplit.length-1])
 				}else{
-					unsupportedType()
+					showAlert([
+						"Unable to open this type of file",
+						"无法打开此类文件"
+					])
 				}
 			}
 			function openText(serialNumber){
-				setText(localStorage.getItem("Text"+serialNumber))
-				document.getElementsByTagName("input")[0].value=localStorage.getItem("Text"+serialNumber+"Title")
-				apply(serialNumber)
-			}
-			function readMode(type){
-				if(myCodeMirror!=null){
-					if(type=="html"){
-						type="htmlmixed"
-						loadJS(["http://codemirror.net/mode/xml/xml.js","http://codemirror.net/mode/css/css.js"],function(){
-							setMode(type)
-						})
-					}else if(type=="js"){
-						type="javascript"
-					}else if(type.indexOf("c")!=-1&&type.indexOf("css")==-1){
-						type="clike"
-					}else if(type=="md"){
-						type="markdown"
-					}
-					if(type!="txt"&&type!="rth"&&myCodeMirror.getOption("mode")!=type){
-						setMode(type)
-					}
+				var text
+				if(savedText.text[serialNumber-1].encrypt){
+					text=decrypt(atob(savedText.text[serialNumber-1].text),"RTH")
+				}else{
+					encrypt=false
+					text=savedText.text[serialNumber-1].text
 				}
+				setText(text)
+				document.getElementsByTagName("input")[0].value=savedText.text[serialNumber-1].title
+				applyItem(serialNumber)
 			}
 			function readText(){
-				if(myCodeMirror!=null){
-					return myCodeMirror.getValue().replace(/\/\*[^>]+\*\//g,"")
-				}else{
-					return document.getElementById("Text").value.replace(/\/\*[^>]+\*\//g,"")
-				}
+				return document.getElementsByClassName("text-editor")[0].innerText.replace(note,"")
 			}
 			function reload(){
-				document.getElementsByTagName("input")[0].value=""
+				scrollTo(0,0)
+				currentItem=null
 				setText("")
-				document.getElementById("SavedTextUl").style.marginBottom="45px"
+				document.getElementsByTagName("input")[0].value=
 				document.getElementById("SavedTextUl").innerHTML=""
-				load()
+				encrypt=true
+				edit(false)
+				loadSavedText()
 			}
 			function runJSCode(fromShortcut){
 				if(!isEmpty()){
-					var code=readText().replace(/coin|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast")
+					syntaxHighlighting()
+					var code=readText().replace(/coin|localStorage|runJSCode|runTrue|userInfo/gi,"").replace(/console.log/g,"mui.toast")
 					var runTrue=function(){
 						try{
 							var result=calc(code)
 							if(result!=undefined){
+								if(result.toString().indexOf("[object")!=-1){
+									result=JSON.stringify(result)
+								}
 								addNote(result)
 							}
 						}catch(e){
 							if(fromShortcut){
-								speak()
+								if(note.test(document.getElementsByClassName("text-editor")[0].innerText)){
+									translateText()
+								}else{
+									speak()
+								}
 							}else{
 								mui.toast(e.message)
 							}
 						}
 					}
-					if(myCodeMirror!=null){
-						if(myCodeMirror.getOption("mode")!="javascript"){
-							setMode("javascript")
-						}
-					}
 					if(code.indexOf("switch(language)")==-1){
-						if(/clearData|eval|plus|require/.test(code)){
+						if(/clearData|cordova|eval|require/.test(code)){
 							showConfirm([
-								"This code can harm your device. Do you want to continue?",
-								"此代码可能会对您的设备有害。您想要继续吗？"
+								"This code can harm your device",
+								"此代码可能会对您的设备有害"
 							],runTrue)
 						}else{
 							runTrue()
@@ -348,7 +431,204 @@
 					}
 				}
 			}
-			function save(){
+			function save(callback){
+				var text
+				if(encrypt){
+					text=encryptText(readText(),"RTH")
+				}else{
+					text=readText()
+				}
+				if(savedText&&savedText.text&&savedText.text[currentItem-1]){
+					savedText.text[currentItem-1].encrypt=encrypt
+					savedText.text[currentItem-1].text=text
+					savedText.text[currentItem-1].time=new Date().toLocaleString()
+					savedText.text[currentItem-1].title=document.getElementsByTagName("input")[0].value
+				}else{
+					savedText.text.push({
+						"encrypt":encrypt,
+						"text":text,
+						"time":new Date().toLocaleString(),
+						"title":document.getElementsByTagName("input")[0].value
+					})
+					currentItem=savedText.text.length
+				}
+				submit(function(){
+					if(callback){
+						callback()
+					}
+					applyItem(currentItem)
+				})
+			}
+			function setText(text,noScrolling){
+				document.getElementsByClassName("text-editor")[0].innerText=text
+				if(!noScrolling){
+					scrollTo(0,0)
+				}
+				count()
+			}
+			function speak(){
+				if(!isEmpty()&&window.speechSynthesis){
+					window.speechSynthesis.speak(new SpeechSynthesisUtterance(readText()))
+				}
+			}
+			function submit(callback){
+				savedText.time=new Date().getTime()
+				localStorage.setItem("SavedText",JSON.stringify(savedText))
+				if(login.username){
+					switch(language){
+						case "SimplifiedChinese":
+						mui.toast("正在提交")
+						break
+						default:
+						mui.toast("Submitting")
+						break
+					}
+					$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
+						"dir":"text/",
+						"filename":login.username,
+						"text":JSON.stringify(savedText)
+					},callback)
+				}else{
+					switch(language){
+						case "SimplifiedChinese":
+						mui.toast("更改已保存")
+						break
+						default:
+						mui.toast("Changes are saved")
+						break
+					}
+					if(userInfo){
+						loginDialog()
+					}
+					if(callback){
+						callback()
+					}
+				}
+			}
+			function syntaxHighlighting(){
+				scrollTo(0,0)
+				document.getElementsByClassName("text-editor")[0].innerHTML=document.getElementsByClassName("text-editor")[0].innerText.
+				replace(/</g,"&lt;").
+				replace(/>/g,"&gt;").
+				replace(/&lt;[^&]+&gt;/g,"<span class=\"highlight-tag\">$&</span>").
+				replace(/break|case|catch|default|else|for|if|return|switch|try|while/g,"<span class=\"highlight-func\">$&</span>").
+				replace(/(document|window)./g,"<span class=\"highlight-obj\">$&</span>").
+				replace(/const|false|function|let|new|null|true|undefined|var/g,"<span class=\"highlight-var\">$&</span>").
+				replace(note,"<span class=\"highlight-note\">$&</span>").
+				replace(/\n/g,"<br>")
+			}
+			function translateText(){
+				if(!isEmpty()){
+					addNote()
+					translate(readText().replace(/\s/g," "),"auto","auto",function(e){
+						addNote(e.trans_result[0].dst)
+					})
+				}
+			}
+			window.onkeydown=function(e){
+				if(e.ctrlKey||e.metaKey){
+					switch(e.keyCode){
+						case 13:
+						runJSCode(true)
+						return false
+						break
+						case 48:
+						if(document.getElementsByClassName("start")[0].style.display!=""){
+							fontSize=16
+							document.getElementsByClassName("text-editor")[0].style.fontSize=
+							document.getElementsByClassName("text-editor")[0].style.lineHeight=""
+						}
+						return false
+						break
+						case 70:
+						find()
+						return false
+						break
+						case 78:
+						newDoc()
+						return false
+						break
+						case 79:
+						openDialog()
+						return false
+						break
+						case 83:
+						save()
+						return false
+						break
+						case 187:
+						if(document.getElementsByClassName("start")[0].style.display!=""){
+							fontSize+=4
+							document.getElementsByClassName("text-editor")[0].style.fontSize=fontSize+"px"
+							document.getElementsByClassName("text-editor")[0].style.lineHeight=(fontSize+8)+"px"
+						}
+						return false
+						break
+						case 189:
+						if(document.getElementsByClassName("start")[0].style.display!=""&&fontSize>4){
+							fontSize-=4
+							document.getElementsByClassName("text-editor")[0].style.fontSize=fontSize+"px"
+							document.getElementsByClassName("text-editor")[0].style.lineHeight=(fontSize+8)+"px"
+						}
+						return false
+						break
+						default:break
+					}
+				}
+			}
+			document.getElementsByClassName("text-editor")[0].ondrop=function(e){
+				setText(event.dataTransfer.getData("Text"))
+				openLText(e.dataTransfer.files[0])
+			}
+			document.getElementsByClassName("text-editor")[0].oninput=count
+			document.getElementsByClassName("text-editor")[0].onkeydown=function(e){
+				switch(e.keyCode){
+					case 9:
+					document.execCommand("insertText",null,"\u0009")
+					return false
+					break
+					default:break
+				}
+			}
+			document.getElementById("NewDocument").onclick=newDoc
+			document.getElementById("OpenLocalDocument").onclick=openDialog
+			document.getElementById("OpenOnlineDocument").onclick=function(){
+				showPrompt([
+					"Enter the URL",
+					"输入网址"
+				],function(url){
+					if(url!=null&&url!=""){
+						reload()
+						var type=url.split(".")
+						type=type[type.length-1]
+						if(/c|tk/.test(type)&&type.indexOf("css")==-1){
+							type="html"
+						}
+						if(/css|html|js|php|txt/.test(type)){
+							url=addTime(url)
+							if(url.indexOf("http")==-1){
+								url="http://"+url
+							}
+							request("https://rthsoftware.azurewebsites.net/get.php?url="+encodeURIComponent(url),function(e){
+								setText(e.replace(/&lt;/g,"<").replace(/&gt;/g,">"))
+								applyItem(0)
+							})
+						}else{
+							showAlert([
+								"Unable to open this type of file",
+								"无法打开此类文件"
+							])
+						}
+					}
+				})
+			}
+			document.getElementById("Save").onclick=function(){
+				save()
+			}
+			document.getElementById("RunJSCode").onclick=function(){
+				runJSCode(false)
+			}
+			document.getElementById("SaveAs").onclick=function(){
 				if(isElectron&&!isLinux){
 					require("electron").remote.dialog.showSaveDialog({
 						defaultPath:document.getElementsByTagName("input")[0].value,
@@ -358,234 +638,55 @@
 							require("fs").writeFileSync(filename,readText())
 						}
 					})
-				}else if(isEdge||isLinux||isMobile){
-					if(currentItem==null||currentItem=="Text"){
-						for(var i=1;i<10000;i++){
-							if(localStorage.getItem("Text"+i)==null||localStorage.getItem("Text"+i)==""){
-								currentItem="Text"+i
-								i=10000
-							}
-						}
-						if(currentItem==null){
-							return false
-						}
-					}
-					localStorage.setItem(currentItem,readText())
-					localStorage.setItem(currentItem+"Title",document.getElementsByTagName("input")[0].value)
-					switch(language){
-						case "SimplifiedChinese":
-							mui.toast("已保存文本")
-							break
-						default:
-							mui.toast("The text has been saved")
-							break
-					}
-					apply(currentItem.replace("Text",""))
 				}else{
-					showConfirm([
-						"Do you want to download this document?",
-						"您想要下载此文档吗？"
-					],function(){
-						var filename=document.getElementsByTagName("input")[0].value
-						if(filename==""){
-							switch(language){
-								case "SimplifiedChinese":
-									filename="文本文档"
-									break
-								default:
-									filename="Text Document"
-									break
-							}
-						}
-						if(filename.indexOf(".")==-1){
-							filename+=".txt"
-						}
-						var dl=document.createElement("a")
-						dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(readText()))
-						dl.setAttribute("download",filename)
-						if(document.createEvent){
-							var event=document.createEvent("MouseEvents")
-							event.initEvent("click",true,true)
-							dl.dispatchEvent(event)
-						}else{
-							dl.click()
-						}
-					})
-				}
-			}
-			function setMode(type){
-				loadJS(["http://codemirror.net/mode/"+type+"/"+type+".js"],function(){
-					myCodeMirror.setOption("mode",type)
-				})
-			}
-			function setText(text){
-				if(myCodeMirror!=null){
-					myCodeMirror.setValue(text)
-				}else{
-					document.getElementById("Text").value=text
-				}
-				textChanged()
-				window.scrollTo(0,0)
-			}
-			function setTheme(themeName){
-				loadCSS("http://codemirror.net/theme/"+themeName+".css")
-				myCodeMirror.setOption("theme",themeName)
-			}
-			function speak(){
-				if(!isEmpty()&&window.speechSynthesis){
-					window.speechSynthesis.speak(new SpeechSynthesisUtterance(readText()))
-				}
-			}
-			function textChanged(){
-				if(myCodeMirror!=null){
-					setTimeout(function(){
-						myCodeMirror.refresh()
-					},1)
-				}
-				count()
-			}
-			window.onkeydown=function(e){
-				if(e.ctrlKey||e.metaKey){
-					switch(e.keyCode){
-						case 13:
-							runJSCode(true)
-							return false
+					var filename=document.getElementsByTagName("input")[0].value
+					if(filename==""){
+						switch(language){
+							case "SimplifiedChinese":
+							filename="文本文档"
 							break
-						case 78:
-							newDoc()
-							return false
+							default:
+							filename="Text Document"
 							break
-						case 79:
-							openDialog()
-							return false
-							break
-						case 83:
-							save()
-							return false
-							break
-						default:break
-					}
-				}
-			}
-			document.getElementsByTagName("textarea")[0].oninput=count
-			document.getElementById("Save").onclick=save
-			document.getElementById("RunJSCode").onclick=function(){
-				runJSCode(false)
-			}
-			document.getElementById("OpenLocalDocument").onclick=openDialog
-			document.getElementById("OpenOnlineDocument").onclick=function(){
-				showPrompt([
-					"Enter the URL",
-					"输入网址"
-				],[
-					"Open",
-					"打开"
-				],function(url){
-					if(url!=null&&url!=""){
-						clear()
-						if(url.indexOf("?")!=-1&&url.indexOf("text=")!=-1&&url.indexOf("title=")!=-1){
-							var title=searchURL("title",url)
-							if(title){
-								document.getElementsByTagName("input")[0].value=title
-							}
-							var text=searchURL("text",url)
-							if(text){
-								setText(text)
-							}
-							apply(0)
-						}else{
-							var type=url.split(".")
-							type=type[type.length-1]
-							if(type.indexOf("c")!=-1&&type.indexOf("css")==-1){
-								if(type.indexOf("/")==-1){
-									url+="/"
-								}
-								url+="index.html"
-								type="html"
-							}
-							var openTrue=function(){
-								url=addTime(url)
-								if(url.indexOf("http")==-1){
-									url="http://"+url
-								}
-								request(url,function(e){
-									setText(e)
-									apply(0)
-								})
-								readMode(type)
-							}
-							if(type=="txt"){
-								openTrue()
-							}else if(/html|css|js/.test(type)){
-								enableCodeEditor(openTrue)
-							}else{
-								unsupportedType()
-							}
 						}
 					}
-				})
+					if(filename.indexOf(".")==-1){
+						filename+=".txt"
+					}
+					var dl=document.createElement("a")
+					dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(readText()))
+					dl.setAttribute("download",filename)
+					if(document.createEvent){
+						var event=document.createEvent("MouseEvents")
+						event.initEvent("click",true,true)
+						dl.dispatchEvent(event)
+					}else{
+						dl.click()
+					}
+				}
 			}
 			document.getElementById("Delete").onclick=function(){
 				showConfirm([
 					"Do you want to delete the text document?",
 					"您想要删除此文本文档吗？"
 				],function(){
-					localStorage.removeItem(currentItem)
-					clear()
-				})
-			}
-			document.getElementById("NewDocument").onclick=newDoc
-			document.getElementById("CreateMessageBox").onclick=function(){
-				if(!isEmpty()){
-					if(navigator.onLine){
-						openWebPage("http://rthsoftware.tk/sharedtext?alert=1&title="+escape(document.getElementsByTagName("input")[0].value)+"&text="+escape(readText()))
+					if(currentItem){
+						savedText.text.splice(currentItem-1,1)
+						submit(reload)
 					}else{
-						showAlert([
-							readText(),
-							readText()
-						])
+						reload()
 					}
-				}
-			}
-			document.getElementById("Translate").onclick=function(){
-				if(!isEmpty()){
-					addNote()
-					translate(readText().replace(/\s/g," "),"auto","auto",function(e){
-						addNote(e.trans_result[0].dst)
-					})
-				}
-			}
-			document.getElementById("GetHitokoto").onclick=function(){
-				addNote()
-				request("https://sslapi.hitokoto.cn/",function(e){
-					var json=JSON.parse(e)
-					addNote("「"+json.hitokoto+"」——"+json.from)
 				})
 			}
-			document.getElementById("Encrypt").onclick=function(){
-				if(!isEmpty()){
-					showPrompt([
-						"Please set the password",
-						"请设置密码"
-					],[
-						"Encrypt",
-						"加密"
-					],function(e){
-						addNote()
-						loadJS(["js/md5.min.js"],function(){
-							var encrypted="",
-							text=readText().replace(/丨/g,"｜")+"丨"+MD5(e)
-							for(var i=0;i<text.length;i++){
-								encrypted+=(text.charCodeAt(i)*8).toString(8)+"9"
-							}
-							setText(btoa(encrypted))
-						})
-					})
-				}
+			document.getElementById("FindReplace").onclick=function(){
+				find()
 			}
+			document.getElementById("SyntaxHighlighting").onclick=syntaxHighlighting
+			document.getElementById("Translate").onclick=translateText
 			document.getElementById("Decode").onclick=function(){
 				if(!isEmpty()){
-					var encoded=readText()
+					var encoded=readText(),
+					showDecoded=true
 					var decoded=encoded
 					try{
 						if(decoded.indexOf(" ")==-1){
@@ -599,35 +700,22 @@
 								decoded=decodeUnicode(decoded)
 							}else{
 								decoded=decodeUnicode(atob(decoded))
-								if(only(isNumber,decoded)){
-									var encrypted=decoded.split("9"),
-									str=""
-									for(var i=0;i<encrypted.length;i++){
-										str+=String.fromCharCode(parseInt(encrypted[i],8)/8)
-									}
-									if(str.indexOf("丨")!=-1){
-										showPrompt([
-											"Please enter the password",
-											"请输入密码"
-										],[
-											"Decrypt",
-											"解密"
-										],function(e){
-											addNote()
-											loadJS(["js/md5.min.js"],function(){
-												if(MD5(e)==str.substr(str.indexOf("丨")+1,32)){
-													setText(str.substr(0,str.indexOf("丨")))
-												}else{
-													setText(encoded)
-													showAlert([
-														"Incorrect password",
-														"密码错误"
-													])
-												}
-											})
-										})
-										return false
-									}
+								if(only(isNumber,decoded)&&decrypt(decoded)){
+									showDecoded=false
+									showPrompt([
+										"Enter the password",
+										"输入密码"
+									],function(e){
+										var decrypted=decrypt(decoded,e)
+										if(decrypted==decoded){
+											showAlert([
+												"Incorrect password",
+												"密码错误"
+											])
+										}else{
+											setText(decrypted)
+										}
+									},"password")
 								}
 							}
 						}else if(only(/0|1|\s/,decoded)){
@@ -644,10 +732,50 @@
 							e.message
 						])
 					}
-					setText(decoded)
+					if(showDecoded){
+						setText(decoded)
+					}
 				}
 			}
 			document.getElementById("Speak").onclick=speak
+			document.getElementById("CreateMessageBox").onclick=function(){
+				if(!isEmpty()){
+					openWebPage("http://rthshare.tk/?alert="+encodeURI(readText())+"&title="+encodeURI(document.getElementsByTagName("input")[0].value))
+				}
+			}
+			document.getElementById("GenerateQRCode").onclick=function(){
+				if(!isEmpty()){
+					showImage("https://rthsoftware.azurewebsites.net/topscan.php?text="+readText())
+				}
+			}
+			document.getElementById("GenerateMD5Value").onclick=function(){
+				if(!isEmpty()){
+					addNote(MD5(readText()))
+				}
+			}
+			document.getElementById("GenerateWebPage").onclick=function(){
+				if(!isEmpty()){
+					if(login.username){
+						encrypt=false
+						save(function(){
+							var url="http://rthshare.tk/?username="+login.username+"&index="+currentItem
+							if(isApp){
+								openWebPage(url)
+							}else{
+								location.href=url
+							}
+						})
+					}else if(userInfo){
+						applyItem(0)
+						loginDialog()
+					}else{
+						showAlert([
+							"Unable to connect to the server",
+							"无法连接服务器"
+						])
+					}
+				}
+			}
 			document.getElementById("Base64Encode").onclick=function(){
 				if(!isEmpty()){
 					try{
@@ -667,6 +795,16 @@
 					setText(binary.trim())
 				}
 			}
+			document.getElementById("Encrypt").onclick=function(){
+				if(!isEmpty()){
+					showPrompt([
+						"Set the password",
+						"设置密码"
+					],function(e){
+						setText(encryptText(readText(),e))
+					},"password")
+				}
+			}
 			document.getElementById("UnicodeEncode").onclick=function(){
 				if(!isEmpty()){
 					setText(encodeUnicode(readText()))
@@ -677,98 +815,107 @@
 					setText(encodeURIComponent(readText()))
 				}
 			}
-			document.getElementById("GenerateQRCode").onclick=function(){
-				if(!isEmpty()){
-					showImage("http://qr.topscan.com/api.php?text="+readText())
-				}
-			}
-			document.getElementById("GenerateMD5Value").onclick=function(){
-				if(!isEmpty()){
-					addNote()
-					loadJS(["js/md5.min.js"],function(){
-						addNote(MD5(readText()))
-					})
-				}
-			}
-			document.getElementById("GenerateWebPage").onclick=function(){
-				if(!isEmpty()){
-					openWebPage("http://rthsoftware.tk/sharedtext?title="+escape(document.getElementsByTagName("input")[0].value)+"&text="+escape(readText()))
-				}
-			}
 			document.getElementsByClassName("open-file")[0].onchange=function(e){
 				openLText(e.target.files[0])
 			}
 			switch(language){
 				case "SimplifiedChinese":
-					document.title="文本编辑器"
-					document.getElementsByTagName("input")[0].placeholder="标题"
-					document.getElementById("Text").placeholder="正文"
-					document.getElementById("Save").innerText="保存"
-					document.getElementById("RunJSCode").innerText="运行"
-					document.getElementById("OpenLocalDocument").innerText="打开本地文件"
-					document.getElementById("OpenOnlineDocument").innerText="打开在线文件"
-					document.getElementById("Delete").innerText="删除"
-					document.getElementById("NewDocument").innerText="新建文档"
-					document.getElementById("CreateMessageBox").innerText="创建消息框"
-					document.getElementById("Translate").innerText="翻译"
-					document.getElementById("GetHitokoto").innerText="获取一言"
-					document.getElementById("Encrypt").innerText="加密"
-					document.getElementById("Decode").innerText="解码"
-					document.getElementById("Speak").innerText="朗读"
-					document.getElementById("Base64Encode").innerText="Base64 编码"
-					document.getElementById("BinaryEncode").innerText="二进制编码"
-					document.getElementById("UnicodeEncode").innerText="Unicode 编码"
-					document.getElementById("URIComponentEncode").innerText="URI Component 编码"
-					document.getElementById("GenerateQRCode").innerText="生成二维码"
-					document.getElementById("GenerateMD5Value").innerText="生成 MD5 值"
-					document.getElementById("GenerateWebPage").innerText="生成网页"
-					break
+				document.title="文本编辑器"
+				document.getElementById("NewDocument").innerText="新建文档"
+				document.getElementById("OpenLocalDocument").innerText="打开本地文件"
+				document.getElementById("OpenOnlineDocument").innerText="打开在线文件"
+				document.getElementsByTagName("input")[0].placeholder="标题"
+				document.getElementById("Save").innerText="保存"
+				document.getElementById("RunJSCode").innerText="运行"
+				document.getElementById("SaveAs").innerText="另存为"
+				document.getElementById("Delete").innerText="删除"
+				document.getElementById("FindReplace").innerText="查找和替换"
+				document.getElementById("SyntaxHighlighting").innerText="代码高亮"
+				document.getElementById("Translate").innerText="翻译"
+				document.getElementById("Decode").innerText="解码"
+				document.getElementById("Speak").innerText="朗读"
+				document.getElementById("CreateMessageBox").innerText="创建消息框"
+				document.getElementById("GenerateQRCode").innerText="生成二维码"
+				document.getElementById("GenerateMD5Value").innerText="生成 MD5 值"
+				document.getElementById("GenerateWebPage").innerText="生成网页"
+				document.getElementById("Base64Encode").innerText="Base64 编码"
+				document.getElementById("BinaryEncode").innerText="二进制编码"
+				document.getElementById("Encrypt").innerText="加密"
+				document.getElementById("UnicodeEncode").innerText="Unicode 编码"
+				document.getElementById("URIComponentEncode").innerText="URI Component 编码"
+				break
 				default:
-					document.title="Text Editor"
-					document.getElementsByTagName("input")[0].placeholder="Title"
-					document.getElementById("Text").placeholder="Text"
-					document.getElementById("Save").innerText="Save"
-					document.getElementById("RunJSCode").innerText="Run"
-					document.getElementById("OpenLocalDocument").innerText="Open Local Document"
-					document.getElementById("OpenOnlineDocument").innerText="Open Online Document"
-					document.getElementById("Delete").innerText="Delete"
-					document.getElementById("NewDocument").innerText="New Document"
-					document.getElementById("CreateMessageBox").innerText="Create Message Box"
-					document.getElementById("Translate").innerText="Translate"
-					document.getElementById("GetHitokoto").innerText="Get Hitokoto"
-					document.getElementById("Encrypt").innerText="Encrypt"
-					document.getElementById("Decode").innerText="Decode"
-					document.getElementById("Speak").innerText="Speak"
-					document.getElementById("Base64Encode").innerText="Base64 Encode"
-					document.getElementById("BinaryEncode").innerText="Binary Encode"
-					document.getElementById("UnicodeEncode").innerText="Unicode Encode"
-					document.getElementById("URIComponentEncode").innerText="URI Component Encode"
-					document.getElementById("GenerateQRCode").innerText="Generate QR Code"
-					document.getElementById("GenerateMD5Value").innerText="Generate MD5 Value"
-					document.getElementById("GenerateWebPage").innerText="Generate Web Page"
-					break
+				document.title="Text Editor"
+				document.getElementById("NewDocument").innerText="New Document"
+				document.getElementById("OpenLocalDocument").innerText="Open Local Document"
+				document.getElementById("OpenOnlineDocument").innerText="Open Online Document"
+				document.getElementsByTagName("input")[0].placeholder="Title"
+				document.getElementById("Save").innerText="Save"
+				document.getElementById("RunJSCode").innerText="Run"
+				document.getElementById("SaveAs").innerText="Save As"
+				document.getElementById("Delete").innerText="Delete"
+				document.getElementById("FindReplace").innerText="Find & Replace"
+				document.getElementById("SyntaxHighlighting").innerText="Syntax Highlighting"
+				document.getElementById("Translate").innerText="Translate"
+				document.getElementById("Decode").innerText="Decode"
+				document.getElementById("Speak").innerText="Speak"
+				document.getElementById("CreateMessageBox").innerText="Create Message Box"
+				document.getElementById("GenerateQRCode").innerText="Generate QR Code"
+				document.getElementById("GenerateMD5Value").innerText="Generate MD5 Value"
+				document.getElementById("GenerateWebPage").innerText="Generate Web Page"
+				document.getElementById("Base64Encode").innerText="Base64 Encode"
+				document.getElementById("BinaryEncode").innerText="Binary Encode"
+				document.getElementById("Encrypt").innerText="Encrypt"
+				document.getElementById("UnicodeEncode").innerText="Unicode Encode"
+				document.getElementById("URIComponentEncode").innerText="URI Component Encode"
+				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			if(isElectron){
+				document.getElementsByClassName("text-editor")[0].oncontextmenu=function(e){
+					showMenu(e,[{
+						"onclick":function(){
+							document.execCommand("cut")
+							closeMenu()
+						},
+						"text":[
+							"Cut",
+							"剪切"
+						]
+					},{
+						"onclick":function(){
+							document.execCommand("copy")
+							closeMenu()
+						},
+						"text":[
+							"Copy",
+							"复制"
+						]
+					},{
+						"onclick":function(){
+							setText(readText()+require("electron").clipboard.readText())
+							closeMenu()
+						},
+						"text":[
+							"Paste",
+							"粘贴"
+						]
+					}])
+					return false
+				}
+			}else if(!isIE){
+				document.getElementsByClassName("text-editor")[0].setAttribute("contenteditable","plaintext-only")
+			}
 			if(!window.speechSynthesis){
 				document.getElementById("Speak").style.display="none"
 			}
-			if(isMobile){
-				document.getElementById("Text").style.display=""
-				document.getElementById("OpenLocalDocument").style.display="none"
-			}else{
-				enableCodeEditor()
+			if(isEdge||isLinux||isMobile){
+				document.getElementById("SaveAs").style.display="none"
+				if(isMobile){
+					document.getElementById("OpenLocalDocument").style.display="none"
+				}
 			}
-			if(isOnline){
-				document.getElementById("OpenOnlineDocument").style.display="none"
-			}
-			if(!navigator.onLine){
-				document.getElementById("OpenOnlineDocument").style.display="none"
-				document.getElementById("Translate").style.display="none"
-				document.getElementById("GetHitokoto").style.display="none"
-				document.getElementById("GenerateQRCode").style.display="none"
-				document.getElementById("GenerateWebPage").style.display="none"
-			}
-			load()
+			loadSavedText()
 		</script>
 	</body>
 </html>
