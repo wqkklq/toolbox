@@ -650,10 +650,6 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 	newCancelButton=document.createElement("button"),
 	newOKButton=document.createElement("button")
 	newDiv.setAttribute("class","popup prompt")
-	newDiv.style.borderBottom="1px solid rgba(0,0,0,.2)"
-	newDiv.style.borderTopStyle="none"
-	newDiv.style.bottom="auto"
-	newDiv.style.top="-100%"
 	if(type){
 		newInput.type=type
 	}else{
@@ -676,7 +672,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 		if(closeFunc){
 			closeFunc()
 		}
-		newDiv.style.top="-100%"
+		newDiv.style.top=""
 		setTimeout(function(){
 			document.body.removeChild(newDiv)
 		},250)
@@ -692,7 +688,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 			}
 		}
 		setTimeout(function(){
-			newDiv.style.top="-100%"
+			newDiv.style.top=""
 			setTimeout(function(){
 				document.body.removeChild(newDiv)
 			},250)
