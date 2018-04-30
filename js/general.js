@@ -25,7 +25,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 userInfo,
-ver="9.0"
+ver="9.1"
 var isApp=isCordova||isElectron||isUWP,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -347,7 +347,7 @@ function loginDialog(){
 		newCloseDiv.innerText="×"
 		newCloseDiv.onclick=function(){
 			if(newH1.innerText==newLoginButton.innerText){
-				newDiv.style.bottom=""
+				newDiv.style.opacity=""
 				setTimeout(function(){
 					document.body.removeChild(newDiv)
 				},250)
@@ -388,8 +388,9 @@ function loginDialog(){
 		newDiv.appendChild(newDescriptionDiv)
 		newDiv.appendChild(newCloseDiv)
 		document.body.appendChild(newDiv)
+		newDiv.style.top="calc(50% - "+(newDiv.offsetHeight/2)+"px)"
 		setTimeout(function(){
-			newDiv.style.bottom="0px"
+			newDiv.style.opacity="1"
 		},25)
 	}
 }

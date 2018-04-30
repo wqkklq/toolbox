@@ -217,16 +217,16 @@ td div{
 }
 .popup{
 	background-color:rgb(239,239,244);
-	border-top:1px solid rgba(0,0,0,.2);
-	bottom:-100%;
+	border:1px solid rgba(0,0,0,.2);
+	border-radius:10px;
 	color:black;
-	max-width:450px;
+	left:calc(50% - 175px);
+	opacity:0;
 	padding:20px;
 	position:fixed;
-	right:0px;
 	text-align:center;
 	transition:all .25s;
-	width:100%;
+	width:350px;
 	z-index:12;
 }
 .popup button{
@@ -275,14 +275,8 @@ td div{
 	text-align:left;
 }
 .popup.prompt{
-	border:1px solid rgba(0,0,0,.2);
-	border-radius:10px;
-	bottom:auto;
 	height:132px;
-	left:calc(50% - 175px);
-	opacity:0;
 	top:calc(50% - 66px);
-	width:350px;
 }
 .popup.prompt button{
 	margin:10px 1px 0px 1px;

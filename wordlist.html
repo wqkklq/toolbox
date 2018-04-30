@@ -627,7 +627,7 @@
 							savedWordList.sharing=false
 						}
 						submit(reload)
-						newDiv.style.bottom=""
+						newDiv.style.opacity=""
 						setTimeout(function(){
 							document.body.removeChild(newDiv)
 						},250)
@@ -655,8 +655,9 @@
 					newDiv.appendChild(newNotSharingButton)
 					newDiv.appendChild(newCloseDiv)
 					document.body.appendChild(newDiv)
+					newDiv.style.top="calc(50% - "+(newDiv.offsetHeight/2)+"px)"
 					setTimeout(function(){
-						newDiv.style.bottom="0px"
+						newDiv.style.opacity="1"
 					},25)
 				}
 			}
