@@ -678,7 +678,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 		if(closeFunc){
 			closeFunc()
 		}
-		newDiv.style.top=""
+		newDiv.style.opacity=""
 		setTimeout(function(){
 			document.body.removeChild(newDiv)
 		},250)
@@ -694,7 +694,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 			}
 		}
 		setTimeout(function(){
-			newDiv.style.top=""
+			newDiv.style.opacity=""
 			setTimeout(function(){
 				document.body.removeChild(newDiv)
 			},250)
@@ -718,7 +718,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 	document.body.appendChild(newDiv)
 	newInput.focus()
 	setTimeout(function(){
-		newDiv.style.top="0px"
+		newDiv.style.opacity="1"
 	},25)
 }
 function translate(query,from,to,callback){

@@ -275,10 +275,14 @@ td div{
 	text-align:left;
 }
 .popup.prompt{
-	border-bottom:1px solid rgba(0,0,0,.2);
-	border-top-style:none;
+	border:1px solid rgba(0,0,0,.2);
+	border-radius:10px;
 	bottom:auto;
-	top:-100%;
+	height:132px;
+	left:calc(50% - 175px);
+	opacity:0;
+	top:calc(50% - 66px);
+	width:350px;
 }
 .popup.prompt button{
 	margin:10px 1px 0px 1px;
