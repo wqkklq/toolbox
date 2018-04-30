@@ -240,6 +240,7 @@
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="RTH 工具箱"
+				document.getElementsByClassName("get")[0].innerText="下载 RTH 工具箱"
 				document.getElementById("WordList").innerText="单词表"
 				document.getElementById("Timer").innerText="计时器"
 				document.getElementById("Calculator").innerText="计算器"
@@ -255,11 +256,6 @@
 					document.getElementById("Quote").innerText="晚上好！"
 				}else if(currentHour>=21&&currentHour<=23||currentHour>=0&&currentHour<=5){
 					document.getElementById("Quote").innerText="晚安！"
-				}
-				if(isAndroidApp){
-					document.getElementsByClassName("get")[0].innerText="更新 RTH 工具箱"
-				}else{
-					document.getElementsByClassName("get")[0].innerText="下载 RTH 工具箱"
 				}
 				var getSentence=function(){
 					request("https://rthsoftware.azurewebsites.net/sentences.php?lang="+language,function(e){
@@ -294,6 +290,7 @@
 				break
 				default:
 				document.title="RTH Toolbox"
+				document.getElementsByClassName("get")[0].innerText="Download RTH Toolbox"
 				document.getElementById("WordList").innerText="Word List"
 				document.getElementById("Timer").innerText="Timer"
 				document.getElementById("Calculator").innerText="Calculator"
@@ -309,11 +306,6 @@
 					document.getElementById("Quote").innerText="Good evening!"
 				}else if(currentHour>=21&&currentHour<=23||currentHour>=0&&currentHour<=5){
 					document.getElementById("Quote").innerText="Good night!"
-				}
-				if(isAndroidApp){
-					document.getElementsByClassName("get")[0].innerText="Update RTH Toolbox"
-				}else{
-					document.getElementsByClassName("get")[0].innerText="Download RTH Toolbox"
 				}
 				break
 			}
@@ -386,7 +378,10 @@
 						}
 					})()){
 						if(isAndroidApp){
-							document.getElementsByClassName("get")[0].style.display="block"
+							showConfirm([
+								"There is an update available. Do you want to update?",
+								"有更新可用。您想要更新吗？"
+							],getToolbox)
 						}else if(isElectron){
 							location.href="electron/update.html"
 						}

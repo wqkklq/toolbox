@@ -25,7 +25,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 userInfo,
-ver="9.1"
+ver="9.2"
 var isApp=isCordova||isElectron||isUWP,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
