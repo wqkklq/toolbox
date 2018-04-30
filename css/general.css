@@ -361,8 +361,3 @@ td div{
 ::-webkit-scrollbar{
 	display:none;
 }
-@media screen and (min-width:450px){
-	.popup{
-		border-left:1px solid rgba(0,0,0,.2);
-	}
-}
