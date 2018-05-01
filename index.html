@@ -194,6 +194,11 @@
 				}else if(isLinux){
 					location.href="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Linux.zip"
 				}
+				if(searchURL("action")){
+					setTimeout(function(){
+						location.search=""
+					},1000)
+				}
 			}
 			function links(){
 				request("https://rthsoftware.azurewebsites.net/links.php?lang="+language,function(e){
