@@ -187,8 +187,6 @@
 					}
 				}else if(isiOS){
 					location.href="https://itunes.apple.com/app/rth-toolbox/id1294479577"
-				}else if(isWin10){
-					location.href="https://www.microsoft.com/store/apps/9PBT29R7W8DJ"
 				}else if(isWindows){
 					location.href="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Windows_2.zip"
 				}else if(isMac){
@@ -211,7 +209,7 @@
 				})
 			}
 			function resize(){
-				if(!isApp||!isMac&&!isUWP){
+				if(!isApp||!isMac){
 					if(!isApp){
 						document.getElementsByClassName("home-main")[0].style.top="30px"
 					}
@@ -308,40 +306,6 @@
 			document.getElementsByClassName("home-title")[0].innerText=document.title.replace("RTH ","")
 			if(!isApp){
 				document.getElementsByClassName("get")[0].style.display="block"
-			}else if(isUWP){
-				var titleBar=Windows.UI.ViewManagement.ApplicationView.getForCurrentView().titleBar,titleBarColor
-				if(appliedTheme=="Dark"){
-					titleBarColor={
-						a:255,
-						b:136,
-						g:68,
-						r:0
-					}
-				}else{
-					titleBarColor={
-						a:255,
-						b:204,
-						g:102,
-						r:0
-					}
-				}
-				titleBar.backgroundColor=
-				titleBar.inactiveBackgroundColor=
-				titleBar.buttonBackgroundColor=
-				titleBar.buttonInactiveBackgroundColor=titleBarColor
-				titleBar.buttonHoverBackgroundColor={
-					a:255,
-					b:244,
-					g:122,
-					r:0
-				}
-				titleBar.buttonPressedBackgroundColor={
-					a:255,
-					b:34,
-					g:33,
-					r:31
-				}
-				titleBar.foregroundColor=titleBar.inactiveForegroundColor=titleBar.buttonForegroundColor=titleBar.buttonInactiveForegroundColor=titleBar.buttonHoverForegroundColor=titleBar.buttonPressedForegroundColor=Windows.UI.Colors.white
 			}
 			resize()
 			if(searchURL("action")){

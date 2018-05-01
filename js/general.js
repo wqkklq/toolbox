@@ -8,14 +8,12 @@ isEdge=/Edge/i.test(navigator.userAgent),
 isElectron=/Electron/i.test(navigator.userAgent),
 isEnglish=/[A-Za-z]+/,
 isIE=/MSIE|Trident/i.test(navigator.userAgent),
-isiOS=/iPhone/i.test(navigator.userAgent)||/iPad/i.test(navigator.userAgent),
+isiOS=/iPhone|iPad/i.test(navigator.userAgent),
 isLinux=/Linux/i.test(navigator.userAgent),
 isMac=/Macintosh/i.test(navigator.userAgent),
 isNumber=/[0-9]+/,
 isUpperCase=/[A-Z]+/,
-isUWP=/MSAppHost/i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
-isWin10=/Windows\sNT\s10\.0/i.test(navigator.userAgent),
 language=localStorage.getItem("Language"),
 login={
 	"email":localStorage.getItem("Email"),
@@ -26,7 +24,7 @@ recentInput=0,
 theme=localStorage.getItem("Theme"),
 userInfo,
 ver="9.2"
-var isApp=isCordova||isElectron||isUWP,
+var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
 isMobile=isAndroid||isiOS
@@ -407,8 +405,6 @@ function openWebPage(href){
 		require("electron").shell.openExternal(href)
 	}else if(isiOSApp){
 		OpenUrlExt.open(href)
-	}else if(isUWP){
-		Windows.System.Launcher.launchUriAsync(new Windows.Foundation.Uri(href))
 	}else{
 		open(href)
 	}
@@ -446,7 +442,7 @@ function restart(){
 		"RTH Toolbox needs to be restarted",
 		"需要重新启动 RTH 工具箱"
 	],function(){
-		if(isAndroidApp||isElectron||isUWP){
+		if(isAndroidApp||isElectron){
 			mui.back()
 		}else{
 			openWindow("index")
@@ -474,72 +470,34 @@ function searchURL(key,url){
 	}
 }
 function showAlert(text,callback){
-	if(isUWP){
-		switch(language){
-			case "SimplifiedChinese":
-			mui.alert(text[1],document.title,null,callback)
-			break
-			default:
-			mui.alert(text[0],document.title,"OK",callback)
-			break
-		}
-	}else{
-		switch(language){
-			case "SimplifiedChinese":
-			alert(text[1])
-			break
-			default:
-			alert(text[0])
-			break
-		}
-		if(callback){
-			callback()
-		}
+	switch(language){
+		case "SimplifiedChinese":
+		alert(text[1])
+		break
+		default:
+		alert(text[0])
+		break
+	}
+	if(callback){
+		callback()
 	}
 }
 function showConfirm(text,positiveCallback,negativeCallback){
-	if(isUWP){
-		switch(language){
-			case "SimplifiedChinese":
-			mui.confirm(text[1],document.title,["否","是"],function(e){
-				if(e.index==1){
-					if(positiveCallback){
-						positiveCallback()
-					}
-				}else if(negativeCallback){
-					negativeCallback()
-				}
-			})
-			break
-			default:
-			mui.confirm(text[0],document.title,["No","Yes"],function(e){
-				if(e.index==1){
-					if(positiveCallback){
-						positiveCallback()
-					}
-				}else if(negativeCallback){
-					negativeCallback()
-				}
-			})
-			break
+	var value
+	switch(language){
+		case "SimplifiedChinese":
+		value=confirm(text[1])
+		break
+		default:
+		value=confirm(text[0])
+		break
+	}
+	if(value){
+		if(positiveCallback){
+			positiveCallback()
 		}
-	}else{
-		var value
-		switch(language){
-			case "SimplifiedChinese":
-			value=confirm(text[1])
-			break
-			default:
-			value=confirm(text[0])
-			break
-		}
-		if(value){
-			if(positiveCallback){
-				positiveCallback()
-			}
-		}else if(negativeCallback){
-			negativeCallback()
-		}
+	}else if(negativeCallback){
+		negativeCallback()
 	}
 }
 function showImage(src){
@@ -848,7 +806,7 @@ if(header){
 	newH1.setAttribute("class","mui-title")
 	header.appendChild(newA)
 	header.appendChild(newH1)
-	if(!isApp||isMac||isUWP){
+	if(!isApp||isMac){
 		document.getElementsByClassName("mui-content")[0].style.marginTop="40px"
 		header.style.height="65px"
 		header.style.paddingTop="20px"
