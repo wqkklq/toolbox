@@ -755,6 +755,8 @@ if(!isIE){
 						"感谢您提交错误报告"
 					])
 				})
+			},function(){
+				location.reload()
 			})
 		}
 	}
