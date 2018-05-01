@@ -132,12 +132,12 @@
 					document.getElementById("ENDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_ENDef")
 					dictChanged()
 					translate(document.getElementById("ENDefinition").innerText,"en","zh",function(e){
-						document.getElementById("Translate").innerText=e.trans_result[0].dst
+						document.getElementById("Translate").innerText=e
 						document.getElementById("Translate").style.display="block"
 					})
 				}else{
 					translate(word,"auto","auto",function(e){
-						document.getElementById("Translate").innerText=e.trans_result[0].dst
+						document.getElementById("Translate").innerText=e
 						dictChanged()
 					})
 					request("https://rthsoftware.azurewebsites.net/shanbay.php?word="+word,function(e){
@@ -155,7 +155,7 @@
 								localStorage.setItem(wordWithoutSpace+"_ENDef",json.data.en_definition.defn)
 							}
 							translate(document.getElementById("ENDefinition").innerText,"en","zh",function(e){
-								document.getElementById("Translate").innerText=e.trans_result[0].dst
+								document.getElementById("Translate").innerText=e
 								document.getElementById("Translate").style.display="block"
 							})
 						}

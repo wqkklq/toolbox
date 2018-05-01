@@ -704,8 +704,8 @@ function translate(query,from,to,callback){
 			sign:sign
 		},
 		success:function(data){
-			if(callback){
-				callback(data)
+			if(data.trans_result&&callback){
+				callback(data.trans_result[0].dst)
 			}
 		}
 	})
@@ -738,6 +738,7 @@ function verifyPassword(email,password){
 }
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){
+		window.onerror=null
 		if(msg!="Script error."){
 			var message=msg+" at "+url+":"+lineNo
 			showConfirm([
@@ -753,11 +754,9 @@ if(!isIE){
 					showAlert([
 						"Thank you for submitting an error report",
 						"感谢您提交错误报告"
-					])
+					],restart)
 				})
-			},function(){
-				location.reload()
-			})
+			},restart)
 		}
 	}
 }

@@ -122,7 +122,7 @@
 						break
 						default:
 						translate(botText,"zh","en",function(e){
-							newChildDiv.innerText=e.trans_result[0].dst
+							newChildDiv.innerText=e
 							document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
 							appendMsg()
 						})
@@ -149,7 +149,7 @@
 						default:
 						document.getElementsByClassName("mui-title")[0].innerText="Typing"
 						translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
-							chatbotReply(e.trans_result[0].dst)
+							chatbotReply(e)
 						})
 						break
 					}

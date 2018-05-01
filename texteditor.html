@@ -532,7 +532,7 @@
 				if(!isEmpty()){
 					addNote()
 					translate(readText().replace(/\s/g," "),"auto","auto",function(e){
-						addNote(e.trans_result[0].dst)
+						addNote(e)
 					})
 				}
 			}
