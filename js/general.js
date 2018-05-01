@@ -894,7 +894,7 @@ request("https://rthsoftware.azurewebsites.net/userdata/users.txt",function(e){
 				loginDialog()
 			})
 		}
-	}else if(header==null){
+	}else if(header==null&&!searchURL("action")){
 		loginDialog()
 	}
 },function(){
