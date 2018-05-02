@@ -164,7 +164,7 @@ function initCalculator(max,calculate){
 				],function(e){
 					document.getElementById(id).value=e
 					document.getElementById(id).oninput()
-				},document.getElementById(id).type)
+				},document.getElementById(id).type,document.getElementById(id).value)
 			}
 		}
 	}
