@@ -163,6 +163,7 @@ function initCalculator(max,calculate){
 					"输入数字"
 				],function(e){
 					document.getElementById(id).value=e
+					document.getElementById(id).oninput()
 				},document.getElementById(id).type)
 			}
 		}
@@ -766,8 +767,10 @@ if(appliedTheme!="Light"){
 }
 mui.init({swipeBack:false})
 if(header){
-	var newA=document.createElement("a"),
+	var newDiv=document.createElement("div"),
+	newA=document.createElement("a"),
 	newH1=document.createElement("h1")
+	newDiv.setAttribute("class","title-bg")
 	newA.setAttribute("class","mui-icon mui-icon-left-nav mui-pull-left back")
 	if(window.history.length<=1){
 		newA.onclick=function(){
@@ -781,12 +784,13 @@ if(header){
 		newA.onclick=mui.back
 	}
 	newH1.setAttribute("class","mui-title")
-	header.appendChild(newA)
-	header.appendChild(newH1)
+	newDiv.appendChild(newA)
+	newDiv.appendChild(newH1)
+	header.appendChild(newDiv)
 	if(!isApp||isMac){
 		document.getElementsByClassName("mui-content")[0].style.marginTop="40px"
 		header.style.height="65px"
-		header.style.paddingTop="20px"
+		newDiv.style.paddingTop="20px"
 	}
 }
 if(appliedTheme=="Bing"){
@@ -794,7 +798,7 @@ if(appliedTheme=="Bing"){
 		if(header){
 			header.style.backgroundImage="url("+savedBingWallpaper+")"
 		}
-		var blueButtons=document.getElementsByClassName("mui-btn-blue")
+		var blueButtons=document.getElementsByClassName("btn-bg-img")
 		for(var i=0;i<blueButtons.length;i++){
 			blueButtons[i].style.backgroundImage="url("+savedBingWallpaper+")"
 		}

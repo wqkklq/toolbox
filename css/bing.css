@@ -33,19 +33,14 @@ footer div,
 	color:black;
 }
 .mui-btn-blue{
-	background-attachment:fixed;
-	background-color:rgb(21,23,24);
-	background-position:center center;
-	background-repeat:no-repeat;
-	background-size:cover;
+	background-color:rgba(0,0,0,.5);
 }
 .mui-checkbox input[type=checkbox]:checked:before,
 .mui-radio input[type=radio]:checked:before{
-	color:white;
+	color:rgb(128,128,128);
 }
 .mui-input-range input[type=range]::-webkit-slider-thumb{
-	background-color:white;
-	border-color:white;
+	background-color:rgb(128,128,128);
 }
 .mui-switch-blue.mui-active{
 	background-color:rgb(21,23,24);
@@ -63,4 +58,7 @@ footer div,
 	background-position:center top;
 	background-repeat:no-repeat;
 	background-size:cover;
+}
+.title-bg{
+	background-color:rgba(0,0,0,.5);
 }
