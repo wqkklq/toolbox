@@ -138,6 +138,9 @@ function initCalculator(max,calculate){
 			input[i].placeholder="Enter the number"
 			break
 		}
+		if(isAndroid){
+			input[i].type="text"
+		}
 		input[i].oninput=function(){
 			var name=this.id.replace("Input","")
 			var num=name.replace(/[A-Za-z]+/g,"")
@@ -152,24 +155,17 @@ function initCalculator(max,calculate){
 		}
 		input[i].setAttribute("number",i)
 		input[i].onclick=function(){
+			var id=this.id
 			recentInput=this.getAttribute("number")
-		}
-	}
-	document.getElementsByClassName("sign")[0].onclick=function(){
-		var value=input[recentInput].value
-		if(value!=""&&value!=null){
-			if(value.indexOf("-")!=-1){
-				value=value.replace("-","")
-			}else{
-				value="-"+value
+			if(isMobile){
+				showPrompt([
+					"Enter the number",
+					"输入数字"
+				],function(e){
+					document.getElementById(id).value=e
+				},document.getElementById(id).type)
 			}
-		}else{
-			value="-0"
 		}
-		input[recentInput].value=value
-		var label=document.getElementById(input[recentInput].id.replace("Input","")+"Label")
-		label.innerHTML=input[recentInput].value
-		calculate()
 	}
 }
 function loadCSS(href){

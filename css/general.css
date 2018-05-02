@@ -74,21 +74,6 @@ td div{
 	background-color:orange;
 	color:black;
 }
-.highlight-func{
-	color:darkviolet;
-}
-.highlight-note{
-	color:green;
-}
-.highlight-obj{
-	color:rgb(83,150,206);
-}
-.highlight-tag{
-	color:darkred;
-}
-.highlight-var{
-	color:rgb(0,102,204);
-}
 .image{
 	border:1px solid rgb(0,102,204);
 	box-shadow:0px 0px 10px rgb(109,109,114);
