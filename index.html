@@ -201,16 +201,23 @@
 				}
 			}
 			function links(){
-				request("https://rthsoftware.azurewebsites.net/links.php?lang="+language,function(e){
-					switch(language){
-						case "SimplifiedChinese":
-						document.getElementsByClassName("home-title")[0].innerText="友情链接"
-						break
-						default:
-						document.getElementsByClassName("home-title")[0].innerText="Links"
-						break
+				$.ajax({
+					"url":"https://rthsoftware.azurewebsites.net/links.php",
+					"data":{
+						"lang":language,
+						"time":new Date().getTime()
+					},
+					"success":function(e){
+						switch(language){
+							case "SimplifiedChinese":
+							document.getElementsByClassName("home-title")[0].innerText="友情链接"
+							break
+							default:
+							document.getElementsByClassName("home-title")[0].innerText="Links"
+							break
+						}
+						document.getElementsByTagName("ul")[0].innerHTML=e
 					}
-					document.getElementsByTagName("ul")[0].innerHTML=e
 				})
 			}
 			function resize(){
@@ -257,32 +264,39 @@
 					document.getElementById("Quote").innerText="晚安！"
 				}
 				var getSentence=function(){
-					request("https://rthsoftware.azurewebsites.net/sentences.php?lang="+language,function(e){
-						document.getElementById("Quote").innerText=e
-						document.getElementById("Quote").oncontextmenu=
-						document.getElementById("Quote").onclick=function(mouse){
-							showMenu(mouse,[{
-								"onclick":function(){
-									openWebPage("https://so.gushiwen.org/search.aspx?value="+e)
-									closeMenu()
-								},
-								"text":[
-									"Look Up",
-									"查询"
-								]
-							},{
-								"onclick":function(){
-									getSentence()
-									closeMenu()
-								},
-								"text":[
-									"Change",
-									"更改"
-								]
-							}])
-							return false
+					$.ajax({
+						"url":"https://rthsoftware.azurewebsites.net/sentences.php",
+						"data":{
+							"lang":language,
+							"time":new Date().getTime()
+						},
+						"success":function(e){
+							document.getElementById("Quote").innerText=e
+							document.getElementById("Quote").oncontextmenu=
+							document.getElementById("Quote").onclick=function(mouse){
+								showMenu(mouse,[{
+									"onclick":function(){
+										openWebPage("https://so.gushiwen.org/search.aspx?value="+e)
+										closeMenu()
+									},
+									"text":[
+										"Look Up",
+										"查询"
+									]
+								},{
+									"onclick":function(){
+										getSentence()
+										closeMenu()
+									},
+									"text":[
+										"Change",
+										"更改"
+									]
+								}])
+								return false
+							}
+							resize()
 						}
-						resize()
 					})
 				}
 				getSentence()
@@ -325,30 +339,36 @@
 				}
 			}
 			if(isAndroidApp||isElectron){
-				request("https://t.rths.tk/package.json",function(e){
-					var json=JSON.parse(e)
-					if((function(){
-						var newVer=json.version.split("."),
-						currentVer=ver.split(".")
-						if(newVer[0]*1>currentVer[0]*1){
-							return true
-						}else if(newVer[0]*1==currentVer[0]*1){
-							if(newVer[1]*1>currentVer[1]*1){
+				$.ajax({
+					"url":"https://t.rths.tk/package.json",
+					"data":{
+						"time":new Date().getTime()
+					},
+					"dataType":"json",
+					"success":function(e){
+						if((function(){
+							var newVer=e.version.split("."),
+							currentVer=ver.split(".")
+							if(newVer[0]*1>currentVer[0]*1){
 								return true
+							}else if(newVer[0]*1==currentVer[0]*1){
+								if(newVer[1]*1>currentVer[1]*1){
+									return true
+								}else{
+									return false
+								}
 							}else{
 								return false
 							}
-						}else{
-							return false
-						}
-					})()){
-						if(isAndroidApp){
-							showConfirm([
-								"There is an update available. Do you want to update?",
-								"有更新可用。您想要更新吗？"
-							],getToolbox)
-						}else if(isElectron){
-							location.href="electron/update.html"
+						})()){
+							if(isAndroidApp){
+								showConfirm([
+									"There is an update available. Do you want to update?",
+									"有更新可用。您想要更新吗？"
+								],getToolbox)
+							}else if(isElectron){
+								location.href="electron/update.html"
+							}
 						}
 					}
 				})
@@ -372,9 +392,15 @@
 				if(savedBingWallpaper){
 					document.getElementsByClassName("bg-img")[0].style.backgroundImage="url("+savedBingWallpaper+")"
 				}
-				request("https://rthsoftware.azurewebsites.net/bing.php",function(e){
-					localStorage.setItem("Bing",e)
-					document.getElementsByClassName("bg-img")[0].style.backgroundImage="url("+e+")"
+				$.ajax({
+					"url":"https://rthsoftware.azurewebsites.net/bing.php",
+					"data":{
+						"time":new Date().getTime()
+					},
+					"success":function(e){
+						localStorage.setItem("Bing",e)
+						document.getElementsByClassName("bg-img")[0].style.backgroundImage="url("+e+")"
+					}
 				})
 			}else if(theme!="Bing"){
 				localStorage.removeItem("Bing")

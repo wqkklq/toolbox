@@ -28,14 +28,6 @@ var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
 isMobile=isAndroid||isiOS
-function addTime(url){
-	if(url.indexOf("?")!=-1){
-		url+="&time="+new Date().getTime()
-	}else{
-		url+="?time="+new Date().getTime()
-	}
-	return url
-}
 function addZero(num,length){
 	return (Array(length).join("0")+num).slice(-length)
 }
@@ -399,7 +391,11 @@ function openDialog(){
 function openWebPage(href){
 	href=encodeURI(href)
 	if(/t.rths.tk/.test(href)&&href.indexOf("jpg")==-1){
-		href=addTime(href)
+		if(href.indexOf("?")!=-1){
+			href+="&time="+new Date().getTime()
+		}else{
+			href+="?time="+new Date().getTime()
+		}
 	}
 	if(isElectron){
 		require("electron").shell.openExternal(href)
@@ -416,26 +412,6 @@ function openWindow(name){
 	}
 	var url=name+suffix
 	location.href=url
-}
-function request(url,callback,errCallback){
-	if(/t.rths.tk|rthsoftware.azurewebsites.net/.test(url)){
-		url=addTime(url)
-	}
-	var xhr=new XMLHttpRequest()
-	xhr.onreadystatechange=function(){
-		switch(xhr.readyState){
-			case 4:
-			if(xhr.status==200&&callback){
-				callback(xhr.responseText)
-			}else if(errCallback){
-				errCallback()
-			}
-			break
-			default:break
-		}
-	}
-	xhr.open("GET",url)
-	xhr.send()
 }
 function restart(){
 	showAlert([
@@ -661,12 +637,16 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 	}
 	switch(language){
 		case "SimplifiedChinese":
-		newInput.placeholder=text[1]
+		if(text){
+			newInput.placeholder=text[1]
+		}
 		newCancelButton.innerText="取消"
 		newOKButton.innerText="确定"
 		break
 		default:
-		newInput.placeholder=text[0]
+		if(text){
+			newInput.placeholder=text[0]
+		}
 		newCancelButton.innerText="Cancel"
 		newOKButton.innerText="OK"
 		break
@@ -692,18 +672,18 @@ function translate(query,from,to,callback){
 	var str1=appid+query+salt+key
 	var sign=MD5(str1)
 	$.ajax({
-		url:"https://api.fanyi.baidu.com/api/trans/vip/translate",
-		type:"get",
-		dataType:"jsonp",
-		data:{
-			q:query,
-			appid:appid,
-			salt:salt,
-			from:from,
-			to:to,
-			sign:sign
+		"url":"https://api.fanyi.baidu.com/api/trans/vip/translate",
+		"type":"get",
+		"dataType":"jsonp",
+		"data":{
+			"q":query,
+			"appid":appid,
+			"salt":salt,
+			"from":from,
+			"to":to,
+			"sign":sign
 		},
-		success:function(data){
+		"success":function(data){
 			if(data.trans_result&&callback){
 				callback(data.trans_result[0].dst)
 			}
@@ -827,10 +807,16 @@ if(appliedTheme=="Bing"){
 	if(savedBingWallpaper){
 		loadWallpaper()
 	}else if(header){
-		request("https://rthsoftware.azurewebsites.net/bing.php",function(e){
-			localStorage.setItem("Bing",e)
-			savedBingWallpaper=e
-			loadWallpaper()
+		$.ajax({
+			"url":"https://rthsoftware.azurewebsites.net/bing.php",
+			"data":{
+				"time":new Date().getTime()
+			},
+			"success":function(e){
+				localStorage.setItem("Bing",e)
+				savedBingWallpaper=e
+				loadWallpaper()
+			}
 		})
 	}
 }
@@ -884,20 +870,28 @@ if(isElectron){
 		document.body.appendChild(newDiv)
 	}
 }
-request("https://rthsoftware.azurewebsites.net/userdata/users.txt",function(e){
-	userInfo=JSON.parse(e)
-	if(login.username){
-		if(!verifyPassword(login.email,login.password).pass){
-			showAlert([
-				"Incorrect password",
-				"密码错误"
-			],function(){
-				loginDialog()
-			})
+$.ajax({
+	"url":"https://rthsoftware.azurewebsites.net/userdata/users.txt",
+	"data":{
+		"time":new Date().getTime()
+	},
+	"dataType":"json",
+	"success":function(e){
+		userInfo=e
+		if(login.username){
+			if(!verifyPassword(login.email,login.password).pass){
+				showAlert([
+					"Incorrect password",
+					"密码错误"
+				],function(){
+					loginDialog()
+				})
+			}
+		}else if(header==null&&!searchURL("action")){
+			loginDialog()
 		}
-	}else if(header==null&&!searchURL("action")){
-		loginDialog()
+	},
+	"error":function(){
+		login.username=null
 	}
-},function(){
-	login.username=null
 })

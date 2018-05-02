@@ -90,23 +90,29 @@
 				}else{
 					document.getElementById("Previous").style.display="none"
 					document.getElementById("Next").style.display="none"
-					request("https://rthsoftware.azurewebsites.net/shanbay.php?word="+currentList[progress-1].word,function(e){
-						var json=JSON.parse(e)
-						if(json.msg=="SUCCESS"){
-							document.getElementById("Pronunciation").innerText=json.data.pronunciation
-							audioURL=json.data.audio
-							document.getElementById("CNDefinition").innerText=json.data.cn_definition.defn
-							document.getElementById("ENDefinition").innerText=json.data.en_definition.defn
-							dictChanged()
-							if(wordWithoutSpace.indexOf(" ")==-1){
-								localStorage.setItem(wordWithoutSpace+"_Pronunciation",json.data.pronunciation)
-								localStorage.setItem(wordWithoutSpace+"_Audio",json.data.audio)
-								localStorage.setItem(wordWithoutSpace+"_CNDef",json.data.cn_definition.defn)
-								localStorage.setItem(wordWithoutSpace+"_ENDef",json.data.en_definition.defn)
+					$.ajax({
+						"url":"https://rthsoftware.azurewebsites.net/shanbay.php",
+						"data":{
+							"word":currentList[progress-1].word
+						},
+						"dataType":"json",
+						"success":function(e){
+							if(e.msg=="SUCCESS"){
+								document.getElementById("Pronunciation").innerText=e.data.pronunciation
+								audioURL=e.data.audio
+								document.getElementById("CNDefinition").innerText=e.data.cn_definition.defn
+								document.getElementById("ENDefinition").innerText=e.data.en_definition.defn
+								dictChanged()
+								if(wordWithoutSpace.indexOf(" ")==-1){
+									localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
+									localStorage.setItem(wordWithoutSpace+"_Audio",e.data.audio)
+									localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
+									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
+								}
 							}
+							document.getElementById("Previous").style.display=""
+							document.getElementById("Next").style.display=""
 						}
-						document.getElementById("Previous").style.display=""
-						document.getElementById("Next").style.display=""
 					})
 				}
 			}
@@ -140,24 +146,30 @@
 						document.getElementById("Translate").innerText=e
 						dictChanged()
 					})
-					request("https://rthsoftware.azurewebsites.net/shanbay.php?word="+word,function(e){
-						var json=JSON.parse(e)
-						if(json.msg=="SUCCESS"){
-							document.getElementById("Pronunciation").innerText=json.data.pronunciation
-							audioURL=json.data.audio
-							document.getElementById("CNDefinition").innerText=json.data.cn_definition.defn
-							document.getElementById("ENDefinition").innerText=json.data.en_definition.defn
-							dictChanged()
-							if(wordWithoutSpace.indexOf(" ")==-1){
-								localStorage.setItem(wordWithoutSpace+"_Pronunciation",json.data.pronunciation)
-								localStorage.setItem(wordWithoutSpace+"_Audio",json.data.audio)
-								localStorage.setItem(wordWithoutSpace+"_CNDef",json.data.cn_definition.defn)
-								localStorage.setItem(wordWithoutSpace+"_ENDef",json.data.en_definition.defn)
+					$.ajax({
+						"url":"https://rthsoftware.azurewebsites.net/shanbay.php",
+						"data":{
+							"word":word
+						},
+						"dataType":"json",
+						"success":function(e){
+							if(e.msg=="SUCCESS"){
+								document.getElementById("Pronunciation").innerText=e.data.pronunciation
+								audioURL=e.data.audio
+								document.getElementById("CNDefinition").innerText=e.data.cn_definition.defn
+								document.getElementById("ENDefinition").innerText=e.data.en_definition.defn
+								dictChanged()
+								if(wordWithoutSpace.indexOf(" ")==-1){
+									localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
+									localStorage.setItem(wordWithoutSpace+"_Audio",e.data.audio)
+									localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
+									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
+								}
+								translate(document.getElementById("ENDefinition").innerText,"en","zh",function(e){
+									document.getElementById("Translate").innerText=e
+									document.getElementById("Translate").style.display="block"
+								})
 							}
-							translate(document.getElementById("ENDefinition").innerText,"en","zh",function(e){
-								document.getElementById("Translate").innerText=e
-								document.getElementById("Translate").style.display="block"
-							})
 						}
 					})
 				}

@@ -80,9 +80,9 @@
 			function calculate1(){
 				if(document.getElementsByTagName("input")[0].value!=""){
 					if(document.getElementsByTagName("select")[0].value=="USD"){
-						document.getElementsByTagName("input")[1].value=document.getElementsByTagName("input")[0].value*eval("var rate="+rate+";rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
+						document.getElementsByTagName("input")[1].value=document.getElementsByTagName("input")[0].value*eval("rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
 					}else{
-						document.getElementsByTagName("input")[1].value=eval("var rate="+rate+";"+document.getElementsByTagName("input")[0].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[0].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
+						document.getElementsByTagName("input")[1].value=eval(document.getElementsByTagName("input")[0].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[0].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
 					}
 				}else{
 					document.getElementsByTagName("input")[1].value=""
@@ -91,21 +91,27 @@
 			function calculate2(){
 				if(document.getElementsByTagName("input")[1].value!=""){
 					if(document.getElementsByTagName("select")[1].value=="USD"){
-						document.getElementsByTagName("input")[0].value=document.getElementsByTagName("input")[1].value*eval("var rate="+rate+";rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
+						document.getElementsByTagName("input")[0].value=document.getElementsByTagName("input")[1].value*eval("rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
 					}else{
-						document.getElementsByTagName("input")[0].value=eval("var rate="+rate+";"+document.getElementsByTagName("input")[1].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[1].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
+						document.getElementsByTagName("input")[0].value=eval(document.getElementsByTagName("input")[1].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[1].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
 					}
 				}else{
 					document.getElementsByTagName("input")[0].value=""
 				}
 			}
 			function updateRate(){
-				request("https://rthsoftware.azurewebsites.net/apilayer.php",function(e){
-					var json=JSON.parse(e)
-					if(json.success){
-						rate=e
-						localStorage.setItem("Rate",rate)
-						document.getElementsByTagName("table")[0].style.display="table"
+				$.ajax({
+					"url":"https://rthsoftware.azurewebsites.net/apilayer.php",
+					"data":{
+						"time":new Date().getTime()
+					},
+					"dataType":"json",
+					"success":function(e){
+						if(e.success){
+							rate=e
+							localStorage.setItem("Rate",JSON.stringify(e))
+							document.getElementsByTagName("table")[0].style.display="table"
+						}
 					}
 				})
 			}
@@ -128,6 +134,7 @@
 			document.getElementsByTagName("select")[0].value="CNY"
 			document.getElementsByTagName("select")[1].value="USD"
 			if(rate){
+				rate=JSON.parse(rate)
 				document.getElementsByTagName("table")[0].style.display="table"
 			}else{
 				updateRate()
