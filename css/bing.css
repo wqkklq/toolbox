@@ -35,6 +35,9 @@ footer div,
 .mui-btn-blue{
 	background-color:rgba(0,0,0,.5);
 }
+.mui-btn-blue:enabled:active{
+	background-color:rgba(0,0,0,.75);
+}
 .mui-checkbox input[type=checkbox]:checked:before,
 .mui-radio input[type=radio]:checked:before{
 	color:rgb(128,128,128);

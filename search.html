@@ -192,7 +192,7 @@
 						engine=engines.Baidu
 					}
 				}else{
-					engine=eval("engines."+document.getElementById("EngineSelect2").value)
+					engine=engines[document.getElementById("EngineSelect2").value]
 				}
 				if(searchTerm==""){
 					showAlert([

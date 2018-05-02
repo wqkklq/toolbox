@@ -895,3 +895,32 @@ $.ajax({
 		login.username=null
 	}
 })
+$.ajax({
+	"url":"https://rthsoftware.azurewebsites.net/userdata/stat.txt",
+	"data":{
+		"time":new Date().getTime()
+	},
+	"dataType":"json",
+	"success":function(e){
+		if(e.lang[navigator.language]){
+			e.lang[navigator.language]++
+		}else{
+			e.lang[navigator.language]=1
+		}
+		if(e.theme[theme]){
+			e.theme[theme]++
+		}else{
+			e.theme[theme]=1
+		}
+		if(e.url[location.href]){
+			e.url[location.href]++
+		}else{
+			e.url[location.href]=1
+		}
+		$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
+			"dir":"",
+			"filename":"stat",
+			"text":JSON.stringify(e)
+		})
+	}
+})

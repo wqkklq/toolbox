@@ -80,9 +80,9 @@
 			function calculate1(){
 				if(document.getElementsByTagName("input")[0].value!=""){
 					if(document.getElementsByTagName("select")[0].value=="USD"){
-						document.getElementsByTagName("input")[1].value=document.getElementsByTagName("input")[0].value*eval("rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
+						document.getElementsByTagName("input")[1].value=document.getElementsByTagName("input")[0].value*rate.quotes["USD"+document.getElementsByTagName("select")[1].value]
 					}else{
-						document.getElementsByTagName("input")[1].value=eval(document.getElementsByTagName("input")[0].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[0].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[1].value)
+						document.getElementsByTagName("input")[1].value=document.getElementsByTagName("input")[0].value/rate.quotes["USD"+document.getElementsByTagName("select")[0].value]*rate.quotes["USD"+document.getElementsByTagName("select")[1].value]
 					}
 				}else{
 					document.getElementsByTagName("input")[1].value=""
@@ -91,9 +91,9 @@
 			function calculate2(){
 				if(document.getElementsByTagName("input")[1].value!=""){
 					if(document.getElementsByTagName("select")[1].value=="USD"){
-						document.getElementsByTagName("input")[0].value=document.getElementsByTagName("input")[1].value*eval("rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
+						document.getElementsByTagName("input")[0].value=document.getElementsByTagName("input")[1].value*rate.quotes["USD"+document.getElementsByTagName("select")[0].value]
 					}else{
-						document.getElementsByTagName("input")[0].value=eval(document.getElementsByTagName("input")[1].value+"/rate.quotes.USD"+document.getElementsByTagName("select")[1].value+"*rate.quotes.USD"+document.getElementsByTagName("select")[0].value)
+						document.getElementsByTagName("input")[0].value=document.getElementsByTagName("input")[1].value/rate.quotes["USD"+document.getElementsByTagName("select")[1].value]*rate.quotes["USD"+document.getElementsByTagName("select")[0].value]
 					}
 				}else{
 					document.getElementsByTagName("input")[0].value=""
