@@ -912,10 +912,11 @@ $.ajax({
 		}else{
 			e.theme[theme]=1
 		}
-		if(e.url[location.href]){
-			e.url[location.href]++
+		var url=location.href.replace(location.search,"")
+		if(e.url[url]){
+			e.url[url]++
 		}else{
-			e.url[location.href]=1
+			e.url[url]=1
 		}
 		$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
 			"dir":"",
