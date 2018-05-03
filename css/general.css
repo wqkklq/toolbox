@@ -61,6 +61,7 @@ td div{
 textarea{
 	font-size:17px;
 	line-height:25.5px;
+	padding:10px 15px;
 	word-break:break-all;
 }
 .back{
