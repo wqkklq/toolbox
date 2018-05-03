@@ -59,7 +59,9 @@ td div{
 	width:100%;
 }
 textarea{
+	display:block;
 	font-size:17px;
+	height:275px;
 	line-height:25.5px;
 	word-break:break-all;
 }

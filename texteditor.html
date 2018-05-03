@@ -15,6 +15,7 @@
 				width:50%;
 			}
 			textarea{
+				display:none;
 				margin:0px;
 			}
 			.edit{
@@ -30,6 +31,7 @@
 				border-radius:5px;
 				font-size:17px;
 				line-height:25.5px;
+				min-height:275px;
 				padding:10px 15px;
 				-webkit-user-select:text;
 				user-select:text;
@@ -52,7 +54,7 @@
 				<div class="mui-input-row">
 					<input type="text" class="mui-input-clear">
 				</div>
-				<textarea rows="10"></textarea>
+				<textarea></textarea>
 				<div class="text-view"></div>
 				<ul class="menu">
 					<li id="SaveAs" class="menu"></li>
@@ -163,9 +165,6 @@
 					document.getElementsByClassName("edit")[0].style.display="block"
 					document.getElementsByTagName("footer")[0].style.display="block"
 					document.getElementsByClassName("back")[0].onclick=newDoc
-					document.getElementsByTagName("textarea")[0].style.display=""
-					document.getElementsByClassName("text-view")[0].style.minHeight=document.getElementsByTagName("textarea")[0].offsetHeight+"px"
-					document.getElementsByTagName("textarea")[0].style.display="none"
 				}else{
 					document.getElementsByClassName("start")[0].style.display=
 					document.getElementsByClassName("edit")[0].style.display=
@@ -450,7 +449,7 @@
 			function setText(text,noScrolling){
 				document.getElementsByTagName("textarea")[0].value=text
 				document.getElementsByClassName("text-view")[0].innerText=text.replace(/\u0009/g,"\u00a0\u00a0\u00a0\u00a0")
-				document.getElementsByTagName("textarea")[0].style.display="none"
+				document.getElementsByTagName("textarea")[0].style.display=
 				document.getElementsByClassName("text-view")[0].style.display=""
 				if(!noScrolling){
 					scrollTo(0,0)
@@ -591,7 +590,7 @@
 			}
 			document.getElementsByClassName("text-view")[0].onclick=function(){
 				this.style.display="none"
-				document.getElementsByTagName("textarea")[0].style.display=""
+				document.getElementsByTagName("textarea")[0].style.display="block"
 				document.getElementsByTagName("textarea")[0].focus()
 			}
 			document.getElementById("NewDocument").onclick=newDoc
