@@ -11,6 +11,12 @@
 			footer div{
 				width:100%;
 			}
+			#AccountManagement{
+				display:none;
+			}
+			#Introduction{
+				margin-top:10px;
+			}
 		</style>
 	</head>
 	<body>
@@ -39,12 +45,17 @@
 					</tr>
 				</tbody>
 			</table>
-			<ul id="AccountManagement" class="menu">
-				<li id="ChangePassword" class="menu"></li>
-				<li id="DeleteAccount" class="menu"></li>
-				<li id="LogOut" class="menu"></li>
-				<li id="SwitchAccount" class="menu"></li>
+			<p id="MyEmail"></p>
+			<ul class="menu">
+				<li id="Login" class="menu"></li>
+				<span id="AccountManagement">
+					<li id="ChangePassword" class="menu"></li>
+					<li id="DeleteAccount" class="menu"></li>
+					<li id="LogOut" class="menu"></li>
+					<li id="SwitchAccount" class="menu"></li>
+				</span>
 			</ul>
+			<p id="Introduction"></p>
 		</div>
 		<footer>
 			<div id="About"></div>
@@ -75,6 +86,8 @@
 					restart()
 				}
 			}
+			document.getElementById("Login").onclick=
+			document.getElementById("SwitchAccount").onclick=loginDialog
 			document.getElementById("ChangePassword").onclick=function(){
 				showPrompt([
 					"Enter your current password",
@@ -152,7 +165,6 @@
 				})
 			}
 			document.getElementById("LogOut").onclick=logOut
-			document.getElementById("SwitchAccount").onclick=loginDialog
 			document.getElementById("About").onclick=function(){
 				openWindow("about")
 			}
@@ -165,10 +177,13 @@
 				document.getElementById("ThemeSelect").options.add(new Option("必应","Bing"))
 				document.getElementById("ThemeSelect").options.add(new Option("浅色","Light"))
 				document.getElementById("ThemeSelect").options.add(new Option("深色","Dark"))
+				document.getElementById("MyEmail").innerText="未登录"
+				document.getElementById("Login").innerText="登录"
 				document.getElementById("ChangePassword").innerText="更改密码"
 				document.getElementById("DeleteAccount").innerText="删除账号"
 				document.getElementById("LogOut").innerText="退出登录"
 				document.getElementById("SwitchAccount").innerText="切换账号"
+				document.getElementById("Introduction").innerText="登录后，您可以在 https://t.rths.tk/ 查看您保存的单词表和文本文档。"
 				document.getElementById("About").innerText="关于 RTH 工具箱"
 				break
 				default:
@@ -179,18 +194,26 @@
 				document.getElementById("ThemeSelect").options.add(new Option("Bing","Bing"))
 				document.getElementById("ThemeSelect").options.add(new Option("Light","Light"))
 				document.getElementById("ThemeSelect").options.add(new Option("Dark","Dark"))
+				document.getElementById("MyEmail").innerText="Not logged in"
+				document.getElementById("Login").innerText="Login"
 				document.getElementById("ChangePassword").innerText="Change Password"
 				document.getElementById("DeleteAccount").innerText="Delete Account"
 				document.getElementById("LogOut").innerText="Log Out"
 				document.getElementById("SwitchAccount").innerText="Switch Account"
+				document.getElementById("Introduction").innerText="After logging in, you can view your saved word lists and text documents at https://t.rths.tk/."
 				document.getElementById("About").innerText="About RTH Toolbox"
 				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			document.getElementById("LanguageSelect").value=language
 			document.getElementById("ThemeSelect").value=theme
-			if(!login.username){
-				document.getElementById("AccountManagement").style.display="none"
+			if(login.username){
+				document.getElementById("MyEmail").innerText=login.email
+				document.getElementById("Login").style.display="none"
+				document.getElementById("AccountManagement").style.display="block"
+				document.getElementById("Introduction").innerText=document.getElementById("Introduction").innerText.
+				replace("After logging in, y","Y").
+				replace("登录后，","")
 			}
 		</script>
 	</body>

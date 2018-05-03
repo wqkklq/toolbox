@@ -387,24 +387,6 @@
 					}
 				}
 			}
-			if(appliedTheme=="Bing"){
-				var savedBingWallpaper=localStorage.getItem("Bing")
-				if(savedBingWallpaper){
-					document.getElementsByClassName("bg-img")[0].style.backgroundImage="url("+savedBingWallpaper+")"
-				}
-				$.ajax({
-					"url":"https://rthsoftware.azurewebsites.net/bing.php",
-					"data":{
-						"time":new Date().getTime()
-					},
-					"success":function(e){
-						localStorage.setItem("Bing",e)
-						document.getElementsByClassName("bg-img")[0].style.backgroundImage="url("+e+")"
-					}
-				})
-			}else if(theme!="Bing"){
-				localStorage.removeItem("Bing")
-			}
 		</script>
 	</body>
 </html>

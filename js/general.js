@@ -795,9 +795,12 @@ if(header){
 	}
 }
 if(appliedTheme=="Bing"){
+	var savedBingWallpaper
 	var loadWallpaper=function(){
 		if(header){
 			header.style.backgroundImage="url("+savedBingWallpaper+")"
+		}else if(document.getElementsByClassName("bg-img")[0]){
+			document.getElementsByClassName("bg-img")[0].style.backgroundImage="url("+savedBingWallpaper+")"
 		}
 		var blueButtons=document.getElementsByClassName("btn-bg-img")
 		for(var i=0;i<blueButtons.length;i++){
@@ -807,19 +810,20 @@ if(appliedTheme=="Bing"){
 	savedBingWallpaper=localStorage.getItem("Bing")
 	if(savedBingWallpaper){
 		loadWallpaper()
-	}else if(header){
-		$.ajax({
-			"url":"https://rthsoftware.azurewebsites.net/bing.php",
-			"data":{
-				"time":new Date().getTime()
-			},
-			"success":function(e){
-				localStorage.setItem("Bing",e)
-				savedBingWallpaper=e
-				loadWallpaper()
-			}
-		})
 	}
+	$.ajax({
+		"url":"https://rthsoftware.azurewebsites.net/bing.php",
+		"data":{
+			"time":new Date().getTime()
+		},
+		"success":function(e){
+			localStorage.setItem("Bing",e)
+			savedBingWallpaper=e
+			loadWallpaper()
+		}
+	})
+}else if(theme!="Bing"){
+	localStorage.removeItem("Bing")
 }
 if(isElectron){
 	var electron=require("electron")
@@ -907,6 +911,11 @@ $.ajax({
 			e.lang[navigator.language]++
 		}else{
 			e.lang[navigator.language]=1
+		}
+		if(login.username){
+			e.login.true++
+		}else{
+			e.login.false++
 		}
 		if(e.theme[theme]){
 			e.theme[theme]++
