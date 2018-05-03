@@ -14,6 +14,9 @@
 			footer div{
 				width:50%;
 			}
+			textarea{
+				display:none;
+			}
 			.edit{
 				display:none;
 				margin-bottom:60px;
@@ -21,14 +24,14 @@
 			.edit ul.menu{
 				margin-top:15px
 			}
-			.text-editor{
+			.text-view{
 				background-color:white;
 				border:1px solid rgba(0,0,0,.2);
 				border-radius:5px;
-				font-size:16px;
-				line-height:24px;
-				min-height:230px;
-				padding:10px;
+				font-size:17px;
+				line-height:25.5px;
+				min-height:272px;
+				padding:10px 15px;
 				-webkit-user-select:text;
 				user-select:text;
 				word-break:break-all;
@@ -50,7 +53,8 @@
 				<div class="mui-input-row">
 					<input type="text" class="mui-input-clear">
 				</div>
-				<div class="text-editor" contenteditable="true" draggable="true"></div>
+				<textarea rows="10"></textarea>
+				<div class="text-view"></div>
 				<ul class="menu">
 					<li id="SaveAs" class="menu"></li>
 					<li id="Delete" class="menu"></li>
@@ -104,7 +108,7 @@
 				restart()
 			}
 			function count(){
-				var wordCount=(document.getElementsByClassName("text-editor")[0].innerText.match(/[a-z]+|[\u4E00-\uFA29]/ig)||[]).length
+				var wordCount=(document.getElementsByTagName("textarea")[0].value.match(/[a-z]+|[\u4E00-\uFA29]/ig)||[]).length
 				if(wordCount<=0){
 					switch(language){
 						case "SimplifiedChinese":
@@ -187,7 +191,7 @@
 				return btoa(encrypted)
 			}
 			function find(){
-				setText(document.getElementsByClassName("text-editor")[0].innerText,true)
+				setText(document.getElementsByTagName("textarea")[0].value,true)
 				showPrompt([
 					"Find what",
 					"查找内容"
@@ -196,28 +200,28 @@
 						"Replace with",
 						"替换为"
 					],function(replaceWith){
-						setText(document.getElementsByClassName("text-editor")[0].innerText.replace(new RegExp(e,"g"),replaceWith))
+						setText(document.getElementsByTagName("textarea")[0].value.replace(new RegExp(e,"g"),replaceWith))
 					})
 				},"text",null,null,function(){
-					setText(document.getElementsByClassName("text-editor")[0].innerText,true)
+					setText(document.getElementsByTagName("textarea")[0].value,true)
 				},function(e){
 					if(e&&e!=""){
 						e=e.replace(/</g,"&lt;").
 						replace(/>/g,"&gt;")
-						document.getElementsByClassName("text-editor")[0].innerHTML=document.getElementsByClassName("text-editor")[0].innerText.
+						document.getElementsByClassName("text-view")[0].innerHTML=document.getElementsByClassName("text-view")[0].innerText.
 						replace(/</g,"&lt;").
 						replace(/>/g,"&gt;").
 						replace(new RegExp(e,"g"),"<span class=\"highlight-find\">$&</span>").
 						replace(/\n/g,"<br>")
 					}else{
-						setText(document.getElementsByClassName("text-editor")[0].innerText,true)
+						setText(document.getElementsByTagName("textarea")[0].value,true)
 					}
 				})
 			}
 			function isEmpty(){
-				if(document.getElementsByClassName("text-editor")[0].innerText==""){
-					setText(document.getElementsByClassName("text-editor")[0].innerText.replace(/\/\*\s|\s\*\//g,"").trim())
-					if(document.getElementsByClassName("text-editor")[0].innerText==""){
+				if(document.getElementsByTagName("textarea")[0].value==""){
+					setText(document.getElementsByTagName("textarea")[0].value.replace(/\/\*\s|\s\*\//g,"").trim())
+					if(document.getElementsByTagName("textarea")[0].value==""){
 						showAlert([
 							"The text cannot be empty",
 							"文本不能为空"
@@ -317,7 +321,7 @@
 				if(document.getElementsByClassName("start")[0].style.display==""){
 					edit(true)
 				}else{
-					if(document.getElementsByClassName("text-editor")[0].innerText!=""){
+					if(document.getElementsByTagName("textarea")[0].value!=""){
 						showConfirm([
 							"Do you want to close the current document?",
 							"您想要关闭当前文档吗？"
@@ -381,7 +385,7 @@
 			}
 			function runJSCode(fromShortcut){
 				if(!isEmpty()){
-					var code=document.getElementsByClassName("text-editor")[0].innerText.replace(/coin|localStorage|runJSCode|runTrue|userInfo/gi,"").replace(/console.log/g,"mui.toast")
+					var code=document.getElementsByTagName("textarea")[0].value.replace(/coin|localStorage|runJSCode|runTrue|userInfo/gi,"").replace(/console.log/g,"mui.toast")
 					var runTrue=function(){
 						try{
 							var result=calc(code)
@@ -416,9 +420,9 @@
 			function save(callback){
 				var text
 				if(encrypt){
-					text=encryptText(document.getElementsByClassName("text-editor")[0].innerText,"RTH")
+					text=encryptText(document.getElementsByTagName("textarea")[0].value,"RTH")
 				}else{
-					text=document.getElementsByClassName("text-editor")[0].innerText
+					text=document.getElementsByTagName("textarea")[0].value
 				}
 				if(savedText&&savedText.text&&savedText.text[currentItem-1]){
 					savedText.text[currentItem-1].encrypt=encrypt
@@ -442,7 +446,10 @@
 				})
 			}
 			function setText(text,noScrolling){
-				document.getElementsByClassName("text-editor")[0].innerText=text
+				document.getElementsByTagName("textarea")[0].value=text
+				document.getElementsByClassName("text-view")[0].innerText=text.replace(/\u0009/g,"\u00a0\u00a0\u00a0\u00a0")
+				document.getElementsByTagName("textarea")[0].style.display=
+				document.getElementsByClassName("text-view")[0].style.display=""
 				if(!noScrolling){
 					scrollTo(0,0)
 				}
@@ -450,7 +457,7 @@
 			}
 			function speak(){
 				if(!isEmpty()&&window.speechSynthesis){
-					window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementsByClassName("text-editor")[0].innerText))
+					window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementsByTagName("textarea")[0].value))
 				}
 			}
 			function submit(callback){
@@ -501,7 +508,7 @@
 			}
 			function translateText(){
 				if(!isEmpty()){
-					translate(document.getElementsByClassName("text-editor")[0].innerText.replace(/\s/g," "),"auto","auto",function(e){
+					translate(document.getElementsByTagName("textarea")[0].value.replace(/\s/g," "),"auto","auto",function(e){
 						showPrompt(null,null,null,e)
 					})
 				}
@@ -516,8 +523,10 @@
 						case 48:
 						if(document.getElementsByClassName("start")[0].style.display!=""){
 							fontSize=16
-							document.getElementsByClassName("text-editor")[0].style.fontSize=
-							document.getElementsByClassName("text-editor")[0].style.lineHeight=""
+							document.getElementsByTagName("textarea")[0].style.fontSize=
+							document.getElementsByClassName("text-view")[0].style.fontSize=
+							document.getElementsByTagName("textarea")[0].style.lineHeight=
+							document.getElementsByClassName("text-view")[0].style.lineHeight=""
 						}
 						return false
 						break
@@ -540,16 +549,20 @@
 						case 187:
 						if(document.getElementsByClassName("start")[0].style.display!=""){
 							fontSize+=4
-							document.getElementsByClassName("text-editor")[0].style.fontSize=fontSize+"px"
-							document.getElementsByClassName("text-editor")[0].style.lineHeight=(fontSize+8)+"px"
+							document.getElementsByTagName("textarea")[0].style.fontSize=
+							document.getElementsByClassName("text-view")[0].style.fontSize=fontSize+"px"
+							document.getElementsByTagName("textarea")[0].style.lineHeight=
+							document.getElementsByClassName("text-view")[0].style.lineHeight=(fontSize*3/2)+"px"
 						}
 						return false
 						break
 						case 189:
-						if(document.getElementsByClassName("start")[0].style.display!=""&&fontSize>4){
+						if(document.getElementsByClassName("start")[0].style.display!=""&&fontSize>8){
 							fontSize-=4
-							document.getElementsByClassName("text-editor")[0].style.fontSize=fontSize+"px"
-							document.getElementsByClassName("text-editor")[0].style.lineHeight=(fontSize+8)+"px"
+							document.getElementsByTagName("textarea")[0].style.fontSize=
+							document.getElementsByClassName("text-view")[0].style.fontSize=fontSize+"px"
+							document.getElementsByTagName("textarea")[0].style.lineHeight=
+							document.getElementsByClassName("text-view")[0].style.lineHeight=(fontSize*3/2)+"px"
 						}
 						return false
 						break
@@ -557,12 +570,14 @@
 					}
 				}
 			}
-			document.getElementsByClassName("text-editor")[0].ondrop=function(e){
+			document.getElementsByTagName("textarea")[0].ondrop=
+			document.getElementsByClassName("text-view")[0].ondrop=function(e){
 				setText(event.dataTransfer.getData("Text"))
 				openLText(e.dataTransfer.files[0])
+				return false
 			}
-			document.getElementsByClassName("text-editor")[0].oninput=count
-			document.getElementsByClassName("text-editor")[0].onkeydown=function(e){
+			document.getElementsByTagName("textarea")[0].oninput=count
+			document.getElementsByTagName("textarea")[0].onkeydown=function(e){
 				switch(e.keyCode){
 					case 9:
 					document.execCommand("insertText",null,"\u0009")
@@ -570,6 +585,11 @@
 					break
 					default:break
 				}
+			}
+			document.getElementsByClassName("text-view")[0].onclick=function(){
+				this.style.display="none"
+				document.getElementsByTagName("textarea")[0].style.display="block"
+				document.getElementsByTagName("textarea")[0].focus()
 			}
 			document.getElementById("NewDocument").onclick=newDoc
 			document.getElementById("OpenLocalDocument").onclick=openDialog
@@ -620,7 +640,7 @@
 						filters:[{name:"Text Documents",extensions:["txt"]}]
 					},function(filename){
 						if(filename){
-							require("fs").writeFileSync(filename,document.getElementsByClassName("text-editor")[0].innerText)
+							require("fs").writeFileSync(filename,document.getElementsByTagName("textarea")[0].value)
 						}
 					})
 				}else{
@@ -639,7 +659,7 @@
 						filename+=".txt"
 					}
 					var dl=document.createElement("a")
-					dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(document.getElementsByClassName("text-editor")[0].innerText))
+					dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(document.getElementsByTagName("textarea")[0].value))
 					dl.setAttribute("download",filename)
 					if(document.createEvent){
 						var event=document.createEvent("MouseEvents")
@@ -669,7 +689,7 @@
 			document.getElementById("Translate").onclick=translateText
 			document.getElementById("Decode").onclick=function(){
 				if(!isEmpty()){
-					var encoded=document.getElementsByClassName("text-editor")[0].innerText,
+					var encoded=document.getElementsByTagName("textarea")[0].value,
 					showDecoded=true
 					var decoded=encoded
 					try{
@@ -724,17 +744,17 @@
 			document.getElementById("Speak").onclick=speak
 			document.getElementById("CreateMessageBox").onclick=function(){
 				if(!isEmpty()){
-					openWebPage("http://rthshare.tk/?alert="+encodeURI(document.getElementsByClassName("text-editor")[0].innerText)+"&title="+encodeURI(document.getElementsByTagName("input")[0].value))
+					openWebPage("http://rthshare.tk/?alert="+encodeURI(document.getElementsByTagName("textarea")[0].value)+"&title="+encodeURI(document.getElementsByTagName("input")[0].value))
 				}
 			}
 			document.getElementById("GenerateQRCode").onclick=function(){
 				if(!isEmpty()){
-					showImage("https://rthsoftware.azurewebsites.net/topscan.php?text="+document.getElementsByClassName("text-editor")[0].innerText)
+					showImage("https://rthsoftware.azurewebsites.net/topscan.php?text="+document.getElementsByTagName("textarea")[0].value)
 				}
 			}
 			document.getElementById("GenerateMD5Value").onclick=function(){
 				if(!isEmpty()){
-					showPrompt(null,null,null,MD5(document.getElementsByClassName("text-editor")[0].innerText))
+					showPrompt(null,null,null,MD5(document.getElementsByTagName("textarea")[0].value))
 				}
 			}
 			document.getElementById("GenerateWebPage").onclick=function(){
@@ -763,16 +783,16 @@
 			document.getElementById("Base64Encode").onclick=function(){
 				if(!isEmpty()){
 					try{
-						setText(btoa(document.getElementsByClassName("text-editor")[0].innerText))
+						setText(btoa(document.getElementsByTagName("textarea")[0].value))
 					}catch(e){
-						setText(btoa(encodeUnicode(document.getElementsByClassName("text-editor")[0].innerText)))
+						setText(btoa(encodeUnicode(document.getElementsByTagName("textarea")[0].value)))
 					}
 				}
 			}
 			document.getElementById("BinaryEncode").onclick=function(){
 				if(!isEmpty()){
 					var binary="",
-					text=document.getElementsByClassName("text-editor")[0].innerText
+					text=document.getElementsByTagName("textarea")[0].value
 					for(var i=0;i<text.length;i++){
 						binary+=text.charCodeAt(i).toString(2)+" "
 					}
@@ -785,18 +805,18 @@
 						"Set the password",
 						"设置密码"
 					],function(e){
-						setText(encryptText(document.getElementsByClassName("text-editor")[0].innerText,e))
+						setText(encryptText(document.getElementsByTagName("textarea")[0].value,e))
 					},"password")
 				}
 			}
 			document.getElementById("UnicodeEncode").onclick=function(){
 				if(!isEmpty()){
-					setText(encodeUnicode(document.getElementsByClassName("text-editor")[0].innerText))
+					setText(encodeUnicode(document.getElementsByTagName("textarea")[0].value))
 				}
 			}
 			document.getElementById("URIComponentEncode").onclick=function(){
 				if(!isEmpty()){
-					setText(encodeURIComponent(document.getElementsByClassName("text-editor")[0].innerText))
+					setText(encodeURIComponent(document.getElementsByTagName("textarea")[0].value))
 				}
 			}
 			document.getElementsByClassName("open-file")[0].onchange=function(e){
@@ -854,40 +874,34 @@
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(isElectron){
-				document.getElementsByClassName("text-editor")[0].oncontextmenu=function(e){
-					showMenu(e,[{
-						"onclick":function(){
-							document.execCommand("cut")
-							closeMenu()
-						},
-						"text":[
-							"Cut",
-							"剪切"
-						]
-					},{
-						"onclick":function(){
-							document.execCommand("copy")
-							closeMenu()
-						},
-						"text":[
-							"Copy",
-							"复制"
-						]
-					},{
-						"onclick":function(){
-							setText(document.getElementsByClassName("text-editor")[0].innerText+require("electron").clipboard.document.getElementsByClassName("text-editor")[0].innerText)
-							closeMenu()
-						},
-						"text":[
-							"Paste",
-							"粘贴"
-						]
-					}])
-					return false
+				var remote=require("electron").remote
+				var Menu=remote.Menu
+				var inputMenu=Menu.buildFromTemplate([{
+					label:"Undo",
+					role:"undo",
+				},{
+					label:"Redo",
+					role:"redo",
+				},{
+					type:"separator",
+				},{
+					label:"Cut",
+					role:"cut",
+				},{
+					label:"Copy",
+					role:"copy",
+				},{
+					label:"Paste",
+					role:"paste",
+				},{
+					type:"separator",
+				},{
+					label:"Select all",
+					role:"selectall",
+				}])
+				document.getElementsByTagName("textarea")[0].oncontextmenu=function(e){
+					inputMenu.popup(remote.getCurrentWindow())
 				}
-			}
-			if(!isIE){
-				document.getElementsByClassName("text-editor")[0].setAttribute("contenteditable","plaintext-only")
 			}
 			if(!window.speechSynthesis){
 				document.getElementById("Speak").style.display="none"

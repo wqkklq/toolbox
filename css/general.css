@@ -58,6 +58,11 @@ td div{
 	top:-7px;
 	width:100%;
 }
+textarea{
+	font-size:17px;
+	line-height:25.5px;
+	word-break:break-all;
+}
 .back{
 	color:white;
 	-webkit-app-region:no-drag;

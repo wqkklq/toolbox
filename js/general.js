@@ -23,7 +23,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 userInfo,
-ver="9.2"
+ver="9.3"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -724,6 +724,7 @@ if(!isIE){
 			],function(){
 				$.post("https://rthsoftware.azurewebsites.net/feedback.php",{
 					"email":login.email,
+					"lang":language,
 					"name":login.username,
 					"text":message,
 					"ver":ver
