@@ -23,7 +23,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 userInfo,
-ver="9.3"
+ver="9.4"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
