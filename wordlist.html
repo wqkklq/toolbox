@@ -294,7 +294,9 @@
 					currentItem=serialNumber
 					localStorage.setItem("WordList",JSON.stringify(savedWordList.list[currentItem-1]))
 				}
-				reload()
+				if(document.getElementsByClassName("quiz")[0].style.display==""){
+					reload()
+				}
 			}
 			function arrange(name){
 				var wordCount=currentList.length*1,wordMin
@@ -309,8 +311,9 @@
 				}
 				if(wordCount>=wordMin){
 					if(name=="quiz"){
-						save()
-						openDiv(name)
+						save(function(){
+							openDiv(name)
+						})
 					}else{
 						localStorage.setItem("WordList",JSON.stringify({
 							"list":currentList,
@@ -888,7 +891,7 @@
 				}
 				document.getElementById("NextButton").style.display=""
 			}
-			function save(){
+			function save(callback){
 				if(currentItem){
 					savedWordList.list[currentItem-1].list=currentList
 					savedWordList.list[currentItem-1].title=document.getElementById("TitleInput").value
@@ -900,6 +903,9 @@
 					currentItem=savedWordList.list.length
 				}
 				submit(function(){
+					if(callback){
+						callback()
+					}
 					applyItem(currentItem)
 				})
 			}
@@ -1084,7 +1090,9 @@
 			document.getElementById("FlashCard").onclick=function(){
 				arrange(this.id.toLowerCase())
 			}
-			document.getElementById("Save").onclick=save
+			document.getElementById("Save").onclick=function(){
+				save()
+			}
 			document.getElementById("Add").onclick=add
 			document.getElementById("SaveAs").onclick=function(){
 				if(isElectron&&!isLinux){

@@ -304,12 +304,14 @@ function loginDialog(){
 			}
 		}
 		newDiv.setAttribute("class","popup")
+		newEmailInput.name="email"
 		newEmailInput.type="email"
 		newEmailInput.onkeydown=function(e){
 			if(e.keyCode==13){
 				newPasswordInput.focus()
 			}
 		}
+		newPasswordInput.name="password"
 		newPasswordInput.type="password"
 		newPasswordInput.onkeydown=function(e){
 			if(e.keyCode==13){
