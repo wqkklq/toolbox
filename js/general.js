@@ -889,6 +889,9 @@ $.ajax({
 					"Incorrect password",
 					"密码错误"
 				],function(){
+					localStorage.removeItem("Email")
+					localStorage.removeItem("Password")
+					localStorage.removeItem("Username")
 					loginDialog()
 				})
 			}
