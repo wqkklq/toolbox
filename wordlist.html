@@ -355,6 +355,7 @@
 			function end(){
 				var correctRate=Math.round(100-(mistakes.list.length/progress)*100)
 				if(mistakes.list.length>0){
+					currentItem=null
 					localStorage.setItem("WordList",JSON.stringify(mistakes))
 				}
 				showAlert([
