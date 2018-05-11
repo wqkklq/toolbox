@@ -467,7 +467,7 @@
 			function loadFriendWordList(email){
 				$.post("https://rths.tk/userdata/verify.php",{
 					"email":email,
-					"password":null
+					"password":new Date().getTime()
 				},function(verifyResult){
 					if(verifyResult.username){
 						$.ajax({
