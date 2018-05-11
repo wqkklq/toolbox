@@ -221,7 +221,22 @@
 							})
 						}else if(isCordova){
 							if(isAndroid){
-								openWebPage("http://rthshare.tk/?alert="+escape(document.getElementById("CreateMessageBoxInput").value)+"&title="+escape(document.title))
+								$.ajax({
+									"url":"https://rths.tk/generate.php",
+									"data":{
+										"alert":document.getElementById("CreateMessageBoxInput").value,
+										"title":document.title
+									},
+									"method":"POST",
+									"success":function(e){
+										openWebPage(e)
+									},
+									"error":function(){
+										setTimeout(function(){
+											alert(document.getElementById("CreateMessageBoxInput").value)
+										},1000)
+									}
+								})
 							}else if(isiOS){
 								cordova.plugins.notification.local.schedule({
 									title:document.title,
@@ -231,10 +246,7 @@
 						}
 					}else{
 						setTimeout(function(){
-							showAlert([
-								document.getElementById("CreateMessageBoxInput").value,
-								document.getElementById("CreateMessageBoxInput").value
-							])
+							alert(document.getElementById("CreateMessageBoxInput").value)
 						},1000)
 					}
 				}
@@ -277,7 +289,7 @@
 				if(document.getElementById("HistoryUl").innerHTML!=""){
 					showConfirm([
 						"Do you want to clear the history?",
-						"您想要清空历史记录吗？"
+						"您想清空历史记录吗？"
 					],function(){
 						document.getElementById("HistoryUl").innerHTML=""
 						historyArray=[]

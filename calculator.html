@@ -191,14 +191,14 @@
 				<li id="Statistics" class="menu"></li>
 			</ul>
 			<ul class="menu">
-				<li id="CurrencyConversion" class="menu"></li>
-				<li id="NumberBaseConversion" class="menu"></li>
-				<li id="MoleConversion" class="menu"></li>
+				<li id="Currency" class="menu"></li>
+				<li id="NumberBase" class="menu"></li>
+				<li id="Mole" class="menu"></li>
 			</ul>
 			<ul class="menu">
-				<li id="QuadraticEquationOneUnknown" class="menu"></li>
-				<li id="SystemLinearEquations2Unknowns" class="menu"></li>
-				<li id="SystemLinearEquations3Unknowns" class="menu"></li>
+				<li id="Equation12" class="menu"></li>
+				<li id="Equation21" class="menu"></li>
+				<li id="Equation31" class="menu"></li>
 				<li id="QuadraticFunction" class="menu"></li>
 				<li id="FindLinearFunction" class="menu"></li>
 				<li id="FindQuadraticFunction" class="menu"></li>
@@ -254,38 +254,18 @@
 				document.getElementsByTagName("input")[0].value=value.substr(0,value.length-1)
 			}
 			document.getElementById("Equal").onclick=calculate
-			document.getElementById("Date").onclick=function(){
-				openWindow("date")
-			}
-			document.getElementById("Statistics").onclick=function(){
-				openWindow("statistics")
-			}
-			document.getElementById("CurrencyConversion").onclick=function(){
-				openWindow("currency")
-			}
-			document.getElementById("NumberBaseConversion").onclick=function(){
-				openWindow("numberbase")
-			}
-			document.getElementById("MoleConversion").onclick=function(){
-				openWindow("mole")
-			}
-			document.getElementById("QuadraticEquationOneUnknown").onclick=function(){
-				openWindow("equation12")
-			}
-			document.getElementById("SystemLinearEquations2Unknowns").onclick=function(){
-				openWindow("equation21")
-			}
-			document.getElementById("SystemLinearEquations3Unknowns").onclick=function(){
-				openWindow("equation31")
-			}
-			document.getElementById("QuadraticFunction").onclick=function(){
-				openWindow("quadraticfunction")
-			}
-			document.getElementById("FindLinearFunction").onclick=function(){
-				openWindow("findlinearfunction")
-			}
+			document.getElementById("Date").onclick=
+			document.getElementById("Statistics").onclick=
+			document.getElementById("Currency").onclick=
+			document.getElementById("NumberBase").onclick=
+			document.getElementById("Mole").onclick=
+			document.getElementById("Equation12").onclick=
+			document.getElementById("Equation21").onclick=
+			document.getElementById("Equation31").onclick=
+			document.getElementById("QuadraticFunction").onclick=
+			document.getElementById("FindLinearFunction").onclick=
 			document.getElementById("FindQuadraticFunction").onclick=function(){
-				openWindow("findquadraticfunction")
+				openWindow(this.id.toLowerCase())
 			}
 			switch(language){
 				case "SimplifiedChinese":
@@ -293,12 +273,12 @@
 				document.getElementsByTagName("input")[0].placeholder="输入算式"
 				document.getElementById("Date").innerText="日期"
 				document.getElementById("Statistics").innerText="统计"
-				document.getElementById("CurrencyConversion").innerText="货币换算"
-				document.getElementById("NumberBaseConversion").innerText="进制换算"
-				document.getElementById("MoleConversion").innerText="摩尔换算"
-				document.getElementById("QuadraticEquationOneUnknown").innerText="一元二次方程"
-				document.getElementById("SystemLinearEquations2Unknowns").innerText="二元一次方程组"
-				document.getElementById("SystemLinearEquations3Unknowns").innerText="三元一次方程组"
+				document.getElementById("Currency").innerText="货币换算"
+				document.getElementById("NumberBase").innerText="进制换算"
+				document.getElementById("Mole").innerText="摩尔换算"
+				document.getElementById("Equation12").innerText="一元二次方程"
+				document.getElementById("Equation21").innerText="二元一次方程组"
+				document.getElementById("Equation31").innerText="三元一次方程组"
 				document.getElementById("QuadraticFunction").innerText="二次函数"
 				document.getElementById("FindLinearFunction").innerText="求一次函数解析式"
 				document.getElementById("FindQuadraticFunction").innerText="求二次函数解析式"
@@ -308,12 +288,12 @@
 				document.getElementsByTagName("input")[0].placeholder="Enter the formula"
 				document.getElementById("Date").innerText="Date"
 				document.getElementById("Statistics").innerText="Statistics"
-				document.getElementById("CurrencyConversion").innerText="Currency Conversion"
-				document.getElementById("NumberBaseConversion").innerText="Number Base Conversion"
-				document.getElementById("MoleConversion").innerText="Mole Conversion"
-				document.getElementById("QuadraticEquationOneUnknown").innerText="Quadratic Equation in One Unknown"
-				document.getElementById("SystemLinearEquations2Unknowns").innerText="System of Linear Equations in 2 Unknowns"
-				document.getElementById("SystemLinearEquations3Unknowns").innerText="System of Linear Equations in 3 Unknowns"
+				document.getElementById("Currency").innerText="Currency Conversion"
+				document.getElementById("NumberBase").innerText="Number Base Conversion"
+				document.getElementById("Mole").innerText="Mole Conversion"
+				document.getElementById("Equation12").innerText="Quadratic Equation in One Unknown"
+				document.getElementById("Equation21").innerText="System of Linear Equations in 2 Unknowns"
+				document.getElementById("Equation31").innerText="System of Linear Equations in 3 Unknowns"
 				document.getElementById("QuadraticFunction").innerText="Quadratic Function"
 				document.getElementById("FindLinearFunction").innerText="Find Analytic Formula of Linear Function"
 				document.getElementById("FindQuadraticFunction").innerText="Find Analytic Formula of Quadratic Function"

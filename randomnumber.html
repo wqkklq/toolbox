@@ -120,7 +120,7 @@
 				if(document.getElementById("HistoryUl").innerHTML!=""){
 					showConfirm([
 						"Do you want to clear the history?",
-						"您想要清空历史记录吗？"
+						"您想清空历史记录吗？"
 					],function(){
 						document.getElementById("HistoryUl").innerHTML=""
 						historyArray=[]
@@ -170,7 +170,7 @@
 						"onclick":function(){
 							showConfirm([
 								"Do you want to delete "+savedNames.names[index]+"?",
-								"您想要删除"+savedNames.names[index]+"吗？"
+								"您想删除"+savedNames.names[index]+"吗？"
 							],function(){
 								savedNames.names.splice(index,1)
 								submit()
@@ -243,39 +243,27 @@
 				savedNames.time=new Date().getTime()
 				localStorage.setItem("Names",JSON.stringify(savedNames))
 				if(login.username){
-					switch(language){
-						case "SimplifiedChinese":
-						mui.toast("正在提交")
-						break
-						default:
-						mui.toast("Submitting")
-						break
-					}
-					$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
+					showToast([
+						"Submitting",
+						"正在提交"
+					])
+					$.post("https://rths.tk/userdata/upload.php",{
 						"dir":"names/",
 						"filename":login.username,
 						"text":JSON.stringify(savedNames)
 					},function(){
 						load()
-						switch(language){
-							case "SimplifiedChinese":
-							mui.toast("更改已保存")
-							break
-							default:
-							mui.toast("Changes are saved")
-							break
-						}
+						showToast([
+							"Changes are saved",
+							"更改已保存"
+						])
 					})
 				}else{
-					switch(language){
-						case "SimplifiedChinese":
-						mui.toast("更改已保存")
-						break
-						default:
-						mui.toast("Changes are saved")
-						break
-					}
-					if(userInfo){
+					showToast([
+						"Changes are saved",
+						"更改已保存"
+					])
+					if(!localStorage.getItem("Username")){
 						loginDialog()
 					}
 					load()
@@ -332,7 +320,7 @@
 			document.getElementById("NamesClear").onclick=function(){
 				showConfirm([
 					"Do you want to clear the names?",
-					"您想要清空名字吗？"
+					"您想清空名字吗？"
 				],function(){
 					document.getElementById("NamesUl").innerHTML=""
 					savedNames.names=[]
@@ -398,7 +386,7 @@
 			}
 			if(login.username){
 				$.ajax({
-					"url":"https://rthsoftware.azurewebsites.net/userdata/names/"+login.username+".txt",
+					"url":"https://rths.tk/userdata/names/"+login.username+".txt",
 					"data":{
 						"time":new Date().getTime()
 					},

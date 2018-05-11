@@ -180,7 +180,7 @@
 							}
 						}else{
 							$.ajax({
-								"url":"https://rthsoftware.azurewebsites.net/shanbay.php",
+								"url":"https://rths.tk/shanbay.php",
 								"data":{
 									"word":newWord
 								},
@@ -267,7 +267,7 @@
 						"onclick":function(){
 							showConfirm([
 								"Do you want to delete "+currentList[index].word+"?",
-								"您想要删除 "+currentList[index].word+" 吗？"
+								"您想删除 "+currentList[index].word+" 吗？"
 							],function(){
 								currentList.splice(index,1)
 								save()
@@ -414,21 +414,7 @@
 					}
 					var friendEmail=localStorage.getItem("FriendEmail")
 					if(friendEmail&&friendEmail!=""){
-						if(userInfo){
-							loadFriendWordList(friendEmail)
-						}else{
-							$.ajax({
-								"url":"https://rthsoftware.azurewebsites.net/userdata/users.txt",
-								"data":{
-									"time":new Date().getTime()
-								},
-								"dataType":"json",
-								"success":function(e){
-									userInfo=e
-									loadFriendWordList(friendEmail)
-								}
-							})
-						}
+						loadFriendWordList(friendEmail)
 					}else{
 						loadAdminWordList()
 					}
@@ -441,7 +427,7 @@
 			}
 			function loadAdminWordList(){
 				$.ajax({
-					"url":"https://rthsoftware.azurewebsites.net/userdata/wordlist/admin.txt",
+					"url":"https://rths.tk/userdata/wordlist/admin.txt",
 					"data":{
 						"time":new Date().getTime()
 					},
@@ -479,75 +465,67 @@
 				})
 			}
 			function loadFriendWordList(email){
-				var username=verifyPassword(email).username
-				if(username){
-					$.ajax({
-						"url":"https://rthsoftware.azurewebsites.net/userdata/wordlist/"+username+".txt",
-						"data":{
-							"time":new Date().getTime()
-						},
-						"dataType":"json",
-						"success":function(e){
-							friendWordList=e
-							if(friendWordList.sharing){
-								for(var i=friendWordList.list.length-1;i>=0;i--){
-									var newLi=document.createElement("li")
-									newLi.setAttribute("class","menu")
-									newLi.innerText="F"+addZero(friendWordList.list.length-i,3)+". "
-									if(friendWordList.list[i].title!=null&&friendWordList.list[i].title!=""){
-										newLi.innerText+=friendWordList.list[i].title
-									}else{
-										switch(language){
-											case "SimplifiedChinese":
-											newLi.innerText+=friendWordList.list[i].list[0].word+" 和另外 "+friendWordList.list[i].list.length+" 个单词"
-											break
-											default:
-											newLi.innerText+=friendWordList.list[i].list[0].word+" and other "+friendWordList.list[i].list.length+" words"
-											break
+				$.post("https://rths.tk/userdata/verify.php",{
+					"email":email,
+					"password":null
+				},function(verifyResult){
+					if(verifyResult.username){
+						$.ajax({
+							"url":"https://rths.tk/userdata/wordlist/"+verifyResult.username+".txt",
+							"data":{
+								"time":new Date().getTime()
+							},
+							"dataType":"json",
+							"success":function(e){
+								friendWordList=e
+								if(friendWordList.sharing){
+									for(var i=friendWordList.list.length-1;i>=0;i--){
+										var newLi=document.createElement("li")
+										newLi.setAttribute("class","menu")
+										newLi.innerText="F"+addZero(friendWordList.list.length-i,3)+". "
+										if(friendWordList.list[i].title!=null&&friendWordList.list[i].title!=""){
+											newLi.innerText+=friendWordList.list[i].title
+										}else{
+											switch(language){
+												case "SimplifiedChinese":
+												newLi.innerText+=friendWordList.list[i].list[0].word+" 和另外 "+friendWordList.list[i].list.length+" 个单词"
+												break
+												default:
+												newLi.innerText+=friendWordList.list[i].list[0].word+" and other "+friendWordList.list[i].list.length+" words"
+												break
+											}
 										}
+										newLi.setAttribute("number",i+1)
+										newLi.onclick=function(){
+											var index=this.getAttribute("number")*1-1
+											applyItem(0,friendWordList.list[index])
+										}
+										document.getElementById("SavedWordListUl").appendChild(newLi)
 									}
-									newLi.setAttribute("number",i+1)
-									newLi.onclick=function(){
-										var index=this.getAttribute("number")*1-1
-										applyItem(0,friendWordList.list[index])
-									}
-									document.getElementById("SavedWordListUl").appendChild(newLi)
+								}else{
+									showToast([
+										email+" has no shared word lists",
+										email+" 没有共享单词表"
+									])
 								}
-							}else{
-								switch(language){
-									case "SimplifiedChinese":
-									mui.toast(email+" 没有共享单词表")
-									break
-									default:
-									mui.toast(email+" has no shared word lists")
-									break
-								}
+								loadAdminWordList()
+							},
+							"error":function(){
+								showToast([
+									email+" has no shared word lists",
+									email+" 没有共享单词表"
+								])
+								loadAdminWordList()
 							}
-							loadAdminWordList()
-						},
-						"error":function(){
-							switch(language){
-								case "SimplifiedChinese":
-								mui.toast(email+" 没有共享单词表")
-								break
-								default:
-								mui.toast(email+" has no shared word lists")
-								break
-							}
-							loadAdminWordList()
-						}
-					})
-				}else{
-					switch(language){
-						case "SimplifiedChinese":
-						mui.toast(email+" 不是有效的 RTH 账号")
-						break
-						default:
-						mui.toast(email+" is not a valid RTH account")
-						break
+						})
+					}else{
+						showToast([
+							email+" is not a valid RTH account",
+							email+" 不是有效的 RTH 账号"
+						])
+						loadAdminWordList()
 					}
-					loadAdminWordList()
-				}
+				},"json")
 			}
 			function loadQuestion(){
 				showAnswer=false
@@ -648,7 +626,7 @@
 				localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
 				if(login.username){
 					$.ajax({
-						"url":"https://rthsoftware.azurewebsites.net/userdata/wordlist/"+login.username+".txt",
+						"url":"https://rths.tk/userdata/wordlist/"+login.username+".txt",
 						"data":{
 							"time":new Date().getTime()
 						},
@@ -672,8 +650,8 @@
 								load()
 							}
 						},
-						"error":function(){
-							if(savedWordList.list.length>0){
+						"error":function(e){
+							if(e.status!=0&&savedWordList.list.length>0){
 								submit(load)
 							}else{
 								load()
@@ -709,7 +687,7 @@
 					document.getElementsByClassName("back")[0].onclick=function(){
 						showConfirm([
 							"Do you want to close the document?",
-							"您想要关闭文档吗？"
+							"您想关闭文档吗？"
 						],closeTrue)
 					}
 					break
@@ -926,15 +904,11 @@
 				savedWordList.time=new Date().getTime()
 				localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
 				if(login.username){
-					switch(language){
-						case "SimplifiedChinese":
-						mui.toast("正在提交")
-						break
-						default:
-						mui.toast("Submitting")
-						break
-					}
-					$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
+					showToast([
+						"Submitting",
+						"正在提交"
+					])
+					$.post("https://rths.tk/userdata/upload.php",{
 						"dir":"wordlist/",
 						"filename":login.username,
 						"text":JSON.stringify(savedWordList)
@@ -942,25 +916,17 @@
 						if(callback){
 							callback()
 						}
-						switch(language){
-							case "SimplifiedChinese":
-							mui.toast("更改已保存")
-							break
-							default:
-							mui.toast("Changes are saved")
-							break
-						}
+						showToast([
+							"Changes are saved",
+							"更改已保存"
+						])
 					})
 				}else{
-					switch(language){
-						case "SimplifiedChinese":
-						mui.toast("更改已保存")
-						break
-						default:
-						mui.toast("Changes are saved")
-						break
-					}
-					if(userInfo){
+					showToast([
+						"Changes are saved",
+						"更改已保存"
+					])
+					if(!localStorage.getItem("Username")){
 						loginDialog()
 					}
 					if(callback){
@@ -1134,7 +1100,7 @@
 			document.getElementById("Delete").onclick=function(){
 				showConfirm([
 					"Do you want to delete the word list?",
-					"您想要删除此单词表吗？"
+					"您想删除此单词表吗？"
 				],function(){
 					savedWordList.list.splice(currentItem-1,1)
 					submit(closeTrue)

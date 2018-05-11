@@ -121,6 +121,10 @@
 				width:100px;
 				-webkit-app-region:no-drag;
 			}
+			.mui-icon-settings{
+				cursor:pointer;
+				margin-left:5px;
+			}
 			.mui-table-view-cell:active{
 				color:rgb(0,102,204);
 			}
@@ -128,10 +132,6 @@
 				color:rgba(255,255,255,.85);
 				cursor:default;
 				line-height:24px;
-			}
-			#Settings{
-				cursor:pointer;
-				padding-left:5px;
 			}
 			@media screen and (min-width:450px){
 				.home-title{
@@ -165,7 +165,7 @@
 					<tr>
 						<td id="Quote" width="100%"></td>
 						<td>
-							<span id="Settings" class="mui-icon mui-icon-settings" onclick="openWindow('settings')"></span>
+							<span class="mui-icon mui-icon-settings"></span>
 						</td>
 					</tr>
 				</tbody>
@@ -177,7 +177,10 @@
 		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var currentHour=new Date().getHours()
+			var currentHour=new Date().getHours(),
+			dateCountdown=localStorage.getItem("DateCountdown"),
+			displayDateCountdown,
+			getSentence
 			function getToolbox(){
 				if(isAndroid){
 					if(navigator.language=="zh-CN"){
@@ -202,7 +205,7 @@
 			}
 			function links(){
 				$.ajax({
-					"url":"https://rthsoftware.azurewebsites.net/links.php",
+					"url":"https://rths.tk/links.php",
 					"data":{
 						"lang":language,
 						"time":new Date().getTime()
@@ -232,15 +235,27 @@
 					document.getElementsByClassName("home-menu")[0].style.height="calc(100% - "+(190+document.getElementsByClassName("bottom")[0].offsetHeight)+"px)"
 				}
 			}
+			function submitDateCountdown(){
+				displayDateCountdown()
+				if(login.username){
+					$.post("https://rths.tk/userdata/upload.php",{
+						"dir":"datecountdown/",
+						"filename":login.username,
+						"text":JSON.stringify(dateCountdown)
+					})
+				}
+			}
 			document.getElementById("WordList").onclick=
 			document.getElementById("Timer").onclick=
 			document.getElementById("Calculator").onclick=
 			document.getElementById("Chatbot").onclick=
 			document.getElementById("RandomNumber").onclick=
 			document.getElementById("Search").onclick=
-			document.getElementById("TextEditor").onclick=
-			document.getElementById("Settings").onclick=function(){
+			document.getElementById("TextEditor").onclick=function(){
 				openWindow(this.id.toLowerCase())
+			}
+			document.getElementsByClassName("mui-icon-settings")[0].onclick=function(){
+				openWindow("settings")
 			}
 			document.getElementsByTagName("button")[0].onclick=getToolbox
 			switch(language){
@@ -263,9 +278,19 @@
 				}else if(currentHour>=21&&currentHour<=23||currentHour>=0&&currentHour<=5){
 					document.getElementById("Quote").innerText="晚安！"
 				}
-				var getSentence=function(){
+				displayDateCountdown=function(){
+					if(dateCountdown&&dateCountdown.name){
+						document.getElementById("Quote").innerText=dateCountdown.name+"：还有 "+dateDiff(new Date().getTime(),dateCountdown.date)
+						document.getElementById("Quote").onclick=function(){
+							openWindow("date")
+						}
+					}else{
+						getSentence()
+					}
+				}
+				getSentence=function(){
 					$.ajax({
-						"url":"https://rthsoftware.azurewebsites.net/sentences.php",
+						"url":"https://rths.tk/sentences.php",
 						"data":{
 							"lang":language,
 							"time":new Date().getTime()
@@ -299,7 +324,6 @@
 						}
 					})
 				}
-				getSentence()
 				break
 				default:
 				document.title="RTH Toolbox"
@@ -319,6 +343,14 @@
 					document.getElementById("Quote").innerText="Good evening!"
 				}else if(currentHour>=21&&currentHour<=23||currentHour>=0&&currentHour<=5){
 					document.getElementById("Quote").innerText="Good night!"
+				}
+				displayDateCountdown=function(){
+					if(dateCountdown&&dateCountdown.name){
+						document.getElementById("Quote").innerText=dateCountdown.name+": "+dateDiff(new Date().getTime(),dateCountdown.date)+" remaining"
+						document.getElementById("Quote").onclick=function(){
+							openWindow("date")
+						}
+					}
 				}
 				break
 			}
@@ -364,7 +396,7 @@
 							if(isAndroidApp){
 								showConfirm([
 									"There is an update available. Do you want to update?",
-									"有更新可用。您想要更新吗？"
+									"有更新可用。您想更新吗？"
 								],getToolbox)
 							}else if(isElectron){
 								location.href="electron/update.html"
@@ -386,6 +418,36 @@
 						openWindow("wordlist")
 					}
 				}
+			}
+			if(dateCountdown){
+				dateCountdown=JSON.parse(dateCountdown)
+			}
+			if(login.username){
+				$.ajax({
+					"url":"https://rths.tk/userdata/datecountdown/"+login.username+".txt",
+					"data":{
+						"time":new Date().getTime()
+					},
+					"dataType":"json",
+					"success":function(e){
+						if(!dateCountdown||e.time>dateCountdown.time){
+							dateCountdown=e
+							localStorage.setItem("DateCountdown",JSON.stringify(e))
+						}else if(dateCountdown.time>e.time){
+							submitDateCountdown()
+						}
+						displayDateCountdown()
+					},
+					"error":function(e){
+						if(e.status==0){
+							displayDateCountdown()
+						}else if(dateCountdown){
+							submitDateCountdown()
+						}
+					}
+				})
+			}else{
+				submitDateCountdown()
 			}
 		</script>
 	</body>

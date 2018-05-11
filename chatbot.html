@@ -19,7 +19,7 @@
 				-webkit-user-select:text;
 				user-select:text;
 				width:fit-content;
-				word-break:break-all;
+				word-break:break-word;
 			}
 			.msg-bot{
 				background-color:white;
@@ -98,7 +98,7 @@
 			var lastBotInfo
 			function chatbotReply(botInfo){
 				$.ajax({
-					"url":"https://rthsoftware.azurewebsites.net/tuling.php",
+					"url":"https://rths.tk/tuling.php",
 					"data":{
 						"info":botInfo
 					},

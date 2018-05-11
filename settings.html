@@ -14,11 +14,11 @@
 			p{
 				padding:0px 5px;
 			}
+			p:last-of-type{
+				margin-top:10px;
+			}
 			#AccountManagement{
 				display:none;
-			}
-			#Introduction{
-				margin-top:10px;
 			}
 		</style>
 	</head>
@@ -94,45 +94,47 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
-					var verifyResult=verifyPassword(login.email,MD5(e))
-					if(verifyResult.pass){
-						showPrompt([
-							"Enter a new password",
-							"输入新密码"
-						],function(newPassword){
+					$.post("https://rths.tk/userdata/verify.php",{
+						"email":login.email,
+						"password":MD5(e)
+					},function(verifyResult){
+						if(verifyResult.pass){
 							showPrompt([
-								"Enter the new password again",
-								"再次输入新密码"
-							],function(confirmPassword){
-								if(confirmPassword==newPassword){
-									userInfo.users[verifyResult.index-1].password=MD5(newPassword)
-									localStorage.setItem("Password",userInfo.users[verifyResult.index-1].password)
-									$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
-										"dir":"",
-										"filename":"users",
-										"text":JSON.stringify(userInfo)
-									},function(){
-										showAlert([
-											"The password is changed",
-											"密码已更改"
-										],function(){
-											location.reload()
+								"Enter a new password",
+								"输入新密码"
+							],function(newPassword){
+								showPrompt([
+									"Enter the new password again",
+									"再次输入新密码"
+								],function(confirmPassword){
+									if(confirmPassword==newPassword){
+										localStorage.setItem("Password",MD5(newPassword))
+										$.post("https://rths.tk/reset.php",{
+											"index":verifyResult.index,
+											"passwordmd5":MD5(newPassword)
+										},function(){
+											showAlert([
+												"The password is changed",
+												"密码已更改"
+											],function(){
+												location.reload()
+											})
 										})
-									})
-								}else{
-									showAlert([
-										"The two passwords you entered does not match",
-										"两次输入的密码不一致"
-									])
-								}
+									}else{
+										showAlert([
+											"The two passwords you entered does not match",
+											"两次输入的密码不一致"
+										])
+									}
+								},"password")
 							},"password")
-						},"password")
-					}else{
-						showAlert([
-							"Incorrect password",
-							"密码错误"
-						])
-					}
+						}else{
+							showAlert([
+								"Incorrect password",
+								"密码错误"
+							])
+						}
+					},"json")
 				},"password")
 			}
 			document.getElementById("DeleteAccount").onclick=function(){
@@ -144,24 +146,22 @@
 						"Enter your current password",
 						"输入您的当前密码"
 					],function(e){
-						var verifyResult=verifyPassword(login.email,MD5(e))
-						if(verifyResult.pass){
-							userInfo.users.splice(verifyResult.index-1,1)
-							$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
-								"dir":"",
-								"filename":"users",
-								"text":JSON.stringify(userInfo)
-							},function(){
-								$.post("https://rthsoftware.azurewebsites.net/userdata/remove.php",{
+						$.post("https://rths.tk/userdata/verify.php",{
+							"email":login.email,
+							"password":MD5(e)
+						},function(verifyResult){
+							if(verifyResult.pass){
+								$.post("https://rths.tk/userdata/remove.php",{
+									"index":verifyResult.index,
 									"username":login.username
 								},logOut)
-							})
-						}else{
-							showAlert([
-								"Incorrect password",
-								"密码错误"
-							])
-						}
+							}else{
+								showAlert([
+									"Incorrect password",
+									"密码错误"
+								])
+							}
+						},"json")
 					},"password")
 				})
 			}

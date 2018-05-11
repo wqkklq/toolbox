@@ -38,15 +38,11 @@
 				}else if(document.getElementsByTagName("textarea")[0].value==""){
 					document.getElementsByTagName("textarea")[0].style.background="rgb(255,192,203)"
 				}else{
-					switch(language){
-						case "SimplifiedChinese":
-						mui.toast("正在发送")
-						break
-						default:
-						mui.toast("Sending")
-						break
-					}
-					$.post("https://rthsoftware.azurewebsites.net/feedback.php",{
+					showToast([
+						"Sending",
+						"正在发送"
+					])
+					$.post("https://rths.tk/feedback.php",{
 						"email":document.getElementById("Email").value,
 						"lang":language,
 						"name":document.getElementById("Name").value,

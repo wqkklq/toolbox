@@ -22,8 +22,7 @@ login={
 },
 recentInput=0,
 theme=localStorage.getItem("Theme"),
-userInfo,
-ver="9.4"
+ver="9.5"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -118,6 +117,21 @@ function closeMenu(){
 		document.body.removeChild(document.getElementsByClassName("popup-menu")[0])
 	},250)
 }
+function dateDiff(startDate,endDate){
+	var result=parseInt(Math.abs(endDate-startDate)/1000/60/60/24)
+	switch(language){
+		case "SimplifiedChinese":
+		return result+" 天"
+		break
+		default:
+		if(Math.abs(result>1)){
+			return result+" days"
+		}else{
+			return result+" day"
+		}
+		break
+	}
+}
 function initCalculator(max,calculate){
 	switch(language){
 		case "SimplifiedChinese":
@@ -198,109 +212,100 @@ function loginDialog(){
 			}
 		}
 		var submitLogin=function(){
-			if(userInfo&&userInfo.users){
-				var email=newEmailInput.value.toLowerCase(),
-				password=MD5(newPasswordInput.value),
-				match=false
-				var verifyResult=verifyPassword(email,password)
-				if(verifyResult.index){
-					match=true
-					if(verifyResult.pass){
-						showAlert([
-							"Log in successfully",
-							"已成功登录"
-						],function(){
-							localStorage.setItem("Email",userInfo.users[verifyResult.index-1].email)
-							localStorage.setItem("Password",userInfo.users[verifyResult.index-1].password)
-							localStorage.setItem("Username",userInfo.users[verifyResult.index-1].username)
-							location.reload()
-						})
-					}else if(email!="admin"){
-						showConfirm([
-							"Incorrect password. Do you want to reset the password?",
-							"密码错误。您想要重置密码吗？"
-						],function(){
-							newPasswordInput.value=""
-							newConfirmPasswordInput.value=""
-							switch(language){
-								case "SimplifiedChinese":
-								mui.toast("正在重置")
-								break
-								default:
-								mui.toast("Resetting")
-								break
-							}
-							var newPassword=(new Date().getTime()*(Math.round(Math.random()*99)+1)).toString(36)
-							userInfo.users[verifyResult.index-1].password=MD5(newPassword)
-							$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
-								"dir":"",
-								"filename":"users",
-								"text":JSON.stringify(userInfo)
-							},function(){
-								$.post("https://rthsoftware.azurewebsites.net/reset.php",{
-									"email":userInfo.users[verifyResult.index-1].email,
-									"password":newPassword
-								},function(){
-									showAlert([
-										"We will send your new password to your email",
-										"我们会将您的新密码发送到您的邮箱"
-									])
-								})
-							})
-						},function(){
-							newPasswordInput.value=""
-							newConfirmPasswordInput.value=""
-						})
-					}
-				}
-				if(newH1.innerText==newSignUpButton.innerText&&!match){
-					newEmailInput.style.borderColor=""
-					newPasswordInput.style.borderColor=""
-					newConfirmPasswordInput.style.borderColor=""
-					if(!/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(newEmailInput.value)){
-						newEmailInput.style.borderColor="rgb(255,192,203)"
-						newEmailInput.focus()
-					}else if(newPasswordInput.value==""){
-						newPasswordInput.style.borderColor="rgb(255,192,203)"
-						newPasswordInput.focus()
-					}else if(newConfirmPasswordInput.value!=newPasswordInput.value){
-						newConfirmPasswordInput.style.borderColor="rgb(255,192,203)"
-						newConfirmPasswordInput.focus()
-					}else{
-						userInfo.users.push({
-							"email":email,
-							"password":password,
-							"username":email.split("@")[0]+new Date().getTime().toString(36)
-						})
-						switch(language){
-							case "SimplifiedChinese":
-							mui.toast("正在注册")
-							break
-							default:
-							mui.toast("Signing up")
-							break
-						}
-						$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
-							"dir":"",
-							"filename":"users",
-							"text":JSON.stringify(userInfo)
-						},function(){
-							location.reload()
-						})
-					}
-				}else{
-					if(!match){
-						showAlert([
-							"This user does not exist",
-							"此用户不存在"
-						],signUp)
-					}
-				}
+			var email=newEmailInput.value.toLowerCase(),
+			password=MD5(newPasswordInput.value)
+			newEmailInput.style.borderColor=
+			newPasswordInput.style.borderColor=
+			newConfirmPasswordInput.style.borderColor=""
+			if(!/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(email)){
+				newEmailInput.style.borderColor="rgb(255,192,203)"
+				newEmailInput.focus()
+			}else if(newPasswordInput.value==""){
+				newPasswordInput.style.borderColor="rgb(255,192,203)"
+				newPasswordInput.focus()
 			}else{
-				showAlert([
-					"Unable to connect to the server",
-					"无法连接服务器"
-				])
+				$.ajax({
+					"url":"https://rths.tk/userdata/verify.php",
+					"data":{
+						"email":email,
+						"password":password
+					},
+					"dataType":"json",
+					"method":"POST",
+					"success":function(e){
+						if(e.index){
+							if(e.pass){
+								showAlert([
+									"Log in successfully",
+									"已成功登录"
+								],function(){
+									localStorage.setItem("Email",email)
+									localStorage.setItem("Password",password)
+									localStorage.setItem("Username",e.username)
+									location.reload()
+								})
+							}else if(email!="admin"){
+								showConfirm([
+									"Incorrect password. Do you want to reset the password?",
+									"密码错误。您想重置密码吗？"
+								],function(){
+									newPasswordInput.value=""
+									newConfirmPasswordInput.value=""
+									var newPassword=(new Date().getTime()*(Math.round(Math.random()*99)+1)).toString(36)
+									$.post("https://rths.tk/reset.php",{
+										"email":email,
+										"index":e.index,
+										"password":newPassword,
+										"passwordmd5":MD5(newPassword)
+									},function(){
+										showAlert([
+											"We will send your new password to your email",
+											"我们会将您的新密码发送到您的邮箱"
+										])
+									})
+								},function(){
+									newPasswordInput.value=""
+									newConfirmPasswordInput.value=""
+								})
+							}
+						}else{
+							if(newH1.innerText==newSignUpButton.innerText){
+								if(newConfirmPasswordInput.value!=newPasswordInput.value){
+									newConfirmPasswordInput.style.borderColor="rgb(255,192,203)"
+									newConfirmPasswordInput.focus()
+								}else{
+									var username=email.split("@")[0]+new Date().getTime().toString(36)
+									$.post("https://rths.tk/userdata/signup.php",{
+										"email":email,
+										"password":password,
+										"username":username
+									},function(){
+										showAlert([
+											"Log in successfully",
+											"已成功登录"
+										],function(){
+											localStorage.setItem("Email",email)
+											localStorage.setItem("Password",password)
+											localStorage.setItem("Username",username)
+											location.reload()
+										})
+									})
+								}
+							}else{
+								showAlert([
+									"This user does not exist",
+									"此用户不存在"
+								],signUp)
+							}
+						}
+					},
+					"error":function(){
+						showAlert([
+							"Unable to connect to the server",
+							"无法连接服务器"
+						])
+					}
+				})
 			}
 		}
 		newDiv.setAttribute("class","popup")
@@ -659,8 +664,20 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 		newDiv.style.opacity="1"
 	},25)
 }
+function showToast(text){
+	switch(language){
+		case "SimplifiedChinese":
+		mui.toast(text[1])
+		break
+		default:
+		mui.toast(text[0])
+		break
+	}
+}
 function translate(query,from,to,callback){
-	var appid="20171109000093780",key="ZR6EGbP8ZzwU7GookTvy",salt=new Date().getTime()
+	var appid="20171109000093780",
+	key="ZR6EGbP8ZzwU7GookTvy",
+	salt=new Date().getTime()
 	if(to=="auto"){
 		if(isEnglish.test(query)){
 			to="zh"
@@ -689,32 +706,6 @@ function translate(query,from,to,callback){
 		}
 	})
 }
-function verifyPassword(email,password){
-	if(userInfo){
-		for(var i=0;i<userInfo.users.length;i++){
-			if(email==userInfo.users[i].email){
-				if(password==userInfo.users[i].password){
-					return{
-						"index":i+1,
-						"pass":true,
-						"username":userInfo.users[i].username
-					}
-				}else{
-					return{
-						"index":i+1,
-						"pass":false,
-						"username":userInfo.users[i].username
-					}
-				}
-			}
-		}
-	}
-	return{
-		"index":null,
-		"pass":false,
-		"username":null
-	}
-}
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){
 		window.onerror=null
@@ -722,9 +713,9 @@ if(!isIE){
 			var message=msg+" at "+url+":"+lineNo
 			showConfirm([
 				"An error occurs. Do you want to submit the error report?\n"+message,
-				"发生错误。您想要提交错误报告吗？\n"+message
+				"发生错误。您想提交错误报告吗？\n"+message
 			],function(){
-				$.post("https://rthsoftware.azurewebsites.net/feedback.php",{
+				$.post("https://rths.tk/feedback.php",{
 					"email":login.email,
 					"lang":language,
 					"name":login.username,
@@ -814,7 +805,7 @@ if(appliedTheme=="Bing"){
 		loadWallpaper()
 	}
 	$.ajax({
-		"url":"https://rthsoftware.azurewebsites.net/bing.php",
+		"url":"https://rths.tk/bing.php",
 		"data":{
 			"time":new Date().getTime()
 		},
@@ -877,16 +868,17 @@ if(isElectron){
 		document.body.appendChild(newDiv)
 	}
 }
-$.ajax({
-	"url":"https://rthsoftware.azurewebsites.net/userdata/users.txt",
-	"data":{
-		"time":new Date().getTime()
-	},
-	"dataType":"json",
-	"success":function(e){
-		userInfo=e
-		if(login.username){
-			if(!verifyPassword(login.email,login.password).pass){
+if(login.username){
+	$.ajax({
+		"url":"https://rths.tk/userdata/verify.php",
+		"data":{
+			"email":login.email,
+			"password":login.password
+		},
+		"dataType":"json",
+		"method":"POST",
+		"success":function(e){
+			if(!e.pass){
 				showAlert([
 					"Incorrect password",
 					"密码错误"
@@ -894,49 +886,23 @@ $.ajax({
 					localStorage.removeItem("Email")
 					localStorage.removeItem("Password")
 					localStorage.removeItem("Username")
-					loginDialog()
+					location.reload()
 				})
 			}
-		}else if(header==null&&!searchURL("action")){
-			loginDialog()
+		},
+		"error":function(){
+			login.username=null
 		}
-	},
-	"error":function(){
-		login.username=null
-	}
-})
-$.ajax({
-	"url":"https://rthsoftware.azurewebsites.net/userdata/stat.txt",
-	"data":{
-		"time":new Date().getTime()
-	},
-	"dataType":"json",
-	"success":function(e){
-		if(e.lang[navigator.language]){
-			e.lang[navigator.language]++
-		}else{
-			e.lang[navigator.language]=1
-		}
-		if(login.username){
-			e.login.true++
-		}else{
-			e.login.false++
-		}
-		if(e.theme[theme]){
-			e.theme[theme]++
-		}else{
-			e.theme[theme]=1
-		}
-		var url=location.href.replace(location.search,"")
-		if(e.url[url]){
-			e.url[url]++
-		}else{
-			e.url[url]=1
-		}
-		$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
-			"dir":"",
-			"filename":"stat",
-			"text":JSON.stringify(e)
-		})
-	}
+	})
+}else if(!header){
+	loginDialog()
+}
+$.post("https://rths.tk/userdata/stat.php",{
+	"login":!!login.username,
+	"theme":theme,
+	"url":(function(){
+		var url=location.href.replace(location.search,"").split("/")
+		return url[url.length-1]
+	})(),
+	"ver":ver
 })

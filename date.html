@@ -8,9 +8,17 @@
 		<link href="css/mui.min.css" rel="stylesheet">
 		<link href="css/general.css" rel="stylesheet">
 		<style>
+			fieldset{
+				margin-top:20px;
+			}
+			fieldset:first-of-type{
+				margin-top:0px;
+			}
+			ul.menu{
+				margin-top:10px;
+			}
 			.result{
 				font-size:20px;
-				margin-top:15px;
 				text-align:center;
 				-webkit-user-select:text;
 				user-select:text
@@ -30,7 +38,24 @@
 					<label id="EndDateLabel"></label>
 					<input id="EndDate" type="date">
 				</div>
-				<div class="result"></div>
+				<ul class="menu card">
+					<li class="menu result"></li>
+				</ul>
+			</fieldset>
+			<fieldset>
+				<legend></legend>
+				<div class="mui-input-row">
+					<label id="NameLabel"></label>
+					<input id="Name" type="text">
+				</div>
+				<div class="mui-input-row">
+					<label id="DateLabel"></label>
+					<input id="Date" type="date">
+				</div>
+				<ul class="menu">
+					<li id="Save" class="menu"></li>
+					<li id="Delete" class="menu"></li>
+				</ul>
 			</fieldset>
 		</div>
 		<script src="cordova.js"></script>
@@ -38,32 +63,74 @@
 		<script src="js/jquery.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			function calculate(){
-				var startDateValue=new Date(document.getElementById("StartDate").value),
-				endDateValue=new Date(document.getElementById("EndDate").value)
-				var dateDiff=parseInt(Math.abs(endDateValue-startDateValue)/1000/60/60/24)
-				switch(language){
-					case "SimplifiedChinese":
-					document.getElementsByClassName("result")[0].innerText="距离 "+dateDiff+" 天"
-					break
-					default:
-					if(Math.abs(dateDiff>1)){
-						document.getElementsByClassName("result")[0].innerText=dateDiff+" Days"
-					}else{
-						document.getElementsByClassName("result")[0].innerText=dateDiff+" Day"
+			var dateCountdown=localStorage.getItem("DateCountdown")
+			function submit(){
+				localStorage.setItem("DateCountdown",JSON.stringify(dateCountdown))
+				if(login.username){
+					showToast([
+						"Submitting",
+						"正在提交"
+					])
+					$.post("https://rths.tk/userdata/upload.php",{
+						"dir":"datecountdown/",
+						"filename":login.username,
+						"text":JSON.stringify(dateCountdown)
+					},function(){
+						showToast([
+							"Changes are saved",
+							"更改已保存"
+						])
+					})
+				}else{
+					showToast([
+						"Changes are saved",
+						"更改已保存"
+					])
+					if(!localStorage.getItem("Username")){
+						loginDialog()
 					}
-					break
 				}
 			}
-			document.getElementById("StartDate").oninput=calculate
-			document.getElementById("EndDate").oninput=calculate
+			document.getElementById("StartDate").oninput=
+			document.getElementById("EndDate").oninput=function(){
+				document.getElementsByClassName("result")[0].innerText=dateDiff(new Date(document.getElementById("StartDate").value).getTime(),new Date(document.getElementById("EndDate").value).getTime())
+			}
+			document.getElementById("Save").onclick=function(){
+				if(dateCountdown){
+					dateCountdown.date=new Date(document.getElementById("Date").value).getTime()
+					dateCountdown.name=document.getElementById("Name").value
+					dateCountdown.time=new Date().getTime()
+				}else{
+					dateCountdown={
+						"date":new Date(document.getElementById("Date").value).getTime(),
+						"name":document.getElementById("Name").value,
+						"time":new Date().getTime()
+					}
+				}
+				submit()
+			}
+			document.getElementById("Delete").onclick=function(){
+				document.getElementById("Name").value=
+				document.getElementById("Date").value=""
+				dateCountdown={
+					"date":"",
+					"name":"",
+					"time":new Date().getTime()
+				}
+				submit()
+			}
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="计算器"
 				document.getElementsByTagName("legend")[0].innerText="日期之间的差异"
 				document.getElementById("StartDateLabel").innerText="起始日期"
 				document.getElementById("EndDateLabel").innerText="结束日期"
-				document.getElementsByClassName("result")[0].innerText="距离 0 天"
+				document.getElementsByClassName("result")[0].innerText="0 天"
+				document.getElementsByTagName("legend")[1].innerText="日期倒计时"
+				document.getElementById("NameLabel").innerText="名称"
+				document.getElementById("DateLabel").innerText="日期"
+				document.getElementById("Save").innerText="保存"
+				document.getElementById("Delete").innerText="删除"
 				break
 				default:
 				document.title="Calculator"
@@ -71,9 +138,21 @@
 				document.getElementById("StartDateLabel").innerText="Start Date"
 				document.getElementById("EndDateLabel").innerText="End Date"
 				document.getElementsByClassName("result")[0].innerText="0 Day"
+				document.getElementsByTagName("legend")[1].innerText="Date Countdown"
+				document.getElementById("NameLabel").innerText="Name"
+				document.getElementById("DateLabel").innerText="Date"
+				document.getElementById("Save").innerText="Save"
+				document.getElementById("Delete").innerText="Delete"
 				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			if(dateCountdown){
+				dateCountdown=JSON.parse(dateCountdown)
+				document.getElementById("Name").value=dateCountdown.name
+				if(dateCountdown.date){
+					document.getElementById("Date").value=new Date(dateCountdown.date).toLocaleDateString()
+				}
+			}
 		</script>
 	</body>
 </html>

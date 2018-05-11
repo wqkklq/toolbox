@@ -34,7 +34,7 @@
 				line-height:25.5px;
 				min-height:275px;
 				padding:10px 15px;
-				word-break:break-all;
+				word-break:break-word;
 			}
 		</style>
 	</head>
@@ -281,7 +281,7 @@
 				localStorage.setItem("SavedText",JSON.stringify(savedText))
 				if(login.username){
 					$.ajax({
-						"url":"https://rthsoftware.azurewebsites.net/userdata/text/"+login.username+".txt",
+						"url":"https://rths.tk/userdata/text/"+login.username+".txt",
 						"data":{
 							"time":new Date().getTime()
 						},
@@ -305,8 +305,8 @@
 								load()
 							}
 						},
-						"error":function(){
-							if(savedText.text.length>0){
+						"error":function(e){
+							if(e.status!=0&&savedText.text.length>0){
 								submit(load)
 							}else{
 								load()
@@ -324,7 +324,7 @@
 					if(document.getElementsByTagName("textarea")[0].value!=""){
 						showConfirm([
 							"Do you want to close the current document?",
-							"您想要关闭当前文档吗？"
+							"您想关闭当前文档吗？"
 						],reload)
 					}else{
 						reload()
@@ -385,7 +385,7 @@
 			}
 			function runJSCode(fromShortcut){
 				if(!isEmpty()){
-					var code=document.getElementsByTagName("textarea")[0].value.replace(/coin|localStorage|runJSCode|runTrue|userInfo/gi,"").replace(/console.log/g,"mui.toast")
+					var code=document.getElementsByTagName("textarea")[0].value.replace(/coin|localStorage|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast")
 					var runTrue=function(){
 						try{
 							var result=calc(code)
@@ -464,15 +464,11 @@
 				savedText.time=new Date().getTime()
 				localStorage.setItem("SavedText",JSON.stringify(savedText))
 				if(login.username){
-					switch(language){
-						case "SimplifiedChinese":
-						mui.toast("正在提交")
-						break
-						default:
-						mui.toast("Submitting")
-						break
-					}
-					$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
+					showToast([
+						"Submitting",
+						"正在提交"
+					])
+					$.post("https://rths.tk/userdata/upload.php",{
 						"dir":"text/",
 						"filename":login.username,
 						"text":JSON.stringify(savedText)
@@ -480,25 +476,17 @@
 						if(callback){
 							callback()
 						}
-						switch(language){
-							case "SimplifiedChinese":
-							mui.toast("更改已保存")
-							break
-							default:
-							mui.toast("Changes are saved")
-							break
-						}
+						showToast([
+							"Changes are saved",
+							"更改已保存"
+						])
 					})
 				}else{
-					switch(language){
-						case "SimplifiedChinese":
-						mui.toast("更改已保存")
-						break
-						default:
-						mui.toast("Changes are saved")
-						break
-					}
-					if(userInfo){
+					showToast([
+						"Changes are saved",
+						"更改已保存"
+					])
+					if(!localStorage.getItem("Username")){
 						loginDialog()
 					}
 					if(callback){
@@ -609,7 +597,7 @@
 							url="http://"+url
 						}
 						$.ajax({
-							"url":"https://rthsoftware.azurewebsites.net/get.php",
+							"url":"https://rths.tk/get.php",
 							"data":{
 								"time":new Date().getTime(),
 								"url":url
@@ -674,7 +662,7 @@
 			document.getElementById("Delete").onclick=function(){
 				showConfirm([
 					"Do you want to delete the text document?",
-					"您想要删除此文本文档吗？"
+					"您想删除此文本文档吗？"
 				],function(){
 					if(currentItem){
 						savedText.text.splice(currentItem-1,1)
@@ -732,10 +720,7 @@
 							decoded=str
 						}
 					}catch(e){
-						showAlert([
-							e.message,
-							e.message
-						])
+						alert(e.message)
 					}
 					if(showDecoded){
 						setText(decoded)
@@ -745,12 +730,29 @@
 			document.getElementById("Speak").onclick=speak
 			document.getElementById("CreateMessageBox").onclick=function(){
 				if(!isEmpty()){
-					openWebPage("http://rthshare.tk/?alert="+encodeURI(document.getElementsByTagName("textarea")[0].value)+"&title="+encodeURI(document.getElementsByTagName("input")[0].value))
+					if(isApp){
+						$.ajax({
+							"url":"https://rths.tk/generate.php",
+							"data":{
+								"alert":document.getElementsByTagName("textarea")[0].value,
+								"title":document.getElementsByTagName("input")[0].value
+							},
+							"method":"POST",
+							"success":function(e){
+								openWebPage(e)
+							},
+							"error":function(){
+								alert(document.getElementsByTagName("textarea")[0].value)
+							}
+						})
+					}else{
+						alert(document.getElementsByTagName("textarea")[0].value)
+					}
 				}
 			}
 			document.getElementById("GenerateQRCode").onclick=function(){
 				if(!isEmpty()){
-					showImage("https://rthsoftware.azurewebsites.net/topscan.php?text="+document.getElementsByTagName("textarea")[0].value)
+					showImage("https://rths.tk/topscan.php?text="+document.getElementsByTagName("textarea")[0].value)
 				}
 			}
 			document.getElementById("GenerateMD5Value").onclick=function(){
@@ -763,14 +765,18 @@
 					if(login.username){
 						encrypt=false
 						save(function(){
-							var url="http://rthshare.tk/?username="+login.username+"&index="+currentItem
-							if(isApp){
-								openWebPage(url)
-							}else{
-								location.href=url
-							}
+							$.post("https://rths.tk/generate.php",{
+								"index":currentItem,
+								"username":login.username
+							},function(e){
+								if(isApp){
+									openWebPage(e)
+								}else{
+									location.href=e
+								}
+							})
 						})
-					}else if(userInfo){
+					}else if(!localStorage.getItem("Username")){
 						applyItem(0)
 						loginDialog()
 					}else{
