@@ -29,7 +29,7 @@
 		<header class="mui-bar mui-bar-nav title"></header>
 		<div class="mui-content">
 			<fieldset>
-				<legend></legend>
+				<legend id="DateDiff"></legend>
 				<div class="mui-input-row">
 					<label id="StartDateLabel"></label>
 					<input id="StartDate" type="date">
@@ -43,10 +43,10 @@
 				</ul>
 			</fieldset>
 			<fieldset>
-				<legend></legend>
+				<legend id="DateCountdown"></legend>
 				<div class="mui-input-row">
-					<label id="NameLabel"></label>
-					<input id="Name" type="text" autocomplete="off">
+					<label id="DateCountdownNLabel"></label>
+					<input id="DateCountdownN" type="text">
 				</div>
 				<div class="mui-input-row">
 					<label id="DateLabel"></label>
@@ -98,19 +98,19 @@
 			document.getElementById("Save").onclick=function(){
 				if(dateCountdown){
 					dateCountdown.date=new Date(document.getElementById("Date").value).getTime()
-					dateCountdown.name=document.getElementById("Name").value
+					dateCountdown.name=document.getElementById("DateCountdownN").value
 					dateCountdown.time=new Date().getTime()
 				}else{
 					dateCountdown={
 						"date":new Date(document.getElementById("Date").value).getTime(),
-						"name":document.getElementById("Name").value,
+						"name":document.getElementById("DateCountdownN").value,
 						"time":new Date().getTime()
 					}
 				}
 				submit()
 			}
 			document.getElementById("Delete").onclick=function(){
-				document.getElementById("Name").value=
+				document.getElementById("DateCountdownN").value=
 				document.getElementById("Date").value=""
 				dateCountdown={
 					"date":"",
@@ -122,24 +122,24 @@
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="计算器"
-				document.getElementsByTagName("legend")[0].innerText="日期之间的差异"
+				document.getElementById("DateDiff").innerText="日期之间的差异"
 				document.getElementById("StartDateLabel").innerText="起始日期"
 				document.getElementById("EndDateLabel").innerText="结束日期"
 				document.getElementsByClassName("result")[0].innerText="0 天"
-				document.getElementsByTagName("legend")[1].innerText="日期倒计时"
-				document.getElementById("NameLabel").innerText="名称"
+				document.getElementById("DateCountdown").innerText="日期倒计时"
+				document.getElementById("DateCountdownNLabel").innerText="名称"
 				document.getElementById("DateLabel").innerText="日期"
 				document.getElementById("Save").innerText="保存"
 				document.getElementById("Delete").innerText="删除"
 				break
 				default:
 				document.title="Calculator"
-				document.getElementsByTagName("legend")[0].innerText="Date Diff"
+				document.getElementById("DateDiff").innerText="Date Diff"
 				document.getElementById("StartDateLabel").innerText="Start Date"
 				document.getElementById("EndDateLabel").innerText="End Date"
 				document.getElementsByClassName("result")[0].innerText="0 Day"
-				document.getElementsByTagName("legend")[1].innerText="Date Countdown"
-				document.getElementById("NameLabel").innerText="Name"
+				document.getElementById("DateCountdown").innerText="Date Countdown"
+				document.getElementById("DateCountdownNLabel").innerText="Name"
 				document.getElementById("DateLabel").innerText="Date"
 				document.getElementById("Save").innerText="Save"
 				document.getElementById("Delete").innerText="Delete"
@@ -148,7 +148,7 @@
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(dateCountdown){
 				dateCountdown=JSON.parse(dateCountdown)
-				document.getElementById("Name").value=dateCountdown.name
+				document.getElementById("DateCountdownN").value=dateCountdown.name
 				if(dateCountdown.date){
 					document.getElementById("Date").value=new Date(dateCountdown.date).toLocaleDateString()
 				}
