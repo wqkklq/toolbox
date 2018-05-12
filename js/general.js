@@ -228,7 +228,8 @@ function loginDialog(){
 					"url":"https://rths.tk/userdata/verify.php",
 					"data":{
 						"email":email,
-						"password":password
+						"password":password,
+						"time":new Date().getTime()
 					},
 					"dataType":"json",
 					"method":"POST",
@@ -873,7 +874,8 @@ if(login.username){
 		"url":"https://rths.tk/userdata/verify.php",
 		"data":{
 			"email":login.email,
-			"password":login.password
+			"password":login.password,
+			"time":new Date().getTime()
 		},
 		"dataType":"json",
 		"method":"POST",
@@ -900,6 +902,7 @@ if(login.username){
 $.post("https://rths.tk/userdata/stat.php",{
 	"login":!!login.username,
 	"theme":theme,
+	"time":new Date().getTime(),
 	"url":(function(){
 		var url=location.href.replace(location.search,"").split("/")
 		return url[url.length-1]

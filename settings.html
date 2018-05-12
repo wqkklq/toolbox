@@ -96,7 +96,8 @@
 				],function(e){
 					$.post("https://rths.tk/userdata/verify.php",{
 						"email":login.email,
-						"password":MD5(e)
+						"password":MD5(e),
+						"time":new Date().getTime()
 					},function(verifyResult){
 						if(verifyResult.pass){
 							showPrompt([
@@ -148,7 +149,8 @@
 					],function(e){
 						$.post("https://rths.tk/userdata/verify.php",{
 							"email":login.email,
-							"password":MD5(e)
+							"password":MD5(e),
+							"time":new Date().getTime()
 						},function(verifyResult){
 							if(verifyResult.pass){
 								$.post("https://rths.tk/userdata/remove.php",{
