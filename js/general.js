@@ -899,13 +899,3 @@ if(login.username){
 }else if(!header){
 	loginDialog()
 }
-$.post("https://rths.tk/userdata/stat.php",{
-	"login":!!login.username,
-	"theme":theme,
-	"time":new Date().getTime(),
-	"url":(function(){
-		var url=location.href.replace(location.search,"").split("/")
-		return url[url.length-1]
-	})(),
-	"ver":ver
-})
