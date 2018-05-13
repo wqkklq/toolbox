@@ -110,17 +110,11 @@
 				document.getElementById("Date").onclick=function(){
 					var id=this.id
 					showPrompt([
-						"Enter the date",
-						"输入日期"
+						document.getElementById(id).placeholder,
+						document.getElementById(id).placeholder
 					],function(e){
 						document.getElementById(id).value=new Date(e).toLocaleDateString()
-					},null,(function(){
-						if(document.getElementById(id).value){
-							return document.getElementById(id).value
-						}else{
-							return document.getElementById(id).placeholder
-						}
-					})(),function(){
+					},null,document.getElementById(id).value,function(){
 						document.getElementById(id).value=""
 					})
 				}
@@ -160,6 +154,7 @@
 				document.getElementById("NameLabel").innerText="名称"
 				document.getElementById("Name").placeholder="输入名称"
 				document.getElementById("DateLabel").innerText="日期"
+				document.getElementById("Date").placeholder="输入日期"
 				document.getElementById("Save").innerText="保存"
 				document.getElementById("Delete").innerText="删除"
 				break
@@ -173,18 +168,21 @@
 				document.getElementById("NameLabel").innerText="Name"
 				document.getElementById("Name").placeholder="Enter the name"
 				document.getElementById("DateLabel").innerText="Date"
+				document.getElementById("Date").placeholder="Enter the date"
 				document.getElementById("Save").innerText="Save"
 				document.getElementById("Delete").innerText="Delete"
 				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			document.getElementById("Date").placeholder=new Date().toLocaleDateString()
 			if(dateCountdown){
 				dateCountdown=JSON.parse(dateCountdown)
+			}
+			if(dateCountdown&&dateCountdown.date&&dateCountdown.name){
 				document.getElementById("Name").value=dateCountdown.name
-				if(dateCountdown.date){
-					document.getElementById("Date").value=new Date(dateCountdown.date).toLocaleDateString()
-				}
+				document.getElementById("Date").value=new Date(dateCountdown.date).toLocaleDateString()
+			}else{
+				dateCountdown=null
+				document.getElementById("Date").value=new Date().toLocaleDateString()
 			}
 		</script>
 	</body>
