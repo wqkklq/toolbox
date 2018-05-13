@@ -205,6 +205,9 @@ textarea{
 .mui-input-range input[type=range]::-webkit-slider-thumb{
 	border-style:none;
 }
+.mui-input-row label~input{
+	padding-left:15px;
+}
 .mui-title{
 	color:white;
 	font-size:20px;
