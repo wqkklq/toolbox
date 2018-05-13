@@ -50,7 +50,7 @@
 				</div>
 				<div class="mui-input-row">
 					<label id="DateLabel"></label>
-					<input id="Date" type="date">
+					<input id="Date" type="text">
 				</div>
 				<ul class="menu">
 					<li id="Save" class="menu"></li>
@@ -97,12 +97,12 @@
 			}
 			document.getElementById("Save").onclick=function(){
 				if(dateCountdown){
-					dateCountdown.date=new Date(document.getElementById("Date").value).getTime()+86400000
+					dateCountdown.date=new Date(document.getElementById("Date").value).getTime()
 					dateCountdown.name=document.getElementById("DateCountdownN").value
 					dateCountdown.time=new Date().getTime()
 				}else{
 					dateCountdown={
-						"date":new Date(document.getElementById("Date").value).getTime()+86400000,
+						"date":new Date(document.getElementById("Date").value).getTime(),
 						"name":document.getElementById("DateCountdownN").value,
 						"time":new Date().getTime()
 					}
@@ -128,6 +128,7 @@
 				document.getElementsByClassName("result")[0].innerText="0 天"
 				document.getElementById("DateCountdown").innerText="日期倒计时"
 				document.getElementById("DateCountdownNLabel").innerText="名称"
+				document.getElementById("DateCountdownN").placeholder="输入名称"
 				document.getElementById("DateLabel").innerText="日期"
 				document.getElementById("Save").innerText="保存"
 				document.getElementById("Delete").innerText="删除"
@@ -140,12 +141,14 @@
 				document.getElementsByClassName("result")[0].innerText="0 Day"
 				document.getElementById("DateCountdown").innerText="Date Countdown"
 				document.getElementById("DateCountdownNLabel").innerText="Name"
+				document.getElementById("DateCountdownN").placeholder="Enter the name"
 				document.getElementById("DateLabel").innerText="Date"
 				document.getElementById("Save").innerText="Save"
 				document.getElementById("Delete").innerText="Delete"
 				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			document.getElementById("Date").placeholder=new Date().toLocaleDateString()
 			if(dateCountdown){
 				dateCountdown=JSON.parse(dateCountdown)
 				document.getElementById("DateCountdownN").value=dateCountdown.name
