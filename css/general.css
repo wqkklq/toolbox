@@ -344,7 +344,7 @@ textarea{
 	-webkit-app-region:drag;
 }
 .width-limit{
-	margin:0 auto;
+	margin:0px auto;
 	max-width:400px;
 }
 .win{
