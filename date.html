@@ -114,9 +114,21 @@
 						document.getElementById(id).placeholder
 					],function(e){
 						document.getElementById(id).value=new Date(e).toLocaleDateString()
-					},null,document.getElementById(id).value,function(){
+					},null,(function(){
+						if(document.getElementById(id).value){
+							return document.getElementById(id).value
+						}else{
+							return new Date().toLocaleDateString()
+						}
+					})(),function(){
 						document.getElementById(id).value=""
 					})
+				}
+			}else{
+				document.getElementById("Date").onclick=function(){
+					if(!this.value){
+						this.value=new Date().toLocaleDateString()
+					}
 				}
 			}
 			document.getElementById("Save").onclick=function(){
@@ -176,13 +188,10 @@
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(dateCountdown){
 				dateCountdown=JSON.parse(dateCountdown)
-			}
-			if(dateCountdown&&dateCountdown.date&&dateCountdown.name){
-				document.getElementById("Name").value=dateCountdown.name
-				document.getElementById("Date").value=new Date(dateCountdown.date).toLocaleDateString()
-			}else{
-				dateCountdown=null
-				document.getElementById("Date").value=new Date().toLocaleDateString()
+				if(dateCountdown.date&&dateCountdown.name){
+					document.getElementById("Name").value=dateCountdown.name
+					document.getElementById("Date").value=new Date(dateCountdown.date).toLocaleDateString()
+				}
 			}
 		</script>
 	</body>
