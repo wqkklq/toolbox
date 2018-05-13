@@ -96,8 +96,7 @@
 				document.getElementsByClassName("result")[0].innerText=dateDiff(new Date(document.getElementById("StartDate").value).getTime(),new Date(document.getElementById("EndDate").value).getTime())
 			}
 			if(isMobile){
-				document.getElementById("DateCountdownN").onclick=
-				document.getElementById("Date").onclick=function(){
+				document.getElementById("DateCountdownN").onclick=function(){
 					var id=this.id
 					showPrompt([
 						document.getElementById(id).placeholder,
@@ -105,6 +104,23 @@
 					],function(e){
 						document.getElementById(id).value=e
 					},null,document.getElementById(id).value,function(){
+						document.getElementById(id).value=""
+					})
+				}
+				document.getElementById("Date").onclick=function(){
+					var id=this.id
+					showPrompt([
+						"Enter the date",
+						"输入日期"
+					],function(e){
+						document.getElementById(id).value=new Date(e).toLocaleDateString()
+					},null,(function(){
+						if(document.getElementById(id).value){
+							return document.getElementById(id).value
+						}else{
+							return document.getElementById(id).placeholder
+						}
+					})(),function(){
 						document.getElementById(id).value=""
 					})
 				}
