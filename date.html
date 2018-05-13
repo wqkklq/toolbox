@@ -97,12 +97,12 @@
 			}
 			document.getElementById("Save").onclick=function(){
 				if(dateCountdown){
-					dateCountdown.date=new Date(document.getElementById("Date").value).getTime()
+					dateCountdown.date=new Date(document.getElementById("Date").value).getTime()+86400000
 					dateCountdown.name=document.getElementById("DateCountdownN").value
 					dateCountdown.time=new Date().getTime()
 				}else{
 					dateCountdown={
-						"date":new Date(document.getElementById("Date").value).getTime(),
+						"date":new Date(document.getElementById("Date").value).getTime()+86400000,
 						"name":document.getElementById("DateCountdownN").value,
 						"time":new Date().getTime()
 					}

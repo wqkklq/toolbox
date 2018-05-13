@@ -279,8 +279,8 @@
 					document.getElementById("Quote").innerText="晚安！"
 				}
 				displayDateCountdown=function(){
-					if(dateCountdown&&dateCountdown.name){
-						document.getElementById("Quote").innerText=dateCountdown.name+"：还有 "+dateDiff(new Date().getTime(),dateCountdown.date)
+					if(dateCountdown&&dateCountdown.date&&dateCountdown.name){
+						document.getElementById("Quote").innerText=dateCountdown.name+"：还有 "+dateDiff(new Date(new Date().toLocaleDateString()).getTime(),dateCountdown.date)
 						document.getElementById("Quote").onclick=function(){
 							openWindow("date")
 						}
@@ -345,8 +345,8 @@
 					document.getElementById("Quote").innerText="Good night!"
 				}
 				displayDateCountdown=function(){
-					if(dateCountdown&&dateCountdown.name){
-						document.getElementById("Quote").innerText=dateCountdown.name+": "+dateDiff(new Date().getTime(),dateCountdown.date)+" remaining"
+					if(dateCountdown&&dateCountdown.date&&dateCountdown.name){
+						document.getElementById("Quote").innerText=dateCountdown.name+": "+dateDiff(new Date(new Date().toLocaleDateString()).getTime(),dateCountdown.date)+" remaining"
 						document.getElementById("Quote").onclick=function(){
 							openWindow("date")
 						}
