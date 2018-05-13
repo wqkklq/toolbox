@@ -178,7 +178,10 @@ function initCalculator(max,calculate){
 				],function(e){
 					document.getElementById(id).value=e
 					document.getElementById(id).oninput()
-				},document.getElementById(id).type,document.getElementById(id).value)
+				},document.getElementById(id).type,document.getElementById(id).value,function(){
+					document.getElementById(id).value=0
+					document.getElementById(id).oninput()
+				})
 			}
 		}
 	}
