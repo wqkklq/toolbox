@@ -592,16 +592,12 @@
 						if(url.indexOf("http")==-1){
 							url="http://"+url
 						}
-						$.ajax({
-							"url":"https://rthsoftware.azurewebsites.net/get.php",
-							"data":{
-								"url":url
-							},
-							"success":function(e){
-								setText(e.replace(/&lt;/g,"<").replace(/&gt;/g,">"))
-								document.getElementsByTagName("input")[0].value=url
-								applyItem(0)
-							}
+						$.post("https://rthsoftware.azurewebsites.net/get.php",{
+							"url":url
+						},function(e){
+							setText(e.replace(/&lt;/g,"<").replace(/&gt;/g,">"))
+							document.getElementsByTagName("input")[0].value=url
+							applyItem(0)
 						})
 					}else{
 						showAlert([
