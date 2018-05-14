@@ -228,7 +228,7 @@ function loginDialog(){
 				newPasswordInput.focus()
 			}else{
 				$.ajax({
-					"url":"https://rths.tk/userdata/verify.php",
+					"url":"https://rthsoftware.azurewebsites.net/userdata/verify.php",
 					"data":{
 						"email":email,
 						"password":password,
@@ -256,7 +256,7 @@ function loginDialog(){
 									newPasswordInput.value=""
 									newConfirmPasswordInput.value=""
 									var newPassword=(new Date().getTime()*(Math.round(Math.random()*99)+1)).toString(36)
-									$.post("https://rths.tk/reset.php",{
+									$.post("https://rthsoftware.azurewebsites.net/reset.php",{
 										"email":email,
 										"index":e.index,
 										"password":newPassword,
@@ -279,7 +279,7 @@ function loginDialog(){
 									newConfirmPasswordInput.focus()
 								}else{
 									var username=email.split("@")[0]+new Date().getTime().toString(36)
-									$.post("https://rths.tk/userdata/signup.php",{
+									$.post("https://rthsoftware.azurewebsites.net/userdata/signup.php",{
 										"email":email,
 										"password":password,
 										"username":username
@@ -719,7 +719,7 @@ if(!isIE){
 				"An error occurs. Do you want to submit the error report?\n"+message,
 				"发生错误。您想提交错误报告吗？\n"+message
 			],function(){
-				$.post("https://rths.tk/feedback.php",{
+				$.post("https://rthsoftware.azurewebsites.net/feedback.php",{
 					"email":login.email,
 					"lang":language,
 					"name":login.username,
@@ -809,7 +809,7 @@ if(appliedTheme=="Bing"){
 		loadWallpaper()
 	}
 	$.ajax({
-		"url":"https://rths.tk/bing.php",
+		"url":"https://rthsoftware.azurewebsites.net/bing.php",
 		"data":{
 			"time":new Date().getTime()
 		},
@@ -874,7 +874,7 @@ if(isElectron){
 }
 if(login.username){
 	$.ajax({
-		"url":"https://rths.tk/userdata/verify.php",
+		"url":"https://rthsoftware.azurewebsites.net/userdata/verify.php",
 		"data":{
 			"email":login.email,
 			"password":login.password,

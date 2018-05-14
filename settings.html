@@ -94,7 +94,7 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
-					$.post("https://rths.tk/userdata/verify.php",{
+					$.post("https://rthsoftware.azurewebsites.net/userdata/verify.php",{
 						"email":login.email,
 						"password":MD5(e),
 						"time":new Date().getTime()
@@ -110,7 +110,7 @@
 								],function(confirmPassword){
 									if(confirmPassword==newPassword){
 										localStorage.setItem("Password",MD5(newPassword))
-										$.post("https://rths.tk/reset.php",{
+										$.post("https://rthsoftware.azurewebsites.net/reset.php",{
 											"index":verifyResult.index,
 											"passwordmd5":MD5(newPassword)
 										},function(){
@@ -147,13 +147,13 @@
 						"Enter your current password",
 						"输入您的当前密码"
 					],function(e){
-						$.post("https://rths.tk/userdata/verify.php",{
+						$.post("https://rthsoftware.azurewebsites.net/userdata/verify.php",{
 							"email":login.email,
 							"password":MD5(e),
 							"time":new Date().getTime()
 						},function(verifyResult){
 							if(verifyResult.pass){
-								$.post("https://rths.tk/userdata/remove.php",{
+								$.post("https://rthsoftware.azurewebsites.net/userdata/remove.php",{
 									"index":verifyResult.index,
 									"username":login.username
 								},logOut)

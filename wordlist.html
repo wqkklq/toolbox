@@ -180,7 +180,7 @@
 							}
 						}else{
 							$.ajax({
-								"url":"https://rths.tk/shanbay.php",
+								"url":"https://rthsoftware.azurewebsites.net/shanbay.php",
 								"data":{
 									"word":newWord
 								},
@@ -427,7 +427,7 @@
 			}
 			function loadAdminWordList(){
 				$.ajax({
-					"url":"https://rths.tk/userdata/wordlist/admin.txt",
+					"url":"https://rthsoftware.azurewebsites.net/userdata/wordlist/admin.txt",
 					"data":{
 						"time":new Date().getTime()
 					},
@@ -465,14 +465,14 @@
 				})
 			}
 			function loadFriendWordList(email){
-				$.post("https://rths.tk/userdata/verify.php",{
+				$.post("https://rthsoftware.azurewebsites.net/userdata/verify.php",{
 					"email":email,
 					"password":new Date().getTime(),
 					"time":new Date().getTime()
 				},function(verifyResult){
 					if(verifyResult.username){
 						$.ajax({
-							"url":"https://rths.tk/userdata/wordlist/"+verifyResult.username+".txt",
+							"url":"https://rthsoftware.azurewebsites.net/userdata/wordlist/"+verifyResult.username+".txt",
 							"data":{
 								"time":new Date().getTime()
 							},
@@ -627,7 +627,7 @@
 				localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
 				if(login.username){
 					$.ajax({
-						"url":"https://rths.tk/userdata/wordlist/"+login.username+".txt",
+						"url":"https://rthsoftware.azurewebsites.net/userdata/wordlist/"+login.username+".txt",
 						"data":{
 							"time":new Date().getTime()
 						},
@@ -909,7 +909,7 @@
 						"Submitting",
 						"正在提交"
 					])
-					$.post("https://rths.tk/userdata/upload.php",{
+					$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
 						"dir":"wordlist/",
 						"filename":login.username,
 						"text":JSON.stringify(savedWordList)

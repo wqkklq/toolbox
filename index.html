@@ -205,7 +205,7 @@
 			}
 			function links(){
 				$.ajax({
-					"url":"https://rths.tk/links.php",
+					"url":"https://rthsoftware.azurewebsites.net/links.php",
 					"data":{
 						"lang":language,
 						"time":new Date().getTime()
@@ -238,7 +238,7 @@
 			function submitDateCountdown(){
 				displayDateCountdown()
 				if(login.username){
-					$.post("https://rths.tk/userdata/upload.php",{
+					$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
 						"dir":"datecountdown/",
 						"filename":login.username,
 						"text":JSON.stringify(dateCountdown)
@@ -290,7 +290,7 @@
 				}
 				getSentence=function(){
 					$.ajax({
-						"url":"https://rths.tk/sentences.php",
+						"url":"https://rthsoftware.azurewebsites.net/sentences.php",
 						"data":{
 							"lang":language,
 							"time":new Date().getTime()
@@ -424,7 +424,7 @@
 			}
 			if(login.username){
 				$.ajax({
-					"url":"https://rths.tk/userdata/datecountdown/"+login.username+".txt",
+					"url":"https://rthsoftware.azurewebsites.net/userdata/datecountdown/"+login.username+".txt",
 					"data":{
 						"time":new Date().getTime()
 					},
