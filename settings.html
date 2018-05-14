@@ -53,10 +53,11 @@
 				<li id="Login" class="menu"></li>
 				<span id="AccountManagement">
 					<li id="ChangePassword" class="menu"></li>
+					<li id="SwitchAccount" class="menu"></li>
 					<li id="DeleteAccount" class="menu"></li>
 					<li id="LogOut" class="menu"></li>
-					<li id="SwitchAccount" class="menu"></li>
 				</span>
+				<li id="ClearLocalStorage" class="menu"></li>
 			</ul>
 			<p id="Introduction"></p>
 		</div>
@@ -96,8 +97,7 @@
 				],function(e){
 					$.post("https://rthsoftware.azurewebsites.net/userdata/verify.php",{
 						"email":login.email,
-						"password":MD5(e),
-						"time":new Date().getTime()
+						"password":MD5(e)
 					},function(verifyResult){
 						if(verifyResult.pass){
 							showPrompt([
@@ -149,8 +149,7 @@
 					],function(e){
 						$.post("https://rthsoftware.azurewebsites.net/userdata/verify.php",{
 							"email":login.email,
-							"password":MD5(e),
-							"time":new Date().getTime()
+							"password":MD5(e)
 						},function(verifyResult){
 							if(verifyResult.pass){
 								$.post("https://rthsoftware.azurewebsites.net/userdata/remove.php",{
@@ -168,6 +167,15 @@
 				})
 			}
 			document.getElementById("LogOut").onclick=logOut
+			document.getElementById("ClearLocalStorage").onclick=function(){
+				showConfirm([
+					"Do you want to clear the local storage?",
+					"您想清空本地存储吗？"
+				],function(){
+					localStorage.clear()
+					restart()
+				})
+			}
 			document.getElementById("About").onclick=function(){
 				openWindow("about")
 			}
@@ -183,9 +191,10 @@
 				document.getElementById("MyEmail").innerText="未登录"
 				document.getElementById("Login").innerText="登录"
 				document.getElementById("ChangePassword").innerText="更改密码"
+				document.getElementById("SwitchAccount").innerText="切换账号"
 				document.getElementById("DeleteAccount").innerText="删除账号"
 				document.getElementById("LogOut").innerText="退出登录"
-				document.getElementById("SwitchAccount").innerText="切换账号"
+				document.getElementById("ClearLocalStorage").innerText="清空本地存储"
 				document.getElementById("Introduction").innerText="登录后，您可以在 https://t.rths.tk/ 查看您保存的单词表和文本文档。"
 				document.getElementById("About").innerText="关于 RTH 工具箱"
 				break
@@ -200,9 +209,10 @@
 				document.getElementById("MyEmail").innerText="Not logged in"
 				document.getElementById("Login").innerText="Login"
 				document.getElementById("ChangePassword").innerText="Change Password"
+				document.getElementById("SwitchAccount").innerText="Switch Account"
 				document.getElementById("DeleteAccount").innerText="Delete Account"
 				document.getElementById("LogOut").innerText="Log Out"
-				document.getElementById("SwitchAccount").innerText="Switch Account"
+				document.getElementById("ClearLocalStorage").innerText="Clear Local Storage"
 				document.getElementById("Introduction").innerText="After logging in, you can view your saved word lists and text documents at https://t.rths.tk/."
 				document.getElementById("About").innerText="About RTH Toolbox"
 				break

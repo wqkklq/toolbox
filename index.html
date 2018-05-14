@@ -178,9 +178,58 @@
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var currentHour=new Date().getHours(),
-			dateCountdown=localStorage.getItem("DateCountdown"),
-			displayDateCountdown,
-			getSentence
+			dateCountdown=localStorage.getItem("DateCountdown")
+			function displayDateCountdown(){
+				if(dateCountdown&&dateCountdown.date&&dateCountdown.name){
+					switch(language){
+						case "SimplifiedChinese":
+						document.getElementById("Quote").innerText=dateCountdown.name+"：还有 "+dateDiff(new Date(new Date().toLocaleDateString()).getTime(),dateCountdown.date)
+						break
+						default:
+						document.getElementById("Quote").innerText=dateCountdown.name+": "+dateDiff(new Date(new Date().toLocaleDateString()).getTime(),dateCountdown.date)+" remaining"
+						break
+					}
+					document.getElementById("Quote").onclick=function(){
+						openWindow("date")
+					}
+				}else{
+					getSentence()
+				}
+			}
+			function getSentence(){
+				$.post("https://rthsoftware.azurewebsites.net/sentences.php",{
+					"lang":language,
+					"ver":ver
+				},function(e){
+					if(e){
+						document.getElementById("Quote").innerText=e
+						document.getElementById("Quote").oncontextmenu=
+						document.getElementById("Quote").onclick=function(mouse){
+							showMenu(mouse,[{
+								"onclick":function(){
+									openWebPage("https://so.gushiwen.org/search.aspx?value="+e)
+									closeMenu()
+								},
+								"text":[
+									"Look Up",
+									"查询"
+								]
+							},{
+								"onclick":function(){
+									getSentence()
+									closeMenu()
+								},
+								"text":[
+									"Change",
+									"更改"
+								]
+							}])
+							return false
+						}
+						resize()
+					}
+				})
+			}
 			function getToolbox(){
 				if(isAndroid){
 					if(navigator.language=="zh-CN"){
@@ -204,23 +253,18 @@
 				}
 			}
 			function links(){
-				$.ajax({
-					"url":"https://rthsoftware.azurewebsites.net/links.php",
-					"data":{
-						"lang":language,
-						"time":new Date().getTime()
-					},
-					"success":function(e){
-						switch(language){
-							case "SimplifiedChinese":
-							document.getElementsByClassName("home-title")[0].innerText="友情链接"
-							break
-							default:
-							document.getElementsByClassName("home-title")[0].innerText="Links"
-							break
-						}
-						document.getElementsByTagName("ul")[0].innerHTML=e
+				$.post("https://rthsoftware.azurewebsites.net/links.php",{
+					"lang":language
+				},function(e){
+					switch(language){
+						case "SimplifiedChinese":
+						document.getElementsByClassName("home-title")[0].innerText="友情链接"
+						break
+						default:
+						document.getElementsByClassName("home-title")[0].innerText="Links"
+						break
 					}
+					document.getElementsByTagName("ul")[0].innerHTML=e
 				})
 			}
 			function resize(){
@@ -278,52 +322,6 @@
 				}else if(currentHour>=21&&currentHour<=23||currentHour>=0&&currentHour<=5){
 					document.getElementById("Quote").innerText="晚安！"
 				}
-				displayDateCountdown=function(){
-					if(dateCountdown&&dateCountdown.date&&dateCountdown.name){
-						document.getElementById("Quote").innerText=dateCountdown.name+"：还有 "+dateDiff(new Date(new Date().toLocaleDateString()).getTime(),dateCountdown.date)
-						document.getElementById("Quote").onclick=function(){
-							openWindow("date")
-						}
-					}else{
-						getSentence()
-					}
-				}
-				getSentence=function(){
-					$.ajax({
-						"url":"https://rthsoftware.azurewebsites.net/sentences.php",
-						"data":{
-							"lang":language,
-							"time":new Date().getTime()
-						},
-						"success":function(e){
-							document.getElementById("Quote").innerText=e
-							document.getElementById("Quote").oncontextmenu=
-							document.getElementById("Quote").onclick=function(mouse){
-								showMenu(mouse,[{
-									"onclick":function(){
-										openWebPage("https://so.gushiwen.org/search.aspx?value="+e)
-										closeMenu()
-									},
-									"text":[
-										"Look Up",
-										"查询"
-									]
-								},{
-									"onclick":function(){
-										getSentence()
-										closeMenu()
-									},
-									"text":[
-										"Change",
-										"更改"
-									]
-								}])
-								return false
-							}
-							resize()
-						}
-					})
-				}
 				break
 				default:
 				document.title="RTH Toolbox"
@@ -343,14 +341,6 @@
 					document.getElementById("Quote").innerText="Good evening!"
 				}else if(currentHour>=21&&currentHour<=23||currentHour>=0&&currentHour<=5){
 					document.getElementById("Quote").innerText="Good night!"
-				}
-				displayDateCountdown=function(){
-					if(dateCountdown&&dateCountdown.date&&dateCountdown.name){
-						document.getElementById("Quote").innerText=dateCountdown.name+": "+dateDiff(new Date(new Date().toLocaleDateString()).getTime(),dateCountdown.date)+" remaining"
-						document.getElementById("Quote").onclick=function(){
-							openWindow("date")
-						}
-					}
 				}
 				break
 			}

@@ -231,8 +231,7 @@ function loginDialog(){
 					"url":"https://rthsoftware.azurewebsites.net/userdata/verify.php",
 					"data":{
 						"email":email,
-						"password":password,
-						"time":new Date().getTime()
+						"password":password
 					},
 					"dataType":"json",
 					"method":"POST",
@@ -810,9 +809,6 @@ if(appliedTheme=="Bing"){
 	}
 	$.ajax({
 		"url":"https://rthsoftware.azurewebsites.net/bing.php",
-		"data":{
-			"time":new Date().getTime()
-		},
 		"success":function(e){
 			localStorage.setItem("Bing",e)
 			savedBingWallpaper=e
@@ -877,8 +873,7 @@ if(login.username){
 		"url":"https://rthsoftware.azurewebsites.net/userdata/verify.php",
 		"data":{
 			"email":login.email,
-			"password":login.password,
-			"time":new Date().getTime()
+			"password":login.password
 		},
 		"dataType":"json",
 		"method":"POST",

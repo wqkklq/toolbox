@@ -103,10 +103,6 @@
 				}
 				edit(true)
 			}
-			function clearData(){
-				localStorage.clear()
-				restart()
-			}
 			function count(){
 				var wordCount=(document.getElementsByTagName("textarea")[0].value.match(/[a-z]+|[\u4E00-\uFA29]/ig)||[]).length
 				if(wordCount<=0){
@@ -404,7 +400,7 @@
 						}
 					}
 					if(code.indexOf("switch(language)")==-1){
-						if(/clearData|cordova|eval|require/.test(code)){
+						if(/cordova|eval|require/.test(code)){
 							showConfirm([
 								"This code can harm your device",
 								"此代码可能会对您的设备有害"
@@ -599,7 +595,6 @@
 						$.ajax({
 							"url":"https://rthsoftware.azurewebsites.net/get.php",
 							"data":{
-								"time":new Date().getTime(),
 								"url":url
 							},
 							"success":function(e){

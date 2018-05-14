@@ -467,8 +467,7 @@
 			function loadFriendWordList(email){
 				$.post("https://rthsoftware.azurewebsites.net/userdata/verify.php",{
 					"email":email,
-					"password":new Date().getTime(),
-					"time":new Date().getTime()
+					"password":new Date().getTime()
 				},function(verifyResult){
 					if(verifyResult.username){
 						$.ajax({
