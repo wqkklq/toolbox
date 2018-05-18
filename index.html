@@ -230,26 +230,27 @@
 					}
 				})
 			}
-			function getToolbox(){
+			function getToolbox(newWindow){
+				var url
 				if(isAndroid){
 					if(navigator.language=="zh-CN"){
-						location.href="https://www.coolapk.com/apk/163867"
+						url="https://www.coolapk.com/apk/163867"
 					}else{
-						location.href="https://play.google.com/store/apps/details?id=shangzhenyang.rthtoolbox"
+						url="https://play.google.com/store/apps/details?id=shangzhenyang.rthtoolbox"
 					}
 				}else if(isiOS){
-					location.href="https://itunes.apple.com/app/rth-toolbox/id1294479577"
+					url="https://itunes.apple.com/app/rth-toolbox/id1294479577"
 				}else if(isWindows){
-					location.href="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Windows_2.zip"
+					url="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Windows_2.zip"
 				}else if(isMac){
-					location.href="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_macOS.zip"
+					url="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_macOS.zip"
 				}else if(isLinux){
-					location.href="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Linux.zip"
+					url="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Linux.zip"
 				}
-				if(searchURL("action")){
-					setTimeout(function(){
-						location.search=""
-					},1000)
+				if(newWindow){
+					open(url)
+				}else{
+					location.href=url
 				}
 			}
 			function links(){
@@ -301,7 +302,9 @@
 			document.getElementsByClassName("mui-icon-settings")[0].onclick=function(){
 				openWindow("settings")
 			}
-			document.getElementsByTagName("button")[0].onclick=getToolbox
+			document.getElementsByTagName("button")[0].onclick=function(){
+				getToolbox(true)
+			}
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="RTH 工具箱"
@@ -352,7 +355,12 @@
 			if(searchURL("action")){
 				switch(searchURL("action").toLowerCase()){
 					case "dl":
-					getToolbox()
+					showConfirm([
+						"Do you want to download RTH Toolbox?",
+						"您想下载 RTH 工具箱吗？"
+					],function(){
+						getToolbox(false)
+					})
 					break
 					case "links":
 					links()
@@ -387,7 +395,9 @@
 								showConfirm([
 									"There is an update available. Do you want to update?",
 									"有更新可用。您想更新吗？"
-								],getToolbox)
+								],function(){
+									getToolbox(false)
+								})
 							}else if(isElectron){
 								location.href="electron/update.html"
 							}
