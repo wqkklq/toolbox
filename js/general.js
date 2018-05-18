@@ -22,7 +22,7 @@ login={
 },
 recentInput=0,
 theme=localStorage.getItem("Theme"),
-ver="9.5"
+ver="9.6"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -114,7 +114,9 @@ function calc(code){
 function closeMenu(){
 	document.getElementsByClassName("popup-menu")[0].style.opacity="0"
 	setTimeout(function(){
-		document.body.removeChild(document.getElementsByClassName("popup-menu")[0])
+		try{
+			document.body.removeChild(document.getElementsByClassName("popup-menu")[0])
+		}catch(e){}
 	},250)
 }
 function dateDiff(startDate,endDate){
@@ -315,14 +317,14 @@ function loginDialog(){
 		newEmailInput.name="email"
 		newEmailInput.type="email"
 		newEmailInput.onkeydown=function(e){
-			if(e.keyCode==13){
+			if(e.keyCode==13&&this.value){
 				newPasswordInput.focus()
 			}
 		}
 		newPasswordInput.name="password"
 		newPasswordInput.type="password"
 		newPasswordInput.onkeydown=function(e){
-			if(e.keyCode==13){
+			if(e.keyCode==13&&this.value){
 				if(newConfirmPasswordInput.style.display=="none"){
 					submitLogin()
 				}else{
@@ -333,7 +335,7 @@ function loginDialog(){
 		newConfirmPasswordInput.type="password"
 		newConfirmPasswordInput.style.display="none"
 		newConfirmPasswordInput.onkeydown=function(e){
-			if(e.keyCode==13){
+			if(e.keyCode==13&&this.value){
 				submitLogin()
 			}
 		}
@@ -346,7 +348,9 @@ function loginDialog(){
 			if(newH1.innerText==newLoginButton.innerText){
 				newDiv.style.opacity=""
 				setTimeout(function(){
-					document.body.removeChild(newDiv)
+					try{
+						document.body.removeChild(newDiv)
+					}catch(e){}
 				},250)
 			}else{
 				newH1.innerText=newLoginButton.innerText
@@ -513,7 +517,9 @@ function showImage(src){
 	newCloseDiv.onclick=function(){
 		newDiv.style.opacity="0"
 		setTimeout(function(){
-			document.body.removeChild(newDiv)
+			try{
+				document.body.removeChild(newDiv)
+			}catch(e){}
 		},250)
 	}
 	newSaveDiv.onclick=function(){
@@ -622,7 +628,9 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 		}
 		newDiv.style.opacity=""
 		setTimeout(function(){
-			document.body.removeChild(newDiv)
+			try{
+				document.body.removeChild(newDiv)
+			}catch(e){}
 		},250)
 	}
 	newOKButton.onclick=function(){
@@ -638,7 +646,9 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 		setTimeout(function(){
 			newDiv.style.opacity=""
 			setTimeout(function(){
-				document.body.removeChild(newDiv)
+				try{
+					document.body.removeChild(newDiv)
+				}catch(e){}
 			},250)
 		},25)
 	}
@@ -894,6 +904,6 @@ if(login.username){
 			login.username=null
 		}
 	})
-}else if(!header){
+}else if(!header&&!searchURL("action")){
 	loginDialog()
 }
