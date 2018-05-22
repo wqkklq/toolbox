@@ -585,28 +585,16 @@
 					"Enter the URL",
 					"输入网址"
 				],function(url){
-					var type=url.split(".")
-					type=type[type.length-1]
-					if(/c|tk/.test(type)&&type.indexOf("css")==-1){
-						type="html"
+					if(url.indexOf("http")==-1){
+						url="http://"+url
 					}
-					if(/css|html|js|php|txt/.test(type)){
-						if(url.indexOf("http")==-1){
-							url="http://"+url
-						}
-						$.post("https://rthsoftware.azurewebsites.net/get.php",{
-							"url":url
-						},function(e){
-							setText(e.replace(/&lt;/g,"<").replace(/&gt;/g,">"))
-							document.getElementsByTagName("input")[0].value=url
-							applyItem(0)
-						})
-					}else{
-						showAlert([
-							"Unable to open this type of file",
-							"无法打开此类文件"
-						])
-					}
+					$.post("https://rthsoftware.azurewebsites.net/get.php",{
+						"url":url
+					},function(e){
+						setText(e)
+						document.getElementsByTagName("input")[0].value=url
+						applyItem(0)
+					})
 				})
 			}
 			document.getElementById("Save").onclick=function(){
