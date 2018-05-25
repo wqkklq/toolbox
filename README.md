@@ -32,10 +32,10 @@ You can get RTH Toolbox on App Store, Google Play and Coolapk.
 
 ---
 
-For more details: [http://rths.tk/](http://rths.tk/)
+For more details: [https://rths.tk/](https://rths.tk/)
 
-更多详情请访问：[http://rths.tk/](http://rths.tk/)
+更多详情请访问：[https://rths.tk/](https://rths.tk/)
 
-Use RTH Toolbox Online: [http://t.rths.tk/](http://t.rths.tk/)
+Use RTH Toolbox Online: [https://t.rths.tk/](https://t.rths.tk/)
 
-使用 RTH 工具箱网页版：[http://t.rths.tk/](http://t.rths.tk/)
+使用 RTH 工具箱网页版：[https://t.rths.tk/](https://t.rths.tk/)
