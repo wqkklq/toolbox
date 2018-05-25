@@ -254,21 +254,6 @@
 					location.href=url
 				}
 			}
-			function links(){
-				$.post("https://rthsoftware.azurewebsites.net/links.php",{
-					"lang":language
-				},function(e){
-					switch(language){
-						case "SimplifiedChinese":
-						document.getElementsByClassName("home-title")[0].innerText="友情链接"
-						break
-						default:
-						document.getElementsByClassName("home-title")[0].innerText="Links"
-						break
-					}
-					document.getElementsByTagName("ul")[0].innerHTML=e
-				})
-			}
 			function resize(){
 				if(!isApp||!isMac){
 					if(!isApp){
@@ -362,11 +347,12 @@
 					],function(){
 						getToolbox(false)
 					},function(){
-						close()
+						if(window.history.length>1){
+							history.go(-1)
+						}else{
+							close()
+						}
 					})
-					break
-					case "links":
-					links()
 					break
 					default:break;
 				}

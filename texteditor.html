@@ -196,7 +196,17 @@
 						"Replace with",
 						"替换为"
 					],function(replaceWith){
-						setText(document.getElementsByTagName("textarea")[0].value.replace(new RegExp(e,"g"),replaceWith))
+						try{
+							setText(document.getElementsByTagName("textarea")[0].value.replace(new RegExp(e,"g"),replaceWith))
+						}catch(e){
+							mui.toast(e.message)
+						}
+					},null,null,function(){
+						try{
+							setText(document.getElementsByTagName("textarea")[0].value.replace(new RegExp(e,"g"),""))
+						}catch(e){
+							mui.toast(e.message)
+						}
 					})
 				},"text",null,null,function(){
 					setText(document.getElementsByTagName("textarea")[0].value,true)
@@ -711,24 +721,15 @@
 			document.getElementById("Speak").onclick=speak
 			document.getElementById("CreateMessageBox").onclick=function(){
 				if(!isEmpty()){
-					if(isApp){
-						$.ajax({
-							"url":"https://rthsoftware.azurewebsites.net/generate.php",
-							"data":{
-								"alert":document.getElementsByTagName("textarea")[0].value,
-								"title":document.getElementsByTagName("input")[0].value
-							},
-							"method":"POST",
-							"success":function(e){
-								openWebPage(e)
-							},
-							"error":function(){
-								alert(document.getElementsByTagName("textarea")[0].value)
-							}
-						})
-					}else{
-						alert(document.getElementsByTagName("textarea")[0].value)
-					}
+					alert(document.getElementsByTagName("textarea")[0].value)
+					$.post("https://rthsoftware.azurewebsites.net/generate.php",{
+						"alert":document.getElementsByTagName("textarea")[0].value,
+						"title":document.getElementsByTagName("input")[0].value
+					},function(e){
+						showPrompt(null,function(){
+							openWebPage(e)
+						},null,e)
+					})
 				}
 			}
 			document.getElementById("GenerateQRCode").onclick=function(){
@@ -750,11 +751,9 @@
 								"index":currentItem,
 								"username":login.username
 							},function(e){
-								if(isApp){
+								showPrompt(null,function(){
 									openWebPage(e)
-								}else{
-									location.href=e
-								}
+								},null,e)
 							})
 						})
 					}else if(!localStorage.getItem("Username")){

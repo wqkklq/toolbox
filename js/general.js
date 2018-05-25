@@ -258,7 +258,6 @@ function loginDialog(){
 									newConfirmPasswordInput.value=""
 									var newPassword=(new Date().getTime()*(Math.round(Math.random()*99)+1)).toString(36)
 									$.post("https://rthsoftware.azurewebsites.net/reset.php",{
-										"email":email,
 										"index":e.index,
 										"password":newPassword,
 										"passwordmd5":MD5(newPassword)
@@ -877,6 +876,9 @@ if(isElectron){
 		newDiv.appendChild(newCloseDiv)
 		document.body.appendChild(newDiv)
 	}
+}
+if(name&&document.referrer.indexOf("https://rths.tk")!=-1){
+	login=JSON.parse(name)
 }
 if(login.username){
 	$.ajax({
