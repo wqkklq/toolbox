@@ -14,6 +14,9 @@
 			footer div{
 				width:50%;
 			}
+			p{
+				margin:5px;
+			}
 			textarea{
 				display:none;
 				margin:0px;
@@ -22,6 +25,7 @@
 				display:none;
 				margin-bottom:60px;
 			}
+			p:first-of-type,
 			.edit ul.menu{
 				margin-top:15px
 			}
@@ -55,6 +59,8 @@
 				</div>
 				<textarea></textarea>
 				<div class="text-view"></div>
+				<p id="Created"></p>
+				<p id="Modified"></p>
 				<ul class="menu">
 					<li id="SaveAs" class="menu"></li>
 					<li id="Delete" class="menu"></li>
@@ -328,6 +334,8 @@
 			function newDoc(){
 				if(document.getElementsByClassName("start")[0].style.display==""){
 					edit(true)
+					document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+					document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
 				}else{
 					if(document.getElementsByTagName("textarea")[0].value!=""){
 						showConfirm([
@@ -379,6 +387,8 @@
 				}
 				setText(text)
 				document.getElementsByTagName("input")[0].value=savedText.text[serialNumber-1].title
+				document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date(savedText.text[serialNumber-1].created).toLocaleString()
+				document.getElementById("Modified").getElementsByTagName("span")[0].innerText=savedText.text[serialNumber-1].time
 				applyItem(serialNumber)
 			}
 			function reload(){
@@ -426,7 +436,8 @@
 				}
 			}
 			function save(callback){
-				var text
+				var text,
+				time=new Date().toLocaleString()
 				if(encrypt){
 					text=encryptText(document.getElementsByTagName("textarea")[0].value,"RTH")
 				}else{
@@ -435,17 +446,19 @@
 				if(savedText&&savedText.text&&savedText.text[currentItem-1]){
 					savedText.text[currentItem-1].encrypt=encrypt
 					savedText.text[currentItem-1].text=text
-					savedText.text[currentItem-1].time=new Date().toLocaleString()
+					savedText.text[currentItem-1].time=time
 					savedText.text[currentItem-1].title=document.getElementsByTagName("input")[0].value
 				}else{
 					savedText.text.push({
+						"created":new Date().getTime(),
 						"encrypt":encrypt,
 						"text":text,
-						"time":new Date().toLocaleString(),
+						"time":time,
 						"title":document.getElementsByTagName("input")[0].value
 					})
 					currentItem=savedText.text.length
 				}
+				document.getElementById("Modified").getElementsByTagName("span")[0].innerText=time
 				submit(function(){
 					if(callback){
 						callback()
@@ -818,6 +831,8 @@
 				document.getElementsByTagName("input")[0].placeholder="标题"
 				document.getElementById("Save").innerText="保存"
 				document.getElementById("RunJSCode").innerText="运行"
+				document.getElementById("Created").innerHTML="创建时间：<span></span>"
+				document.getElementById("Modified").innerHTML="修改时间：<span></span>"
 				document.getElementById("SaveAs").innerText="另存为"
 				document.getElementById("Delete").innerText="删除"
 				document.getElementById("FindReplace").innerText="查找和替换"
@@ -842,6 +857,8 @@
 				document.getElementsByTagName("input")[0].placeholder="Title"
 				document.getElementById("Save").innerText="Save"
 				document.getElementById("RunJSCode").innerText="Run"
+				document.getElementById("Created").innerHTML="Created: <span></span>"
+				document.getElementById("Modified").innerHTML="Modified: <span></span>"
 				document.getElementById("SaveAs").innerText="Save As"
 				document.getElementById("Delete").innerText="Delete"
 				document.getElementById("FindReplace").innerText="Find & Replace"
