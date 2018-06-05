@@ -197,36 +197,57 @@
 				}
 			}
 			function getSentence(){
-				$.post("https://rthsoftware.azurewebsites.net/sentences.php",{
-					"lang":language,
-					"ver":ver
-				},function(e){
-					if(e){
-						document.getElementById("Quote").innerText=e
-						document.getElementById("Quote").oncontextmenu=
-						document.getElementById("Quote").onclick=function(mouse){
-							showMenu(mouse,[{
-								"onclick":function(){
-									openWebPage("https://so.gushiwen.org/search.aspx?value="+e)
-									closeMenu()
-								},
-								"text":[
-									"Look Up",
-									"查询"
-								]
-							},{
-								"onclick":function(){
-									getSentence()
-									closeMenu()
-								},
-								"text":[
-									"Change",
-									"更改"
-								]
-							}])
-							return false
+				$.ajax({
+					"url":"https://rthapi.tk/rs/",
+					"data":{
+						"encode":"text",
+						"language":(function(){
+							switch(language){
+								case "SimplifiedChinese":
+								return "chs"
+								break
+								default:
+								return "en"
+								break
+							}
+						})(),
+						"username":"shangzhenyjg9k10x4"
+					},
+					"success":function(e){
+						if(e){
+							document.getElementById("Quote").innerText=e
+							document.getElementById("Quote").oncontextmenu=
+							document.getElementById("Quote").onclick=function(mouse){
+								showMenu(mouse,[{
+									"onclick":function(){
+										switch(language){
+											case "SimplifiedChinese":
+											openWebPage("https://so.gushiwen.org/search.aspx?value="+e)
+											break
+											default:
+											openWebPage("https://bing.com/search?q="+e)
+											break
+										}
+										closeMenu()
+									},
+									"text":[
+										"Look Up",
+										"查询"
+									]
+								},{
+									"onclick":function(){
+										getSentence()
+										closeMenu()
+									},
+									"text":[
+										"Change",
+										"更改"
+									]
+								}])
+								return false
+							}
+							resize()
 						}
-						resize()
 					}
 				})
 			}
@@ -269,7 +290,7 @@
 			function submitDateCountdown(){
 				displayDateCountdown()
 				if(login.username){
-					$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
+					$.post("https://rthapi.tk/userdata/upload.php",{
 						"dir":"datecountdown/",
 						"filename":login.username,
 						"text":JSON.stringify(dateCountdown)
@@ -412,27 +433,19 @@
 				dateCountdown=JSON.parse(dateCountdown)
 			}
 			if(login.username){
-				$.ajax({
-					"url":"https://rthsoftware.azurewebsites.net/userdata/datecountdown/"+login.username+".txt",
-					"data":{
-						"time":new Date().getTime()
-					},
-					"dataType":"json",
-					"success":function(e){
-						if(!dateCountdown||e.time>dateCountdown.time){
-							dateCountdown=e
-							localStorage.setItem("DateCountdown",JSON.stringify(e))
-						}else if(dateCountdown.time>e.time){
-							submitDateCountdown()
-						}
+				getJSON("https://rthapi.tk/userdata/datecountdown/"+login.username+".txt",function(e){
+					if(!dateCountdown||e.time>dateCountdown.time){
+						dateCountdown=e
+						localStorage.setItem("DateCountdown",JSON.stringify(e))
+					}else if(dateCountdown.time>e.time){
+						submitDateCountdown()
+					}
+					displayDateCountdown()
+				},function(e){
+					if(e.status==0){
 						displayDateCountdown()
-					},
-					"error":function(e){
-						if(e.status==0){
-							displayDateCountdown()
-						}else if(dateCountdown){
-							submitDateCountdown()
-						}
+					}else if(dateCountdown){
+						submitDateCountdown()
 					}
 				})
 			}else{

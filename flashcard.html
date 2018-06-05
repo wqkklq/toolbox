@@ -90,29 +90,22 @@
 				}else{
 					document.getElementById("Previous").style.display="none"
 					document.getElementById("Next").style.display="none"
-					$.ajax({
-						"url":"https:rthsoftware.azurewebsites.net/shanbay.php",
-						"data":{
-							"word":currentList[progress-1].word
-						},
-						"dataType":"json",
-						"success":function(e){
-							if(e.msg=="SUCCESS"){
-								document.getElementById("Pronunciation").innerText=e.data.pronunciation
-								audioURL=e.data.audio
-								document.getElementById("CNDefinition").innerText=e.data.cn_definition.defn
-								document.getElementById("ENDefinition").innerText=e.data.en_definition.defn
-								dictChanged()
-								if(wordWithoutSpace.indexOf(" ")==-1){
-									localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
-									localStorage.setItem(wordWithoutSpace+"_Audio",e.data.audio)
-									localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
-									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
-								}
+					getJSON("http://api.shanbay.com/bdc/search/?word="+encodeURIComponent(currentList[progress-1].word),function(e){
+						if(e.msg=="SUCCESS"){
+							document.getElementById("Pronunciation").innerText=e.data.pronunciation
+							audioURL=e.data.audio
+							document.getElementById("CNDefinition").innerText=e.data.cn_definition.defn
+							document.getElementById("ENDefinition").innerText=e.data.en_definition.defn
+							dictChanged()
+							if(wordWithoutSpace.indexOf(" ")==-1){
+								localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
+								localStorage.setItem(wordWithoutSpace+"_Audio",e.data.audio)
+								localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
+								localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
 							}
-							document.getElementById("Previous").style.display=""
-							document.getElementById("Next").style.display=""
 						}
+						document.getElementById("Previous").style.display=""
+						document.getElementById("Next").style.display=""
 					})
 				}
 			}
@@ -139,27 +132,20 @@
 						document.getElementById("Translate").innerText=e
 						dictChanged()
 					})
-					$.ajax({
-						"url":"https://rthsoftware.azurewebsites.net/shanbay.php",
-						"data":{
-							"word":word
-						},
-						"dataType":"json",
-						"success":function(e){
-							if(e.msg=="SUCCESS"){
-								document.getElementById("Pronunciation").innerText=e.data.pronunciation
-								audioURL=e.data.audio
-								document.getElementById("CNDefinition").innerText=e.data.cn_definition.defn
-								document.getElementById("ENDefinition").innerText=e.data.en_definition.defn
-								dictChanged()
-								if(wordWithoutSpace.indexOf(" ")==-1){
-									localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
-									localStorage.setItem(wordWithoutSpace+"_Audio",e.data.audio)
-									localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
-									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
-								}
-								translateENDef()
+					getJSON("http://api.shanbay.com/bdc/search/?word="+encodeURIComponent(word),function(e){
+						if(e.msg=="SUCCESS"){
+							document.getElementById("Pronunciation").innerText=e.data.pronunciation
+							audioURL=e.data.audio
+							document.getElementById("CNDefinition").innerText=e.data.cn_definition.defn
+							document.getElementById("ENDefinition").innerText=e.data.en_definition.defn
+							dictChanged()
+							if(wordWithoutSpace.indexOf(" ")==-1){
+								localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
+								localStorage.setItem(wordWithoutSpace+"_Audio",e.data.audio)
+								localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
+								localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
 							}
+							translateENDef()
 						}
 					})
 				}

@@ -179,24 +179,17 @@
 								addWord(newWord,ENDef)
 							}
 						}else{
-							$.ajax({
-								"url":"https://rthsoftware.azurewebsites.net/shanbay.php",
-								"data":{
-									"word":newWord
-								},
-								"dataType":"json",
-								"success":function(e){
-									if(e.msg=="SUCCESS"){
-										if(language=="SimplifiedChinese"&&e.data.cn_definition.defn!=null){
-											addWord(newWord,e.data.cn_definition.defn)
-										}else if(e.data.en_definition.defn!=null){
-											addWord(newWord,e.data.en_definition.defn)
-										}
-										localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
-										localStorage.setItem(wordWithoutSpace+"_Audio",e.data.audio)
-										localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
-										localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
+							getJSON("http://api.shanbay.com/bdc/search/?word="+encodeURIComponent(newWord),function(e){
+								if(e.msg=="SUCCESS"){
+									if(language=="SimplifiedChinese"&&e.data.cn_definition.defn!=null){
+										addWord(newWord,e.data.cn_definition.defn)
+									}else if(e.data.en_definition.defn!=null){
+										addWord(newWord,e.data.en_definition.defn)
 									}
+									localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
+									localStorage.setItem(wordWithoutSpace+"_Audio",e.data.audio)
+									localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
+									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
 								}
 							})
 						}
@@ -426,97 +419,82 @@
 				}
 			}
 			function loadAdminWordList(){
-				$.ajax({
-					"url":"https://rthsoftware.azurewebsites.net/userdata/wordlist/admin.txt",
-					"data":{
-						"time":new Date().getTime()
-					},
-					"dataType":"json",
-					"success":function(e){
-						adminWordList=e
-						var count=0
-						for(var i=adminWordList.list.length-1;i>=0;i--){
-							if(language!="SimplifiedChinese"&&!isChinese.test(JSON.stringify(adminWordList.list[i].list))||language=="SimplifiedChinese"&&isChinese.test(JSON.stringify(adminWordList.list[i].list))){
-								count++
-								var newLi=document.createElement("li")
-								newLi.setAttribute("class","menu")
-								newLi.innerText="A"+addZero(count,3)+". "
-								if(adminWordList.list[i].title!=null&&adminWordList.list[i].title!=""){
-									newLi.innerText+=adminWordList.list[i].title
-								}else{
-									switch(language){
-										case "SimplifiedChinese":
-										newLi.innerText+=adminWordList.list[i].list[0].word+" 和另外 "+adminWordList.list[i].list.length+" 个单词"
-										break
-										default:
-										newLi.innerText+=adminWordList.list[i].list[0].word+" and other "+adminWordList.list[i].list.length+" words"
-										break
-									}
+				getJSON("https://rthapi.tk/userdata/wordlist/admin.txt",function(e){
+					adminWordList=e
+					var count=0
+					for(var i=adminWordList.list.length-1;i>=0;i--){
+						if(language!="SimplifiedChinese"&&!isChinese.test(JSON.stringify(adminWordList.list[i].list))||language=="SimplifiedChinese"&&isChinese.test(JSON.stringify(adminWordList.list[i].list))){
+							count++
+							var newLi=document.createElement("li")
+							newLi.setAttribute("class","menu")
+							newLi.innerText="A"+addZero(count,3)+". "
+							if(adminWordList.list[i].title!=null&&adminWordList.list[i].title!=""){
+								newLi.innerText+=adminWordList.list[i].title
+							}else{
+								switch(language){
+									case "SimplifiedChinese":
+									newLi.innerText+=adminWordList.list[i].list[0].word+" 和另外 "+adminWordList.list[i].list.length+" 个单词"
+									break
+									default:
+									newLi.innerText+=adminWordList.list[i].list[0].word+" and other "+adminWordList.list[i].list.length+" words"
+									break
 								}
-								newLi.setAttribute("number",i+1)
-								newLi.onclick=function(){
-									var index=this.getAttribute("number")*1-1
-									applyItem(0,adminWordList.list[index])
-								}
-								document.getElementById("SavedWordListUl").appendChild(newLi)
 							}
+							newLi.setAttribute("number",i+1)
+							newLi.onclick=function(){
+								var index=this.getAttribute("number")*1-1
+								applyItem(0,adminWordList.list[index])
+							}
+							document.getElementById("SavedWordListUl").appendChild(newLi)
 						}
 					}
 				})
 			}
 			function loadFriendWordList(email){
-				$.post("https://rthsoftware.azurewebsites.net/userdata/verify.php",{
+				$.post("https://rthapi.tk/userdata/verify.php",{
 					"email":email,
 					"password":new Date().getTime()
 				},function(verifyResult){
 					if(verifyResult.username){
-						$.ajax({
-							"url":"https://rthsoftware.azurewebsites.net/userdata/wordlist/"+verifyResult.username+".txt",
-							"data":{
-								"time":new Date().getTime()
-							},
-							"dataType":"json",
-							"success":function(e){
-								friendWordList=e
-								if(friendWordList.sharing){
-									for(var i=friendWordList.list.length-1;i>=0;i--){
-										var newLi=document.createElement("li")
-										newLi.setAttribute("class","menu")
-										newLi.innerText="F"+addZero(friendWordList.list.length-i,3)+". "
-										if(friendWordList.list[i].title!=null&&friendWordList.list[i].title!=""){
-											newLi.innerText+=friendWordList.list[i].title
-										}else{
-											switch(language){
-												case "SimplifiedChinese":
-												newLi.innerText+=friendWordList.list[i].list[0].word+" 和另外 "+friendWordList.list[i].list.length+" 个单词"
-												break
-												default:
-												newLi.innerText+=friendWordList.list[i].list[0].word+" and other "+friendWordList.list[i].list.length+" words"
-												break
-											}
+						getJSON("https://rthapi.tk/userdata/wordlist/"+verifyResult.username+".txt",function(e){
+							friendWordList=e
+							if(friendWordList.sharing){
+								for(var i=friendWordList.list.length-1;i>=0;i--){
+									var newLi=document.createElement("li")
+									newLi.setAttribute("class","menu")
+									newLi.innerText="F"+addZero(friendWordList.list.length-i,3)+". "
+									if(friendWordList.list[i].title!=null&&friendWordList.list[i].title!=""){
+										newLi.innerText+=friendWordList.list[i].title
+									}else{
+										switch(language){
+											case "SimplifiedChinese":
+											newLi.innerText+=friendWordList.list[i].list[0].word+" 和另外 "+friendWordList.list[i].list.length+" 个单词"
+											break
+											default:
+											newLi.innerText+=friendWordList.list[i].list[0].word+" and other "+friendWordList.list[i].list.length+" words"
+											break
 										}
-										newLi.setAttribute("number",i+1)
-										newLi.onclick=function(){
-											var index=this.getAttribute("number")*1-1
-											applyItem(0,friendWordList.list[index])
-										}
-										document.getElementById("SavedWordListUl").appendChild(newLi)
 									}
-								}else{
-									showToast([
-										email+" has no shared word lists",
-										email+" 没有共享单词表"
-									])
+									newLi.setAttribute("number",i+1)
+									newLi.onclick=function(){
+										var index=this.getAttribute("number")*1-1
+										applyItem(0,friendWordList.list[index])
+									}
+									document.getElementById("SavedWordListUl").appendChild(newLi)
 								}
-								loadAdminWordList()
-							},
-							"error":function(){
+							}else{
 								showToast([
 									email+" has no shared word lists",
 									email+" 没有共享单词表"
 								])
-								loadAdminWordList()
 							}
+							loadAdminWordList()
+						},function(){
+							showToast([
+								email+" has no shared word lists",
+								email+" 没有共享单词表"
+							])
+							loadAdminWordList()
 						})
 					}else{
 						showToast([
@@ -625,37 +603,29 @@
 				}
 				localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
 				if(login.username){
-					$.ajax({
-						"url":"https://rthsoftware.azurewebsites.net/userdata/wordlist/"+login.username+".txt",
-						"data":{
-							"time":new Date().getTime()
-						},
-						"dataType":"json",
-						"success":function(e){
-							if(e.username==savedWordList.username){
-								if(e.time>savedWordList.time){
-									savedWordList=e
-								}
-							}else{
-								savedWordList.list=savedWordList.list.concat(e.list)
-								savedWordList.time=new Date().getTime()
-								savedWordList.username=login.username
-							}
-							if(JSON.stringify(savedWordList)!=JSON.stringify(e)&&savedWordList.list.length>0){
-								submit(load)
-							}else if(savedWordList.list.length<=0){
+					getJSON("https://rthapi.tk/userdata/wordlist/"+login.username+".txt",function(e){
+						if(e.username==savedWordList.username){
+							if(e.time>savedWordList.time){
 								savedWordList=e
-								load()
-							}else{
-								load()
 							}
-						},
-						"error":function(e){
-							if(e.status!=0&&savedWordList.list.length>0){
-								submit(load)
-							}else{
-								load()
-							}
+						}else{
+							savedWordList.list=savedWordList.list.concat(e.list)
+							savedWordList.time=new Date().getTime()
+							savedWordList.username=login.username
+						}
+						if(JSON.stringify(savedWordList)!=JSON.stringify(e)&&savedWordList.list.length>0){
+							submit(load)
+						}else if(savedWordList.list.length<=0){
+							savedWordList=e
+							load()
+						}else{
+							load()
+						}
+					},function(e){
+						if(e.status!=0&&savedWordList.list.length>0){
+							submit(load)
+						}else{
+							load()
 						}
 					})
 				}else{
@@ -908,7 +878,7 @@
 						"Submitting",
 						"正在提交"
 					])
-					$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
+					$.post("https://rthapi.tk/userdata/upload.php",{
 						"dir":"wordlist/",
 						"filename":login.username,
 						"text":JSON.stringify(savedWordList)

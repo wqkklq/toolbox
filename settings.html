@@ -96,7 +96,7 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
-					$.post("https://rthsoftware.azurewebsites.net/userdata/verify.php",{
+					$.post("https://rthapi.tk/userdata/verify.php",{
 						"email":login.email,
 						"password":MD5(e)
 					},function(verifyResult){
@@ -111,7 +111,7 @@
 								],function(confirmPassword){
 									if(confirmPassword==newPassword){
 										localStorage.setItem("Password",MD5(newPassword))
-										$.post("https://rthsoftware.azurewebsites.net/reset.php",{
+										$.post("https://rthapi.tk/reset.php",{
 											"index":verifyResult.index,
 											"passwordmd5":MD5(newPassword)
 										},function(){
@@ -144,7 +144,7 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
-					$.post("https://rthsoftware.azurewebsites.net/userdata/verify.php",{
+					$.post("https://rthapi.tk/userdata/verify.php",{
 						"email":login.email,
 						"password":MD5(e)
 					},function(verifyResult){
@@ -153,7 +153,7 @@
 								"Enter the new email address",
 								"输入新电子邮箱地址"
 							],function(newEmail){
-								$.post("https://rthsoftware.azurewebsites.net/userdata/verify.php",{
+								$.post("https://rthapi.tk/userdata/verify.php",{
 									"email":newEmail,
 									"password":login.password
 								},function(newVerify){
@@ -169,7 +169,7 @@
 										],function(confirmEmail){
 											if(confirmEmail==newEmail){
 												localStorage.setItem("Email",newEmail)
-												$.post("https://rthsoftware.azurewebsites.net/reset.php",{
+												$.post("https://rthapi.tk/reset.php",{
 													"index":verifyResult.index,
 													"newemail":newEmail
 												},function(){
@@ -208,12 +208,12 @@
 						"Enter your current password",
 						"输入您的当前密码"
 					],function(e){
-						$.post("https://rthsoftware.azurewebsites.net/userdata/verify.php",{
+						$.post("https://rthapi.tk/userdata/verify.php",{
 							"email":login.email,
 							"password":MD5(e)
 						},function(verifyResult){
 							if(verifyResult.pass){
-								$.post("https://rthsoftware.azurewebsites.net/userdata/remove.php",{
+								$.post("https://rthapi.tk/userdata/remove.php",{
 									"index":verifyResult.index,
 									"username":login.username
 								},logOut)

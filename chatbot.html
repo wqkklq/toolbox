@@ -97,40 +97,33 @@
 		<script type="text/javascript">
 			var lastBotInfo
 			function chatbotReply(botInfo){
-				$.ajax({
-					"url":"https://rthsoftware.azurewebsites.net/tuling.php",
-					"data":{
-						"info":botInfo
-					},
-					"dataType":"json",
-					"success":function(e){
-						var botText=e.text,
-						newDiv=document.createElement("div"),
-						newChildDiv=document.createElement("div")
-						newDiv.setAttribute("class","msg-row")
-						newChildDiv.setAttribute("class","msg msg-bot")
-						newDiv.appendChild(newChildDiv)
-						var appendMsg=function(){
-							if(e.code==200000){
-								newChildDiv.innerHTML+="<br><a href=\"javascript:openWebPage('"+e.url+"')\">"+e.url.split("/")[2]+"</a>"
-							}
-							document.getElementsByClassName("mui-content")[0].appendChild(newDiv)
-							scrollTo(0,document.body.scrollHeight)
+				getJSON("http://www.tuling123.com/openapi/api?key=42cff502574d42e996841e655fecd78a&info="+encodeURIComponent(botInfo),function(e){
+					var botText=e.text,
+					newDiv=document.createElement("div"),
+					newChildDiv=document.createElement("div")
+					newDiv.setAttribute("class","msg-row")
+					newChildDiv.setAttribute("class","msg msg-bot")
+					newDiv.appendChild(newChildDiv)
+					var appendMsg=function(){
+						if(e.code==200000){
+							newChildDiv.innerHTML+="<br><a href=\"javascript:openWebPage('"+e.url+"')\">"+e.url.split("/")[2]+"</a>"
 						}
-						switch(language){
-							case "SimplifiedChinese":
-							newChildDiv.innerText=botText
-							document.getElementsByClassName("mui-title")[0].innerText="康康"
+						document.getElementsByClassName("mui-content")[0].appendChild(newDiv)
+						scrollTo(0,document.body.scrollHeight)
+					}
+					switch(language){
+						case "SimplifiedChinese":
+						newChildDiv.innerText=botText
+						document.getElementsByClassName("mui-title")[0].innerText="康康"
+						appendMsg()
+						break
+						default:
+						translate(botText,"zh","en",function(e){
+							newChildDiv.innerText=e
+							document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
 							appendMsg()
-							break
-							default:
-							translate(botText,"zh","en",function(e){
-								newChildDiv.innerText=e
-								document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
-								appendMsg()
-							})
-							break
-						}
+						})
+						break
 					}
 				})
 			}

@@ -22,7 +22,7 @@ login={
 },
 recentInput=0,
 theme=localStorage.getItem("Theme"),
-ver="9.7"
+ver="9.8"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -134,6 +134,18 @@ function dateDiff(startDate,endDate){
 		break
 	}
 }
+function getJSON(url,callback,errorCallback){
+	$.ajax({
+		"url":"https://rthapi.tk/get.php",
+		"data":{
+			"url":url
+		},
+		"dataType":"json",
+		"method":"POST",
+		"success":callback,
+		"error":errorCallback
+	})
+}
 function initCalculator(max,calculate){
 	switch(language){
 		case "SimplifiedChinese":
@@ -230,7 +242,7 @@ function loginDialog(){
 				newPasswordInput.focus()
 			}else{
 				$.ajax({
-					"url":"https://rthsoftware.azurewebsites.net/userdata/verify.php",
+					"url":"https://rthapi.tk/userdata/verify.php",
 					"data":{
 						"email":email,
 						"password":password
@@ -257,7 +269,7 @@ function loginDialog(){
 									newPasswordInput.value=""
 									newConfirmPasswordInput.value=""
 									var newPassword=(new Date().getTime()*(Math.round(Math.random()*99)+1)).toString(36)
-									$.post("https://rthsoftware.azurewebsites.net/reset.php",{
+									$.post("https://rthapi.tk/reset.php",{
 										"index":e.index,
 										"password":newPassword,
 										"passwordmd5":MD5(newPassword)
@@ -279,7 +291,7 @@ function loginDialog(){
 									newConfirmPasswordInput.focus()
 								}else{
 									var username=email.split("@")[0]+new Date().getTime().toString(36)
-									$.post("https://rthsoftware.azurewebsites.net/userdata/signup.php",{
+									$.post("https://rthapi.tk/userdata/signup.php",{
 										"email":email,
 										"password":password,
 										"username":username
@@ -727,7 +739,7 @@ if(!isIE){
 				"An error occurs. Do you want to submit the error report?\n"+message,
 				"发生错误。您想提交错误报告吗？\n"+message
 			],function(){
-				$.post("https://rthsoftware.azurewebsites.net/feedback.php",{
+				$.post("https://rthapi.tk/feedback.php",{
 					"email":login.email,
 					"lang":language,
 					"name":login.username,
@@ -817,7 +829,7 @@ if(appliedTheme=="Bing"){
 		loadWallpaper()
 	}
 	$.ajax({
-		"url":"https://rthsoftware.azurewebsites.net/bing.php",
+		"url":"https://rthapi.tk/bing/base64.php",
 		"success":function(e){
 			localStorage.setItem("Bing",e)
 			savedBingWallpaper=e
@@ -882,7 +894,7 @@ if(name&&document.referrer.indexOf("https://rths.tk")!=-1){
 }
 if(login.username){
 	$.ajax({
-		"url":"https://rthsoftware.azurewebsites.net/userdata/verify.php",
+		"url":"https://rthapi.tk/userdata/verify.php",
 		"data":{
 			"email":login.email,
 			"password":login.password

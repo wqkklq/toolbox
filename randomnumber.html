@@ -247,7 +247,7 @@
 						"Submitting",
 						"正在提交"
 					])
-					$.post("https://rthsoftware.azurewebsites.net/userdata/upload.php",{
+					$.post("https://rthapi.tk/userdata/upload.php",{
 						"dir":"names/",
 						"filename":login.username,
 						"text":JSON.stringify(savedNames)
@@ -385,27 +385,19 @@
 				localStorage.setItem("Names",JSON.stringify(savedNames))
 			}
 			if(login.username){
-				$.ajax({
-					"url":"https://rthsoftware.azurewebsites.net/userdata/names/"+login.username+".txt",
-					"data":{
-						"time":new Date().getTime()
-					},
-					"dataType":"json",
-					"success":function(e){
-						if(e.time>savedNames.time){
-							savedNames=e
-						}
-						if(JSON.stringify(savedNames)!=JSON.stringify(e)&&savedNames.names.length>0){
-							submit()
-						}else if(savedNames.names.length<=0){
-							savedNames=e
-							load()
-						}else{
-							load()
-						}
-					},
-					"error":load
-				})
+				getJSON("https://rthapi.tk/userdata/names/"+login.username+".txt",function(e){
+					if(e.time>savedNames.time){
+						savedNames=e
+					}
+					if(JSON.stringify(savedNames)!=JSON.stringify(e)&&savedNames.names.length>0){
+						submit()
+					}else if(savedNames.names.length<=0){
+						savedNames=e
+						load()
+					}else{
+						load()
+					}
+				},load)
 			}
 			intervalId=setInterval(function(){
 				randScroll()

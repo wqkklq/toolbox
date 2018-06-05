@@ -100,15 +100,11 @@
 				}
 			}
 			function updateRate(){
-				$.ajax({
-					"url":"https://rthsoftware.azurewebsites.net/apilayer.php",
-					"dataType":"json",
-					"success":function(e){
-						if(e.success){
-							rate=e
-							localStorage.setItem("Rate",JSON.stringify(e))
-							document.getElementsByTagName("table")[0].style.display="table"
-						}
+				getJSON("http://www.apilayer.net/api/live?access_key=305f5a80f4da12a238c9ebfe5479c648",function(e){
+					if(e.success){
+						rate=e
+						localStorage.setItem("Rate",JSON.stringify(e))
+						document.getElementsByTagName("table")[0].style.display="table"
 					}
 				})
 			}

@@ -26,33 +26,34 @@
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var engines={
-				"Baidu":"http://www.baidu.com/s?wd=",
-				"Bing":"http://bing.com/search?q=",
+				"Baidu":"https://www.baidu.com/s?wd=",
+				"Bing":"https://bing.com/search?q=",
 				"DuckDuckGo":"https://www.duckduckgo.com/?q=",
 				"Google":"https://www.google.com/search?q=",
 				"Sogou":"https://www.sogou.com/web?query=",
 				"Yahoo":"https://search.yahoo.com/search?p=",
 				"Q360SearchEngine":"https://www.so.com/s?q=",
-				"BaiduEncyclopedia":"http://baike.baidu.com/search?word=",
+				"BaiduEncyclopedia":"https://baike.baidu.com/search?word=",
 				"HudongEncyclopedia":"http://www.baike.com/wiki/",
 				"Wikipedia":"https://en.wikipedia.org/wiki/",
 				"DictionaryCom":"http://www.dictionary.com/browse/",
-				"CambridgeDictionary":"http://dictionary.cambridge.org/us/dictionary/english/",
+				"CambridgeDictionary":"https://dictionary.cambridge.org/us/dictionary/english/",
 				"KingsoftPowerword":"http://www.iciba.com/",
 				"OxfordDictionaries":"https://en.oxforddictionaries.com/definition/",
 				"Wiktionary":"https://en.wiktionary.org/wiki/",
 				"YoudaoDictionary":"http://www.youdao.com/w/",
-				"BaiduTranslate":"http://fanyi.baidu.com/#en/zh/",
-				"GoogleTranslate":"http://translate.google.cn/#en/zh-CN/",
+				"BaiduTranslate":"https://fanyi.baidu.com/#en/zh/",
+				"GoogleTranslate":"https://translate.google.cn/#en/zh-CN/",
+				"AcFun":"http://www.acfun.cn/search/?#query=",
 				"IQIYI":"http://so.iqiyi.com/so/q_",
-				"Bilibili":"http://search.bilibili.com/all?keyword=",
-				"SohuTV":"http://so.tv.sohu.com/mts?wd=",
-				"TencentVideo":"http://v.qq.com/x/search/?q=",
+				"Bilibili":"https://search.bilibili.com/all?keyword=",
+				"SohuTV":"https://so.tv.sohu.com/mts?wd=",
+				"TencentVideo":"https://v.qq.com/x/search/?q=",
 				"Youku":"http://www.soku.com/search_video/q_",
 				"YouTube":"https://www.youtube.com/results?search_query=",
 				"YinYueTai":"http://so.yinyuetai.com/?keyword=",
-				"Q360Image":"http://image.so.com/i?q=",
-				"QQMusic":"http://y.qq.com/portal/search.html#w=",
+				"Q360Image":"https://image.so.com/i?q=",
+				"QQMusic":"https://y.qq.com/portal/search.html#w=",
 				"NetEaseCloudMusic":"http://music.163.com/#/search/m/?s="
 			}
 			function categoryChanged(){
@@ -131,6 +132,7 @@
 					case "Video":
 					switch(language){
 						case "SimplifiedChinese":
+						document.getElementsByTagName("select")[1].options.add(new Option("AcFun","AcFun"))
 						document.getElementsByTagName("select")[1].options.add(new Option("爱奇艺","IQIYI"))
 						document.getElementsByTagName("select")[1].options.add(new Option("哔哩哔哩","Bilibili"))
 						document.getElementsByTagName("select")[1].options.add(new Option("搜狐视频","SohuTV"))
