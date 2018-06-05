@@ -590,6 +590,7 @@
 					},function(e){
 						setText(e)
 						document.getElementsByTagName("input")[0].value=url
+						document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
 						applyItem(0)
 					})
 				})
