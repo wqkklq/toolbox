@@ -393,6 +393,7 @@
 				}else{
 					var loadMyWordList=function(){
 						if(savedWordList&&savedWordList.list){
+							document.getElementById("MyWordList").innerHTML=""
 							for(var i=savedWordList.list.length-1;i>=0;i--){
 								var newLi=document.createElement("li")
 								newLi.setAttribute("class","menu")
@@ -426,34 +427,38 @@
 						}
 					},
 					loadAdminWordList=function(){
-						var count=0
-						for(var i=adminWordList.list.length-1;i>=0;i--){
-							if(language!="SimplifiedChinese"&&!isChinese.test(JSON.stringify(adminWordList.list[i].list))||language=="SimplifiedChinese"&&isChinese.test(JSON.stringify(adminWordList.list[i].list))){
-								count++
-								var newLi=document.createElement("li")
-								newLi.setAttribute("class","menu")
-								newLi.innerText="A"+addZero(count,3)+". "
-								if(adminWordList.list[i].title!=null&&adminWordList.list[i].title!=""){
-									newLi.innerText+=adminWordList.list[i].title
-								}else{
-									switch(language){
-										case "SimplifiedChinese":
-										newLi.innerText+=adminWordList.list[i].list[0].word+" 和另外 "+adminWordList.list[i].list.length+" 个单词"
-										break
-										default:
-										newLi.innerText+=adminWordList.list[i].list[0].word+" and other "+adminWordList.list[i].list.length+" words"
-										break
+						if(adminWordList&&adminWordList.list){
+							document.getElementById("AdminWordList").innerHTML=""
+							var count=0
+							for(var i=adminWordList.list.length-1;i>=0;i--){
+								if(language!="SimplifiedChinese"&&!isChinese.test(JSON.stringify(adminWordList.list[i].list))||language=="SimplifiedChinese"&&isChinese.test(JSON.stringify(adminWordList.list[i].list))){
+									count++
+									var newLi=document.createElement("li")
+									newLi.setAttribute("class","menu")
+									newLi.innerText="A"+addZero(count,3)+". "
+									if(adminWordList.list[i].title!=null&&adminWordList.list[i].title!=""){
+										newLi.innerText+=adminWordList.list[i].title
+									}else{
+										switch(language){
+											case "SimplifiedChinese":
+											newLi.innerText+=adminWordList.list[i].list[0].word+" 和另外 "+adminWordList.list[i].list.length+" 个单词"
+											break
+											default:
+											newLi.innerText+=adminWordList.list[i].list[0].word+" and other "+adminWordList.list[i].list.length+" words"
+											break
+										}
 									}
+									newLi.setAttribute("number",i+1)
+									newLi.onclick=function(){
+										var index=this.getAttribute("number")*1-1
+										applyItem(0,adminWordList.list[index])
+									}
+									document.getElementById("AdminWordList").appendChild(newLi)
 								}
-								newLi.setAttribute("number",i+1)
-								newLi.onclick=function(){
-									var index=this.getAttribute("number")*1-1
-									applyItem(0,adminWordList.list[index])
-								}
-								document.getElementById("AdminWordList").appendChild(newLi)
 							}
 						}
 					}
+					loadMyWordList()
 					if(login.username){
 						getJSON("https://rthapi.tk/userdata/wordlist/"+login.username+".txt",function(e){
 							if(e.username==savedWordList.username){
@@ -480,8 +485,6 @@
 								loadMyWordList()
 							}
 						})
-					}else{
-						loadMyWordList()
 					}
 					var friendEmail=localStorage.getItem("FriendEmail")
 					if(friendEmail&&friendEmail!=""){
@@ -536,13 +539,10 @@
 							}
 						},"json")
 					}
-					if(adminWordList){
-						loadAdminWordList()
-					}
+					loadAdminWordList()
 					getJSON("https://rthapi.tk/userdata/wordlist/admin.txt",function(e){
 						adminWordList=e
 						localStorage.setItem("AdminWordList",JSON.stringify(adminWordList))
-						document.getElementById("AdminWordList").innerHTML=""
 						loadAdminWordList()
 					})
 				}
