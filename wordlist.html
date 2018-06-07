@@ -46,7 +46,9 @@
 					<li id="NewWL" class="menu"></li>
 					<li id="OpenLWL" class="menu"></li>
 					<li id="SharingSettings" class="menu"></li>
-					<span id="SavedWordListUl"></span>
+					<span id="MyWordList"></span>
+					<span id="FriendWordList"></span>
+					<span id="AdminWordList"></span>
 				</ul>
 			</div>
 			<div class="edit">
@@ -402,14 +404,8 @@
 							newLi.onclick=function(){
 								applyItem(this.getAttribute("number"))
 							}
-							document.getElementById("SavedWordListUl").appendChild(newLi)
+							document.getElementById("MyWordList").appendChild(newLi)
 						}
-					}
-					var friendEmail=localStorage.getItem("FriendEmail")
-					if(friendEmail&&friendEmail!=""){
-						loadFriendWordList(friendEmail)
-					}else{
-						loadAdminWordList()
 					}
 				}
 				if(currentItem){
@@ -417,93 +413,6 @@
 				}else{
 					document.getElementById("Delete").style.display="none"
 				}
-			}
-			function loadAdminWordList(){
-				getJSON("https://rthapi.tk/userdata/wordlist/admin.txt",function(e){
-					adminWordList=e
-					var count=0
-					for(var i=adminWordList.list.length-1;i>=0;i--){
-						if(language!="SimplifiedChinese"&&!isChinese.test(JSON.stringify(adminWordList.list[i].list))||language=="SimplifiedChinese"&&isChinese.test(JSON.stringify(adminWordList.list[i].list))){
-							count++
-							var newLi=document.createElement("li")
-							newLi.setAttribute("class","menu")
-							newLi.innerText="A"+addZero(count,3)+". "
-							if(adminWordList.list[i].title!=null&&adminWordList.list[i].title!=""){
-								newLi.innerText+=adminWordList.list[i].title
-							}else{
-								switch(language){
-									case "SimplifiedChinese":
-									newLi.innerText+=adminWordList.list[i].list[0].word+" 和另外 "+adminWordList.list[i].list.length+" 个单词"
-									break
-									default:
-									newLi.innerText+=adminWordList.list[i].list[0].word+" and other "+adminWordList.list[i].list.length+" words"
-									break
-								}
-							}
-							newLi.setAttribute("number",i+1)
-							newLi.onclick=function(){
-								var index=this.getAttribute("number")*1-1
-								applyItem(0,adminWordList.list[index])
-							}
-							document.getElementById("SavedWordListUl").appendChild(newLi)
-						}
-					}
-				})
-			}
-			function loadFriendWordList(email){
-				$.post("https://rthapi.tk/userdata/verify.php",{
-					"email":email,
-					"password":new Date().getTime()
-				},function(verifyResult){
-					if(verifyResult.username){
-						getJSON("https://rthapi.tk/userdata/wordlist/"+verifyResult.username+".txt",function(e){
-							friendWordList=e
-							if(friendWordList.sharing){
-								for(var i=friendWordList.list.length-1;i>=0;i--){
-									var newLi=document.createElement("li")
-									newLi.setAttribute("class","menu")
-									newLi.innerText="F"+addZero(friendWordList.list.length-i,3)+". "
-									if(friendWordList.list[i].title!=null&&friendWordList.list[i].title!=""){
-										newLi.innerText+=friendWordList.list[i].title
-									}else{
-										switch(language){
-											case "SimplifiedChinese":
-											newLi.innerText+=friendWordList.list[i].list[0].word+" 和另外 "+friendWordList.list[i].list.length+" 个单词"
-											break
-											default:
-											newLi.innerText+=friendWordList.list[i].list[0].word+" and other "+friendWordList.list[i].list.length+" words"
-											break
-										}
-									}
-									newLi.setAttribute("number",i+1)
-									newLi.onclick=function(){
-										var index=this.getAttribute("number")*1-1
-										applyItem(0,friendWordList.list[index])
-									}
-									document.getElementById("SavedWordListUl").appendChild(newLi)
-								}
-							}else{
-								showToast([
-									email+" has no shared word lists",
-									email+" 没有共享单词表"
-								])
-							}
-							loadAdminWordList()
-						},function(){
-							showToast([
-								email+" has no shared word lists",
-								email+" 没有共享单词表"
-							])
-							loadAdminWordList()
-						})
-					}else{
-						showToast([
-							email+" is not a valid RTH account",
-							email+" 不是有效的 RTH 账号"
-						])
-						loadAdminWordList()
-					}
-				},"json")
 			}
 			function loadQuestion(){
 				showAnswer=false
@@ -584,7 +493,7 @@
 				}
 				speak()
 			}
-			function loadSavedWordList(){
+			function loadWordList(){
 				savedWordList=JSON.parse(localStorage.getItem("SavedWordList"))
 				if(!savedWordList){
 					savedWordList={
@@ -631,6 +540,89 @@
 				}else{
 					load()
 				}
+				var friendEmail=localStorage.getItem("FriendEmail")
+				if(friendEmail&&friendEmail!=""){
+					$.post("https://rthapi.tk/userdata/verify.php",{
+						"email":friendEmail,
+						"password":new Date().getTime()
+					},function(verifyResult){
+						if(verifyResult.username){
+							getJSON("https://rthapi.tk/userdata/wordlist/"+verifyResult.username+".txt",function(e){
+								friendWordList=e
+								if(friendWordList.sharing){
+									for(var i=friendWordList.list.length-1;i>=0;i--){
+										var newLi=document.createElement("li")
+										newLi.setAttribute("class","menu")
+										newLi.innerText="F"+addZero(friendWordList.list.length-i,3)+". "
+										if(friendWordList.list[i].title!=null&&friendWordList.list[i].title!=""){
+											newLi.innerText+=friendWordList.list[i].title
+										}else{
+											switch(language){
+												case "SimplifiedChinese":
+												newLi.innerText+=friendWordList.list[i].list[0].word+" 和另外 "+friendWordList.list[i].list.length+" 个单词"
+												break
+												default:
+												newLi.innerText+=friendWordList.list[i].list[0].word+" and other "+friendWordList.list[i].list.length+" words"
+												break
+											}
+										}
+										newLi.setAttribute("number",i+1)
+										newLi.onclick=function(){
+											var index=this.getAttribute("number")*1-1
+											applyItem(0,friendWordList.list[index])
+										}
+										document.getElementById("FriendWordList").appendChild(newLi)
+									}
+								}else{
+									showToast([
+										friendEmail+" has no shared word lists",
+										friendEmail+" 没有共享单词表"
+									])
+								}
+							},function(){
+								showToast([
+									friendEmail+" has no shared word lists",
+									friendEmail+" 没有共享单词表"
+								])
+							})
+						}else{
+							showToast([
+								friendEmail+" is not a valid RTH account",
+								friendEmail+" 不是有效的 RTH 账号"
+							])
+						}
+					},"json")
+				}
+				getJSON("https://rthapi.tk/userdata/wordlist/admin.txt",function(e){
+					adminWordList=e
+					var count=0
+					for(var i=adminWordList.list.length-1;i>=0;i--){
+						if(language!="SimplifiedChinese"&&!isChinese.test(JSON.stringify(adminWordList.list[i].list))||language=="SimplifiedChinese"&&isChinese.test(JSON.stringify(adminWordList.list[i].list))){
+							count++
+							var newLi=document.createElement("li")
+							newLi.setAttribute("class","menu")
+							newLi.innerText="A"+addZero(count,3)+". "
+							if(adminWordList.list[i].title!=null&&adminWordList.list[i].title!=""){
+								newLi.innerText+=adminWordList.list[i].title
+							}else{
+								switch(language){
+									case "SimplifiedChinese":
+									newLi.innerText+=adminWordList.list[i].list[0].word+" 和另外 "+adminWordList.list[i].list.length+" 个单词"
+									break
+									default:
+									newLi.innerText+=adminWordList.list[i].list[0].word+" and other "+adminWordList.list[i].list.length+" words"
+									break
+								}
+							}
+							newLi.setAttribute("number",i+1)
+							newLi.onclick=function(){
+								var index=this.getAttribute("number")*1-1
+								applyItem(0,adminWordList.list[index])
+							}
+							document.getElementById("AdminWordList").appendChild(newLi)
+						}
+					}
+				})
 			}
 			function lookUp(word){
 				if(!word){
@@ -806,11 +798,13 @@
 				scrollTo(0,0)
 				currentList=[]
 				document.getElementById("WordListUl").innerHTML=
-				document.getElementById("SavedWordListUl").innerHTML=""
+				document.getElementById("MyWordList").innerHTML=
+				document.getElementById("FriendWordList").innerHTML=
+				document.getElementById("AdminWordList").innerHTML=""
 				if(!localStorage.getItem("WordList")){
 					openDiv("start")
 				}
-				loadSavedWordList()
+				loadWordList()
 			}
 			function restartQuiz(){
 				settingsChanged=false
@@ -1198,7 +1192,7 @@
 				document.getElementById("SpeakWordsLi").style.display="none"
 				document.getElementById("SpeakDefinitionsLi").style.display="none"
 			}
-			loadSavedWordList()
+			loadWordList()
 		</script>
 	</body>
 </html>
