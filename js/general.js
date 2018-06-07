@@ -112,12 +112,14 @@ function calc(code){
 	return calcResult
 }
 function closeMenu(){
-	document.getElementsByClassName("popup-menu")[0].style.opacity="0"
-	setTimeout(function(){
-		try{
-			document.body.removeChild(document.getElementsByClassName("popup-menu")[0])
-		}catch(e){}
-	},250)
+	if(document.getElementsByClassName("popup-menu")[0]){
+		document.getElementsByClassName("popup-menu")[0].style.opacity="0"
+		setTimeout(function(){
+			try{
+				document.body.removeChild(document.getElementsByClassName("popup-menu")[0])
+			}catch(e){}
+		},250)
+	}
 }
 function dateDiff(startDate,endDate){
 	var result=parseInt(Math.abs(endDate-startDate)/1000/60/60/24)
