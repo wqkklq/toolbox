@@ -406,6 +406,16 @@ function loginDialog(){
 		},25)
 	}
 }
+function logOut(){
+	localStorage.removeItem("Email")
+	localStorage.removeItem("Password")
+	localStorage.removeItem("Username")
+	localStorage.removeItem("DateCountdown")
+	localStorage.removeItem("Names")
+	localStorage.removeItem("SavedText")
+	localStorage.removeItem("SavedWordList")
+	restart()
+}
 function openDialog(){
 	document.getElementsByClassName("open-file")[0].value=""
 	document.getElementsByClassName("open-file")[0].click()
@@ -906,12 +916,7 @@ if(login.username){
 				showAlert([
 					"Incorrect password",
 					"密码错误"
-				],function(){
-					localStorage.removeItem("Email")
-					localStorage.removeItem("Password")
-					localStorage.removeItem("Username")
-					location.reload()
-				})
+				],logOut)
 			}
 		},
 		"error":function(){

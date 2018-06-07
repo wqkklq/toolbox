@@ -54,7 +54,6 @@
 				<span id="MyAccount">
 					<li id="ChangePassword" class="menu"></li>
 					<li id="ChangeEmail" class="menu"></li>
-					<li id="SwitchAccount" class="menu"></li>
 					<li id="DeleteAccount" class="menu"></li>
 					<li id="LogOut" class="menu"></li>
 				</span>
@@ -71,12 +70,6 @@
 		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			function logOut(){
-				localStorage.removeItem("Email")
-				localStorage.removeItem("Password")
-				localStorage.removeItem("Username")
-				restart()
-			}
 			document.getElementById("LanguageSelect").onchange=function(){
 				if(this.value!=language){
 					localStorage.setItem("Language",document.getElementById("LanguageSelect").value)
@@ -89,8 +82,7 @@
 					restart()
 				}
 			}
-			document.getElementById("Login").onclick=
-			document.getElementById("SwitchAccount").onclick=loginDialog
+			document.getElementById("Login").onclick=loginDialog
 			document.getElementById("ChangePassword").onclick=function(){
 				showPrompt([
 					"Enter your current password",
@@ -253,7 +245,6 @@
 				document.getElementById("Login").innerText="登录"
 				document.getElementById("ChangePassword").innerText="更改密码"
 				document.getElementById("ChangeEmail").innerText="更改电子邮箱"
-				document.getElementById("SwitchAccount").innerText="切换账号"
 				document.getElementById("DeleteAccount").innerText="删除账号"
 				document.getElementById("LogOut").innerText="退出登录"
 				document.getElementById("ClearLocalStorage").innerText="清空本地存储"
@@ -272,7 +263,6 @@
 				document.getElementById("Login").innerText="Login"
 				document.getElementById("ChangePassword").innerText="Change Password"
 				document.getElementById("ChangeEmail").innerText="Change Email"
-				document.getElementById("SwitchAccount").innerText="Switch Account"
 				document.getElementById("DeleteAccount").innerText="Delete Account"
 				document.getElementById("LogOut").innerText="Log Out"
 				document.getElementById("ClearLocalStorage").innerText="Clear Local Storage"
