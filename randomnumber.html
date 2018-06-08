@@ -384,6 +384,7 @@
 				}
 				localStorage.setItem("Names",JSON.stringify(savedNames))
 			}
+			load()
 			if(login.username){
 				getJSON("https://rthapi.tk/userdata/names/"+login.username+".txt",function(e){
 					if(e.time>savedNames.time){

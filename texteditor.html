@@ -101,7 +101,7 @@
 			var currentItem,
 			encrypt=true,
 			fontSize=16,
-			savedText
+			savedText=JSON.parse(localStorage.getItem("SavedText"))
 			function applyItem(serialNumber){
 				if(serialNumber==0){
 					save()
@@ -231,29 +231,6 @@
 				}
 			}
 			function load(){
-				if(savedText&&savedText.text){
-					for(var i=savedText.text.length-1;i>=0;i--){
-						var newLi=document.createElement("li")
-						newLi.setAttribute("class","menu")
-						if(savedText.text[i].title!=null&&savedText.text[i].title!=""){
-							newLi.innerText=savedText.text[i].title
-						}else{
-							if(savedText.text[i].encrypt){
-								newLi.innerText=decrypt(atob(savedText.text[i].text),"RTH")
-							}else{
-								newLi.innerText=savedText.text[i].text
-							}
-						}
-						newLi.setAttribute("number",i+1)
-						newLi.onclick=function(){
-							openText(this.getAttribute("number"))
-						}
-						document.getElementById("SavedTextUl").appendChild(newLi)
-					}
-				}
-			}
-			function loadSavedText(){
-				savedText=JSON.parse(localStorage.getItem("SavedText"))
 				if(!savedText){
 					savedText={
 						"text":[],
@@ -275,6 +252,30 @@
 					}
 				}
 				localStorage.setItem("SavedText",JSON.stringify(savedText))
+				var loadSavedText=function(){
+					if(savedText&&savedText.text){
+						document.getElementById("SavedTextUl").innerHTML=""
+						for(var i=savedText.text.length-1;i>=0;i--){
+							var newLi=document.createElement("li")
+							newLi.setAttribute("class","menu")
+							if(savedText.text[i].title!=null&&savedText.text[i].title!=""){
+								newLi.innerText=savedText.text[i].title
+							}else{
+								if(savedText.text[i].encrypt){
+									newLi.innerText=decrypt(atob(savedText.text[i].text),"RTH")
+								}else{
+									newLi.innerText=savedText.text[i].text
+								}
+							}
+							newLi.setAttribute("number",i+1)
+							newLi.onclick=function(){
+								openText(this.getAttribute("number"))
+							}
+							document.getElementById("SavedTextUl").appendChild(newLi)
+						}
+					}
+				}
+				loadSavedText()
 				if(login.username){
 					getJSON("https://rthapi.tk/userdata/text/"+login.username+".txt",function(e){
 						if(e.username==savedText.username){
@@ -287,22 +288,20 @@
 							savedText.username=login.username
 						}
 						if(JSON.stringify(savedText)!=JSON.stringify(e)&&savedText.text.length>0){
-							submit(load)
+							submit(loadSavedText)
 						}else if(savedText.text.length<=0){
 							savedText=e
-							load()
+							loadSavedText()
 						}else{
-							load()
+							loadSavedText()
 						}
 					},function(e){
 						if(e.status!=0&&savedText.text.length>0){
-							submit(load)
+							submit(loadSavedText)
 						}else{
-							load()
+							loadSavedText()
 						}
 					})
-				}else{
-					load()
 				}
 			}
 			function newDoc(){
@@ -373,7 +372,7 @@
 				document.getElementById("SavedTextUl").innerHTML=""
 				encrypt=true
 				edit(false)
-				loadSavedText()
+				load()
 			}
 			function runJSCode(fromShortcut){
 				if(!isEmpty()){
@@ -897,7 +896,7 @@
 					document.getElementById("OpenLocalDocument").style.display="none"
 				}
 			}
-			loadSavedText()
+			load()
 		</script>
 	</body>
 </html>
