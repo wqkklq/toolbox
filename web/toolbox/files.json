@@ -35,7 +35,6 @@
 		"electron/main.js",
 		"electron/update.html",
 		"electron/update.css",
-		"electron/update.js",
-		"package.json"
+		"electron/update.js"
 	]
 }

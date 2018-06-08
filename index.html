@@ -378,39 +378,40 @@
 					default:break;
 				}
 			}
-			if(isAndroidApp||isElectron){
-				$.ajax({
-					"url":"https://t.rths.tk/package.json",
-					"data":{
-						"time":new Date().getTime()
-					},
-					"dataType":"json",
-					"success":function(e){
-						if((function(){
-							var newVer=e.version.split("."),
-							currentVer=ver.split(".")
-							if(newVer[0]*1>currentVer[0]*1){
+			if(isApp){
+				getJSON("https://rthapi.tk/toolbox.txt",function(e){
+					if((function(){
+						var currentVer=ver.split("."),newVer
+						if(isAndroid){
+							newVer=e.android.ver.split(".")
+						}else if(isElectron){
+							newVer=e.electron.ver.split(".")
+						}else if(isiOS){
+							newVer=e.ios.ver.split(".")
+						}else{
+							return false
+						}
+						if(newVer[0]*1>currentVer[0]*1){
+							return true
+						}else if(newVer[0]*1==currentVer[0]*1){
+							if(newVer[1]*1>currentVer[1]*1){
 								return true
-							}else if(newVer[0]*1==currentVer[0]*1){
-								if(newVer[1]*1>currentVer[1]*1){
-									return true
-								}else{
-									return false
-								}
 							}else{
 								return false
 							}
-						})()){
-							if(isAndroidApp){
-								showConfirm([
-									"There is an update available. Do you want to update?",
-									"有更新可用。您想更新吗？"
-								],function(){
-									getToolbox(false)
-								})
-							}else if(isElectron){
-								location.href="electron/update.html"
-							}
+						}else{
+							return false
+						}
+					})()){
+						if(isElectron){
+							location.href="electron/update.html"
+						}else{
+							showConfirm([
+								"There is an update available. Do you want to update?",
+								"有更新可用。您想更新吗？"
+							],function(){
+								getToolbox(false)
+							})
 						}
 					}
 				})
