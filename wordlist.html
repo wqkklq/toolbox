@@ -276,9 +276,6 @@
 						"onclick":function(){
 							if(currentList[index].word.indexOf(" ")==-1){
 								var audio=new Audio("https://media.shanbay.com/audio/us/"+currentList[index].word+".mp3")
-								audio.oncanplaythrough=function(){
-									audio.play()
-								}
 								audio.onerror=function(){
 									if(window.speechSynthesis){
 										window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentList[index].word))
@@ -289,6 +286,7 @@
 										])
 									}
 								}
+								audio.play()
 							}else if(window.speechSynthesis){
 								window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentList[index].word))
 							}else{
@@ -937,14 +935,12 @@
 				speakWord=document.getElementById("SpeakWordsSwitch").classList.contains("mui-active")
 				if(speakWord&&!speakDef&&correctWord.indexOf(" ")==-1){
 					var audio=new Audio("https://media.shanbay.com/audio/us/"+correctWord+".mp3")
-					audio.oncanplaythrough=function(){
-						audio.play()
-					}
 					audio.onerror=function(){
 						if(window.speechSynthesis){
 							window.speechSynthesis.speak(new SpeechSynthesisUtterance(correctWord))
 						}
 					}
+					audio.play()
 				}else if(window.speechSynthesis){
 					var speakText=""
 					if(speakWord){
