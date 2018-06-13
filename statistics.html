@@ -55,7 +55,7 @@
 			}
 			function addLi(newNum){
 				var newLi=document.createElement("li")
-				newLi.setAttribute("class","menu")
+				newLi.classList.add("menu")
 				newLi.id="Num-"+(document.getElementsByClassName("text-like")[0].getElementsByTagName("li").length+1)
 				newLi.innerText=newNum
 				newLi.oncontextmenu=

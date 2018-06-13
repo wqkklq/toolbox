@@ -814,7 +814,7 @@
 			}
 			function record(){
 				var newLi=document.createElement("li")
-				newLi.setAttribute("class","menu")
+				newLi.classList.add("menu")
 				var mole=document.getElementById("Mole").value*1,symbol
 				mole=Math.round(mole)
 				if(mole<=0){

@@ -22,7 +22,7 @@ login={
 },
 recentInput=0,
 theme=localStorage.getItem("Theme"),
-ver="9.9"
+ver="10.0"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -117,6 +117,7 @@ function closeMenu(){
 		setTimeout(function(){
 			try{
 				document.body.removeChild(document.getElementsByClassName("popup-menu")[0])
+				document.body.removeChild(document.getElementsByClassName("mask")[0])
 			}catch(e){}
 		},250)
 	}
@@ -326,7 +327,7 @@ function loginDialog(){
 				})
 			}
 		}
-		newDiv.setAttribute("class","popup")
+		newDiv.classList.add("popup")
 		newEmailInput.name="email"
 		newEmailInput.type="email"
 		newEmailInput.onkeydown=function(e){
@@ -354,8 +355,8 @@ function loginDialog(){
 		}
 		newSignUpButton.onclick=signUp
 		newLoginButton.onclick=submitLogin
-		newDescriptionDiv.setAttribute("class","description")
-		newCloseDiv.setAttribute("class","close")
+		newDescriptionDiv.classList.add("description")
+		newCloseDiv.classList.add("close")
 		newCloseDiv.innerText="×"
 		newCloseDiv.onclick=function(){
 			if(newH1.innerText==newLoginButton.innerText){
@@ -523,10 +524,10 @@ function showImage(src){
 	newButtonDiv=document.createElement("div"),
 	newCloseDiv=document.createElement("div"),
 	newSaveDiv=document.createElement("div")
-	newDiv.setAttribute("class","image")
-	newTitleDiv.setAttribute("class","image-title")
-	newContentDiv.setAttribute("class","image-content")
-	newLoadDiv.setAttribute("class","image-load")
+	newDiv.classList.add("image")
+	newTitleDiv.classList.add("image-title")
+	newContentDiv.classList.add("image-content")
+	newLoadDiv.classList.add("image-load")
 	newImg.onload=function(){
 		newContentDiv.removeChild(newLoadDiv)
 		var frameHeight=this.height+80
@@ -536,7 +537,7 @@ function showImage(src){
 			newImg.style.opacity="1"
 		},250)
 	}
-	newButtonDiv.setAttribute("class","image-button")
+	newButtonDiv.classList.add("image-button")
 	newCloseDiv.onclick=function(){
 		newDiv.style.opacity="0"
 		setTimeout(function(){
@@ -580,11 +581,17 @@ function showMenu(e,menu){
 	if(addedMenuDiv){
 		document.body.removeChild(addedMenuDiv)
 	}
-	var newDiv=document.createElement("div")
-	newDiv.setAttribute("class","popup-menu")
+	var newDiv=document.createElement("div"),
+	newMask=document.createElement("div")
+	newDiv.classList.add("popup-menu")
+	newMask.classList.add("mask")
+	newDiv.oncontextmenu=
+	newMask.oncontextmenu=function(){
+		return false
+	}
+	newMask.onclick=closeMenu
 	for(var i=0;i<menu.length;i++){
 		var newSpan=document.createElement("span")
-		newSpan.innerText
 		switch(language){
 			case "SimplifiedChinese":
 			newSpan.innerText=menu[i].text[1]
@@ -596,18 +603,7 @@ function showMenu(e,menu){
 		newSpan.onclick=menu[i].onclick
 		newDiv.appendChild(newSpan)
 	}
-	var newSpan=document.createElement("span")
-	newSpan.innerText
-	switch(language){
-		case "SimplifiedChinese":
-		newSpan.innerText="取消"
-		break
-		default:
-		newSpan.innerText="Cancel"
-		break
-	}
-	newSpan.onclick=closeMenu
-	newDiv.appendChild(newSpan)
+	document.body.appendChild(newMask)
 	document.body.appendChild(newDiv)
 	newDiv.style.left=(e.x-newDiv.offsetWidth/2)+"px"
 	newDiv.style.top=(e.y-newDiv.offsetHeight)+"px"
@@ -620,7 +616,8 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 	newInput=document.createElement("input"),
 	newCancelButton=document.createElement("button"),
 	newOKButton=document.createElement("button")
-	newDiv.setAttribute("class","popup prompt")
+	newDiv.classList.add("popup")
+	newDiv.classList.add("prompt")
 	if(type){
 		newInput.type=type
 	}else{
@@ -800,8 +797,11 @@ if(header){
 	var newDiv=document.createElement("div"),
 	newA=document.createElement("a"),
 	newH1=document.createElement("h1")
-	newDiv.setAttribute("class","title-bg")
-	newA.setAttribute("class","mui-icon mui-icon-left-nav mui-pull-left back")
+	newDiv.classList.add("title-bg")
+	newA.classList.add("mui-icon")
+	newA.classList.add("mui-icon-left-nav")
+	newA.classList.add("mui-pull-left")
+	newA.classList.add("back")
 	if(window.history.length<=1){
 		newA.onclick=function(){
 			openWindow("index")
@@ -813,7 +813,7 @@ if(header){
 	}else{
 		newA.onclick=mui.back
 	}
-	newH1.setAttribute("class","mui-title")
+	newH1.classList.add("mui-title")
 	newDiv.appendChild(newA)
 	newDiv.appendChild(newH1)
 	header.appendChild(newDiv)
@@ -874,7 +874,7 @@ if(isElectron){
 		newMinimizeDiv=document.createElement("div")
 		newMaximizeDiv=document.createElement("div")
 		newCloseDiv=document.createElement("div")
-		newDiv.setAttribute("class","win")
+		newDiv.classList.add("win")
 		newMinimizeDiv.style.right="80px"
 		newMinimizeDiv.innerText="-"
 		newMinimizeDiv.onclick=function(){

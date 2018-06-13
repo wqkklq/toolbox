@@ -56,7 +56,6 @@
 					<input id="TitleInput" type="text" class="mui-input-clear">
 				</div>
 				<ul id="OptionUl" class="menu">
-					<li id="Quiz" class="menu"></li>
 					<li id="SaveAs" class="menu"></li>
 					<li id="Delete" class="menu"></li>
 					<li id="FlashCard" class="menu"></li>
@@ -70,7 +69,7 @@
 				<div class="answer">
 					<div id="EnterWordDiv" class="mui-input-row">
 						<label id="WordLabel"></label>
-						<input id="EnteredWord" type="text">
+						<input id="EnteredWord" type="text" autocomplete="off">
 					</div>
 					<div id="EnterDefinitionDiv" class="mui-input-row">
 						<label id="DefinitionLabel"></label>
@@ -95,7 +94,7 @@
 							<div class="mui-switch-handle"></div>
 						</div>
 					</li>
-					<li id="SpeakWordsLi" class="menu">
+					<li class="menu">
 						<span id="SpeakWords"></span>
 						<div id="SpeakWordsSwitch" class="mui-switch mui-switch-blue mui-switch-mini">
 							<div class="mui-switch-handle"></div>
@@ -135,7 +134,7 @@
 			</div>
 		</div>
 		<footer>
-			<div id="Save"></div>
+			<div id="Quiz"></div>
 			<div id="Add"></div>
 		</footer>
 		<input class="open-file" type="file" accept=".rth">
@@ -181,6 +180,10 @@
 								addWord(newWord,ENDef)
 							}
 						}else{
+							showToast([
+								"Getting the definition",
+								"正在获取释义"
+							])
 							getJSON("http://api.shanbay.com/bdc/search/?word="+encodeURIComponent(newWord),function(e){
 								if(e.msg=="SUCCESS"){
 									if(language=="SimplifiedChinese"&&e.data.cn_definition.defn!=null){
@@ -192,7 +195,14 @@
 									localStorage.setItem(wordWithoutSpace+"_Audio",e.data.audio)
 									localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
 									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
+								}else{
+									alert(e.msg)
 								}
+							},function(){
+								showAlert([
+									"Unable to connect to the server",
+									"无法连接服务器"
+								])
 							})
 						}
 					})
@@ -218,17 +228,19 @@
 					"word":word
 				})
 				addWordLi(word,definition,currentList.length-1)
+				scrollTo(0,document.body.scrollHeight)
+				save()
 				add()
 			}
 			function addWordLi(word,definition,i){
 				var newLi=document.createElement("li"),
 				newLabel=document.createElement("label"),
 				newP=document.createElement("p")
-				newLi.setAttribute("class","menu")
-				newLi.setAttribute("number",i+1)
+				newLi.classList.add("menu")
+				newLi.id="Word"+(i+1)
 				newLi.oncontextmenu=
 				newLi.onclick=function(mouse){
-					var index=this.getAttribute("number")*1-1
+					var index=(this.id.replace("Word",""))*1-1
 					showMenu(mouse,[{
 						"onclick":function(){
 							lookUp(currentList[index].word)
@@ -249,6 +261,8 @@
 								],function(newDefinition){
 									currentList[index].word=newWord
 									currentList[index].definition=newDefinition
+									document.getElementById("Word"+(index+1)).getElementsByTagName("label")[0].innerText=newWord
+									document.getElementById("Word"+(index+1)).getElementsByTagName("p")[0].innerText=newDefinition
 									save()
 								},null,currentList[index].definition)
 							},null,currentList[index].word)
@@ -260,12 +274,44 @@
 						]
 					},{
 						"onclick":function(){
+							if(currentList[index].word.indexOf(" ")==-1){
+								var audio=new Audio("https://media.shanbay.com/audio/us/"+currentList[index].word+".mp3")
+								audio.oncanplaythrough=function(){
+									audio.play()
+								}
+								audio.onerror=function(){
+									if(window.speechSynthesis){
+										window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentList[index].word))
+									}else{
+										showAlert([
+											"Unable to connect to the server",
+											"无法连接服务器"
+										])
+									}
+								}
+							}else if(window.speechSynthesis){
+								window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentList[index].word))
+							}else{
+								showAlert([
+									"Unable to speak this word",
+									"无法朗读此单词"
+								])
+							}
+							closeMenu()
+						},
+						"text":[
+							"Speak",
+							"朗读"
+						]
+					},{
+						"onclick":function(){
 							showConfirm([
 								"Do you want to delete "+currentList[index].word+"?",
 								"您想删除 "+currentList[index].word+" 吗？"
 							],function(){
 								currentList.splice(index,1)
-								save()
+								document.getElementById("WordListUl").innerHTML=""
+								save(null,true)
 							})
 							closeMenu()
 						},
@@ -274,6 +320,7 @@
 							"删除"
 						]
 					}])
+					return false
 				}
 				newLabel.innerText=word
 				newP.innerText=definition
@@ -281,15 +328,17 @@
 				newLi.appendChild(newP)
 				document.getElementById("WordListUl").appendChild(newLi)
 			}
-			function applyItem(serialNumber,list){
+			function applyItem(serialNumber,list,willReload){
 				if(serialNumber==0||serialNumber==null){
 					currentItem=null
 					localStorage.setItem("WordList",JSON.stringify(list))
+					localStorage.removeItem("WordListCurrentItem")
 				}else{
 					currentItem=serialNumber
 					localStorage.setItem("WordList",JSON.stringify(savedWordList.list[currentItem-1]))
+					localStorage.setItem("WordListCurrentItem",currentItem)
 				}
-				if(document.getElementsByClassName("quiz")[0].style.display==""){
+				if(willReload||!document.getElementsByClassName("start")[0].style.display){
 					reload()
 				}
 			}
@@ -326,6 +375,7 @@
 			function closeTrue(){
 				localStorage.removeItem("WordList")
 				currentItem=null
+				localStorage.removeItem("WordListCurrentItem")
 				reload()
 			}
 			function convertFormat(list){
@@ -352,6 +402,7 @@
 				if(mistakes.list.length>0){
 					currentItem=null
 					localStorage.setItem("WordList",JSON.stringify(mistakes))
+					localStorage.removeItem("WordListCurrentItem")
 				}
 				showAlert([
 					"Correct rate: "+correctRate+"%",
@@ -383,6 +434,7 @@
 				localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
 				var openedWordList=localStorage.getItem("WordList")
 				if(openedWordList&&openedWordList!="undefined"){
+					currentItem=localStorage.getItem("WordListCurrentItem")
 					openedWordList=convertFormat(openedWordList)
 					currentList=currentList.concat(openedWordList.list)
 					document.getElementById("TitleInput").value=openedWordList.title
@@ -396,7 +448,7 @@
 							document.getElementById("MyWordList").innerHTML=""
 							for(var i=savedWordList.list.length-1;i>=0;i--){
 								var newLi=document.createElement("li")
-								newLi.setAttribute("class","menu")
+								newLi.classList.add("menu")
 								newLi.innerText="M"+addZero(savedWordList.list.length-i,3)+". "
 								if(savedWordList.list[i].title!=null&&savedWordList.list[i].title!=""){
 									newLi.innerText+=savedWordList.list[i].title
@@ -434,7 +486,7 @@
 								if(language!="SimplifiedChinese"&&!isChinese.test(JSON.stringify(adminWordList.list[i].list))||language=="SimplifiedChinese"&&isChinese.test(JSON.stringify(adminWordList.list[i].list))){
 									count++
 									var newLi=document.createElement("li")
-									newLi.setAttribute("class","menu")
+									newLi.classList.add("menu")
 									newLi.innerText="A"+addZero(count,3)+". "
 									if(adminWordList.list[i].title!=null&&adminWordList.list[i].title!=""){
 										newLi.innerText+=adminWordList.list[i].title
@@ -498,7 +550,7 @@
 									if(friendWordList.sharing){
 										for(var i=friendWordList.list.length-1;i>=0;i--){
 											var newLi=document.createElement("li")
-											newLi.setAttribute("class","menu")
+											newLi.classList.add("menu")
 											newLi.innerText="F"+addZero(friendWordList.list.length-i,3)+". "
 											if(friendWordList.list[i].title!=null&&friendWordList.list[i].title!=""){
 												newLi.innerText+=friendWordList.list[i].title
@@ -545,11 +597,6 @@
 						localStorage.setItem("AdminWordList",JSON.stringify(adminWordList))
 						loadAdminWordList()
 					})
-				}
-				if(currentItem){
-					document.getElementById("Delete").style.display=""
-				}else{
-					document.getElementById("Delete").style.display="none"
 				}
 			}
 			function loadQuestion(){
@@ -768,23 +815,12 @@
 								if(enteredDefWithoutSpace==""){
 									incorrect()
 								}else{
-									var defCorrectRate
-									if(correctDefinition.length>enteredDefWithoutSpace.length){
-										defCorrectRate=(enteredDefWithoutSpace.length/correctDefinition.length)*100
-									}else{
-										defCorrectRate=(correctDefinition.length/enteredDefWithoutSpace.length)*100
-									}
-									if(defCorrectRate<1){
-										defCorrectRate=1
-									}else if(defCorrectRate>99){
-										defCorrectRate=99
-									}
 									switch(language){
 										case "SimplifiedChinese":
-										document.getElementById("EnteredDefinition").value+=" ≈ "+correctDefinition+"（"+defCorrectRate+"% 正确）"
+										document.getElementById("EnteredDefinition").value+=" ≈ "+correctDefinition+"（正确）"
 										break
 										default:
-										document.getElementById("EnteredDefinition").value+=" ≈ "+correctDefinition+" ("+defCorrectRate+"% Correct)"
+										document.getElementById("EnteredDefinition").value+=" ≈ "+correctDefinition+" (Correct)"
 										break
 									}
 								}
@@ -842,7 +878,7 @@
 				}
 				document.getElementById("NextButton").style.display=""
 			}
-			function save(callback){
+			function save(callback,willReload){
 				if(currentItem){
 					savedWordList.list[currentItem-1].list=currentList
 					savedWordList.list[currentItem-1].title=document.getElementById("TitleInput").value
@@ -857,16 +893,64 @@
 					if(callback){
 						callback()
 					}
-					applyItem(currentItem)
+					applyItem(currentItem,null,willReload)
 				})
 			}
+			function saveAs(){
+				if(isElectron&&!isLinux){
+					require("electron").remote.dialog.showSaveDialog({
+						defaultPath:document.getElementById("TitleInput").value,
+						filters:[{name:"RTH Toolbox Files",extensions:["rth"]}]
+					},function(filename){
+						if(filename){
+							require("fs").writeFileSync(filename,JSON.stringify({
+								"list":currentList,
+								"title":document.getElementById("TitleInput").value
+							}))
+						}
+					})
+				}else{
+					var filename=document.getElementById("TitleInput").value
+					if(filename==""){
+						filename=document.title
+					}
+					if(filename.indexOf(".")==-1){
+						filename+=".rth"
+					}
+					var dl=document.createElement("a")
+					dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(JSON.stringify({
+						"list":currentList,
+						"title":document.getElementById("TitleInput").value
+					})))
+					dl.setAttribute("download",filename)
+					if(document.createEvent){
+						var event=document.createEvent("MouseEvents")
+						event.initEvent("click",true,true)
+						dl.dispatchEvent(event)
+					}else{
+						dl.click()
+					}
+				}
+			}
 			function speak(){
-				if(window.speechSynthesis){
+				var speakDef=document.getElementById("SpeakDefinitionsSwitch").classList.contains("mui-active")
+				speakWord=document.getElementById("SpeakWordsSwitch").classList.contains("mui-active")
+				if(speakWord&&!speakDef&&correctWord.indexOf(" ")==-1){
+					var audio=new Audio("https://media.shanbay.com/audio/us/"+correctWord+".mp3")
+					audio.oncanplaythrough=function(){
+						audio.play()
+					}
+					audio.onerror=function(){
+						if(window.speechSynthesis){
+							window.speechSynthesis.speak(new SpeechSynthesisUtterance(correctWord))
+						}
+					}
+				}else if(window.speechSynthesis){
 					var speakText=""
-					if(document.getElementById("SpeakWordsSwitch").classList.contains("mui-active")){
+					if(speakWord){
 						speakText+=correctWord+". "
 					}
-					if(document.getElementById("SpeakDefinitionsSwitch").classList.contains("mui-active")){
+					if(speakDef){
 						speakText+=correctDefinition+". "
 					}
 					window.speechSynthesis.speak(new SpeechSynthesisUtterance(speakText))
@@ -914,7 +998,7 @@
 						return false
 						break
 						case 83:
-						save()
+						saveAs()
 						return false
 						break
 						default:break
@@ -959,8 +1043,8 @@
 					newSharingButton=document.createElement("button"),
 					newNotSharingButton=document.createElement("button"),
 					newCloseDiv=document.createElement("div")
-					newDiv.setAttribute("class","popup")
-					newDescriptionDiv.setAttribute("class","description")
+					newDiv.classList.add("popup")
+					newDescriptionDiv.classList.add("description")
 					newDescriptionDiv.style.marginBottom="20px"
 					newInput.type="email"
 					var friendEmail=localStorage.getItem("FriendEmail")
@@ -982,7 +1066,7 @@
 						newSharingButton.classList.remove("active")
 						newNotSharingButton.classList.add("active")
 					}
-					newCloseDiv.setAttribute("class","close")
+					newCloseDiv.classList.add("close")
 					newCloseDiv.innerText="×"
 					newCloseDiv.onclick=function(){
 						localStorage.setItem("FriendEmail",newInput.value)
@@ -1026,57 +1110,22 @@
 					},25)
 				}
 			}
-			document.getElementById("Quiz").onclick=
-			document.getElementById("FlashCard").onclick=function(){
+			document.getElementById("FlashCard").onclick=
+			document.getElementById("Quiz").onclick=function(){
 				arrange(this.id.toLowerCase())
 			}
-			document.getElementById("Save").onclick=function(){
-				save()
-			}
 			document.getElementById("Add").onclick=add
-			document.getElementById("SaveAs").onclick=function(){
-				if(isElectron&&!isLinux){
-					require("electron").remote.dialog.showSaveDialog({
-						defaultPath:document.getElementById("TitleInput").value,
-						filters:[{name:"RTH Toolbox Files",extensions:["rth"]}]
-					},function(filename){
-						if(filename){
-							require("fs").writeFileSync(filename,JSON.stringify({
-								"list":currentList,
-								"title":document.getElementById("TitleInput").value
-							}))
-						}
-					})
-				}else{
-					var filename=document.getElementById("TitleInput").value
-					if(filename==""){
-						filename=document.title
-					}
-					if(filename.indexOf(".")==-1){
-						filename+=".rth"
-					}
-					var dl=document.createElement("a")
-					dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(JSON.stringify({
-						"list":currentList,
-						"title":document.getElementById("TitleInput").value
-					})))
-					dl.setAttribute("download",filename)
-					if(document.createEvent){
-						var event=document.createEvent("MouseEvents")
-						event.initEvent("click",true,true)
-						dl.dispatchEvent(event)
-					}else{
-						dl.click()
-					}
-				}
-			}
+			document.getElementById("SaveAs").onclick=saveAs
 			document.getElementById("Delete").onclick=function(){
 				showConfirm([
 					"Do you want to delete the word list?",
 					"您想删除此单词表吗？"
 				],function(){
-					savedWordList.list.splice(currentItem-1,1)
-					submit(closeTrue)
+					if(currentItem){
+						savedWordList.list.splice(currentItem-1,1)
+						submit()
+					}
+					closeTrue()
 				})
 			}
 			document.getElementById("EnteredWord").onkeydown=function(e){
@@ -1128,10 +1177,9 @@
 				document.getElementById("OpenLWL").innerText="打开本地的单词表"
 				document.getElementById("SharingSettings").innerText="共享设置"
 				document.getElementById("TitleInput").placeholder="标题"
-				document.getElementById("Quiz").innerText="测验"
 				document.getElementById("SaveAs").innerText="另存为"
 				document.getElementById("FlashCard").innerText="学习卡"
-				document.getElementById("Save").innerText="保存"
+				document.getElementById("Quiz").innerText="测验"
 				document.getElementById("Add").innerText="添加"
 				document.getElementById("Delete").innerText="删除"
 				document.getElementById("WordLabel").innerText="单词"
@@ -1161,10 +1209,9 @@
 				document.getElementById("OpenLWL").innerText="Open Local Word List"
 				document.getElementById("SharingSettings").innerText="Sharing Settings"
 				document.getElementById("TitleInput").placeholder="Title"
-				document.getElementById("Quiz").innerText="Quiz"
 				document.getElementById("SaveAs").innerText="Save As"
 				document.getElementById("FlashCard").innerText="Flash Card"
-				document.getElementById("Save").innerText="Save"
+				document.getElementById("Quiz").innerText="Quiz"
 				document.getElementById("Add").innerText="Add"
 				document.getElementById("Delete").innerText="Delete"
 				document.getElementById("WordLabel").innerText="Word"
@@ -1197,8 +1244,6 @@
 				document.getElementById("SaveAs").style.display="none"
 			}
 			if(!window.speechSynthesis){
-				document.getElementById("Speak").style.display="none"
-				document.getElementById("SpeakWordsLi").style.display="none"
 				document.getElementById("SpeakDefinitionsLi").style.display="none"
 			}
 			load()

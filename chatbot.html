@@ -101,8 +101,9 @@
 					var botText=e.text,
 					newDiv=document.createElement("div"),
 					newChildDiv=document.createElement("div")
-					newDiv.setAttribute("class","msg-row")
-					newChildDiv.setAttribute("class","msg msg-bot")
+					newDiv.classList.add("msg-row")
+					newChildDiv.classList.add("msg")
+					newChildDiv.classList.add("msg-bot")
 					newDiv.appendChild(newChildDiv)
 					var appendMsg=function(){
 						if(e.code==200000){
@@ -132,8 +133,9 @@
 					lastBotInfo=e
 					var newMyDiv=document.createElement("div"),
 					newMyChildDiv=document.createElement("div")
-					newMyDiv.setAttribute("class","msg-row")
-					newMyChildDiv.setAttribute("class","msg msg-me")
+					newMyDiv.classList.add("msg-row")
+					newMyChildDiv.classList.add("msg")
+					newMyChildDiv.classList.add("msg-me")
 					newMyChildDiv.innerText=document.getElementsByTagName("input")[0].value
 					newMyDiv.appendChild(newMyChildDiv)
 					document.getElementsByClassName("mui-content")[0].appendChild(newMyDiv)

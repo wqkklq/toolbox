@@ -155,6 +155,13 @@ textarea{
 	border-radius:5px;
 	margin-bottom:10px;
 }
+.mask{
+	height:100%;
+	left:0px;
+	position:fixed;
+	top:0px;
+	width:100%;
+}
 .menu{
 	border-bottom:1px solid rgb(239,239,244);
 	border-top:1px solid rgb(239,239,244);
