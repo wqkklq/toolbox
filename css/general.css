@@ -174,7 +174,7 @@ textarea{
 	margin-left:-40px;
 	overflow:hidden;
 	padding:10px 15px;
-	word-break:break-all;
+	word-break:break-word;
 }
 .menu p{
 	margin-bottom:0px;
