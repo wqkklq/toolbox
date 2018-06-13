@@ -192,7 +192,6 @@
 										addWord(newWord,e.data.en_definition.defn)
 									}
 									localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
-									localStorage.setItem(wordWithoutSpace+"_Audio",e.data.audio)
 									localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
 									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
 								}else{
@@ -274,27 +273,18 @@
 						]
 					},{
 						"onclick":function(){
-							if(currentList[index].word.indexOf(" ")==-1){
-								var audio=new Audio("https://media.shanbay.com/audio/us/"+currentList[index].word+".mp3")
-								audio.onerror=function(){
-									if(window.speechSynthesis){
-										window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentList[index].word))
-									}else{
-										showAlert([
-											"Unable to connect to the server",
-											"无法连接服务器"
-										])
-									}
+							var audio=new Audio("https://media.shanbay.com/audio/us/"+currentList[index].word.replace(/\s/g,"_")+".mp3")
+							audio.onerror=function(){
+								if(window.speechSynthesis){
+									window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentList[index].word))
+								}else{
+									showAlert([
+										"Unable to speak this word",
+										"无法朗读此单词"
+									])
 								}
-								audio.play()
-							}else if(window.speechSynthesis){
-								window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentList[index].word))
-							}else{
-								showAlert([
-									"Unable to speak this word",
-									"无法朗读此单词"
-								])
 							}
+							audio.play()
 							closeMenu()
 						},
 						"text":[
@@ -933,8 +923,8 @@
 			function speak(){
 				var speakDef=document.getElementById("SpeakDefinitionsSwitch").classList.contains("mui-active")
 				speakWord=document.getElementById("SpeakWordsSwitch").classList.contains("mui-active")
-				if(speakWord&&!speakDef&&correctWord.indexOf(" ")==-1){
-					var audio=new Audio("https://media.shanbay.com/audio/us/"+correctWord+".mp3")
+				if(speakWord&&!speakDef){
+					var audio=new Audio("https://media.shanbay.com/audio/us/"+correctWord.replace(/\s/g,"_")+".mp3")
 					audio.onerror=function(){
 						if(window.speechSynthesis){
 							window.speechSynthesis.speak(new SpeechSynthesisUtterance(correctWord))
