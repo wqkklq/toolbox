@@ -273,18 +273,25 @@
 						]
 					},{
 						"onclick":function(){
-							var audio=new Audio("https://media.shanbay.com/audio/us/"+currentList[index].word.replace(/\s/g,"_")+".mp3")
-							audio.onerror=function(){
-								if(window.speechSynthesis){
-									window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentList[index].word))
-								}else{
+							if(isEnglish.test(currentList[index].word)){
+								var audio=new Audio("https://media.shanbay.com/audio/us/"+currentList[index].word.replace(/\s/g,"_")+".mp3")
+								audio.onerror=function(){
 									showAlert([
 										"Unable to speak this word",
 										"无法朗读此单词"
-									])
+									],function(){
+										location.reload()
+									})
 								}
+								audio.play()
+							}else if(window.speechSynthesis){
+								window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentList[index].word))
+							}else{
+								showAlert([
+									"Unable to speak this word",
+									"无法朗读此单词"
+								])
 							}
-							audio.play()
 							closeMenu()
 						},
 						"text":[
@@ -930,7 +937,7 @@
 			function speak(){
 				var speakDef=document.getElementById("SpeakDefinitionsSwitch").classList.contains("mui-active")
 				speakWord=document.getElementById("SpeakWordsSwitch").classList.contains("mui-active")
-				if(speakWord&&!speakDef){
+				if(speakWord&&!speakDef&&isEnglish.test(correctWord)){
 					var audio=new Audio("https://media.shanbay.com/audio/us/"+correctWord.replace(/\s/g,"_")+".mp3")
 					audio.onerror=function(){
 						if(window.speechSynthesis){
