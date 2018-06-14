@@ -300,6 +300,7 @@ textarea{
 	background-color:rgba(0,0,0,.75);
 	border-radius:10px;
 	color:white;
+	cursor:default;
 	font-size:14px;
 	opacity:0;
 	padding:10px;

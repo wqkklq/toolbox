@@ -426,6 +426,7 @@
 				if(path){
 					if(path.indexOf("://")==-1){
 						localStorage.setItem("WordList",require("fs").readFileSync(path,"utf8"))
+						localStorage.removeItem("WordListCurrentItem")
 						openWindow("wordlist")
 					}
 				}

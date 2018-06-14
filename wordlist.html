@@ -298,7 +298,14 @@
 								"您想删除 "+currentList[index].word+" 吗？"
 							],function(){
 								currentList.splice(index,1)
-								document.getElementById("WordListUl").innerHTML=""
+								switch(language){
+									case "SimplifiedChinese":
+									document.getElementById("WordListUl").innerHTML="<li class=\"menu\">正在加载</li>"
+									break
+									default:
+									document.getElementById("WordListUl").innerHTML="<li class=\"menu\">Loading</li>"
+									break
+								}
 								save(null,true)
 							})
 							closeMenu()
@@ -1144,7 +1151,12 @@
 				optionClicked(3)
 			}
 			document.getElementById("NextButton").onclick=next
-			document.getElementById("Restart").onclick=restartQuiz
+			document.getElementById("Restart").onclick=function(){
+				showConfirm([
+					"Do you want to restart the quiz?",
+					"您想重新开始测验吗？"
+				],restartQuiz)
+			}
 			document.getElementById("Speak").onclick=speak
 			for(var i=0;i<handle.length;i++){
 				handle[i].onclick=function(){
