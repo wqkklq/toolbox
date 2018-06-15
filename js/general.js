@@ -753,7 +753,6 @@ if(!isIE){
 					"lang":language,
 					"name":login.username,
 					"text":message,
-					"time":new Date().getTime(),
 					"ver":ver
 				},function(){
 					showAlert([
