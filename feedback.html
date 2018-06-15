@@ -42,11 +42,12 @@
 						"Sending",
 						"正在发送"
 					])
-					$.post("https://rthapi.tk/feedback.php",{
+					$.get("https://rthapi.tk/feedback.php",{
 						"email":document.getElementById("Email").value,
 						"lang":language,
 						"name":document.getElementById("Name").value,
 						"text":document.getElementsByTagName("textarea")[0].value,
+						"time":new Date().getTime(),
 						"ver":ver
 					},function(){
 						showAlert([

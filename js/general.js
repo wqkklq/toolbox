@@ -141,10 +141,10 @@ function getJSON(url,callback,errorCallback){
 	$.ajax({
 		"url":"https://rthapi.tk/get.php",
 		"data":{
+			"time":new Date().getTime(),
 			"url":url
 		},
 		"dataType":"json",
-		"method":"POST",
 		"success":callback,
 		"error":errorCallback
 	})
@@ -248,10 +248,10 @@ function loginDialog(){
 					"url":"https://rthapi.tk/userdata/verify.php",
 					"data":{
 						"email":email,
-						"password":password
+						"password":password,
+						"time":new Date().getTime()
 					},
 					"dataType":"json",
-					"method":"POST",
 					"success":function(e){
 						if(e.index){
 							if(e.pass){
@@ -748,11 +748,12 @@ if(!isIE){
 				"An error occurs. Do you want to submit the error report?\n"+message,
 				"发生错误。您想提交错误报告吗？\n"+message
 			],function(){
-				$.post("https://rthapi.tk/feedback.php",{
+				$.get("https://rthapi.tk/feedback.php",{
 					"email":login.email,
 					"lang":language,
 					"name":login.username,
 					"text":message,
+					"time":new Date().getTime(),
 					"ver":ver
 				},function(){
 					showAlert([
@@ -909,10 +910,10 @@ if(login.username){
 		"url":"https://rthapi.tk/userdata/verify.php",
 		"data":{
 			"email":login.email,
-			"password":login.password
+			"password":login.password,
+			"time":new Date().getTime()
 		},
 		"dataType":"json",
-		"method":"POST",
 		"success":function(e){
 			if(!e.pass){
 				showAlert([

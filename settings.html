@@ -88,9 +88,10 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
-					$.post("https://rthapi.tk/userdata/verify.php",{
+					$.get("https://rthapi.tk/userdata/verify.php",{
 						"email":login.email,
-						"password":MD5(e)
+						"password":MD5(e),
+						"time":new Date().getTime()
 					},function(verifyResult){
 						if(verifyResult.pass){
 							showPrompt([
@@ -136,18 +137,20 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
-					$.post("https://rthapi.tk/userdata/verify.php",{
+					$.get("https://rthapi.tk/userdata/verify.php",{
 						"email":login.email,
-						"password":MD5(e)
+						"password":MD5(e),
+						"time":new Date().getTime()
 					},function(verifyResult){
 						if(verifyResult.pass){
 							showPrompt([
 								"Enter the new email address",
 								"输入新电子邮箱地址"
 							],function(newEmail){
-								$.post("https://rthapi.tk/userdata/verify.php",{
+								$.get("https://rthapi.tk/userdata/verify.php",{
 									"email":newEmail,
-									"password":login.password
+									"password":login.password,
+									"time":new Date().getTime()
 								},function(newVerify){
 									if(newVerify.index>0){
 										showAlert([
@@ -200,9 +203,10 @@
 						"Enter your current password",
 						"输入您的当前密码"
 					],function(e){
-						$.post("https://rthapi.tk/userdata/verify.php",{
+						$.get("https://rthapi.tk/userdata/verify.php",{
 							"email":login.email,
-							"password":MD5(e)
+							"password":MD5(e),
+							"time":new Date().getTime()
 						},function(verifyResult){
 							if(verifyResult.pass){
 								$.post("https://rthapi.tk/userdata/remove.php",{

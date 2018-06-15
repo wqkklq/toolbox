@@ -225,9 +225,9 @@
 									"url":"https://rthapi.tk/generate.php",
 									"data":{
 										"alert":document.getElementById("CreateMessageBoxInput").value,
+										"time":new Date().getTime(),
 										"title":document.title
 									},
-									"method":"POST",
 									"success":function(e){
 										openWebPage(e)
 									},

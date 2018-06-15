@@ -357,9 +357,8 @@
 				}
 				if(wordCount>=wordMin){
 					if(name=="quiz"){
-						save(function(){
-							openDiv(name)
-						})
+						openDiv(name)
+						save()
 					}else{
 						localStorage.setItem("WordList",JSON.stringify({
 							"list":currentList,
@@ -542,9 +541,10 @@
 					}
 					var friendEmail=localStorage.getItem("FriendEmail")
 					if(friendEmail&&friendEmail!=""){
-						$.post("https://rthapi.tk/userdata/verify.php",{
+						$.get("https://rthapi.tk/userdata/verify.php",{
 							"email":friendEmail,
-							"password":new Date().getTime()
+							"password":new Date().getTime(),
+							"time":new Date().getTime()
 						},function(verifyResult){
 							if(verifyResult.username){
 								getJSON("https://rthapi.tk/userdata/wordlist/"+verifyResult.username+".txt",function(e){
@@ -884,19 +884,25 @@
 				if(currentItem){
 					savedWordList.list[currentItem-1].list=currentList
 					savedWordList.list[currentItem-1].title=document.getElementById("TitleInput").value
+					submit(function(){
+						if(callback){
+							callback()
+						}
+						applyItem(currentItem,null,willReload)
+					},JSON.stringify(savedWordList.list[currentItem-1]),"list",currentItem-1)
 				}else{
 					savedWordList.list.push({
 						"list":currentList,
 						"title":document.getElementById("TitleInput").value
 					})
 					currentItem=savedWordList.list.length
+					submit(function(){
+						if(callback){
+							callback()
+						}
+						applyItem(currentItem,null,willReload)
+					})
 				}
-				submit(function(){
-					if(callback){
-						callback()
-					}
-					applyItem(currentItem,null,willReload)
-				})
 			}
 			function saveAs(){
 				if(isElectron&&!isLinux){
@@ -956,7 +962,7 @@
 					window.speechSynthesis.speak(new SpeechSynthesisUtterance(speakText))
 				}
 			}
-			function submit(callback){
+			function submit(callback,text,key1,key2){
 				savedWordList.time=new Date().getTime()
 				localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
 				if(login.username){
@@ -964,11 +970,20 @@
 						"Submitting",
 						"正在提交"
 					])
-					$.post("https://rthapi.tk/userdata/upload.php",{
+					var postData={
 						"dir":"wordlist/",
 						"filename":login.username,
 						"text":JSON.stringify(savedWordList)
-					},function(){
+					}
+					if(key1){
+						postData["key1"]=key1
+						if(key2){
+							postData["key2"]=key2
+						}
+						postData.text=text
+						postData["time"]=savedWordList.time
+					}
+					$.post("https://rthapi.tk/userdata/upload.php",postData,function(){
 						if(callback){
 							callback()
 						}
@@ -1075,7 +1090,7 @@
 						}else{
 							savedWordList.sharing=false
 						}
-						submit(reload)
+						submit(reload,savedWordList.sharing,"sharing")
 						newDiv.style.opacity=""
 						setTimeout(function(){
 							document.body.removeChild(newDiv)
