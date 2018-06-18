@@ -247,7 +247,7 @@
 						"Submitting",
 						"正在提交"
 					])
-					$.post("https://rthapi.tk/userdata/upload.php",{
+					$.post("https://api.rthsoftware.cn/userdata/upload.php",{
 						"dir":"names/",
 						"filename":login.username,
 						"text":JSON.stringify(savedNames)
@@ -386,7 +386,7 @@
 			}
 			load()
 			if(login.username){
-				getJSON("https://rthapi.tk/userdata/names/"+login.username+".txt",function(e){
+				getJSON("https://api.rthsoftware.cn/userdata/names/"+login.username+".txt",function(e){
 					if(e.time>savedNames.time){
 						savedNames=e
 					}

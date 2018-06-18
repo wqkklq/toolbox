@@ -22,7 +22,7 @@ login={
 },
 recentInput=0,
 theme=localStorage.getItem("Theme"),
-ver="10.0"
+ver="10.1"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -139,7 +139,7 @@ function dateDiff(startDate,endDate){
 }
 function getJSON(url,callback,errorCallback){
 	$.ajax({
-		"url":"https://rthapi.tk/get.php",
+		"url":"https://api.rthsoftware.cn/get.php",
 		"data":{
 			"time":new Date().getTime(),
 			"url":url
@@ -245,7 +245,7 @@ function loginDialog(){
 				newPasswordInput.focus()
 			}else{
 				$.ajax({
-					"url":"https://rthapi.tk/userdata/verify.php",
+					"url":"https://api.rthsoftware.cn/userdata/verify.php",
 					"data":{
 						"email":email,
 						"password":password,
@@ -272,7 +272,7 @@ function loginDialog(){
 									newPasswordInput.value=""
 									newConfirmPasswordInput.value=""
 									var newPassword=(new Date().getTime()*(Math.round(Math.random()*99)+1)).toString(36)
-									$.post("https://rthapi.tk/reset.php",{
+									$.post("https://api.rthsoftware.cn/reset.php",{
 										"index":e.index,
 										"password":newPassword,
 										"passwordmd5":MD5(newPassword)
@@ -294,7 +294,7 @@ function loginDialog(){
 									newConfirmPasswordInput.focus()
 								}else{
 									var username=email.split("@")[0]+new Date().getTime().toString(36)
-									$.post("https://rthapi.tk/userdata/signup.php",{
+									$.post("https://api.rthsoftware.cn/userdata/signup.php",{
 										"email":email,
 										"password":password,
 										"username":username
@@ -382,7 +382,7 @@ function loginDialog(){
 			newConfirmPasswordInput.placeholder="确认密码"
 			newSignUpButton.innerText="注册"
 			newLoginButton.innerText="登录"
-			newDescriptionDiv.innerText="登录后，您可以在 https://t.rths.tk/ 查看您保存的单词表和文本文档。"
+			newDescriptionDiv.innerText="登录后，您可以在 https://toolbox.rthsoftware.cn/ 查看您保存的单词表和文本文档。"
 			break
 			default:
 			newH1.innerText="Login"
@@ -391,7 +391,7 @@ function loginDialog(){
 			newConfirmPasswordInput.placeholder="Confirm Password"
 			newSignUpButton.innerText="Sign Up"
 			newLoginButton.innerText="Login"
-			newDescriptionDiv.innerText="After logging in, you can view your saved word lists and text documents at https://t.rths.tk/."
+			newDescriptionDiv.innerText="After logging in, you can view your saved word lists and text documents at https://toolbox.rthsoftware.cn/."
 			break
 		}
 		newDiv.appendChild(newH1)
@@ -425,7 +425,7 @@ function openDialog(){
 }
 function openWebPage(href){
 	href=encodeURI(href)
-	if(/t.rths.tk/.test(href)&&href.indexOf("jpg")==-1){
+	if(/toolbox.rthsoftware.cn/.test(href)&&href.indexOf("jpg")==-1){
 		if(href.indexOf("?")!=-1){
 			href+="&time="+new Date().getTime()
 		}else{
@@ -442,7 +442,7 @@ function openWebPage(href){
 }
 function openWindow(name){
 	var suffix=".html"
-	if(name.indexOf(suffix)!=-1||/t.rths.tk/.test(location.href)){
+	if(name.indexOf(suffix)!=-1||/toolbox.rthsoftware.cn/.test(location.href)){
 		suffix=""
 	}
 	var url=name+suffix
@@ -748,7 +748,7 @@ if(!isIE){
 				"An error occurs. Do you want to submit the error report?\n"+message,
 				"发生错误。您想提交错误报告吗？\n"+message
 			],function(){
-				$.get("https://rthapi.tk/feedback.php",{
+				$.get("https://api.rthsoftware.cn/feedback.php",{
 					"email":login.email,
 					"lang":language,
 					"name":login.username,
@@ -841,7 +841,7 @@ if(appliedTheme=="Bing"){
 		loadWallpaper()
 	}
 	$.ajax({
-		"url":"https://rthapi.tk/bing/base64.php",
+		"url":"https://api.rthsoftware.cn/bing/base64.php",
 		"success":function(e){
 			localStorage.setItem("Bing",e)
 			savedBingWallpaper=e
@@ -901,12 +901,12 @@ if(isElectron){
 		document.body.appendChild(newDiv)
 	}
 }
-if(name&&document.referrer.indexOf("https://rths.tk")!=-1){
+if(name&&document.referrer.indexOf("https://rthsoftware.cn")!=-1){
 	login=JSON.parse(name)
 }
 if(login.username){
 	$.ajax({
-		"url":"https://rthapi.tk/userdata/verify.php",
+		"url":"https://api.rthsoftware.cn/userdata/verify.php",
 		"data":{
 			"email":login.email,
 			"password":login.password,

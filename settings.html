@@ -88,7 +88,7 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
-					$.get("https://rthapi.tk/userdata/verify.php",{
+					$.get("https://api.rthsoftware.cn/userdata/verify.php",{
 						"email":login.email,
 						"password":MD5(e),
 						"time":new Date().getTime()
@@ -104,7 +104,7 @@
 								],function(confirmPassword){
 									if(confirmPassword==newPassword){
 										localStorage.setItem("Password",MD5(newPassword))
-										$.post("https://rthapi.tk/reset.php",{
+										$.post("https://api.rthsoftware.cn/reset.php",{
 											"index":verifyResult.index,
 											"passwordmd5":MD5(newPassword)
 										},function(){
@@ -137,7 +137,7 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
-					$.get("https://rthapi.tk/userdata/verify.php",{
+					$.get("https://api.rthsoftware.cn/userdata/verify.php",{
 						"email":login.email,
 						"password":MD5(e),
 						"time":new Date().getTime()
@@ -147,7 +147,7 @@
 								"Enter the new email address",
 								"输入新电子邮箱地址"
 							],function(newEmail){
-								$.get("https://rthapi.tk/userdata/verify.php",{
+								$.get("https://api.rthsoftware.cn/userdata/verify.php",{
 									"email":newEmail,
 									"password":login.password,
 									"time":new Date().getTime()
@@ -164,7 +164,7 @@
 										],function(confirmEmail){
 											if(confirmEmail==newEmail){
 												localStorage.setItem("Email",newEmail)
-												$.post("https://rthapi.tk/reset.php",{
+												$.post("https://api.rthsoftware.cn/reset.php",{
 													"index":verifyResult.index,
 													"newemail":newEmail
 												},function(){
@@ -203,13 +203,13 @@
 						"Enter your current password",
 						"输入您的当前密码"
 					],function(e){
-						$.get("https://rthapi.tk/userdata/verify.php",{
+						$.get("https://api.rthsoftware.cn/userdata/verify.php",{
 							"email":login.email,
 							"password":MD5(e),
 							"time":new Date().getTime()
 						},function(verifyResult){
 							if(verifyResult.pass){
-								$.post("https://rthapi.tk/userdata/remove.php",{
+								$.post("https://api.rthsoftware.cn/userdata/remove.php",{
 									"index":verifyResult.index,
 									"username":login.username
 								},logOut)
@@ -252,7 +252,7 @@
 				document.getElementById("DeleteAccount").innerText="删除账号"
 				document.getElementById("LogOut").innerText="退出登录"
 				document.getElementById("ClearLocalStorage").innerText="清空本地存储"
-				document.getElementById("Introduction").innerText="登录后，您可以在 https://t.rths.tk/ 查看您保存的单词表和文本文档。"
+				document.getElementById("Introduction").innerText="登录后，您可以在 https://toolbox.rthsoftware.cn/ 查看您保存的单词表和文本文档。"
 				document.getElementById("About").innerText="关于 RTH 工具箱"
 				break
 				default:
@@ -270,7 +270,7 @@
 				document.getElementById("DeleteAccount").innerText="Delete Account"
 				document.getElementById("LogOut").innerText="Log Out"
 				document.getElementById("ClearLocalStorage").innerText="Clear Local Storage"
-				document.getElementById("Introduction").innerText="After logging in, you can view your saved word lists and text documents at https://t.rths.tk/."
+				document.getElementById("Introduction").innerText="After logging in, you can view your saved word lists and text documents at https://toolbox.rthsoftware.cn/."
 				document.getElementById("About").innerText="About RTH Toolbox"
 				break
 			}

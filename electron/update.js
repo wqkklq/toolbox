@@ -32,7 +32,7 @@ try{
 				default:break
 			}
 		}
-		xhr.open("GET","https://t.rths.tk/web/toolbox/files.json?time="+new Date().getTime())
+		xhr.open("GET","https://toolbox.rthsoftware.cn/web/toolbox/files.json?time="+new Date().getTime())
 		xhr.send()
 	}
 	function next(){
@@ -61,7 +61,7 @@ try{
 				default:break
 			}
 		}
-		xhr.open("GET","https://t.rths.tk/"+file+"?time="+new Date().getTime())
+		xhr.open("GET","https://toolbox.rthsoftware.cn/"+file+"?time="+new Date().getTime())
 		xhr.send()
 	}
 }catch(e){
