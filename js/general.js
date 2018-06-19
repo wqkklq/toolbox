@@ -901,9 +901,6 @@ if(isElectron){
 		document.body.appendChild(newDiv)
 	}
 }
-if(name&&document.referrer.indexOf("https://www.rthsoftware.cn")!=-1){
-	login=JSON.parse(name)
-}
 if(login.username){
 	$.ajax({
 		"url":"https://api.rthsoftware.cn/userdata/verify.php",

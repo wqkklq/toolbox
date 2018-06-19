@@ -277,6 +277,9 @@
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			document.getElementById("LanguageSelect").value=language
 			document.getElementById("ThemeSelect").value=theme
+			if(document.referrer.indexOf("https://www.rthsoftware.cn")!=-1&&searchURL("account")){
+				login=JSON.parse(searchURL("account"))
+			}
 			if(login.username){
 				document.getElementById("MyEmail").innerText=login.email
 				document.getElementById("Login").style.display="none"
