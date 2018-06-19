@@ -32,9 +32,9 @@ You can get RTH Toolbox on App Store, Google Play and Coolapk.
 
 ---
 
-For more details: [https://rthsoftware.cn/](https://rthsoftware.cn/)
+For more details: [https://www.rthsoftware.cn/](https://www.rthsoftware.cn/)
 
-更多详情请访问：[https://rthsoftware.cn/](https://rthsoftware.cn/)
+更多详情请访问：[https://www.rthsoftware.cn/](https://www.rthsoftware.cn/)
 
 Use RTH Toolbox Online: [https://toolbox.rthsoftware.cn/](https://toolbox.rthsoftware.cn/)
 

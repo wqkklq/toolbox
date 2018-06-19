@@ -901,7 +901,7 @@ if(isElectron){
 		document.body.appendChild(newDiv)
 	}
 }
-if(name&&document.referrer.indexOf("https://rthsoftware.cn")!=-1){
+if(name&&document.referrer.indexOf("https://www.rthsoftware.cn")!=-1){
 	login=JSON.parse(name)
 }
 if(login.username){
