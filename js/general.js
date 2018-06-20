@@ -1,5 +1,6 @@
 /*Code written by Shangzhen Yang*/
 var appliedTheme,
+backend="https://api.rthsoftware.cn",
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
 isChinese=/[\u4E00-\u9FA5]+/,
@@ -139,7 +140,7 @@ function dateDiff(startDate,endDate){
 }
 function getJSON(url,callback,errorCallback){
 	$.ajax({
-		"url":"https://api.rthsoftware.cn/get.php",
+		"url":backend+"/get.php",
 		"data":{
 			"time":new Date().getTime(),
 			"url":url
@@ -245,7 +246,7 @@ function loginDialog(){
 				newPasswordInput.focus()
 			}else{
 				$.ajax({
-					"url":"https://api.rthsoftware.cn/userdata/verify.php",
+					"url":backend+"/userdata/verify.php",
 					"data":{
 						"email":email,
 						"password":password,
@@ -272,7 +273,7 @@ function loginDialog(){
 									newPasswordInput.value=""
 									newConfirmPasswordInput.value=""
 									var newPassword=(new Date().getTime()*(Math.round(Math.random()*99)+1)).toString(36)
-									$.post("https://api.rthsoftware.cn/reset.php",{
+									$.post(backend+"/reset.php",{
 										"index":e.index,
 										"password":newPassword,
 										"passwordmd5":MD5(newPassword)
@@ -294,7 +295,7 @@ function loginDialog(){
 									newConfirmPasswordInput.focus()
 								}else{
 									var username=email.split("@")[0]+new Date().getTime().toString(36)
-									$.post("https://api.rthsoftware.cn/userdata/signup.php",{
+									$.post(backend+"/userdata/signup.php",{
 										"email":email,
 										"password":password,
 										"username":username
@@ -748,7 +749,7 @@ if(!isIE){
 				"An error occurs. Do you want to submit the error report?\n"+message,
 				"发生错误。您想提交错误报告吗？\n"+message
 			],function(){
-				$.get("https://api.rthsoftware.cn/feedback.php",{
+				$.get(backend+"/feedback.php",{
 					"email":login.email,
 					"lang":language,
 					"name":login.username,
@@ -841,7 +842,7 @@ if(appliedTheme=="Bing"){
 		loadWallpaper()
 	}
 	$.ajax({
-		"url":"https://api.rthsoftware.cn/bing/base64.php",
+		"url":backend+"/bing/base64.php",
 		"success":function(e){
 			localStorage.setItem("Bing",e)
 			savedBingWallpaper=e
@@ -903,7 +904,7 @@ if(isElectron){
 }
 if(login.username){
 	$.ajax({
-		"url":"https://api.rthsoftware.cn/userdata/verify.php",
+		"url":backend+"/userdata/verify.php",
 		"data":{
 			"email":login.email,
 			"password":login.password,

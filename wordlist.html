@@ -513,7 +513,7 @@
 					}
 					loadMyWordList()
 					if(login.username){
-						getJSON("https://api.rthsoftware.cn/userdata/wordlist/"+login.username+".txt",function(e){
+						getJSON(backend+"/userdata/wordlist/"+login.username+".txt",function(e){
 							if(e.username==savedWordList.username){
 								if(e.time>savedWordList.time){
 									savedWordList=e
@@ -541,13 +541,13 @@
 					}
 					var friendEmail=localStorage.getItem("FriendEmail")
 					if(friendEmail&&friendEmail!=""){
-						$.get("https://api.rthsoftware.cn/userdata/verify.php",{
+						$.get(backend+"/userdata/verify.php",{
 							"email":friendEmail,
 							"password":new Date().getTime(),
 							"time":new Date().getTime()
 						},function(verifyResult){
 							if(verifyResult.username){
-								getJSON("https://api.rthsoftware.cn/userdata/wordlist/"+verifyResult.username+".txt",function(e){
+								getJSON(backend+"/userdata/wordlist/"+verifyResult.username+".txt",function(e){
 									friendWordList=e
 									if(friendWordList.sharing){
 										for(var i=friendWordList.list.length-1;i>=0;i--){
@@ -594,7 +594,7 @@
 						},"json")
 					}
 					loadAdminWordList()
-					getJSON("https://api.rthsoftware.cn/userdata/wordlist/admin.txt",function(e){
+					getJSON(backend+"/userdata/wordlist/admin.txt",function(e){
 						adminWordList=e
 						localStorage.setItem("AdminWordList",JSON.stringify(adminWordList))
 						loadAdminWordList()
@@ -983,7 +983,7 @@
 						postData.text=text
 						postData["time"]=savedWordList.time
 					}
-					$.post("https://api.rthsoftware.cn/userdata/upload.php",postData,function(){
+					$.post(backend+"/userdata/upload.php",postData,function(){
 						if(callback){
 							callback()
 						}

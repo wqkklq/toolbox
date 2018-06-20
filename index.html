@@ -198,7 +198,7 @@
 			}
 			function getSentence(){
 				$.ajax({
-					"url":"https://api.rthsoftware.cn/rs/",
+					"url":backend+"/rs/",
 					"data":{
 						"encode":"text",
 						"language":(function(){
@@ -290,7 +290,7 @@
 			function submitDateCountdown(){
 				displayDateCountdown()
 				if(login.username){
-					$.post("https://api.rthsoftware.cn/userdata/upload.php",{
+					$.post(backend+"/userdata/upload.php",{
 						"dir":"datecountdown/",
 						"filename":login.username,
 						"text":JSON.stringify(dateCountdown)
@@ -379,7 +379,7 @@
 				}
 			}
 			if(isApp){
-				getJSON("https://api.rthsoftware.cn/toolbox.txt",function(e){
+				getJSON(backend+"/toolbox.txt",function(e){
 					if((function(){
 						var currentVer=ver.split("."),newVer
 						if(isAndroid){
@@ -435,7 +435,7 @@
 				dateCountdown=JSON.parse(dateCountdown)
 			}
 			if(login.username){
-				getJSON("https://api.rthsoftware.cn/userdata/datecountdown/"+login.username+".txt",function(e){
+				getJSON(backend+"/userdata/datecountdown/"+login.username+".txt",function(e){
 					if(!dateCountdown||e.time>dateCountdown.time){
 						dateCountdown=e
 						localStorage.setItem("DateCountdown",JSON.stringify(e))

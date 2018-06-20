@@ -88,7 +88,7 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
-					$.get("https://api.rthsoftware.cn/userdata/verify.php",{
+					$.get(backend+"/userdata/verify.php",{
 						"email":login.email,
 						"password":MD5(e),
 						"time":new Date().getTime()
@@ -104,7 +104,7 @@
 								],function(confirmPassword){
 									if(confirmPassword==newPassword){
 										localStorage.setItem("Password",MD5(newPassword))
-										$.post("https://api.rthsoftware.cn/reset.php",{
+										$.post(backend+"/reset.php",{
 											"index":verifyResult.index,
 											"passwordmd5":MD5(newPassword)
 										},function(){
@@ -137,7 +137,7 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
-					$.get("https://api.rthsoftware.cn/userdata/verify.php",{
+					$.get(backend+"/userdata/verify.php",{
 						"email":login.email,
 						"password":MD5(e),
 						"time":new Date().getTime()
@@ -147,7 +147,7 @@
 								"Enter the new email address",
 								"输入新电子邮箱地址"
 							],function(newEmail){
-								$.get("https://api.rthsoftware.cn/userdata/verify.php",{
+								$.get(backend+"/userdata/verify.php",{
 									"email":newEmail,
 									"password":login.password,
 									"time":new Date().getTime()
@@ -164,7 +164,7 @@
 										],function(confirmEmail){
 											if(confirmEmail==newEmail){
 												localStorage.setItem("Email",newEmail)
-												$.post("https://api.rthsoftware.cn/reset.php",{
+												$.post(backend+"/reset.php",{
 													"index":verifyResult.index,
 													"newemail":newEmail
 												},function(){
@@ -203,13 +203,13 @@
 						"Enter your current password",
 						"输入您的当前密码"
 					],function(e){
-						$.get("https://api.rthsoftware.cn/userdata/verify.php",{
+						$.get(backend+"/userdata/verify.php",{
 							"email":login.email,
 							"password":MD5(e),
 							"time":new Date().getTime()
 						},function(verifyResult){
 							if(verifyResult.pass){
-								$.post("https://api.rthsoftware.cn/userdata/remove.php",{
+								$.post(backend+"/userdata/remove.php",{
 									"index":verifyResult.index,
 									"username":login.username
 								},logOut)

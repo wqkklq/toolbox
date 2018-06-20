@@ -71,7 +71,7 @@
 						"Submitting",
 						"正在提交"
 					])
-					$.post("https://api.rthsoftware.cn/userdata/upload.php",{
+					$.post(backend+"/userdata/upload.php",{
 						"dir":"datecountdown/",
 						"filename":login.username,
 						"text":JSON.stringify(dateCountdown)
