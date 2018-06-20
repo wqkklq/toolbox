@@ -23,7 +23,7 @@ login={
 },
 recentInput=0,
 theme=localStorage.getItem("Theme"),
-timeout=5000,
+timeout=10000,
 ver="10.1"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
