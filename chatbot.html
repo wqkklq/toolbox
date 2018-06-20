@@ -126,6 +126,25 @@
 						})
 						break
 					}
+				},function(e){
+					var newDiv=document.createElement("div"),
+					newChildDiv=document.createElement("div")
+					newDiv.classList.add("msg-row")
+					newChildDiv.classList.add("msg")
+					newChildDiv.classList.add("msg-bot")
+					switch(language){
+						case "SimplifiedChinese":
+						newChildDiv.innerText="无法连接服务器。"
+						document.getElementsByClassName("mui-title")[0].innerText="康康"
+						break
+						default:
+						newChildDiv.innerText="Unable to connect to the server."
+						document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
+						break
+					}
+					newDiv.appendChild(newChildDiv)
+					document.getElementsByClassName("mui-content")[0].appendChild(newDiv)
+					scrollTo(0,document.body.scrollHeight)
 				})
 			}
 			document.getElementById("SendMessage").onclick=function(){
