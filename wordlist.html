@@ -180,10 +180,6 @@
 								addWord(newWord,ENDef)
 							}
 						}else{
-							showToast([
-								"Getting the definition",
-								"正在获取释义"
-							])
 							getJSON("http://api.shanbay.com/bdc/search/?word="+encodeURIComponent(newWord),function(e){
 								if(e.msg=="SUCCESS"){
 									if(language=="SimplifiedChinese"&&e.data.cn_definition.defn!=null){
