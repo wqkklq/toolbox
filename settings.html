@@ -88,48 +88,54 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
-					$.get(backend+"/userdata/verify.php",{
-						"email":login.email,
-						"password":MD5(e),
-						"time":new Date().getTime()
-					},function(verifyResult){
-						if(verifyResult.pass){
-							showPrompt([
-								"Enter a new password",
-								"输入新密码"
-							],function(newPassword){
+					$.ajax({
+						"url":backend+"/userdata/verify.php",
+						"data":{
+							"email":login.email,
+							"password":MD5(e),
+							"time":new Date().getTime()
+						},
+						"dataType":"json",
+						"timeout":timeout,
+						"success":function(verifyResult){
+							if(verifyResult.pass){
 								showPrompt([
-									"Enter the new password again",
-									"再次输入新密码"
-								],function(confirmPassword){
-									if(confirmPassword==newPassword){
-										localStorage.setItem("Password",MD5(newPassword))
-										$.post(backend+"/reset.php",{
-											"index":verifyResult.index,
-											"passwordmd5":MD5(newPassword)
-										},function(){
-											showAlert([
-												"The password is changed",
-												"密码已更改"
-											],function(){
-												location.reload()
+									"Enter a new password",
+									"输入新密码"
+								],function(newPassword){
+									showPrompt([
+										"Enter the new password again",
+										"再次输入新密码"
+									],function(confirmPassword){
+										if(confirmPassword==newPassword){
+											localStorage.setItem("Password",MD5(newPassword))
+											$.post(backend+"/reset.php",{
+												"index":verifyResult.index,
+												"passwordmd5":MD5(newPassword)
+											},function(){
+												showAlert([
+													"The password is changed",
+													"密码已更改"
+												],function(){
+													location.reload()
+												})
 											})
-										})
-									}else{
-										showAlert([
-											"The two passwords you entered are inconsistent",
-											"两次输入的密码不一致"
-										])
-									}
+										}else{
+											showAlert([
+												"The two passwords you entered are inconsistent",
+												"两次输入的密码不一致"
+											])
+										}
+									},"password")
 								},"password")
-							},"password")
-						}else{
-							showAlert([
-								"Incorrect password",
-								"密码错误"
-							])
+							}else{
+								showAlert([
+									"Incorrect password",
+									"密码错误"
+								])
+							}
 						}
-					},"json")
+					})
 				},"password")
 			}
 			document.getElementById("ChangeEmail").onclick=function(){
@@ -137,61 +143,73 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
-					$.get(backend+"/userdata/verify.php",{
-						"email":login.email,
-						"password":MD5(e),
-						"time":new Date().getTime()
-					},function(verifyResult){
-						if(verifyResult.pass){
-							showPrompt([
-								"Enter the new email address",
-								"输入新电子邮箱地址"
-							],function(newEmail){
-								$.get(backend+"/userdata/verify.php",{
-									"email":newEmail,
-									"password":login.password,
-									"time":new Date().getTime()
-								},function(newVerify){
-									if(newVerify.index>0){
-										showAlert([
-											"This email address has already been occupied",
-											"此电子邮箱地址已被占用"
-										])
-									}else{
-										showPrompt([
-											"Enter the new email address again",
-											"再次输入新电子邮箱地址"
-										],function(confirmEmail){
-											if(confirmEmail==newEmail){
-												localStorage.setItem("Email",newEmail)
-												$.post(backend+"/reset.php",{
-													"index":verifyResult.index,
-													"newemail":newEmail
-												},function(){
-													showAlert([
-														"The email address is changed",
-														"电子邮箱地址已更改"
-													],function(){
-														location.reload()
-													})
-												})
-											}else{
+					$.ajax({
+						"url":backend+"/userdata/verify.php",
+						"data":{
+							"email":login.email,
+							"password":MD5(e),
+							"time":new Date().getTime()
+						},
+						"dataType":"json",
+						"timeout":timeout,
+						"success":function(verifyResult){
+							if(verifyResult.pass){
+								showPrompt([
+									"Enter the new email address",
+									"输入新电子邮箱地址"
+								],function(newEmail){
+									$.ajax({
+										"url":backend+"/userdata/verify.php",
+										"data":{
+											"email":newEmail,
+											"password":login.password,
+											"time":new Date().getTime()
+										},
+										"dataType":"json",
+										"timeout":timeout,
+										"success":function(newVerify){
+											if(newVerify.index>0){
 												showAlert([
-													"The two email addresses you entered are inconsistent",
-													"两次输入的电子邮箱地址不一致"
+													"This email address has already been occupied",
+													"此电子邮箱地址已被占用"
 												])
+											}else{
+												showPrompt([
+													"Enter the new email address again",
+													"再次输入新电子邮箱地址"
+												],function(confirmEmail){
+													if(confirmEmail==newEmail){
+														localStorage.setItem("Email",newEmail)
+														$.post(backend+"/reset.php",{
+															"index":verifyResult.index,
+															"newemail":newEmail
+														},function(){
+															showAlert([
+																"The email address is changed",
+																"电子邮箱地址已更改"
+															],function(){
+																location.reload()
+															})
+														})
+													}else{
+														showAlert([
+															"The two email addresses you entered are inconsistent",
+															"两次输入的电子邮箱地址不一致"
+														])
+													}
+												},"email")
 											}
-										},"email")
-									}
-								},"json")
-							},"email")
-						}else{
-							showAlert([
-								"Incorrect password",
-								"密码错误"
-							])
+										}
+									})
+								},"email")
+							}else{
+								showAlert([
+									"Incorrect password",
+									"密码错误"
+								])
+							}
 						}
-					},"json")
+					})
 				},"password")
 			}
 			document.getElementById("DeleteAccount").onclick=function(){
@@ -203,23 +221,29 @@
 						"Enter your current password",
 						"输入您的当前密码"
 					],function(e){
-						$.get(backend+"/userdata/verify.php",{
-							"email":login.email,
-							"password":MD5(e),
-							"time":new Date().getTime()
-						},function(verifyResult){
-							if(verifyResult.pass){
-								$.post(backend+"/userdata/remove.php",{
-									"index":verifyResult.index,
-									"username":login.username
-								},logOut)
-							}else{
-								showAlert([
-									"Incorrect password",
-									"密码错误"
-								])
+						$.ajax({
+							"url":backend+"/userdata/verify.php",
+							"data":{
+								"email":login.email,
+								"password":MD5(e),
+								"time":new Date().getTime()
+							},
+							"dataType":"json",
+							"timeout":timeout,
+							"success":function(verifyResult){
+								if(verifyResult.pass){
+									$.post(backend+"/userdata/remove.php",{
+										"index":verifyResult.index,
+										"username":login.username
+									},logOut)
+								}else{
+									showAlert([
+										"Incorrect password",
+										"密码错误"
+									])
+								}
 							}
-						},"json")
+						})
 					},"password")
 				})
 			}

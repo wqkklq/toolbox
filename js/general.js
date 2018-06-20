@@ -23,6 +23,7 @@ login={
 },
 recentInput=0,
 theme=localStorage.getItem("Theme"),
+timeout=5000,
 ver="10.1"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
@@ -146,6 +147,7 @@ function getJSON(url,callback,errorCallback){
 			"url":url
 		},
 		"dataType":"json",
+		"timeout":timeout,
 		"success":callback,
 		"error":errorCallback
 	})
@@ -253,6 +255,7 @@ function loginDialog(){
 						"time":new Date().getTime()
 					},
 					"dataType":"json",
+					"timeout":timeout,
 					"success":function(e){
 						if(e.index){
 							if(e.pass){
@@ -911,6 +914,7 @@ if(login.username){
 			"time":new Date().getTime()
 		},
 		"dataType":"json",
+		"timeout":timeout,
 		"success":function(e){
 			if(!e.pass){
 				showAlert([

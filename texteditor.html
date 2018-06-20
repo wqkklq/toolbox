@@ -599,14 +599,20 @@
 					if(url.indexOf("http")==-1){
 						url="http://"+url
 					}
-					$.get(backend+"/get.php",{
-						"time":new Date().getTime(),
-						"url":url
-					},function(e){
-						setText(e)
-						document.getElementsByTagName("input")[0].value=url
-						document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
-						applyItem(0)
+					$.ajax({
+						"url":backend+"/get.php",
+						"data":{
+							"time":new Date().getTime(),
+							"url":url
+						},
+						"dataType":"json",
+						"timeout":timeout,
+						"success":function(e){
+							setText(e)
+							document.getElementsByTagName("input")[0].value=url
+							document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+							applyItem(0)
+						}
 					})
 				})
 			}

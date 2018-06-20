@@ -541,57 +541,63 @@
 					}
 					var friendEmail=localStorage.getItem("FriendEmail")
 					if(friendEmail&&friendEmail!=""){
-						$.get(backend+"/userdata/verify.php",{
-							"email":friendEmail,
-							"password":new Date().getTime(),
-							"time":new Date().getTime()
-						},function(verifyResult){
-							if(verifyResult.username){
-								getJSON(backend+"/userdata/wordlist/"+verifyResult.username+".txt",function(e){
-									friendWordList=e
-									if(friendWordList.sharing){
-										for(var i=friendWordList.list.length-1;i>=0;i--){
-											var newLi=document.createElement("li")
-											newLi.classList.add("menu")
-											newLi.innerText="F"+addZero(friendWordList.list.length-i,3)+". "
-											if(friendWordList.list[i].title!=null&&friendWordList.list[i].title!=""){
-												newLi.innerText+=friendWordList.list[i].title
-											}else{
-												switch(language){
-													case "SimplifiedChinese":
-													newLi.innerText+=friendWordList.list[i].list[0].word+" 和另外 "+friendWordList.list[i].list.length+" 个单词"
-													break
-													default:
-													newLi.innerText+=friendWordList.list[i].list[0].word+" and other "+friendWordList.list[i].list.length+" words"
-													break
+						$.ajax({
+							"url":backend+"/userdata/verify.php",
+							"data":{
+								"email":friendEmail,
+								"password":new Date().getTime(),
+								"time":new Date().getTime()
+							},
+							"dataType":"json",
+							"timeout":timeout,
+							"success":function(verifyResult){
+								if(verifyResult.username){
+									getJSON(backend+"/userdata/wordlist/"+verifyResult.username+".txt",function(e){
+										friendWordList=e
+										if(friendWordList.sharing){
+											for(var i=friendWordList.list.length-1;i>=0;i--){
+												var newLi=document.createElement("li")
+												newLi.classList.add("menu")
+												newLi.innerText="F"+addZero(friendWordList.list.length-i,3)+". "
+												if(friendWordList.list[i].title!=null&&friendWordList.list[i].title!=""){
+													newLi.innerText+=friendWordList.list[i].title
+												}else{
+													switch(language){
+														case "SimplifiedChinese":
+														newLi.innerText+=friendWordList.list[i].list[0].word+" 和另外 "+friendWordList.list[i].list.length+" 个单词"
+														break
+														default:
+														newLi.innerText+=friendWordList.list[i].list[0].word+" and other "+friendWordList.list[i].list.length+" words"
+														break
+													}
 												}
+												newLi.setAttribute("number",i+1)
+												newLi.onclick=function(){
+													var index=this.getAttribute("number")*1-1
+													applyItem(0,friendWordList.list[index])
+												}
+												document.getElementById("FriendWordList").appendChild(newLi)
 											}
-											newLi.setAttribute("number",i+1)
-											newLi.onclick=function(){
-												var index=this.getAttribute("number")*1-1
-												applyItem(0,friendWordList.list[index])
-											}
-											document.getElementById("FriendWordList").appendChild(newLi)
+										}else{
+											showToast([
+												friendEmail+" has no shared word lists",
+												friendEmail+" 没有共享单词表"
+											])
 										}
-									}else{
+									},function(){
 										showToast([
 											friendEmail+" has no shared word lists",
 											friendEmail+" 没有共享单词表"
 										])
-									}
-								},function(){
+									})
+								}else{
 									showToast([
-										friendEmail+" has no shared word lists",
-										friendEmail+" 没有共享单词表"
+										friendEmail+" is not a valid RTH account",
+										friendEmail+" 不是有效的 RTH 账号"
 									])
-								})
-							}else{
-								showToast([
-									friendEmail+" is not a valid RTH account",
-									friendEmail+" 不是有效的 RTH 账号"
-								])
+								}
 							}
-						},"json")
+						})
 					}
 					loadAdminWordList()
 					getJSON(backend+"/userdata/wordlist/admin.txt",function(e){
