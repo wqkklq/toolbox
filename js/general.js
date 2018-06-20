@@ -150,7 +150,7 @@ function getJSON(url,callback,errorCallback){
 		if(document.getElementsByClassName("loading")[0]){
 			document.getElementsByClassName("loading")[0].innerText=(document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1)+"%"
 		}
-	},100)
+	},timeout/100)
 	$.ajax({
 		"url":backend+"/get.php",
 		"data":{
