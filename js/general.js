@@ -147,7 +147,9 @@ function getJSON(url,callback,errorCallback){
 		document.body.appendChild(newDiv)
 	}
 	var intervalId=setInterval(function(){
-		document.getElementsByClassName("loading")[0].innerText=(document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1)+"%"
+		if(document.getElementsByClassName("loading")[0]){
+			document.getElementsByClassName("loading")[0].innerText=(document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1)+"%"
+		}
 	},100)
 	$.ajax({
 		"url":backend+"/get.php",
