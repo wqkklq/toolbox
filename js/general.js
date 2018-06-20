@@ -140,6 +140,15 @@ function dateDiff(startDate,endDate){
 	}
 }
 function getJSON(url,callback,errorCallback){
+	if(!document.getElementsByClassName("loading")[0]){
+		var newDiv=document.createElement("div")
+		newDiv.classList.add("loading")
+		newDiv.innerText="0%"
+		document.body.appendChild(newDiv)
+	}
+	var intervalId=setInterval(function(){
+		document.getElementsByClassName("loading")[0].innerText=(document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1)+"%"
+	},100)
 	$.ajax({
 		"url":backend+"/get.php",
 		"data":{
@@ -148,8 +157,20 @@ function getJSON(url,callback,errorCallback){
 		},
 		"dataType":"json",
 		"timeout":timeout,
-		"success":callback,
-		"error":errorCallback
+		"success":function(e){
+			clearInterval(intervalId)
+			document.body.removeChild(document.getElementsByClassName("loading")[0])
+			if(callback){
+				callback(e)
+			}
+		},
+		"error":function(e){
+			clearInterval(intervalId)
+			document.body.removeChild(document.getElementsByClassName("loading")[0])
+			if(errorCallback){
+				errorCallback(e)
+			}
+		}
 	})
 }
 function initCalculator(max,calculate){

@@ -155,6 +155,19 @@ textarea{
 	border-radius:5px;
 	margin-bottom:10px;
 }
+.loading{
+	background-color:rgba(0,0,0,.5);
+	border-radius:10px;
+	color:white;
+	height:50px;
+	left:calc(50% - 50px);
+	line-height:30px;
+	padding:10px;
+	position:fixed;
+	text-align:center;
+	top:calc(50% - 25px);
+	width:100px;
+}
 .mask{
 	height:100%;
 	left:0px;
