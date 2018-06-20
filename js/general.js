@@ -161,14 +161,18 @@ function getJSON(url,callback,errorCallback){
 		"timeout":timeout,
 		"success":function(e){
 			clearInterval(intervalId)
-			document.body.removeChild(document.getElementsByClassName("loading")[0])
+			try{
+				document.body.removeChild(document.getElementsByClassName("loading")[0])
+			}catch(e){}
 			if(callback){
 				callback(e)
 			}
 		},
 		"error":function(e){
 			clearInterval(intervalId)
-			document.body.removeChild(document.getElementsByClassName("loading")[0])
+			try{
+				document.body.removeChild(document.getElementsByClassName("loading")[0])
+			}catch(e){}
 			if(errorCallback){
 				errorCallback(e)
 			}
