@@ -221,22 +221,7 @@
 							})
 						}else if(isCordova){
 							if(isAndroid){
-								$.ajax({
-									"url":backend+"generate.php",
-									"data":{
-										"alert":document.getElementById("CreateMessageBoxInput").value,
-										"time":new Date().getTime(),
-										"title":document.title
-									},
-									"success":function(e){
-										openWebPage(e)
-									},
-									"error":function(){
-										setTimeout(function(){
-											alert(document.getElementById("CreateMessageBoxInput").value)
-										},1000)
-									}
-								})
+								openWebPage(backend+"alert.php?text="+encodeURIComponent(document.getElementById("CreateMessageBoxInput").value)+"&title="+encodeURIComponent(document.title))
 							}else if(isiOS){
 								cordova.plugins.notification.local.schedule({
 									title:document.title,

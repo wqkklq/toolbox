@@ -754,15 +754,6 @@
 			document.getElementById("CreateMessageBox").onclick=function(){
 				if(!isEmpty()){
 					alert(document.getElementsByTagName("textarea")[0].value)
-					$.get(backend+"generate.php",{
-						"alert":document.getElementsByTagName("textarea")[0].value,
-						"time":new Date().getTime(),
-						"title":document.getElementsByTagName("input")[0].value
-					},function(e){
-						showPrompt(null,function(){
-							openWebPage(e)
-						},null,e)
-					})
 				}
 			}
 			document.getElementById("GenerateQRCode").onclick=function(){
