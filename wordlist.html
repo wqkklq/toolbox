@@ -452,14 +452,14 @@
 								}else{
 									switch(language){
 										case "SimplifiedChinese":
-										if(savedWordList["list"][i]["list"][0]){
+										if(savedWordList.list[i].list[0]){
 											newLi.innerText+=savedWordList.list[i].list[0].word+" 和另外 "+savedWordList.list[i].list.length+" 个单词"
 										}else{
 											newLi.innerText+="空白单词表"
 										}
 										break
 										default:
-										if(savedWordList["list"][i]["list"][0]){
+										if(savedWordList.list[i].list[0]){
 											newLi.innerText+=savedWordList.list[i].list[0].word+" and other "+savedWordList.list[i].list.length+" words"
 										}else{
 											newLi.innerText+="Empty Word List"
