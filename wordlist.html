@@ -444,34 +444,36 @@
 						if(savedWordList&&savedWordList.list){
 							document.getElementById("MyWordList").innerHTML=""
 							for(var i=savedWordList.list.length-1;i>=0;i--){
-								var newLi=document.createElement("li")
-								newLi.classList.add("menu")
-								newLi.innerText="M"+addZero(savedWordList.list.length-i,3)+". "
-								if(savedWordList.list[i].title!=null&&savedWordList.list[i].title!=""){
-									newLi.innerText+=savedWordList.list[i].title
-								}else{
-									switch(language){
-										case "SimplifiedChinese":
-										if(savedWordList.list[i].list[0]){
-											newLi.innerText+=savedWordList.list[i].list[0].word+" 和另外 "+savedWordList.list[i].list.length+" 个单词"
-										}else{
-											newLi.innerText+="空白单词表"
+								if(savedWordList.list[i]){
+									var newLi=document.createElement("li")
+									newLi.classList.add("menu")
+									newLi.innerText="M"+addZero(savedWordList.list.length-i,3)+". "
+									if(savedWordList.list[i].title!=null&&savedWordList.list[i].title!=""){
+										newLi.innerText+=savedWordList.list[i].title
+									}else{
+										switch(language){
+											case "SimplifiedChinese":
+											if(savedWordList.list[i].list[0]){
+												newLi.innerText+=savedWordList.list[i].list[0].word+" 和另外 "+savedWordList.list[i].list.length+" 个单词"
+											}else{
+												newLi.innerText+="空白单词表"
+											}
+											break
+											default:
+											if(savedWordList.list[i].list[0]){
+												newLi.innerText+=savedWordList.list[i].list[0].word+" and other "+savedWordList.list[i].list.length+" words"
+											}else{
+												newLi.innerText+="Empty Word List"
+											}
+											break
 										}
-										break
-										default:
-										if(savedWordList.list[i].list[0]){
-											newLi.innerText+=savedWordList.list[i].list[0].word+" and other "+savedWordList.list[i].list.length+" words"
-										}else{
-											newLi.innerText+="Empty Word List"
-										}
-										break
 									}
+									newLi.setAttribute("number",i+1)
+									newLi.onclick=function(){
+										applyItem(this.getAttribute("number"))
+									}
+									document.getElementById("MyWordList").appendChild(newLi)
 								}
-								newLi.setAttribute("number",i+1)
-								newLi.onclick=function(){
-									applyItem(this.getAttribute("number"))
-								}
-								document.getElementById("MyWordList").appendChild(newLi)
 							}
 						}
 					},
