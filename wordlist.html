@@ -560,10 +560,18 @@
 												}else{
 													switch(language){
 														case "SimplifiedChinese":
-														newLi.innerText+=friendWordList.list[i].list[0].word+" 和另外 "+friendWordList.list[i].list.length+" 个单词"
+														if(friendWordList.list[i].list[0]){
+															newLi.innerText+=friendWordList.list[i].list[0].word+" 和另外 "+friendWordList.list[i].list.length+" 个单词"
+														}else{
+															newLi.innerText+="空白单词表"
+														}
 														break
 														default:
-														newLi.innerText+=friendWordList.list[i].list[0].word+" and other "+friendWordList.list[i].list.length+" words"
+														if(friendWordList.list[i].list[0]){
+															newLi.innerText+=friendWordList.list[i].list[0].word+" and other "+friendWordList.list[i].list.length+" words"
+														}else{
+															newLi.innerText+="Empty Word List"
+														}
 														break
 													}
 												}
