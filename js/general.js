@@ -1,6 +1,6 @@
 /*Code written by Shangzhen Yang*/
 var appliedTheme,
-backend="https://api.rthsoftware.cn",
+backend="https://www.rthsoftware.cn/backend/",
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
 isChinese=/[\u4E00-\u9FA5]+/,
@@ -160,7 +160,7 @@ function getJSON(url,callback,errorCallback){
 		}
 	},timeout/100)
 	$.ajax({
-		"url":backend+"/get.php",
+		"url":backend+"get.php",
 		"data":{
 			"time":new Date().getTime(),
 			"url":url
@@ -283,7 +283,7 @@ function loginDialog(){
 				newPasswordInput.focus()
 			}else{
 				$.ajax({
-					"url":backend+"/userdata/verify.php",
+					"url":backend+"userdata/verify.php",
 					"data":{
 						"email":email,
 						"password":password,
@@ -311,7 +311,7 @@ function loginDialog(){
 									newPasswordInput.value=""
 									newConfirmPasswordInput.value=""
 									var newPassword=(new Date().getTime()*(Math.round(Math.random()*99)+1)).toString(36)
-									$.post(backend+"/reset.php",{
+									$.post(backend+"reset.php",{
 										"index":e.index,
 										"password":newPassword,
 										"passwordmd5":MD5(newPassword)
@@ -333,7 +333,7 @@ function loginDialog(){
 									newConfirmPasswordInput.focus()
 								}else{
 									var username=email.split("@")[0]+new Date().getTime().toString(36)
-									$.post(backend+"/userdata/signup.php",{
+									$.post(backend+"userdata/signup.php",{
 										"email":email,
 										"password":password,
 										"username":username
@@ -787,7 +787,7 @@ if(!isIE){
 				"An error occurs. Do you want to submit the error report?\n"+message,
 				"发生错误。您想提交错误报告吗？\n"+message
 			],function(){
-				$.get(backend+"/feedback.php",{
+				$.get(backend+"feedback.php",{
 					"email":login.email,
 					"lang":language,
 					"name":login.username,
@@ -880,7 +880,7 @@ if(appliedTheme=="Bing"){
 		loadWallpaper()
 	}
 	$.ajax({
-		"url":backend+"/bing/base64.php",
+		"url":backend+"bing/base64.php",
 		"success":function(e){
 			localStorage.setItem("Bing",e)
 			savedBingWallpaper=e
@@ -942,7 +942,7 @@ if(isElectron){
 }
 if(login.username){
 	$.ajax({
-		"url":backend+"/userdata/verify.php",
+		"url":backend+"userdata/verify.php",
 		"data":{
 			"email":login.email,
 			"password":login.password,
