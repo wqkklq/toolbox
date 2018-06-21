@@ -600,15 +600,37 @@
 					if(url.indexOf("http")==-1){
 						url="http://"+url
 					}
+					if(!document.getElementsByClassName("loading")[0]){
+						var newDiv=document.createElement("div")
+						newDiv.classList.add("loading")
+						newDiv.innerText="0%"
+						document.body.appendChild(newDiv)
+					}
+					var intervalId=setInterval(function(){
+						if(document.getElementsByClassName("loading")[0]){
+							var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
+							if(newNum>100){
+								clearInterval(intervalId)
+								try{
+									document.body.removeChild(document.getElementsByClassName("loading")[0])
+								}catch(e){}
+							}else{
+								document.getElementsByClassName("loading")[0].innerText=newNum+"%"
+							}
+						}
+					},timeout/100)
 					$.ajax({
 						"url":backend+"get.php",
 						"data":{
 							"time":new Date().getTime(),
 							"url":url
 						},
-						"dataType":"json",
 						"timeout":timeout,
 						"success":function(e){
+							clearInterval(intervalId)
+							try{
+								document.body.removeChild(document.getElementsByClassName("loading")[0])
+							}catch(e){}
 							setText(e)
 							document.getElementsByTagName("input")[0].value=url
 							document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
