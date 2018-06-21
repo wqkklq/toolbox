@@ -106,15 +106,19 @@
 				}
 			}
 			function addName(){
-				showPrompt([
-					"Enter a person's name",
-					"输入一个人的名字"
-				],function(e){
-					savedNames.names.push(e)
-					loadNames(savedNames.names.length-1)
-					count()
-					addName()
-				})
+				if(localStorage.getItem("Username")){
+					showPrompt([
+						"Enter a person's name",
+						"输入一个人的名字"
+					],function(e){
+						savedNames.names.push(e)
+						loadNames(savedNames.names.length-1)
+						count()
+						addName()
+					})
+				}else{
+					loginDialog()
+				}
 			}
 			function clearHistory(negativeCallback){
 				if(document.getElementById("HistoryUl").innerHTML!=""){
@@ -263,9 +267,6 @@
 						"Changes are saved",
 						"更改已保存"
 					])
-					if(!localStorage.getItem("Username")){
-						loginDialog()
-					}
 					load()
 				}
 			}

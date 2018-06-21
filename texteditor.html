@@ -305,12 +305,16 @@
 				}
 			}
 			function newDoc(){
-				if(document.getElementsByClassName("start")[0].style.display==""){
-					edit(true)
-					document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
-					document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+				if(!document.getElementsByClassName("start")[0].style.display){
+					if(localStorage.getItem("Username")){
+						edit(true)
+						document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+						document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+					}else{
+						loginDialog()
+					}
 				}else{
-					if(document.getElementsByTagName("textarea")[0].value!=""){
+					if(document.getElementsByTagName("textarea")[0].value){
 						showConfirm([
 							"Do you want to close the current document?",
 							"您想关闭当前文档吗？"
@@ -495,9 +499,6 @@
 						"Changes are saved",
 						"更改已保存"
 					])
-					if(!localStorage.getItem("Username")){
-						loginDialog()
-					}
 					if(callback){
 						callback()
 					}
@@ -771,9 +772,6 @@
 								}
 							})
 						})
-					}else if(!localStorage.getItem("Username")){
-						applyItem(0)
-						loginDialog()
 					}else{
 						showAlert([
 							"Unable to connect to the server",

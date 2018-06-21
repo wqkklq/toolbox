@@ -999,9 +999,6 @@
 						"Changes are saved",
 						"更改已保存"
 					])
-					if(!localStorage.getItem("Username")){
-						loginDialog()
-					}
 					if(callback){
 						callback()
 					}
@@ -1047,8 +1044,12 @@
 				lookUp()
 			}
 			document.getElementById("NewWL").onclick=function(){
-				document.getElementById("TitleInput").value=""
-				openDiv("edit")
+				if(localStorage.getItem("Username")){
+					document.getElementById("TitleInput").value=""
+					openDiv("edit")
+				}else{
+					loginDialog()
+				}
 			}
 			document.getElementById("OpenLWL").onclick=openDialog
 			document.getElementById("SharingSettings").onclick=function(){

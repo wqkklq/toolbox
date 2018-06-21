@@ -86,9 +86,6 @@
 						"Changes are saved",
 						"更改已保存"
 					])
-					if(!localStorage.getItem("Username")){
-						loginDialog()
-					}
 				}
 			}
 			document.getElementById("StartDate").oninput=
@@ -132,18 +129,22 @@
 				}
 			}
 			document.getElementById("Save").onclick=function(){
-				if(dateCountdown){
-					dateCountdown.date=new Date(document.getElementById("Date").value).getTime()
-					dateCountdown.name=document.getElementById("Name").value
-					dateCountdown.time=new Date().getTime()
-				}else{
-					dateCountdown={
-						"date":new Date(document.getElementById("Date").value).getTime(),
-						"name":document.getElementById("Name").value,
-						"time":new Date().getTime()
+				if(localStorage.getItem("Username")){
+					if(dateCountdown){
+						dateCountdown.date=new Date(document.getElementById("Date").value).getTime()
+						dateCountdown.name=document.getElementById("Name").value
+						dateCountdown.time=new Date().getTime()
+					}else{
+						dateCountdown={
+							"date":new Date(document.getElementById("Date").value).getTime(),
+							"name":document.getElementById("Name").value,
+							"time":new Date().getTime()
+						}
 					}
+					submit()
+				}else{
+					loginDialog()
 				}
-				submit()
 			}
 			document.getElementById("Delete").onclick=function(){
 				document.getElementById("Name").value=
