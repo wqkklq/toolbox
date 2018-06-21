@@ -148,7 +148,15 @@ function getJSON(url,callback,errorCallback){
 	}
 	var intervalId=setInterval(function(){
 		if(document.getElementsByClassName("loading")[0]){
-			document.getElementsByClassName("loading")[0].innerText=(document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1)+"%"
+			var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
+			if(newNum>100){
+				clearInterval(intervalId)
+				try{
+					document.body.removeChild(document.getElementsByClassName("loading")[0])
+				}catch(e){}
+			}else{
+				document.getElementsByClassName("loading")[0].innerText=newNum+"%"
+			}
 		}
 	},timeout/100)
 	$.ajax({
