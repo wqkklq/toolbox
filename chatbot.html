@@ -126,69 +126,74 @@
 						})
 						break
 					}
-				},function(e){
-					var newDiv=document.createElement("div"),
-					newChildDiv=document.createElement("div")
-					newDiv.classList.add("msg-row")
-					newChildDiv.classList.add("msg")
-					newChildDiv.classList.add("msg-bot")
-					switch(language){
-						case "SimplifiedChinese":
-						newChildDiv.innerText="无法连接服务器。"
-						document.getElementsByClassName("mui-title")[0].innerText="康康"
-						break
-						default:
-						newChildDiv.innerText="Unable to connect to the server."
-						document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
-						break
-					}
-					newDiv.appendChild(newChildDiv)
-					document.getElementsByClassName("mui-content")[0].appendChild(newDiv)
-					scrollTo(0,document.body.scrollHeight)
-				})
+				},noConnection)
+			}
+			function noConnection(){
+				var newDiv=document.createElement("div"),
+				newChildDiv=document.createElement("div")
+				newDiv.classList.add("msg-row")
+				newChildDiv.classList.add("msg")
+				newChildDiv.classList.add("msg-bot")
+				switch(language){
+					case "SimplifiedChinese":
+					newChildDiv.innerText="无法连接服务器。"
+					document.getElementsByClassName("mui-title")[0].innerText="康康"
+					break
+					default:
+					newChildDiv.innerText="Unable to connect to the server."
+					document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
+					break
+				}
+				newDiv.appendChild(newChildDiv)
+				document.getElementsByClassName("mui-content")[0].appendChild(newDiv)
+				scrollTo(0,document.body.scrollHeight)
 			}
 			document.getElementById("SendMessage").onclick=function(){
-				var sendMsg=function(e){
-					lastBotInfo=e
-					var newMyDiv=document.createElement("div"),
-					newMyChildDiv=document.createElement("div")
-					newMyDiv.classList.add("msg-row")
-					newMyChildDiv.classList.add("msg")
-					newMyChildDiv.classList.add("msg-me")
-					newMyChildDiv.innerText=document.getElementsByTagName("input")[0].value
-					newMyDiv.appendChild(newMyChildDiv)
-					document.getElementsByClassName("mui-content")[0].appendChild(newMyDiv)
-					scrollTo(0,document.body.scrollHeight)
-					switch(language){
-						case "SimplifiedChinese":
-						document.getElementsByClassName("mui-title")[0].innerText="对方正在输入"
-						chatbotReply(document.getElementsByTagName("input")[0].value)
-						break
-						default:
-						document.getElementsByClassName("mui-title")[0].innerText="Typing"
-						if(isEnglish.test(document.getElementsByTagName("input")[0].value)){
-							translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
-								chatbotReply(e)
-							})
-						}else{
+				if(localStorage.getItem("Username")){
+					var sendMsg=function(e){
+						lastBotInfo=e
+						var newMyDiv=document.createElement("div"),
+						newMyChildDiv=document.createElement("div")
+						newMyDiv.classList.add("msg-row")
+						newMyChildDiv.classList.add("msg")
+						newMyChildDiv.classList.add("msg-me")
+						newMyChildDiv.innerText=document.getElementsByTagName("input")[0].value
+						newMyDiv.appendChild(newMyChildDiv)
+						document.getElementsByClassName("mui-content")[0].appendChild(newMyDiv)
+						scrollTo(0,document.body.scrollHeight)
+						switch(language){
+							case "SimplifiedChinese":
+							document.getElementsByClassName("mui-title")[0].innerText="对方正在输入"
 							chatbotReply(document.getElementsByTagName("input")[0].value)
+							break
+							default:
+							document.getElementsByClassName("mui-title")[0].innerText="Typing"
+							if(isEnglish.test(document.getElementsByTagName("input")[0].value)&&login.username){
+								translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
+									chatbotReply(e)
+								})
+							}else{
+								chatbotReply(document.getElementsByTagName("input")[0].value)
+							}
+							break
 						}
-						break
 					}
-				}
-				showPrompt([
-					"Enter the message",
-					"输入消息"
-				],function(e){
-					sendMsg(e)
-				},null,null,function(){
 					showPrompt([
 						"Enter the message",
 						"输入消息"
 					],function(e){
 						sendMsg(e)
-					},null,lastBotInfo)
-				})
+					},null,null,function(){
+						showPrompt([
+							"Enter the message",
+							"输入消息"
+						],function(e){
+							sendMsg(e)
+						},null,lastBotInfo)
+					})
+				}else{
+					loginDialog()
+				}
 			}
 			switch(language){
 				case "SimplifiedChinese":
