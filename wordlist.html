@@ -192,6 +192,7 @@
 									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
 								}else{
 									alert(e.msg)
+									add()
 								}
 							},function(){
 								showAlert([
@@ -976,10 +977,6 @@
 				savedWordList.time=new Date().getTime()
 				localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
 				if(login.username){
-					showToast([
-						"Submitting",
-						"正在提交"
-					])
 					var postData={
 						"dir":"wordlist/",
 						"filename":login.username,
@@ -997,16 +994,8 @@
 						if(callback){
 							callback()
 						}
-						showToast([
-							"Changes are saved",
-							"更改已保存"
-						])
 					})
 				}else{
-					showToast([
-						"Changes are saved",
-						"更改已保存"
-					])
 					if(callback){
 						callback()
 					}
@@ -1135,6 +1124,9 @@
 						newDiv.style.opacity="1"
 					},25)
 				}
+			}
+			document.getElementById("TitleInput").oninput=function(){
+				save()
 			}
 			document.getElementById("FlashCard").onclick=
 			document.getElementById("Quiz").onclick=function(){
