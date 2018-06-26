@@ -1129,8 +1129,10 @@
 					},25)
 				}
 			}
-			document.getElementById("TitleInput").oninput=function(){
-				save()
+			document.getElementById("TitleInput").onkeydown=function(e){
+				if(e.keyCode==13){
+					save()
+				}
 			}
 			document.getElementById("FlashCard").onclick=
 			document.getElementById("Quiz").onclick=function(){
