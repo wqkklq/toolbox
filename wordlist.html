@@ -159,7 +159,7 @@
 			settingsChanged,
 			showAnswer=false,
 			wordIndex
-			function add(){
+			function add(word){
 				showPrompt([
 					"Enter a new word",
 					"输入新单词"
@@ -192,17 +192,19 @@
 									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
 								}else{
 									alert(e.msg)
-									add()
+									add(newWord)
 								}
 							},function(){
 								showAlert([
 									"Unable to connect to the server",
 									"无法连接服务器"
-								])
+								],function(){
+									add(newWord)
+								})
 							})
 						}
 					})
-				})
+				},null,word)
 			}
 			function addMistake(word,definition){
 				var repeat=false
