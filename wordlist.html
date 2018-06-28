@@ -1142,7 +1142,9 @@
 			document.getElementById("Quiz").onclick=function(){
 				arrange(this.id.toLowerCase())
 			}
-			document.getElementById("Add").onclick=add
+			document.getElementById("Add").onclick=function(){
+				add()
+			}
 			document.getElementById("SaveAs").onclick=saveAs
 			document.getElementById("Delete").onclick=function(){
 				showConfirm([
