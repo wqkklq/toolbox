@@ -277,7 +277,9 @@
 										"Unable to speak this word",
 										"无法朗读此单词"
 									],function(){
-										location.reload()
+										if(location.href.indexOf("https")!=-1){
+											location.reload()
+										}
 									})
 								}
 								audio.play()
