@@ -1,6 +1,6 @@
 /*Code written by Shangzhen Yang*/
 var appliedTheme,
-backend="https://www.rthsoftware.cn/backend/",
+backend="https://rthapi.tk/",
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
 isChinese=/[\u4E00-\u9FA5]+/,
