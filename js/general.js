@@ -421,7 +421,7 @@ function loginDialog(){
 			newConfirmPasswordInput.placeholder="确认密码"
 			newSignUpButton.innerText="注册"
 			newLoginButton.innerText="登录"
-			newDescriptionDiv.innerText="登录后，您可以在 https://toolbox.rthsoftware.cn/ 查看您保存的单词表和文本文档。"
+			newDescriptionDiv.innerText="登录后，您可以在 https://t.rths.tk/ 查看您保存的单词表和文本文档。"
 			break
 			default:
 			newH1.innerText="Login"
@@ -430,7 +430,7 @@ function loginDialog(){
 			newConfirmPasswordInput.placeholder="Confirm Password"
 			newSignUpButton.innerText="Sign Up"
 			newLoginButton.innerText="Login"
-			newDescriptionDiv.innerText="After logging in, you can view your saved word lists and text documents at https://toolbox.rthsoftware.cn/."
+			newDescriptionDiv.innerText="After logging in, you can view your saved word lists and text documents at https://t.rths.tk/."
 			break
 		}
 		newDiv.appendChild(newH1)
@@ -464,7 +464,7 @@ function openDialog(){
 }
 function openWebPage(href){
 	href=encodeURI(href)
-	if(/toolbox.rthsoftware.cn/.test(href)&&href.indexOf("jpg")==-1){
+	if(href.indexOf("jpg")==-1){
 		if(href.indexOf("?")!=-1){
 			href+="&time="+new Date().getTime()
 		}else{
@@ -481,7 +481,7 @@ function openWebPage(href){
 }
 function openWindow(name){
 	var suffix=".html"
-	if(name.indexOf(suffix)!=-1||/toolbox.rthsoftware.cn/.test(location.href)){
+	if(name.indexOf(suffix)!=-1||location.href.indexOf("https")!=-1){
 		suffix=""
 	}
 	var url=name+suffix
