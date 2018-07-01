@@ -464,13 +464,6 @@ function openDialog(){
 }
 function openWebPage(href){
 	href=encodeURI(href)
-	if(href.indexOf("jpg")==-1){
-		if(href.indexOf("?")!=-1){
-			href+="&time="+new Date().getTime()
-		}else{
-			href+="?time="+new Date().getTime()
-		}
-	}
 	if(isElectron){
 		require("electron").shell.openExternal(href)
 	}else if(isiOSApp){
