@@ -358,7 +358,7 @@
 				}
 				if(wordCount>=wordMin){
 					if(name=="quiz"){
-						openDiv(name)
+						openDiv("quiz")
 						save()
 					}else{
 						localStorage.setItem("WordList",JSON.stringify({
@@ -620,7 +620,7 @@
 				showAnswer=false
 				document.getElementById("EnteredWord").value=""
 				document.getElementById("EnteredDefinition").value=""
-				document.getElementsByClassName("mui-title")[0].innerText=document.getElementById("Quiz").innerText+" ("+progress+"/"+currentList.length+")"
+				document.getElementById("Progress").innerText=progress
 				generateOrder()
 				outOfOrder.push(wordIndex)
 				correctWord=currentList[wordIndex-1].word
@@ -868,6 +868,7 @@
 				load()
 			}
 			function restartQuiz(){
+				document.getElementsByClassName("mui-title")[0].innerHTML=document.getElementById("Quiz").innerText+" (<span id=\"Progress\">1</span>/"+currentList.length+")"
 				settingsChanged=false
 				progress=1
 				outOfOrder=[]
@@ -1138,9 +1139,11 @@
 					save()
 				}
 			}
-			document.getElementById("FlashCard").onclick=
+			document.getElementById("FlashCard").onclick=function(){
+				arrange("flashcard")
+			}
 			document.getElementById("Quiz").onclick=function(){
-				arrange(this.id.toLowerCase())
+				arrange("quiz")
 			}
 			document.getElementById("Add").onclick=function(){
 				add()
