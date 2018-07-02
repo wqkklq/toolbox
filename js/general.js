@@ -824,7 +824,6 @@ if(appliedTheme=="Bing"){
 if(appliedTheme!="Light"){
 	loadCSS("css/"+appliedTheme.toLowerCase()+".css")
 }
-mui.init({swipeBack:false})
 if(header){
 	var newDiv=document.createElement("div"),
 	newA=document.createElement("a"),
