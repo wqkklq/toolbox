@@ -1162,19 +1162,23 @@
 				})
 			}
 			document.getElementById("EnteredWord").onkeydown=function(e){
-				if(e.keyCode==13&&this.value!=""){
-					if(document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
-						document.getElementById("EnteredDefinition").focus()
-					}else{
-						next()
+				if(e.keyCode==13){
+					if(this.value||e.ctrlKey||e.metaKey){
+						if(document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
+							document.getElementById("EnteredDefinition").focus()
+						}else{
+							next()
+						}
 					}
 				}
 			}
 			document.getElementById("EnteredDefinition").onkeydown=function(e){
-				if(e.keyCode==13&&this.value!=""){
-					next()
-					if(!showAnswer&&document.getElementById("EnterWordsSwitch").classList.contains("mui-active")){
-						document.getElementById("EnteredWord").focus()
+				if(e.keyCode==13){
+					if(this.value||e.ctrlKey||e.metaKey){
+						next()
+						if(!showAnswer&&document.getElementById("EnterWordsSwitch").classList.contains("mui-active")){
+							document.getElementById("EnteredWord").focus()
+						}
 					}
 				}
 			}
