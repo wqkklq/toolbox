@@ -891,7 +891,6 @@
 					break
 					default:
 					name=elements[i].name
-					break
 				}
 				document.getElementsByTagName("select")[0].options.add(new Option(i+1+". "+elements[i].symbol+" ("+name+")",elements[i].mass))
 			}
@@ -917,7 +916,6 @@
 				document.getElementById("MassLabel").innerText="Mass"
 				enterNum="Enter the number"
 				document.getElementsByTagName("button")[0].innerText="Record"
-				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			document.getElementById("Mole").placeholder=enterNum

@@ -28,8 +28,6 @@ try{
 				}else{
 					document.getElementsByClassName("content")[0].innerText+=" Error ("+xhr.status+")\nFailed to update."
 				}
-				break
-				default:break
 			}
 		}
 		xhr.open("GET","https://t.rths.tk/web/toolbox/files.json?time="+new Date().getTime())
@@ -57,8 +55,6 @@ try{
 				}else{
 					document.getElementsByClassName("content")[0].innerText+=" Error ("+xhr.status+")\nFailed to update."
 				}
-				break
-				default:break
 			}
 		}
 		xhr.open("GET","https://t.rths.tk/"+file+"?time="+new Date().getTime())

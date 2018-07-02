@@ -517,7 +517,6 @@
 						case 13:
 						runJSCode(true)
 						return false
-						break
 						case 48:
 						if(document.getElementsByClassName("start")[0].style.display!=""){
 							fontSize=16
@@ -527,23 +526,18 @@
 							document.getElementsByClassName("text-view")[0].style.lineHeight=""
 						}
 						return false
-						break
 						case 70:
 						find()
 						return false
-						break
 						case 78:
 						newDoc()
 						return false
-						break
 						case 79:
 						openDialog()
 						return false
-						break
 						case 83:
 						save()
 						return false
-						break
 						case 187:
 						if(document.getElementsByClassName("start")[0].style.display!=""){
 							fontSize+=4
@@ -553,7 +547,6 @@
 							document.getElementsByClassName("text-view")[0].style.lineHeight=(fontSize*3/2)+"px"
 						}
 						return false
-						break
 						case 189:
 						if(document.getElementsByClassName("start")[0].style.display!=""&&fontSize>8){
 							fontSize-=4
@@ -563,8 +556,6 @@
 							document.getElementsByClassName("text-view")[0].style.lineHeight=(fontSize*3/2)+"px"
 						}
 						return false
-						break
-						default:break
 					}
 				}
 			}
@@ -581,8 +572,6 @@
 					case 9:
 					document.execCommand("insertText",null,"\u0009")
 					return false
-					break
-					default:break
 				}
 			}
 			document.getElementsByClassName("text-view")[0].onclick=function(){
@@ -664,7 +653,6 @@
 							break
 							default:
 							filename="Text Document"
-							break
 						}
 					}
 					if(filename.indexOf(".")==-1){
@@ -889,7 +877,6 @@
 				document.getElementById("Encrypt").innerText="Encrypt"
 				document.getElementById("UnicodeEncode").innerText="Unicode Encode"
 				document.getElementById("URIComponentEncode").innerText="URI Component Encode"
-				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(isElectron){

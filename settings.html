@@ -248,15 +248,7 @@
 				})
 			}
 			document.getElementById("LogOut").onclick=logOut
-			document.getElementById("ClearLocalStorage").onclick=function(){
-				showConfirm([
-					"Do you want to clear the local storage?",
-					"您想清空本地存储吗？"
-				],function(){
-					localStorage.clear()
-					restart()
-				})
-			}
+			document.getElementById("ClearLocalStorage").onclick=clearLocalStorage
 			document.getElementById("About").onclick=function(){
 				openWindow("about")
 			}
@@ -296,7 +288,6 @@
 				document.getElementById("ClearLocalStorage").innerText="Clear Local Storage"
 				document.getElementById("Introduction").innerText="After logging in, you can view your saved word lists and text documents at https://t.rths.tk/."
 				document.getElementById("About").innerText="About RTH Toolbox"
-				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			document.getElementById("LanguageSelect").value=language

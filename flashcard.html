@@ -200,7 +200,6 @@
 				document.getElementById("ShowDefinition").innerText="Show Definition"
 				document.getElementById("Previous").innerText="Previous"
 				document.getElementById("Next").innerText="Next"
-				break
 			}
 			if(openedWordList){
 				currentList=JSON.parse(openedWordList).list
@@ -213,16 +212,15 @@
 					switch(e.keyCode){
 						case 32:
 						showDefinition()
-						break
+						return false
 						case 37:
 						case 38:
 						previous()
-						break
+						return false
 						case 39:
 						case 40:
 						next()
-						break
-						default:break
+						return false
 					}
 				}
 				document.getElementsByClassName("mui-title")[0].innerHTML=document.title+" (<span id=\"Progress\">1</span>/"+currentList.length+")"

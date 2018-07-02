@@ -187,7 +187,6 @@
 						break
 						default:
 						document.getElementById("Quote").innerText=dateCountdown.name+": "+dateDiff(new Date(new Date().toLocaleDateString()).getTime(),dateCountdown.date)+" remaining"
-						break
 					}
 					document.getElementById("Quote").onclick=function(){
 						openWindow("date")
@@ -205,10 +204,8 @@
 							switch(language){
 								case "SimplifiedChinese":
 								return "chs"
-								break
 								default:
 								return "en"
-								break
 							}
 						})(),
 						"username":"shangzhenyjg9k10x4"
@@ -226,7 +223,6 @@
 											break
 											default:
 											openWebPage("https://bing.com/search?q="+e)
-											break
 										}
 										closeMenu()
 									},
@@ -352,7 +348,6 @@
 				}else if(currentHour>=21&&currentHour<=23||currentHour>=0&&currentHour<=5){
 					document.getElementById("Quote").innerText="Good night!"
 				}
-				break
 			}
 			document.getElementsByClassName("home-title")[0].innerText=document.title.replace("RTH ","")
 			if(!isApp){
@@ -374,8 +369,6 @@
 							close()
 						}
 					})
-					break
-					default:break;
 				}
 			}
 			if(isApp){

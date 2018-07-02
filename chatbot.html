@@ -124,7 +124,6 @@
 							document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
 							appendMsg()
 						})
-						break
 					}
 				},noConnection)
 			}
@@ -142,7 +141,6 @@
 					default:
 					newChildDiv.innerText="Unable to connect to the server."
 					document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
-					break
 				}
 				newDiv.appendChild(newChildDiv)
 				document.getElementsByClassName("mui-content")[0].appendChild(newDiv)
@@ -175,7 +173,6 @@
 							}else{
 								chatbotReply(document.getElementsByTagName("input")[0].value)
 							}
-							break
 						}
 					}
 					showPrompt([
@@ -207,7 +204,6 @@
 				document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
 				document.getElementById("Welcome").innerText="Let's chat!"
 				document.getElementById("SendMessage").innerText="Send Message"
-				break
 			}
 		</script>
 	</body>

@@ -113,6 +113,15 @@ function calc(code){
 	}
 	return calcResult
 }
+function clearLocalStorage(){
+	showConfirm([
+		"Do you want to clear the local storage?",
+		"您想清空本地存储吗？"
+	],function(){
+		localStorage.clear()
+		restart()
+	})
+}
 function closeMenu(){
 	if(document.getElementsByClassName("popup-menu")[0]){
 		document.getElementsByClassName("popup-menu")[0].style.opacity="0"
@@ -129,14 +138,12 @@ function dateDiff(startDate,endDate){
 	switch(language){
 		case "SimplifiedChinese":
 		return result+" 天"
-		break
 		default:
 		if(Math.abs(result>1)){
 			return result+" days"
 		}else{
 			return result+" day"
 		}
-		break
 	}
 }
 function getJSON(url,callback,errorCallback){
@@ -194,7 +201,6 @@ function initCalculator(max,calculate){
 		break
 		default:
 		document.title="Calculator"
-		break
 	}
 	document.getElementsByClassName("mui-title")[0].innerText=document.title
 	var input=document.getElementsByTagName("input")
@@ -205,7 +211,6 @@ function initCalculator(max,calculate){
 			break
 			default:
 			input[i].placeholder="Enter the number"
-			break
 		}
 		if(isAndroid){
 			input[i].type="text"
@@ -431,7 +436,6 @@ function loginDialog(){
 			newSignUpButton.innerText="Sign Up"
 			newLoginButton.innerText="Login"
 			newDescriptionDiv.innerText="After logging in, you can view your saved word lists and text documents at https://t.rths.tk/."
-			break
 		}
 		newDiv.appendChild(newH1)
 		newDiv.appendChild(newEmailInput)
@@ -519,7 +523,6 @@ function showAlert(text,callback){
 		break
 		default:
 		alert(text[0])
-		break
 	}
 	if(callback){
 		callback()
@@ -533,7 +536,6 @@ function showConfirm(text,positiveCallback,negativeCallback){
 		break
 		default:
 		value=confirm(text[0])
-		break
 	}
 	if(value){
 		if(positiveCallback){
@@ -593,7 +595,6 @@ function showImage(src){
 		newLoadDiv.innerText="Loading"
 		newCloseDiv.innerText="Close"
 		newSaveDiv.innerText="Save"
-		break
 	}
 	newDiv.appendChild(newTitleDiv)
 	newContentDiv.appendChild(newLoadDiv)
@@ -630,7 +631,6 @@ function showMenu(e,menu){
 			break
 			default:
 			newSpan.innerText=menu[i].text[0]
-			break
 		}
 		newSpan.onclick=menu[i].onclick
 		newDiv.appendChild(newSpan)
@@ -670,8 +670,6 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 			break
 			case 27:
 			newCancelButton.click()
-			break
-			default:break
 		}
 	}
 	newCancelButton.onclick=function(){
@@ -718,7 +716,6 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 		}
 		newCancelButton.innerText="Cancel"
 		newOKButton.innerText="OK"
-		break
 	}
 	newDiv.appendChild(newInput)
 	newDiv.appendChild(newCancelButton)
@@ -736,7 +733,6 @@ function showToast(text){
 		break
 		default:
 		mui.toast(text[0])
-		break
 	}
 }
 function translate(query,from,to,callback){
@@ -775,7 +771,7 @@ if(!isIE){
 	window.onerror=function(msg,url,lineNo){
 		window.onerror=null
 		if(msg!="Script error."){
-			var message=msg+" at "+url+":"+lineNo
+			var message=msg+" at "+url+" : "+lineNo
 			showConfirm([
 				"An error occurs. Do you want to submit the error report?\n"+message,
 				"发生错误。您想提交错误报告吗？\n"+message
@@ -790,9 +786,9 @@ if(!isIE){
 					showAlert([
 						"Thank you for submitting an error report",
 						"感谢您提交错误报告"
-					],restart)
+					],clearLocalStorage)
 				})
-			},restart)
+			},clearLocalStorage)
 		}
 	}
 }
@@ -894,8 +890,6 @@ if(isElectron){
 				break
 				case 82:
 				win.reload()
-				break
-				default:break
 			}
 		}
 	})

@@ -312,7 +312,6 @@
 									break
 									default:
 									document.getElementById("WordListUl").innerHTML="<li class=\"menu\">Loading</li>"
-									break
 								}
 								save(null,true)
 							})
@@ -353,8 +352,6 @@
 					break
 					case "quiz":
 					wordMin=4
-					break
-					default:break
 				}
 				if(wordCount>=wordMin){
 					if(name=="quiz"){
@@ -469,7 +466,6 @@
 										}else{
 											newLi.innerText+="Empty Word List"
 										}
-										break
 									}
 								}
 								newLi.setAttribute("number",i+1)
@@ -499,7 +495,6 @@
 											break
 											default:
 											newLi.innerText+=adminWordList.list[i].list[0].word+" and other "+adminWordList.list[i].list.length+" words"
-											break
 										}
 									}
 									newLi.setAttribute("number",i+1)
@@ -577,7 +572,6 @@
 														}else{
 															newLi.innerText+="Empty Word List"
 														}
-														break
 													}
 												}
 												newLi.setAttribute("number",i+1)
@@ -650,8 +644,6 @@
 						break
 						case 3:
 						document.getElementById("Option4").innerText=optionStr
-						break
-						default:break
 					}
 					var generateOption=function(){
 						optionIndex=Math.round(Math.random()*currentList.length-1)+1
@@ -690,7 +682,6 @@
 						break
 						default:
 						document.getElementById("Show").innerText="There is nothing to show"
-						break
 					}
 				}
 				speak()
@@ -739,8 +730,6 @@
 					document.getElementsByClassName("quiz")[0].style.display=
 					document.getElementsByTagName("footer")[0].style.display=""
 					document.getElementsByClassName("back")[0].onclick=mui.back
-					break
-					default:break
 				}
 			}
 			function openLWL(file){
@@ -791,7 +780,6 @@
 									break
 									default:
 									document.getElementById("EnteredWord").value+=" (Correct)"
-									break
 								}
 							}else{
 								addMistake(correctWord,correctDefinition)
@@ -801,7 +789,6 @@
 									break
 									default:
 									document.getElementById("EnteredWord").value+=" ≠ "+correctWord+" (Incorrect)"
-									break
 								}
 							}
 						}
@@ -816,7 +803,6 @@
 									break
 									default:
 									document.getElementById("EnteredDefinition").value+=" ≠ "+correctDefinition+" (Incorrect)"
-									break
 								}
 							}
 							if(enteredDefWithoutSpace==correctDefWithoutSpace){
@@ -826,7 +812,6 @@
 									break
 									default:
 									document.getElementById("EnteredDefinition").value+=" (Correct)"
-									break
 								}
 							}else if(correctDefWithoutSpace.indexOf(enteredDefWithoutSpace)!=-1||enteredDefWithoutSpace.indexOf(correctDefWithoutSpace)!=-1){
 								if(enteredDefWithoutSpace==""){
@@ -838,7 +823,6 @@
 										break
 										default:
 										document.getElementById("EnteredDefinition").value+=" ≈ "+correctDefinition+" (Correct)"
-										break
 									}
 								}
 							}else{
@@ -1016,12 +1000,9 @@
 						case 79:
 						openDialog()
 						return false
-						break
 						case 83:
 						saveAs()
 						return false
-						break
-						default:break
 					}
 				}else{
 					switch(e.keyCode){
@@ -1036,8 +1017,6 @@
 						break
 						case 52:
 						optionClicked(3)
-						break
-						default:break
 					}
 				}
 			}
@@ -1119,7 +1098,6 @@
 						newInput.placeholder="Email"
 						newSharingButton.innerText="Sharing"
 						newNotSharingButton.innerText="Not Sharing"
-						break
 					}
 					newDiv.appendChild(newH1)
 					newDiv.appendChild(newDescriptionDiv)
@@ -1274,7 +1252,6 @@
 					"list":[],
 					"title":"Mistakes"
 				}
-				break
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(isMobile){
