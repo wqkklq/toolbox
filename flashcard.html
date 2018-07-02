@@ -123,6 +123,34 @@
 					})
 				}
 			}
+			function next(){
+				if(progress>=currentList.length){
+					showAlert([
+						"This is the last word",
+						"这是最后一个单词"
+					])
+				}else{
+					showDefinition=false
+					document.getElementById("ShowDefinition").style.display=""
+					reset()
+					progress+=1
+					loadWord()
+				}
+			}
+			function previous(){
+				if(progress<=1){
+					showAlert([
+						"This is the first word",
+						"这是第一个单词"
+					])
+				}else{
+					showDefinition=false
+					document.getElementById("ShowDefinition").style.display=""
+					reset()
+					progress-=1
+					loadWord()
+				}
+			}
 			function reset(){
 				document.getElementById("Pronunciation").innerText=""
 				document.getElementById("CNDefinition").innerText=""
@@ -136,6 +164,19 @@
 						document.getElementById("Translate").innerText=e
 						document.getElementById("Translate").style.display="block"
 					})
+				}
+			}
+			window.onkeydown=function(e){
+				switch(e.keyCode){
+					case 37:
+					case 38:
+					previous()
+					break
+					case 39:
+					case 40:
+					next()
+					break
+					default:break
 				}
 			}
 			document.getElementsByTagName("input")[0].onkeydown=function(e){
@@ -158,34 +199,8 @@
 				document.getElementById("ShowDefinition").style.display="none"
 				dictChanged()
 			}
-			document.getElementById("Previous").onclick=function(){
-				if(progress<=1){
-					showAlert([
-						"This is the first word",
-						"这是第一个单词"
-					])
-				}else{
-					showDefinition=false
-					document.getElementById("ShowDefinition").style.display=""
-					reset()
-					progress-=1
-					loadWord()
-				}
-			}
-			document.getElementById("Next").onclick=function(){
-				if(progress>=currentList.length){
-					showAlert([
-						"This is the last word",
-						"这是最后一个单词"
-					])
-				}else{
-					showDefinition=false
-					document.getElementById("ShowDefinition").style.display=""
-					reset()
-					progress+=1
-					loadWord()
-				}
-			}
+			document.getElementById("Previous").onclick=previous
+			document.getElementById("Next").onclick=next
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="学习卡"
