@@ -167,7 +167,7 @@ function getJSON(url,callback,errorCallback){
 		}
 	},timeout/100)
 	$.ajax({
-		"url":backend+"get.php",
+		"url":"https://rthapi.tk/get.php",
 		"data":{
 			"time":new Date().getTime(),
 			"url":url
@@ -766,6 +766,9 @@ function translate(query,from,to,callback){
 			}
 		}
 	})
+}
+if(localStorage.getItem("Backend")){
+	backend=localStorage.getItem("Backend")
 }
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){

@@ -371,44 +371,45 @@
 					})
 				}
 			}
-			if(isApp){
-				getJSON(backend+"toolbox.txt",function(e){
-					if((function(){
-						var currentVer=ver.split("."),newVer
-						if(isAndroid){
-							newVer=e.android.ver.split(".")
-						}else if(isElectron){
-							newVer=e.electron.ver.split(".")
-						}else if(isiOS){
-							newVer=e.ios.ver.split(".")
-						}else{
-							return false
-						}
-						if(newVer[0]*1>currentVer[0]*1){
-							return true
-						}else if(newVer[0]*1==currentVer[0]*1){
-							if(newVer[1]*1>currentVer[1]*1){
-								return true
-							}else{
-								return false
-							}
-						}else{
-							return false
-						}
-					})()){
-						if(isElectron){
-							location.href="electron/update.html"
-						}else{
-							showConfirm([
-								"There is an update available. Do you want to update?",
-								"有更新可用。您想更新吗？"
-							],function(){
-								getToolbox(false)
-							})
-						}
+			getJSON("toolbox.txt",function(e){
+				if(backend!=e.backend){
+					localStorage.setItem("Backend",e.backend)
+				}
+				if(isApp&&(function(){
+					var currentVer=ver.split("."),newVer
+					if(isAndroid){
+						newVer=e.android.ver.split(".")
+					}else if(isElectron){
+						newVer=e.electron.ver.split(".")
+					}else if(isiOS){
+						newVer=e.ios.ver.split(".")
+					}else{
+						return false
 					}
-				})
-			}
+					if(newVer[0]*1>currentVer[0]*1){
+						return true
+					}else if(newVer[0]*1==currentVer[0]*1){
+						if(newVer[1]*1>currentVer[1]*1){
+							return true
+						}else{
+							return false
+						}
+					}else{
+						return false
+					}
+				})()){
+					if(isElectron){
+						location.href="electron/update.html"
+					}else{
+						showConfirm([
+							"There is an update available. Do you want to update?",
+							"有更新可用。您想更新吗？"
+						],function(){
+							getToolbox(false)
+						})
+					}
+				}
+			})
 			if(isElectron){
 				var path,remote=require("electron").remote
 				if(process.platform=="darwin"){
