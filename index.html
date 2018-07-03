@@ -429,7 +429,7 @@
 				dateCountdown=JSON.parse(dateCountdown)
 			}
 			if(login.username){
-				getJSON(backend+"userdata/datecountdown/"+login.username+".txt",function(e){
+				getJSON("userdata/datecountdown/"+login.username+".txt",function(e){
 					if(!dateCountdown||e.time>dateCountdown.time){
 						dateCountdown=e
 						localStorage.setItem("DateCountdown",JSON.stringify(e))

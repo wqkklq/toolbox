@@ -277,7 +277,7 @@
 				}
 				loadSavedText()
 				if(login.username){
-					getJSON(backend+"userdata/text/"+login.username+".txt",function(e){
+					getJSON("userdata/text/"+login.username+".txt",function(e){
 						if(e.username==savedText.username){
 							if(e.time>savedText.time){
 								savedText=e
