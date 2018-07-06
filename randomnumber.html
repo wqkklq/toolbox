@@ -271,16 +271,69 @@
 				}
 			}
 			document.getElementsByTagName("button")[0].onclick=function(){
-				if(scrolling==false){
+				var startScrolling=function(){
 					intervalId=setInterval(randScroll,10)
 					scrolling=true
+				}
+				if(scrolling==false){
+					startScrolling()
 				}else{
 					clearInterval(intervalId)
 					scrolling=false
 					if(document.getElementsByClassName("number")[0].innerText=="?"){
 						random()
 					}
-					add()
+					var closeDialog=function(){
+						document.getElementsByClassName("popup")[0].style.transform="scale(0)"
+						setTimeout(function(){
+							try{
+								document.body.removeChild(document.getElementsByClassName("popup")[0])
+							}catch(e){}
+						},250)
+					}
+					if(document.getElementsByClassName("popup")[0]){
+						closeDialog()
+					}
+					var newDiv=document.createElement("div"),
+					newH1=document.createElement("h1"),
+					newNumDiv=document.createElement("div"),
+					newButton=document.createElement("button"),
+					newCloseDiv=document.createElement("div")
+					newDiv.classList.add("popup")
+					newDiv.style.opacity="1"
+					newDiv.style.transform="scale(0)"
+					newNumDiv.classList.add("number")
+					newButton.style.width="100%"
+					newButton.onclick=function(){
+						add()
+						closeDialog()
+						startScrolling()
+					}
+					newNumDiv.innerText=document.getElementsByClassName("number")[0].innerText
+					newCloseDiv.classList.add("close")
+					newCloseDiv.innerText="×"
+					newCloseDiv.onclick=function(){
+						closeDialog()
+						startScrolling()
+					}
+					switch(language){
+						case "SimplifiedChinese":
+						newH1.innerText="结果"
+						newButton.innerText="添加到历史记录"
+						break
+						default:
+						newH1.innerText="Result"
+						newButton.innerText="Add to History"
+					}
+					newDiv.appendChild(newH1)
+					newDiv.appendChild(newNumDiv)
+					newDiv.appendChild(newButton)
+					newDiv.appendChild(newCloseDiv)
+					document.body.appendChild(newDiv)
+					newDiv.style.top="calc(50% - "+(newDiv.offsetHeight/2)+"px)"
+					setTimeout(function(){
+						newDiv.style.transform=""
+					},25)
 				}
 			}
 			document.getElementById("DuplicatesCheck").onchange=function(){
