@@ -305,7 +305,7 @@
 						if(btnText=="×"){
 							var value=document.getElementsByTagName("input")[0].value
 							var last=value.substr(value.length-1,value.length)
-							if(last=="("||last=="*"||last=="-"||value==""){
+							if(!value||/\(|\*|\/|\+|-|×|÷|\s/.test(last)){
 								btnText="x"
 							}else{
 								btnText="*"
