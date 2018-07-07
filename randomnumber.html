@@ -297,8 +297,7 @@
 					var newDiv=document.createElement("div"),
 					newH1=document.createElement("h1"),
 					newNumDiv=document.createElement("div"),
-					newButton=document.createElement("button"),
-					newCloseDiv=document.createElement("div")
+					newButton=document.createElement("button")
 					newDiv.classList.add("popup")
 					newDiv.style.opacity="1"
 					newDiv.style.transform="scale(0)"
@@ -310,12 +309,6 @@
 						startScrolling()
 					}
 					newNumDiv.innerText=document.getElementsByClassName("number")[0].innerText
-					newCloseDiv.classList.add("close")
-					newCloseDiv.innerText="×"
-					newCloseDiv.onclick=function(){
-						closeDialog()
-						startScrolling()
-					}
 					switch(language){
 						case "SimplifiedChinese":
 						newH1.innerText="结果"
@@ -328,7 +321,16 @@
 					newDiv.appendChild(newH1)
 					newDiv.appendChild(newNumDiv)
 					newDiv.appendChild(newButton)
-					newDiv.appendChild(newCloseDiv)
+					if(document.getElementById("DuplicatesCheck").checked){
+						var newCloseDiv=document.createElement("div")
+						newCloseDiv.classList.add("close")
+						newCloseDiv.innerText="×"
+						newCloseDiv.onclick=function(){
+							closeDialog()
+							startScrolling()
+						}
+						newDiv.appendChild(newCloseDiv)
+					}
 					document.body.appendChild(newDiv)
 					newDiv.style.top="calc(50% - "+(newDiv.offsetHeight/2)+"px)"
 					setTimeout(function(){
