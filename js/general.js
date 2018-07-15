@@ -1,6 +1,6 @@
 /*Code written by Shangzhen Yang*/
 var appliedTheme,
-backend="https://rthapi.tk/",
+backend=localStorage.getItem("Backend"),
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
 isChinese=/[\u4E00-\u9FA5]+/,
@@ -24,7 +24,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 timeout=10000,
-ver="10.1"
+ver="10.2"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -167,7 +167,7 @@ function getJSON(url,callback,errorCallback){
 		}
 	},timeout/100)
 	$.ajax({
-		"url":"https://rthapi.tk/get.php",
+		"url":backend+"get.php",
 		"data":{
 			"time":new Date().getTime(),
 			"url":url
@@ -477,12 +477,7 @@ function openWebPage(href){
 	}
 }
 function openWindow(name){
-	var suffix=".html"
-	if(name.indexOf(suffix)!=-1||location.href.indexOf("https")!=-1){
-		suffix=""
-	}
-	var url=name+suffix
-	location.href=url
+	location.href=name+".html"
 }
 function restart(){
 	showAlert([
@@ -767,8 +762,22 @@ function translate(query,from,to,callback){
 		}
 	})
 }
-if(localStorage.getItem("Backend")){
-	backend=localStorage.getItem("Backend")
+if(location.href.indexOf("https")!=-1&&!login.username){
+	if(navigator.language=="zh-CN"){
+		if(location.href.indexOf("www.rthsoftware.cn")==-1){
+			location.href=location.href.replace("t.rths.tk","www.rthsoftware.cn/toolbox")
+		}
+	}else if(location.href.indexOf("t.rths.tk")==-1){
+		location.href=location.href.replace("www.rthsoftware.cn/toolbox","t.rths.tk")
+	}
+}
+if(!backend){
+	if(navigator.language=="zh-CN"){
+		backend="https://www.rthsoftware.cn/backend/"
+	}else{
+		backend="https://rthapi.tk/"
+	}
+	localStorage.setItem("Backend",backend)
 }
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){
@@ -795,16 +804,15 @@ if(!isIE){
 		}
 	}
 }
-if(language==null){
+if(!language){
 	if(navigator.language.indexOf("zh")!=-1){
 		language="SimplifiedChinese"
-		localStorage.setItem("Language","SimplifiedChinese")
 	}else{
 		language="English"
-		localStorage.setItem("Language","English")
 	}
+	localStorage.setItem("Language",language)
 }
-if(theme==null){
+if(!theme){
 	theme="Automatic"
 }
 if(theme=="Automatic"){

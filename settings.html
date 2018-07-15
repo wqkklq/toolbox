@@ -40,6 +40,14 @@
 					</tr>
 					<tr>
 						<td width="30%">
+							<div id="Server"></div>
+						</td>
+						<td width="70%">
+							<select id="ServerSelect"></select>
+						</td>
+					</tr>
+					<tr>
+						<td width="30%">
 							<div id="Theme"></div>
 						</td>
 						<td width="70%">
@@ -72,13 +80,19 @@
 		<script type="text/javascript">
 			document.getElementById("LanguageSelect").onchange=function(){
 				if(this.value!=language){
-					localStorage.setItem("Language",document.getElementById("LanguageSelect").value)
+					localStorage.setItem("Language",this.value)
+					restart()
+				}
+			}
+			document.getElementById("ServerSelect").onchange=function(){
+				if(this.value!=backend){
+					localStorage.setItem("Backend",this.value)
 					restart()
 				}
 			}
 			document.getElementById("ThemeSelect").onchange=function(){
 				if(this.value!=theme){
-					localStorage.setItem("Theme",document.getElementById("ThemeSelect").value)
+					localStorage.setItem("Theme",this.value)
 					restart()
 				}
 			}
@@ -256,6 +270,9 @@
 				case "SimplifiedChinese":
 				document.title="设置"
 				document.getElementById("Language").innerText="语言"
+				document.getElementById("Server").innerText="服务器"
+				document.getElementById("ServerSelect").options.add(new Option("中国大陆","https://www.rthsoftware.cn/backend/"))
+				document.getElementById("ServerSelect").options.add(new Option("国际","https://rthapi.tk/"))
 				document.getElementById("Theme").innerText="主题"
 				document.getElementById("ThemeSelect").options.add(new Option("自动","Automatic"))
 				document.getElementById("ThemeSelect").options.add(new Option("必应","Bing"))
@@ -274,6 +291,9 @@
 				default:
 				document.title="Settings"
 				document.getElementById("Language").innerText="Language"
+				document.getElementById("Server").innerText="Server"
+				document.getElementById("ServerSelect").options.add(new Option("Mainland China","https://www.rthsoftware.cn/backend/"))
+				document.getElementById("ServerSelect").options.add(new Option("International","https://rthapi.tk/"))
 				document.getElementById("Theme").innerText="Theme"
 				document.getElementById("ThemeSelect").options.add(new Option("Automatic","Automatic"))
 				document.getElementById("ThemeSelect").options.add(new Option("Bing","Bing"))
@@ -291,6 +311,7 @@
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			document.getElementById("LanguageSelect").value=language
+			document.getElementById("ServerSelect").value=backend
 			document.getElementById("ThemeSelect").value=theme
 			if(document.referrer.indexOf("https://www.rthsoftware.cn")!=-1&&searchURL("account")){
 				login=JSON.parse(atob(searchURL("account")))

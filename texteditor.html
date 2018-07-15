@@ -760,7 +760,13 @@
 						encrypt=false
 						save(function(){
 							$.get(backend+"generate.php",{
-								"index":currentItem,
+								"index":(function(){
+									if(savedText.text[currentItem-1].created){
+										return savedText.text[currentItem-1].created
+									}else{
+										return currentItem
+									}
+								})(),
 								"time":new Date().getTime(),
 								"username":login.username
 							},function(e){

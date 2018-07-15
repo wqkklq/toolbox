@@ -14,7 +14,6 @@
 			}
 			.number{
 				font-size:45px;
-				height:60px;
 				line-height:60px;
 				text-align:center;
 			}
@@ -31,6 +30,10 @@
 				<legend id="Settings"></legend>
 				<div class="width-limit">
 					<div class="input-bg">
+						<div class="mui-input-row">
+							<label id="QuantityLabel"></label>
+							<input id="Quantity" type="text" value="1">
+						</div>
 						<div class="mui-input-row">
 							<label id="MinimumLabel"></label>
 							<input id="Minimum" type="text" value="1">
@@ -192,7 +195,8 @@
 			function random(){
 				var hide=false,
 				min=parseInt(document.getElementById("Minimum").value),
-				max=parseInt(document.getElementById("Maximum").value)
+				max=parseInt(document.getElementById("Maximum").value),
+				total
 				nameValue=""
 				randomNumValue=min+Math.round(Math.random()*(max-min))
 				if(savedNames.names.length>0){
@@ -201,29 +205,32 @@
 				if((function(){
 					if(document.getElementById("OddNumberOnlyCheck").checked&randomNumValue%2==0||document.getElementById("EvenNumberOnlyCheck").checked&&randomNumValue%2!=0){
 						return true
-					}else{
-						if(historyArray.length>0&&!document.getElementById("DuplicatesCheck").checked){
-							if(historyArray.length<savedNames.names.length){
-								if(historyArray.length-savedNames.names.length==-1){
-									hide=true
-								}
-								var contain=false
-								for(var i=0;i<historyArray.length;i++){
-									if(historyArray[i].number==randomNumValue){
-										contain=true
-									}
-								}
-								return contain
-							}else if(historyArray.length>=savedNames.names.length){
-								document.getElementById("Add").style.display=""
-								document.getElementById("DuplicatesCheck").checked=true
-								return true
-							}else{
-								return false
+					}else if(historyArray.length>0&&!document.getElementById("DuplicatesCheck").checked){
+						if(savedNames.names.length>0){
+							total=savedNames.names.length
+						}else{
+							total=max-min+1
+						}
+						if(historyArray.length<total){
+							if(historyArray.length-total==-1){
+								hide=true
 							}
+							var contain=false
+							for(var i=0;i<historyArray.length;i++){
+								if(historyArray[i].number==randomNumValue){
+									contain=true
+								}
+							}
+							return contain
+						}else if(historyArray.length>=total){
+							document.getElementById("Add").style.display=""
+							document.getElementById("DuplicatesCheck").checked=true
+							return true
 						}else{
 							return false
 						}
+					}else{
+						return false
 					}
 				})()){
 					random()
@@ -233,8 +240,10 @@
 					}else{
 						if(nameValue!=""){
 							document.getElementsByClassName("number")[0].innerText=nameValue
+							return nameValue
 						}else{
 							document.getElementsByClassName("number")[0].innerText=randomNumValue
+							return randomNumValue
 						}
 					}
 				}
@@ -297,7 +306,8 @@
 					var newDiv=document.createElement("div"),
 					newH1=document.createElement("h1"),
 					newNumDiv=document.createElement("div"),
-					newButton=document.createElement("button")
+					newButton=document.createElement("button"),
+					quantity=document.getElementById("Quantity").value
 					newDiv.classList.add("popup")
 					newDiv.style.opacity="1"
 					newDiv.style.transform="scale(0)"
@@ -308,7 +318,14 @@
 						closeDialog()
 						startScrolling()
 					}
-					newNumDiv.innerText=document.getElementsByClassName("number")[0].innerText
+					for(var i=0;i<quantity;i++){
+						if(newNumDiv.innerText){
+							newNumDiv.innerText+=" "
+							add()
+							random()
+						}
+						newNumDiv.innerText+=document.getElementsByClassName("number")[0].innerText
+					}
 					switch(language){
 						case "SimplifiedChinese":
 						newH1.innerText="结果"
@@ -321,7 +338,7 @@
 					newDiv.appendChild(newH1)
 					newDiv.appendChild(newNumDiv)
 					newDiv.appendChild(newButton)
-					if(document.getElementById("DuplicatesCheck").checked){
+					if(document.getElementById("DuplicatesCheck").checked&&quantity==1){
 						var newCloseDiv=document.createElement("div")
 						newCloseDiv.classList.add("close")
 						newCloseDiv.innerText="×"
@@ -388,6 +405,7 @@
 				document.title="随机抽号"
 				document.getElementsByTagName("button")[0].innerText="立即抽号"
 				document.getElementById("Settings").innerText="设置"
+				document.getElementById("QuantityLabel").innerText="数量"
 				document.getElementById("MinimumLabel").innerText="最小值"
 				document.getElementById("MaximumLabel").innerText="最大值"
 				document.getElementById("DuplicatesLabel").innerText="重复"
@@ -406,6 +424,7 @@
 				document.title="Random Number"
 				document.getElementsByTagName("button")[0].innerText="Select Randomly"
 				document.getElementById("Settings").innerText="Settings"
+				document.getElementById("QuantityLabel").innerText="Quantity"
 				document.getElementById("MinimumLabel").innerText="Minimum"
 				document.getElementById("MaximumLabel").innerText="Maximum"
 				document.getElementById("DuplicatesLabel").innerText="Duplicates"

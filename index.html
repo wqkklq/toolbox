@@ -372,9 +372,6 @@
 				}
 			}
 			getJSON("toolbox.txt",function(e){
-				if(backend!=e.backend){
-					localStorage.setItem("Backend",e.backend)
-				}
 				if(isApp&&(function(){
 					var currentVer=ver.split("."),newVer
 					if(isAndroid){
