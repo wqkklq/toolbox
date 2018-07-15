@@ -477,7 +477,11 @@ function openWebPage(href){
 	}
 }
 function openWindow(name){
-	location.href=name+".html"
+	if(name.indexOf("?")!=-1){
+		location.href=name
+	}else{
+		location.href=name+".html"
+	}
 }
 function restart(){
 	showAlert([

@@ -307,7 +307,12 @@
 					newH1=document.createElement("h1"),
 					newNumDiv=document.createElement("div"),
 					newButton=document.createElement("button"),
-					quantity=document.getElementById("Quantity").value
+					quantity=parseInt(document.getElementById("Quantity").value)
+					if(quantity<1||!quantity){
+						document.getElementById("Quantity").value=quantity=1
+					}else if(quantity>40){
+						document.getElementById("Quantity").value=quantity=40
+					}
 					newDiv.classList.add("popup")
 					newDiv.style.opacity="1"
 					newDiv.style.transform="scale(0)"
