@@ -318,11 +318,6 @@
 					newDiv.style.transform="scale(0)"
 					newNumDiv.classList.add("number")
 					newButton.style.width="100%"
-					newButton.onclick=function(){
-						add()
-						closeDialog()
-						startScrolling()
-					}
 					for(var i=0;i<quantity;i++){
 						if(newNumDiv.innerText){
 							newNumDiv.innerText+=" "
@@ -344,6 +339,11 @@
 					newDiv.appendChild(newNumDiv)
 					newDiv.appendChild(newButton)
 					if(document.getElementById("DuplicatesCheck").checked&&quantity==1){
+						newButton.onclick=function(){
+							add()
+							closeDialog()
+							startScrolling()
+						}
 						var newCloseDiv=document.createElement("div")
 						newCloseDiv.classList.add("close")
 						newCloseDiv.innerText="×"
@@ -352,6 +352,12 @@
 							startScrolling()
 						}
 						newDiv.appendChild(newCloseDiv)
+					}else{
+						newButton.onclick=function(){
+							closeDialog()
+							startScrolling()
+						}
+						add()
 					}
 					document.body.appendChild(newDiv)
 					newDiv.style.top="calc(50% - "+(newDiv.offsetHeight/2)+"px)"
