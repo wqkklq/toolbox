@@ -770,13 +770,9 @@
 								"time":new Date().getTime(),
 								"username":login.username
 							},function(e){
-								if(isApp){
+								showPrompt(null,function(){
 									openWebPage(e)
-								}else{
-									showPrompt(null,function(){
-										openWebPage(e)
-									},null,e)
-								}
+								},null,e)
 							})
 						})
 					}else{
