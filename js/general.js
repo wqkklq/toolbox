@@ -890,8 +890,8 @@ if(appliedTheme=="Bing"){
 			loadWallpaper()
 		}
 	})
-}else if(theme!="Bing"){
-	localStorage.removeItem("Bing")
+}else if(theme!="Bing"&&location.href.indexOf("https")==-1){
+	localStorage.removeItem("bing-wallpaper")
 }
 if(isElectron){
 	var electron=require("electron")
