@@ -878,14 +878,14 @@ if(appliedTheme=="Bing"){
 			blueButtons[i].style.backgroundImage="url("+savedBingWallpaper+")"
 		}
 	}
-	savedBingWallpaper=localStorage.getItem("Bing")
+	savedBingWallpaper=localStorage.getItem("bing-wallpaper")
 	if(savedBingWallpaper){
 		loadWallpaper()
 	}
 	$.ajax({
 		"url":backend+"bing/base64.php",
 		"success":function(e){
-			localStorage.setItem("Bing",e)
+			localStorage.setItem("bing-wallpaper",e)
 			savedBingWallpaper=e
 			loadWallpaper()
 		}
