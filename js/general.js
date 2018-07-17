@@ -869,13 +869,13 @@ if(appliedTheme=="Bing"){
 	var savedBingWallpaper
 	var loadWallpaper=function(){
 		if(header){
-			header.style.backgroundImage="url("+savedBingWallpaper+")"
+			header.style.backgroundImage=savedBingWallpaper
 		}else if(document.getElementsByClassName("bg-img")[0]){
-			document.getElementsByClassName("bg-img")[0].style.backgroundImage="url("+savedBingWallpaper+")"
+			document.getElementsByClassName("bg-img")[0].style.backgroundImage=savedBingWallpaper
 		}
 		var blueButtons=document.getElementsByClassName("btn-bg-img")
 		for(var i=0;i<blueButtons.length;i++){
-			blueButtons[i].style.backgroundImage="url("+savedBingWallpaper+")"
+			blueButtons[i].style.backgroundImage=savedBingWallpaper
 		}
 	}
 	savedBingWallpaper=localStorage.getItem("bing-wallpaper")
@@ -885,7 +885,7 @@ if(appliedTheme=="Bing"){
 	$.ajax({
 		"url":backend+"bing/base64.php",
 		"success":function(e){
-			localStorage.setItem("bing-wallpaper",e)
+			localStorage.setItem("bing-wallpaper","url("+e+")")
 			savedBingWallpaper=e
 			loadWallpaper()
 		}
