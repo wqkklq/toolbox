@@ -68,7 +68,7 @@
 				dictBox=document.getElementById("ENDefinition")
 				changeDisplay(false)
 				dictBox=document.getElementById("Translate")
-				if(document.getElementById("CNDefinition").style.display!=""){
+				if(document.getElementById("CNDefinition").style.display){
 					document.getElementById("Translate").style.display=""
 				}else{
 					changeDisplay(false)
@@ -81,7 +81,7 @@
 				document.getElementById("ENDefinition").style.display="none"
 				document.getElementById("ENDefinition").innerText=currentList[progress-1].definition
 				var wordWithoutSpace=currentList[progress-1].word.replace(/\s/g,"").toLowerCase()
-				if(localStorage.getItem(wordWithoutSpace+"_CNDef")!=null){
+				if(localStorage.getItem(wordWithoutSpace+"_CNDef")){
 					document.getElementById("Pronunciation").innerText=localStorage.getItem(wordWithoutSpace+"_Pronunciation")
 					document.getElementById("CNDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_CNDef")
 					document.getElementById("ENDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_ENDef")
@@ -97,7 +97,7 @@
 				document.getElementsByTagName("footer")[0].style.display="none"
 				document.getElementsByTagName("input")[0].value=word
 				var wordWithoutSpace=word.replace(/\s/g,"").toLowerCase()
-				if(localStorage.getItem(wordWithoutSpace+"_CNDef")!=null){
+				if(localStorage.getItem(wordWithoutSpace+"_CNDef")){
 					document.getElementById("Pronunciation").innerText=localStorage.getItem(wordWithoutSpace+"_Pronunciation")
 					document.getElementById("CNDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_CNDef")
 					document.getElementById("ENDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_ENDef")
@@ -165,7 +165,7 @@
 				dictChanged()
 			}
 			function translateENDef(){
-				if(document.getElementById("ENDefinition").innerText!=""&&document.getElementById("ENDefinition").innerText!="undefined"){
+				if(document.getElementById("ENDefinition").innerText&&document.getElementById("ENDefinition").innerText!="undefined"){
 					translate(document.getElementById("ENDefinition").innerText,"en","zh",function(e){
 						document.getElementById("Translate").innerText=e
 						document.getElementById("Translate").style.display="block"
@@ -173,7 +173,7 @@
 				}
 			}
 			document.getElementsByTagName("input")[0].onkeydown=function(e){
-				if(e.keyCode==13&&this.value!=""){
+				if(e.keyCode==13&&this.value){
 					lookUp(this.value)
 				}
 			}

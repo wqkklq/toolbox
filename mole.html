@@ -661,7 +661,7 @@
 			function getCompound(searchTerm){
 				searchTerm=searchTerm.trim()
 				var mole=1,record=new Array()
-				if(searchTerm!=""){
+				if(searchTerm){
 					if(searchTerm.indexOf(" ")!=-1||isUpperCase.test(searchTerm)){
 						var letters=searchTerm.split("")
 						var tempRecord=new Array()
@@ -846,7 +846,7 @@
 			}
 			document.getElementsByTagName("select")[0].onchange=calculateBasedOnMole
 			document.getElementById("Search").oninput=function(){
-				if(this.value!=""){
+				if(this.value){
 					if(this.value.indexOf(" ")==-1&&!isUpperCase.test(this.value)&&this.value.indexOf("化")==-1||this.value.length<=1){
 						var result=getElement(this.value)
 						if(result){

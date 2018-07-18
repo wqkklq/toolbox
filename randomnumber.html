@@ -100,7 +100,7 @@
 				for(var i=historyArray.length-1;i>=0;i--){
 					var newLi=document.createElement("li")
 					newLi.classList.add("menu")
-					if(historyArray[i].name!=""){
+					if(historyArray[i].name){
 						newLi.innerText="("+(i+1)+") "+historyArray[i].name
 					}else{
 						newLi.innerText="("+(i+1)+") "+historyArray[i].number
@@ -124,7 +124,7 @@
 				}
 			}
 			function clearHistory(negativeCallback){
-				if(document.getElementById("HistoryUl").innerHTML!=""){
+				if(document.getElementById("HistoryUl").innerHTML){
 					showConfirm([
 						"Do you want to clear the history?",
 						"您想清空历史记录吗？"
@@ -238,7 +238,7 @@
 					if(hide&&scrolling){
 						document.getElementsByClassName("number")[0].innerText="?"
 					}else{
-						if(nameValue!=""){
+						if(nameValue){
 							document.getElementsByClassName("number")[0].innerText=nameValue
 							return nameValue
 						}else{
@@ -462,7 +462,7 @@
 				if(currentNamesValue&&currentNamesValue.indexOf("\n")!=-1){
 					var namesSplit=currentNamesValue.split("\n")
 					for(var i=0;i<namesSplit.length;i++){
-						if(namesSplit[i]!=""){
+						if(namesSplit[i]){
 							savedNames.names.push(namesSplit[i])
 						}
 					}

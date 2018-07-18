@@ -138,8 +138,6 @@
 					}else{
 						return text
 					}
-				}else{
-					return false
 				}
 			}
 			function edit(edit){
@@ -166,13 +164,17 @@
 				}
 				return unicode
 			}
-			function encryptText(text,password){
+			function encryptText(text,password,base64){
 				var encrypted=""
 				text=text.replace(/丨/g,"｜")+"丨"+MD5(password)
 				for(var i=0;i<text.length;i++){
 					encrypted+=(text.charCodeAt(i)*8).toString(8)+"9"
 				}
-				return btoa(encrypted)
+				if(base64){
+					return btoa(encrypted)
+				}else{
+					return encrypted
+				}
 			}
 			function find(){
 				setText(document.getElementsByTagName("textarea")[0].value,true)
@@ -199,7 +201,7 @@
 				},"text",null,null,function(){
 					setText(document.getElementsByTagName("textarea")[0].value,true)
 				},function(e){
-					if(e&&e!=""){
+					if(e&&e){
 						try{
 							e=e.replace(/</g,"&lt;").
 							replace(/>/g,"&gt;")
@@ -240,7 +242,7 @@
 				}
 				for(var i=0;i<9999;i++){
 					var oldText=localStorage.getItem("Text"+i)
-					if(oldText!=null&&oldText!=""){
+					if(oldText){
 						savedText.text.push({
 							"encrypt":false,
 							"text":oldText,
@@ -258,11 +260,15 @@
 						for(var i=savedText.text.length-1;i>=0;i--){
 							var newLi=document.createElement("li")
 							newLi.classList.add("menu")
-							if(savedText.text[i].title!=null&&savedText.text[i].title!=""){
+							if(savedText.text[i].title){
 								newLi.innerText=savedText.text[i].title
 							}else{
 								if(savedText.text[i].encrypt){
-									newLi.innerText=decrypt(atob(savedText.text[i].text),"RTH")
+									if(only(isNumber,savedText.text[i].text)){
+										newLi.innerText=decrypt(savedText.text[i].text,"RTH")
+									}else{
+										newLi.innerText=decrypt(atob(savedText.text[i].text),"RTH")
+									}
 								}else{
 									newLi.innerText=savedText.text[i].text
 								}
@@ -355,18 +361,27 @@
 				}
 			}
 			function openText(serialNumber){
-				var text
-				if(savedText.text[serialNumber-1].encrypt){
-					text=decrypt(atob(savedText.text[serialNumber-1].text),"RTH")
-				}else{
-					encrypt=false
-					text=savedText.text[serialNumber-1].text
+				try{
+					var text
+					if(savedText.text[serialNumber-1].encrypt){
+						if(only(isNumber,savedText.text[serialNumber-1].text)){
+							text=decrypt(savedText.text[serialNumber-1].text,"RTH")
+						}else{
+							text=decrypt(atob(savedText.text[serialNumber-1].text),"RTH")
+						}
+					}else{
+						encrypt=false
+						text=savedText.text[serialNumber-1].text
+					}
+					setText(text)
+					document.getElementsByTagName("input")[0].value=savedText.text[serialNumber-1].title
+					document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date(savedText.text[serialNumber-1].created).toLocaleString()
+					document.getElementById("Modified").getElementsByTagName("span")[0].innerText=savedText.text[serialNumber-1].time
+					applyItem(serialNumber)
+				}catch(e){
+					savedText.text[serialNumber-1]=JSON.parse(savedText.text[serialNumber-1])
+					openText(serialNumber)
 				}
-				setText(text)
-				document.getElementsByTagName("input")[0].value=savedText.text[serialNumber-1].title
-				document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date(savedText.text[serialNumber-1].created).toLocaleString()
-				document.getElementById("Modified").getElementsByTagName("span")[0].innerText=savedText.text[serialNumber-1].time
-				applyItem(serialNumber)
 			}
 			function reload(){
 				scrollTo(0,0)
@@ -518,7 +533,7 @@
 						runJSCode(true)
 						return false
 						case 48:
-						if(document.getElementsByClassName("start")[0].style.display!=""){
+						if(document.getElementsByClassName("start")[0].style.display){
 							fontSize=16
 							document.getElementsByTagName("textarea")[0].style.fontSize=
 							document.getElementsByClassName("text-view")[0].style.fontSize=
@@ -539,7 +554,7 @@
 						save()
 						return false
 						case 187:
-						if(document.getElementsByClassName("start")[0].style.display!=""){
+						if(document.getElementsByClassName("start")[0].style.display){
 							fontSize+=4
 							document.getElementsByTagName("textarea")[0].style.fontSize=
 							document.getElementsByClassName("text-view")[0].style.fontSize=fontSize+"px"
@@ -548,7 +563,7 @@
 						}
 						return false
 						case 189:
-						if(document.getElementsByClassName("start")[0].style.display!=""&&fontSize>8){
+						if(document.getElementsByClassName("start")[0].style.display&&fontSize>8){
 							fontSize-=4
 							document.getElementsByTagName("textarea")[0].style.fontSize=
 							document.getElementsByClassName("text-view")[0].style.fontSize=fontSize+"px"
@@ -808,7 +823,7 @@
 						"Set the password",
 						"设置密码"
 					],function(e){
-						setText(encryptText(document.getElementsByTagName("textarea")[0].value,e))
+						setText(encryptText(document.getElementsByTagName("textarea")[0].value,e,true))
 					},"password")
 				}
 			}

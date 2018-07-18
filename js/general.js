@@ -24,7 +24,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 timeout=10000,
-ver="10.2"
+ver="10.3"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -119,6 +119,9 @@ function clearLocalStorage(){
 		"您想清空本地存储吗？"
 	],function(){
 		localStorage.clear()
+		localStorage.setItem("Email",login.email)
+		localStorage.setItem("Password",login.password)
+		localStorage.setItem("Username",login.username)
 		restart()
 	})
 }
@@ -504,15 +507,8 @@ function searchURL(key,url){
 		url=url.replace(urlSplit[0],"")
 	}
 	var match=url.substr(1).match(new RegExp("(^|&)"+key+"=([^&]*)(&|$)"))
-	if(match!=null){
-		var value=unescape(decodeURI(match[2]))
-		if(value!=null&value!=""){
-			return value
-		}else{
-			return false
-		}
-	}else{
-		return false
+	if(match){
+		return unescape(decodeURI(match[2]))
 	}
 }
 function showAlert(text,callback){
@@ -683,7 +679,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 		},250)
 	}
 	newOKButton.onclick=function(){
-		if(newInput.value!=""){
+		if(newInput.value){
 			if(callback){
 				callback(newInput.value)
 			}
@@ -885,8 +881,8 @@ if(appliedTheme=="Bing"){
 	$.ajax({
 		"url":backend+"bing/base64.php",
 		"success":function(e){
-			localStorage.setItem("bing-wallpaper","url("+e+")")
-			savedBingWallpaper=e
+			savedBingWallpaper="url("+e+")"
+			localStorage.setItem("bing-wallpaper",savedBingWallpaper)
 			loadWallpaper()
 		}
 	})
