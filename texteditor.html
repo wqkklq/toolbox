@@ -446,7 +446,7 @@
 							callback()
 						}
 						applyItem(currentItem)
-					},JSON.stringify(savedText.text[currentItem-1]),"text",currentItem-1)
+					},JSON.stringify(savedText.text[currentItem-1]),"text",currentItem)
 				}else{
 					savedText.text.push({
 						"created":new Date().getTime(),
@@ -490,7 +490,8 @@
 					var postData={
 						"dir":"text/",
 						"filename":login.username,
-						"text":JSON.stringify(savedText)
+						"text":JSON.stringify(savedText),
+						"ver":ver.split(".")[0]
 					}
 					if(key1){
 						postData["key1"]=key1
@@ -774,21 +775,16 @@
 					if(login.username){
 						encrypt=false
 						save(function(){
-							$.get(backend+"generate.php",{
-								"index":(function(){
-									if(savedText.text[currentItem-1].created){
-										return savedText.text[currentItem-1].created
-									}else{
-										return currentItem
-									}
-								})(),
-								"time":new Date().getTime(),
-								"username":login.username
-							},function(e){
-								showPrompt(null,function(){
-									openWebPage(e)
-								},null,e)
-							})
+							var url="http://www."+login.username+".rths.tk/"+(function(){
+								if(savedText.text[currentItem-1].created){
+									return savedText.text[currentItem-1].created
+								}else{
+									return currentItem
+								}
+							})()+".html"
+							showPrompt(null,function(){
+								openWebPage(url)
+							},null,url)
 						})
 					}else{
 						showAlert([
@@ -931,9 +927,6 @@
 			}
 			if(isEdge||isLinux||isMobile){
 				document.getElementById("SaveAs").style.display="none"
-				if(isMobile){
-					document.getElementById("OpenLocalDocument").style.display="none"
-				}
 			}
 			load()
 		</script>

@@ -44,7 +44,7 @@
 				</div>
 				<ul class="menu">
 					<li id="NewWL" class="menu"></li>
-					<li id="OpenLWL" class="menu"></li>
+					<li id="Open" class="menu"></li>
 					<li id="SharingSettings" class="menu"></li>
 					<span id="MyWordList"></span>
 					<span id="FriendWordList"></span>
@@ -448,40 +448,6 @@
 					}
 					openDiv("edit")
 				}else{
-					var loadMyWordList=function(){
-						if(savedWordList&&savedWordList.list){
-							document.getElementById("MyWordList").innerHTML=""
-							for(var i=savedWordList.list.length-1;i>=0;i--){
-								var newLi=document.createElement("li")
-								newLi.classList.add("menu")
-								newLi.innerText="M"+addZero(savedWordList.list.length-i,3)+". "
-								if(savedWordList.list[i].title){
-									newLi.innerText+=savedWordList.list[i].title
-								}else{
-									switch(language){
-										case "SimplifiedChinese":
-										if(savedWordList.list[i].list[0]){
-											newLi.innerText+=savedWordList.list[i].list[0].word+" 和另外 "+savedWordList.list[i].list.length+" 个单词"
-										}else{
-											newLi.innerText+="空白单词表"
-										}
-										break
-										default:
-										if(savedWordList.list[i].list[0]){
-											newLi.innerText+=savedWordList.list[i].list[0].word+" and other "+savedWordList.list[i].list.length+" words"
-										}else{
-											newLi.innerText+="Empty Word List"
-										}
-									}
-								}
-								newLi.setAttribute("number",i+1)
-								newLi.onclick=function(){
-									applyItem(this.getAttribute("number"))
-								}
-								document.getElementById("MyWordList").appendChild(newLi)
-							}
-						}
-					}
 					loadMyWordList()
 					if(login.username){
 						getJSON("userdata/wordlist/"+login.username+".txt",function(e){
@@ -549,7 +515,7 @@
 											"url":backend+"userdata/getwordlist.php",
 											"data":{
 												"email":friendEmail,
-												"index":this.getAttribute("number")*1-1
+												"index":this.getAttribute("number")*1
 											},
 											"dataType":"json",
 											"success":function(e){
@@ -599,7 +565,7 @@
 									$.ajax({
 										"url":backend+"userdata/getwordlist.php",
 										"data":{
-											"index":this.getAttribute("number")*1-1,
+											"index":this.getAttribute("number")*1,
 											"username":"admin"
 										},
 										"dataType":"json",
@@ -612,6 +578,49 @@
 							}
 						}
 					})
+				}
+			}
+			function loadMyWordList(){
+				try{
+					if(savedWordList&&savedWordList.list){
+						document.getElementById("MyWordList").innerHTML=""
+						for(var i=savedWordList.list.length-1;i>=0;i--){
+							var newLi=document.createElement("li")
+							newLi.classList.add("menu")
+							newLi.innerText="M"+addZero(savedWordList.list.length-i,3)+". "
+							if(savedWordList.list[i].title){
+								newLi.innerText+=savedWordList.list[i].title
+							}else{
+								switch(language){
+									case "SimplifiedChinese":
+									if(savedWordList.list[i].list[0]){
+										newLi.innerText+=savedWordList.list[i].list[0].word+" 和另外 "+savedWordList.list[i].list.length+" 个单词"
+									}else{
+										newLi.innerText+="空白单词表"
+									}
+									break
+									default:
+									if(savedWordList.list[i].list[0]){
+										newLi.innerText+=savedWordList.list[i].list[0].word+" and other "+savedWordList.list[i].list.length+" words"
+									}else{
+										newLi.innerText+="Empty Word List"
+									}
+								}
+							}
+							newLi.setAttribute("number",i+1)
+							newLi.onclick=function(){
+								applyItem(this.getAttribute("number"))
+							}
+							document.getElementById("MyWordList").appendChild(newLi)
+						}
+					}
+				}catch(e){
+					for(var i=0;i<savedWordList.list.length;i++){
+						if(savedWordList.list[i].toString().indexOf("[object")==-1){
+							savedWordList.list[i]=JSON.parse(savedWordList.list[i])
+						}
+					}
+					loadMyWordList()
 				}
 			}
 			function loadQuestion(){
@@ -887,7 +896,7 @@
 							callback()
 						}
 						applyItem(currentItem,null,willReload)
-					},JSON.stringify(savedWordList.list[currentItem-1]),"list",currentItem-1)
+					},JSON.stringify(savedWordList.list[currentItem-1]),"list",currentItem)
 				}else{
 					savedWordList.list.push({
 						"list":currentList,
@@ -915,7 +924,16 @@
 							}))
 						}
 					})
-				}else{
+				}else if(login.username){
+					save(function(){
+						var url="https://www.rthsoftware.cn/backend/userdata/getwordlist.php?dl=rth&index="+currentItem+"&username="+login.username
+						if(isApp){
+							openWebPage(url)
+						}else{
+							location.href=url
+						}
+					})
+				}else if(!isEdge&&!isLinux&&!isMobile){
 					var filename=document.getElementById("TitleInput").value
 					if(filename==""){
 						filename=document.title
@@ -936,6 +954,13 @@
 					}else{
 						dl.click()
 					}
+				}else if(!localStorage.getItem("Username")){
+					loginDialog()
+				}else{
+					showAlert([
+						"Unable to connect to the server",
+						"无法连接服务器"
+					])
 				}
 			}
 			function speak(){
@@ -967,7 +992,8 @@
 					var postData={
 						"dir":"wordlist/",
 						"filename":login.username,
-						"text":JSON.stringify(savedWordList)
+						"text":JSON.stringify(savedWordList),
+						"ver":ver.split(".")[0]
 					}
 					if(key1){
 						postData["key1"]=key1
@@ -1034,7 +1060,7 @@
 					loginDialog()
 				}
 			}
-			document.getElementById("OpenLWL").onclick=openDialog
+			document.getElementById("Open").onclick=openDialog
 			document.getElementById("SharingSettings").onclick=function(){
 				if(!document.getElementsByClassName("popup")[0]){
 					var newDiv=document.createElement("div"),
@@ -1193,7 +1219,7 @@
 				document.getElementById("LookUpInput").placeholder="输入要查询的单词"
 				document.getElementById("LookUpButton").innerText="查询"
 				document.getElementById("NewWL").innerText="新单词表"
-				document.getElementById("OpenLWL").innerText="打开本地的单词表"
+				document.getElementById("Open").innerText="打开单词表文件"
 				document.getElementById("SharingSettings").innerText="共享设置"
 				document.getElementById("TitleInput").placeholder="标题"
 				document.getElementById("CloseDocument").innerText="关闭文档"
@@ -1226,7 +1252,7 @@
 				document.getElementById("LookUpInput").placeholder="Enter the word you want to look up"
 				document.getElementById("LookUpButton").innerText="Look Up"
 				document.getElementById("NewWL").innerText="New Word List"
-				document.getElementById("OpenLWL").innerText="Open Local Word List"
+				document.getElementById("Open").innerText="Open Word List File"
 				document.getElementById("SharingSettings").innerText="Sharing Settings"
 				document.getElementById("TitleInput").placeholder="Title"
 				document.getElementById("CloseDocument").innerText="Close Document"
@@ -1255,13 +1281,8 @@
 				}
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			if(isMobile){
-				document.getElementById("OpenLWL").style.display="none"
-			}else{
+			if(!isMobile){
 				document.getElementById("LookUpInput").focus()
-			}
-			if(isEdge||isLinux||isMobile){
-				document.getElementById("SaveAs").style.display="none"
 			}
 			if(!window.speechSynthesis){
 				document.getElementById("SpeakDefinitionsLi").style.display="none"

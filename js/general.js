@@ -24,7 +24,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 timeout=10000,
-ver="10.3"
+ver="11.0"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -118,10 +118,15 @@ function clearLocalStorage(){
 		"Do you want to clear the local storage?",
 		"您想清空本地存储吗？"
 	],function(){
+		if(localStorage.getItem("Username")&&!login.username){
+			login.username=localStorage.getItem("Username")
+		}
 		localStorage.clear()
-		localStorage.setItem("Email",login.email)
-		localStorage.setItem("Password",login.password)
-		localStorage.setItem("Username",login.username)
+		if(login.username){
+			localStorage.setItem("Email",login.email)
+			localStorage.setItem("Password",login.password)
+			localStorage.setItem("Username",login.username)
+		}
 		restart()
 	})
 }
