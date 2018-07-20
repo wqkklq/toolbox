@@ -155,25 +155,27 @@ function dateDiff(startDate,endDate){
 	}
 }
 function getJSON(url,callback,errorCallback,min){
-	if(!document.getElementsByClassName("loading")[0]){
-		var newDiv=document.createElement("div")
-		newDiv.classList.add("loading")
-		newDiv.innerText="0%"
-		document.body.appendChild(newDiv)
-	}
-	var intervalId=setInterval(function(){
-		if(document.getElementsByClassName("loading")[0]){
-			var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
-			if(newNum>100){
-				clearInterval(intervalId)
-				try{
-					document.body.removeChild(document.getElementsByClassName("loading")[0])
-				}catch(e){}
-			}else{
-				document.getElementsByClassName("loading")[0].innerText=newNum+"%"
-			}
+	if(!min){
+		if(!document.getElementsByClassName("loading")[0]){
+			var newDiv=document.createElement("div")
+			newDiv.classList.add("loading")
+			newDiv.innerText="0%"
+			document.body.appendChild(newDiv)
 		}
-	},timeout/100)
+		var intervalId=setInterval(function(){
+			if(document.getElementsByClassName("loading")[0]){
+				var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
+				if(newNum>100){
+					clearInterval(intervalId)
+					try{
+						document.body.removeChild(document.getElementsByClassName("loading")[0])
+					}catch(e){}
+				}else{
+					document.getElementsByClassName("loading")[0].innerText=newNum+"%"
+				}
+			}
+		},timeout/100)
+	}
 	$.ajax({
 		"url":backend+"get.php",
 		"data":{
@@ -184,19 +186,23 @@ function getJSON(url,callback,errorCallback,min){
 		"dataType":"json",
 		"timeout":timeout,
 		"success":function(e){
-			clearInterval(intervalId)
-			try{
-				document.body.removeChild(document.getElementsByClassName("loading")[0])
-			}catch(e){}
+			if(!min){
+				clearInterval(intervalId)
+				try{
+					document.body.removeChild(document.getElementsByClassName("loading")[0])
+				}catch(e){}
+			}
 			if(callback){
 				callback(e)
 			}
 		},
 		"error":function(e){
-			clearInterval(intervalId)
-			try{
-				document.body.removeChild(document.getElementsByClassName("loading")[0])
-			}catch(e){}
+			if(!min){
+				clearInterval(intervalId)
+				try{
+					document.body.removeChild(document.getElementsByClassName("loading")[0])
+				}catch(e){}
+			}
 			if(errorCallback){
 				errorCallback(e)
 			}
