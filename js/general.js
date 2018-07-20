@@ -24,7 +24,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 timeout=10000,
-ver="11.1"
+ver="11.2"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -154,7 +154,7 @@ function dateDiff(startDate,endDate){
 		}
 	}
 }
-function getJSON(url,callback,errorCallback){
+function getJSON(url,callback,errorCallback,min){
 	if(!document.getElementsByClassName("loading")[0]){
 		var newDiv=document.createElement("div")
 		newDiv.classList.add("loading")
@@ -177,6 +177,7 @@ function getJSON(url,callback,errorCallback){
 	$.ajax({
 		"url":backend+"get.php",
 		"data":{
+			"min":min,
 			"time":new Date().getTime(),
 			"url":url
 		},
@@ -865,6 +866,32 @@ if(header){
 		header.style.height="65px"
 		newDiv.style.paddingTop="20px"
 	}
+	getJSON("ad.txt",function(e){
+		if(e){
+			if((function(){
+				if(isApp){
+					if(isAndroid){
+						return e.android[language]
+					}else if(isElectron){
+						return e.electron[language]
+					}else if(isiOS){
+						return e.ios[language]
+					}
+				}else{
+					return e.web[language]
+				}
+			})()){
+				var newAd=document.createElement("a")
+				newAd.classList.add("mui-pull-right")
+				newAd.classList.add("ad")
+				newAd.style.backgroundImage="url("+e.toolbox[language].icon+")"
+				newAd.onclick=function(){
+					openWebPage(e.link)
+				}
+				document.getElementsByClassName("title-bg")[0].appendChild(newAd)
+			}
+		}
+	},null,true)
 }
 if(appliedTheme=="Bing"){
 	var savedBingWallpaper

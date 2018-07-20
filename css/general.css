@@ -65,6 +65,14 @@ textarea{
 	height:275px;
 	line-height:25.5px;
 }
+.ad{
+	background-position:center center;
+	background-repeat:no-repeat;
+	background-size:24px;
+	height:44px;
+	margin-right:-10px;
+	width:44px;
+}
 .back{
 	color:white;
 	-webkit-app-region:no-drag;

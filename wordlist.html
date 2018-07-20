@@ -57,7 +57,7 @@
 				</div>
 				<ul id="OptionUl" class="menu">
 					<li id="CloseDocument" class="menu"></li>
-					<li id="SaveAs" class="menu"></li>
+					<li id="SaveAsFile" class="menu"></li>
 					<li id="Delete" class="menu"></li>
 					<li id="FlashCard" class="menu"></li>
 				</ul>
@@ -911,7 +911,7 @@
 					})
 				}
 			}
-			function saveAs(){
+			function saveAsFile(){
 				if(isElectron&&!isLinux){
 					require("electron").remote.dialog.showSaveDialog({
 						defaultPath:document.getElementById("TitleInput").value,
@@ -1025,7 +1025,7 @@
 						openDialog()
 						return false
 						case 83:
-						saveAs()
+						saveAsFile()
 						return false
 					}
 				}else{
@@ -1148,7 +1148,7 @@
 				add()
 			}
 			document.getElementById("CloseDocument").onclick=closeDoc
-			document.getElementById("SaveAs").onclick=saveAs
+			document.getElementById("SaveAsFile").onclick=saveAsFile
 			document.getElementById("Delete").onclick=function(){
 				showConfirm([
 					"Do you want to delete the word list?",
@@ -1223,7 +1223,7 @@
 				document.getElementById("SharingSettings").innerText="共享设置"
 				document.getElementById("TitleInput").placeholder="标题"
 				document.getElementById("CloseDocument").innerText="关闭文档"
-				document.getElementById("SaveAs").innerText="另存为"
+				document.getElementById("SaveAsFile").innerText="另存为文件"
 				document.getElementById("FlashCard").innerText="学习卡"
 				document.getElementById("Quiz").innerText="测验"
 				document.getElementById("Add").innerText="添加"
@@ -1256,7 +1256,7 @@
 				document.getElementById("SharingSettings").innerText="Sharing Settings"
 				document.getElementById("TitleInput").placeholder="Title"
 				document.getElementById("CloseDocument").innerText="Close Document"
-				document.getElementById("SaveAs").innerText="Save As"
+				document.getElementById("SaveAsFile").innerText="Save as File"
 				document.getElementById("FlashCard").innerText="Flash Card"
 				document.getElementById("Quiz").innerText="Quiz"
 				document.getElementById("Add").innerText="Add"
@@ -1283,6 +1283,9 @@
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(!isMobile){
 				document.getElementById("LookUpInput").focus()
+			}
+			if(isiOS){
+				document.getElementById("SaveAsFile").style.display="none"
 			}
 			if(!window.speechSynthesis){
 				document.getElementById("SpeakDefinitionsLi").style.display="none"
