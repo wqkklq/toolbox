@@ -884,7 +884,6 @@ if(header){
 				var newAd=document.createElement("a")
 				newAd.classList.add("mui-pull-right")
 				newAd.classList.add("ad")
-				newAd.style.backgroundImage="url("+e.toolbox[language].icon+")"
 				newAd.onclick=function(){
 					openWebPage(e.link)
 				}
