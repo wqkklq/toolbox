@@ -30,7 +30,7 @@ try{
 				}
 			}
 		}
-		xhr.open("GET","https://t.rths.tk/web/toolbox/files.json?time="+new Date().getTime())
+		xhr.open("GET","https://www.rthsoftware.cn/toolbox/web/toolbox/files.json?time="+new Date().getTime())
 		xhr.send()
 	}
 	function next(){
@@ -57,7 +57,7 @@ try{
 				}
 			}
 		}
-		xhr.open("GET","https://t.rths.tk/"+file+"?time="+new Date().getTime())
+		xhr.open("GET","https://www.rthsoftware.cn/toolbox/"+file+"?time="+new Date().getTime())
 		xhr.send()
 	}
 }catch(e){

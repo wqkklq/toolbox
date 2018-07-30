@@ -262,7 +262,12 @@
 				})
 			}
 			document.getElementById("LogOut").onclick=logOut
-			document.getElementById("ClearLocalStorage").onclick=clearLocalStorage
+			document.getElementById("ClearLocalStorage").onclick=function(){
+				showConfirm([
+					"Do you want to clear the local storage?",
+					"您想清空本地存储吗？"
+				],clearLocalStorage)
+			}
 			document.getElementById("About").onclick=function(){
 				openWindow("about")
 			}

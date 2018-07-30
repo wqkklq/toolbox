@@ -24,7 +24,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 timeout=10000,
-ver="11.2"
+ver="11.3"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -114,21 +114,16 @@ function calc(code){
 	return calcResult
 }
 function clearLocalStorage(){
-	showConfirm([
-		"Do you want to clear the local storage?",
-		"您想清空本地存储吗？"
-	],function(){
-		if(localStorage.getItem("Username")&&!login.username){
-			login.username=localStorage.getItem("Username")
-		}
-		localStorage.clear()
-		if(login.username){
-			localStorage.setItem("Email",login.email)
-			localStorage.setItem("Password",login.password)
-			localStorage.setItem("Username",login.username)
-		}
-		restart()
-	})
+	if(localStorage.getItem("Username")&&!login.username){
+		login.username=localStorage.getItem("Username")
+	}
+	localStorage.clear()
+	if(login.username){
+		localStorage.setItem("Email",login.email)
+		localStorage.setItem("Password",login.password)
+		localStorage.setItem("Username",login.username)
+	}
+	restart()
 }
 function closeMenu(){
 	if(document.getElementsByClassName("popup-menu")[0]){
@@ -499,16 +494,11 @@ function openWindow(name){
 	}
 }
 function restart(){
-	showAlert([
-		"RTH Toolbox needs to be restarted",
-		"需要重新启动 RTH 工具箱"
-	],function(){
-		if(isAndroidApp||isElectron){
-			mui.back()
-		}else{
-			openWindow("index")
-		}
-	})
+	if(isAndroidApp||isElectron){
+		mui.back()
+	}else{
+		openWindow("index")
+	}
 }
 function searchURL(key,url){
 	if(!url){
@@ -774,15 +764,6 @@ function translate(query,from,to,callback){
 		}
 	})
 }
-if(location.href.indexOf("https")!=-1&&!login.username){
-	if(navigator.language=="zh-CN"){
-		if(location.href.indexOf("www.rthsoftware.cn")==-1){
-			location.href=location.href.replace("t.rths.tk","www.rthsoftware.cn/toolbox")
-		}
-	}else if(location.href.indexOf("t.rths.tk")==-1){
-		location.href=location.href.replace("www.rthsoftware.cn/toolbox","t.rths.tk")
-	}
-}
 if(!backend){
 	if(navigator.language=="zh-CN"){
 		backend="https://www.rthsoftware.cn/backend/"
@@ -795,24 +776,17 @@ if(!isIE){
 	window.onerror=function(msg,url,lineNo){
 		window.onerror=null
 		if(msg!="Script error."){
-			var message=msg+" at "+url+" : "+lineNo
-			showConfirm([
-				"An error occurs. Do you want to submit the error report?\n"+message,
-				"发生错误。您想提交错误报告吗？\n"+message
-			],function(){
-				$.get(backend+"feedback.php",{
-					"email":login.email,
-					"lang":language,
-					"name":login.username,
-					"text":message,
-					"ver":ver
-				},function(){
-					showAlert([
-						"Thank you for submitting an error report",
-						"感谢您提交错误报告"
-					],clearLocalStorage)
-				})
-			},clearLocalStorage)
+			$.get(backend+"feedback.php",{
+				"email":login.email,
+				"lang":language,
+				"name":login.username,
+				"text":msg+" at "+url+" : "+lineNo,
+				"ver":ver
+			},function(){
+				if(url.indexOf("html")!=-1){
+					clearLocalStorage()
+				}
+			})
 		}
 	}
 }

@@ -46,6 +46,7 @@
 					<li id="NewWL" class="menu"></li>
 					<li id="Open" class="menu"></li>
 					<li id="SharingSettings" class="menu"></li>
+					<li id="ClearMistakes" class="menu"></li>
 					<span id="MyWordList"></span>
 					<span id="FriendWordList"></span>
 					<span id="AdminWordList"></span>
@@ -56,8 +57,8 @@
 					<input id="TitleInput" type="text" class="mui-input-clear">
 				</div>
 				<ul id="OptionUl" class="menu">
+					<li id="Export" class="menu"></li>
 					<li id="CloseDocument" class="menu"></li>
-					<li id="SaveAsFile" class="menu"></li>
 					<li id="Delete" class="menu"></li>
 					<li id="FlashCard" class="menu"></li>
 				</ul>
@@ -378,6 +379,7 @@
 				],closeTrue)
 			}
 			function closeTrue(){
+				document.getElementById("TitleInput").value=""
 				localStorage.removeItem("WordList")
 				currentItem=null
 				localStorage.removeItem("WordListCurrentItem")
@@ -911,7 +913,7 @@
 					})
 				}
 			}
-			function saveAsFile(){
+			function exportWL(){
 				if(isElectron&&!isLinux){
 					require("electron").remote.dialog.showSaveDialog({
 						defaultPath:document.getElementById("TitleInput").value,
@@ -925,13 +927,18 @@
 						}
 					})
 				}else if(login.username){
-					save(function(){
-						var url="https://www.rthsoftware.cn/backend/userdata/getwordlist.php?dl=rth&index="+currentItem+"&username="+login.username
-						if(isApp){
-							openWebPage(url)
-						}else{
-							location.href=url
-						}
+					showConfirm([
+						"Do you want to export the word list?",
+						"您想导出此单词表吗？"
+					],function(){
+						save(function(){
+							var url="https://www.rthsoftware.cn/backend/userdata/getwordlist.php?dl=rth&index="+currentItem+"&username="+login.username
+							if(isApp){
+								openWebPage(url)
+							}else{
+								location.href=url
+							}
+						})
 					})
 				}else if(!isEdge&&!isLinux&&!isMobile){
 					var filename=document.getElementById("TitleInput").value
@@ -1025,7 +1032,7 @@
 						openDialog()
 						return false
 						case 83:
-						saveAsFile()
+						exportWL()
 						return false
 					}
 				}else{
@@ -1136,6 +1143,23 @@
 					},25)
 				}
 			}
+			document.getElementById("ClearMistakes").onclick=function(){
+				showConfirm([
+					"Do you want to clear mistakes?",
+					"您想清空错题吗？"
+				],function(){
+					for(var i=0;i<savedWordList.list.length;i++){
+						if(/Mistakes|错题/.test(savedWordList.list[i].title)){
+							savedWordList.list.splice(i,1)
+							i=0
+						}
+					}
+					if(login.username){
+						submit()
+					}
+					closeTrue()
+				})
+			}
 			document.getElementById("TitleInput").onkeydown=function(e){
 				if(e.keyCode==13){
 					save()
@@ -1148,7 +1172,7 @@
 				add()
 			}
 			document.getElementById("CloseDocument").onclick=closeDoc
-			document.getElementById("SaveAsFile").onclick=saveAsFile
+			document.getElementById("Export").onclick=exportWL
 			document.getElementById("Delete").onclick=function(){
 				showConfirm([
 					"Do you want to delete the word list?",
@@ -1221,9 +1245,10 @@
 				document.getElementById("NewWL").innerText="新单词表"
 				document.getElementById("Open").innerText="打开单词表文件"
 				document.getElementById("SharingSettings").innerText="共享设置"
+				document.getElementById("ClearMistakes").innerText="清空错题"
 				document.getElementById("TitleInput").placeholder="标题"
+				document.getElementById("Export").innerText="导出"
 				document.getElementById("CloseDocument").innerText="关闭文档"
-				document.getElementById("SaveAsFile").innerText="另存为文件"
 				document.getElementById("FlashCard").innerText="学习卡"
 				document.getElementById("Quiz").innerText="测验"
 				document.getElementById("Add").innerText="添加"
@@ -1254,9 +1279,10 @@
 				document.getElementById("NewWL").innerText="New Word List"
 				document.getElementById("Open").innerText="Open Word List File"
 				document.getElementById("SharingSettings").innerText="Sharing Settings"
+				document.getElementById("ClearMistakes").innerText="Clear Mistakes"
 				document.getElementById("TitleInput").placeholder="Title"
+				document.getElementById("Export").innerText="Export"
 				document.getElementById("CloseDocument").innerText="Close Document"
-				document.getElementById("SaveAsFile").innerText="Save as File"
 				document.getElementById("FlashCard").innerText="Flash Card"
 				document.getElementById("Quiz").innerText="Quiz"
 				document.getElementById("Add").innerText="Add"
@@ -1285,7 +1311,7 @@
 				document.getElementById("LookUpInput").focus()
 			}
 			if(isiOS){
-				document.getElementById("SaveAsFile").style.display="none"
+				document.getElementById("Export").style.display="none"
 			}
 			if(!window.speechSynthesis){
 				document.getElementById("SpeakDefinitionsLi").style.display="none"

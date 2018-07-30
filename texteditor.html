@@ -448,20 +448,24 @@
 						applyItem(currentItem)
 					},JSON.stringify(savedText.text[currentItem-1]),"text",currentItem)
 				}else{
-					savedText.text.push({
-						"created":new Date().getTime(),
-						"encrypt":encrypt,
-						"text":text,
-						"time":time,
-						"title":document.getElementsByTagName("input")[0].value
-					})
-					currentItem=savedText.text.length
-					submit(function(){
-						if(callback){
-							callback()
-						}
-						applyItem(currentItem)
-					})
+					try{
+						savedText.text.push({
+							"created":new Date().getTime(),
+							"encrypt":encrypt,
+							"text":text,
+							"time":time,
+							"title":document.getElementsByTagName("input")[0].value
+						})
+						currentItem=savedText.text.length
+						submit(function(){
+							if(callback){
+								callback()
+							}
+							applyItem(currentItem)
+						})
+					}catch(e){
+						savedText.text=[JSON.parse(savedText.text)]
+					}
 				}
 			}
 			function setText(text,noScrolling){

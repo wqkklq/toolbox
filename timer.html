@@ -65,11 +65,11 @@
 				<div class="mui-input-row">
 					<input id="OpenWebPageInput" type="text" class="mui-input-clear">
 				</div>
-				<div id="SpeakDiv1" class="mui-input-row mui-checkbox">
+				<div class="mui-input-row mui-checkbox">
 					<label id="SpeakLabel"></label>
 					<input id="SpeakCheck" type="checkbox" checked="checked">
 				</div>
-				<div id="SpeakDiv2" class="mui-input-row">
+				<div class="mui-input-row">
 					<input id="SpeakInput" type="text" class="mui-input-clear">
 				</div>
 				<div class="mui-input-row mui-checkbox">
@@ -200,8 +200,12 @@
 						mui.toast(e.message)
 					}
 				}
-				if(document.getElementById("SpeakCheck").checked&&window.speechSynthesis){
-					window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementById("SpeakInput").value))
+				if(document.getElementById("SpeakCheck").checked){
+					if(document.getElementById("SpeakInput").readOnly){
+						new Audio("https://www.rthsoftware.cn/toolbox/audio/timeout_"+language+".mp3").play()
+					}else if(window.speechSynthesis){
+						window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementById("SpeakInput").value))
+					}
 				}
 				if(document.getElementById("OpenWebPageCheck").checked){
 					openWebPage(document.getElementById("OpenWebPageInput").value)
@@ -258,6 +262,14 @@
 			document.getElementById("Second").onchange=timeChanged
 			document.getElementById("StartButton").onclick=start
 			document.getElementById("PauseButton").onclick=pause
+			document.getElementById("SpeakInput").onclick=function(){
+				if(this.readOnly){
+					showAlert([
+						"You cannot change this value",
+						"您不能修改此值"
+					])
+				}
+			}
 			document.getElementById("PreviewButton").onclick=task
 			document.getElementById("Add").onclick=function(){
 				var date=new Date()
@@ -345,8 +357,7 @@
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(!window.speechSynthesis){
-				document.getElementById("SpeakDiv1").style.display="none"
-				document.getElementById("SpeakDiv2").style.display="none"
+				document.getElementById("SpeakInput").readOnly=true
 			}
 			if(isElectron){
 				window.onbeforeunload=function(){

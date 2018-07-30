@@ -36,6 +36,6 @@ For more details: [https://www.rthsoftware.cn/](https://www.rthsoftware.cn/)
 
 更多详情请访问：[https://www.rthsoftware.cn/](https://www.rthsoftware.cn/)
 
-Use RTH Toolbox Online: [https://t.rths.tk/](https://t.rths.tk/)
+Use RTH Toolbox Online: [https://www.rthsoftware.cn/toolbox/](https://www.rthsoftware.cn/toolbox/)
 
-使用 RTH 工具箱网页版：[https://t.rths.tk/](https://t.rths.tk/)
+使用 RTH 工具箱网页版：[https://www.rthsoftware.cn/toolbox/](https://www.rthsoftware.cn/toolbox/)

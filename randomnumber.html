@@ -42,6 +42,10 @@
 							<label id="MaximumLabel"></label>
 							<input id="Maximum" type="number" value="60">
 						</div>
+						<div class="mui-input-row">
+							<label id="IntervalLabel"></label>
+							<input id="Interval" type="number" value="10">
+						</div>
 					</div>
 					<div class="mui-input-row mui-checkbox">
 						<label id="DuplicatesLabel"></label>
@@ -86,6 +90,7 @@
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var historyArray=[],
+			interval=10,
 			intervalId,
 			nameValue="",
 			randomNumValue,
@@ -252,6 +257,10 @@
 				random()
 				scrolling=true
 			}
+			function startScrolling(){
+				intervalId=setInterval(randScroll,interval)
+				scrolling=true
+			}
 			function submit(){
 				savedNames.time=new Date().getTime()
 				localStorage.setItem("Names",JSON.stringify(savedNames))
@@ -289,10 +298,6 @@
 							}catch(e){}
 						},250)
 					}
-				},
-				startScrolling=function(){
-					intervalId=setInterval(randScroll,10)
-					scrolling=true
 				}
 				closeDialog()
 				if(scrolling==false){
@@ -366,6 +371,15 @@
 					},25)
 				}
 			}
+			document.getElementById("Interval").oninput=function(){
+				if(this.value){
+					interval=this.value
+					if(scrolling){
+						clearInterval(intervalId)
+						startScrolling()
+					}
+				}
+			}
 			document.getElementById("DuplicatesCheck").onchange=function(){
 				if(this.checked){
 					document.getElementById("Add").style.display=""
@@ -419,6 +433,7 @@
 				document.getElementById("QuantityLabel").innerText="数量"
 				document.getElementById("MinimumLabel").innerText="最小值"
 				document.getElementById("MaximumLabel").innerText="最大值"
+				document.getElementById("IntervalLabel").innerText="间隔"
 				document.getElementById("DuplicatesLabel").innerText="重复"
 				document.getElementById("OddNumberOnlyLabel").innerText="仅奇数"
 				document.getElementById("EvenNumberOnlyLabel").innerText="仅偶数"
@@ -438,6 +453,7 @@
 				document.getElementById("QuantityLabel").innerText="Quantity"
 				document.getElementById("MinimumLabel").innerText="Minimum"
 				document.getElementById("MaximumLabel").innerText="Maximum"
+				document.getElementById("IntervalLabel").innerText="Interval"
 				document.getElementById("DuplicatesLabel").innerText="Duplicates"
 				document.getElementById("OddNumberOnlyLabel").innerText="Odd Number Only"
 				document.getElementById("EvenNumberOnlyLabel").innerText="Even Number Only"
@@ -487,7 +503,7 @@
 			}
 			intervalId=setInterval(function(){
 				randScroll()
-			},10)
+			},interval)
 		</script>
 	</body>
 </html>
