@@ -43,8 +43,8 @@
 							<input id="Maximum" type="number" value="60">
 						</div>
 						<div class="mui-input-row">
-							<label id="IntervalLabel"></label>
-							<input id="Interval" type="number" value="10">
+							<label id="SpeedLabel"></label>
+							<input id="Speed" type="number" value="100">
 						</div>
 					</div>
 					<div class="mui-input-row mui-checkbox">
@@ -371,9 +371,9 @@
 					},25)
 				}
 			}
-			document.getElementById("Interval").oninput=function(){
+			document.getElementById("Speed").oninput=function(){
 				if(this.value){
-					interval=this.value
+					interval=1000/this.value
 					if(scrolling){
 						clearInterval(intervalId)
 						startScrolling()
@@ -433,7 +433,7 @@
 				document.getElementById("QuantityLabel").innerText="数量"
 				document.getElementById("MinimumLabel").innerText="最小值"
 				document.getElementById("MaximumLabel").innerText="最大值"
-				document.getElementById("IntervalLabel").innerText="间隔"
+				document.getElementById("SpeedLabel").innerText="速度"
 				document.getElementById("DuplicatesLabel").innerText="重复"
 				document.getElementById("OddNumberOnlyLabel").innerText="仅奇数"
 				document.getElementById("EvenNumberOnlyLabel").innerText="仅偶数"
@@ -453,7 +453,7 @@
 				document.getElementById("QuantityLabel").innerText="Quantity"
 				document.getElementById("MinimumLabel").innerText="Minimum"
 				document.getElementById("MaximumLabel").innerText="Maximum"
-				document.getElementById("IntervalLabel").innerText="Interval"
+				document.getElementById("SpeedLabel").innerText="Speed"
 				document.getElementById("DuplicatesLabel").innerText="Duplicates"
 				document.getElementById("OddNumberOnlyLabel").innerText="Odd Number Only"
 				document.getElementById("EvenNumberOnlyLabel").innerText="Even Number Only"
