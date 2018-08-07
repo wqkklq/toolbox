@@ -154,9 +154,9 @@
 			function loadPreview(){
 				var value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9]/g,"")
 				if(value){
-					document.getElementById("Preview").innerText="http://"+value+".rths.tk"
+					document.getElementById("Preview").innerText="http://"+value+".rths.tk/"
 				}else{
-					document.getElementById("Preview").innerText="http://"+defaultShortURL+".rths.tk"
+					document.getElementById("Preview").innerText="http://"+defaultShortURL+".rths.tk/"
 				}
 			}
 			document.getElementById("ShortURL").oninput=loadPreview
