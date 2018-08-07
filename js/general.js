@@ -297,6 +297,8 @@ function loginDialog(){
 				newPasswordInput.style.borderColor="rgb(255,192,203)"
 				newPasswordInput.focus()
 			}else{
+				newSignUpButton.onclick=
+				newLoginButton.onclick=null
 				$.ajax({
 					"url":backend+"userdata/verify.php",
 					"data":{
@@ -307,6 +309,8 @@ function loginDialog(){
 					"dataType":"json",
 					"timeout":timeout,
 					"success":function(e){
+						newSignUpButton.onclick=signUp
+						newLoginButton.onclick=submitLogin
 						if(e.index){
 							if(e.pass){
 								showAlert([
@@ -373,6 +377,8 @@ function loginDialog(){
 						}
 					},
 					"error":function(){
+						newSignUpButton.onclick=signUp
+						newLoginButton.onclick=submitLogin
 						showAlert([
 							"Unable to connect to the server",
 							"无法连接服务器"
