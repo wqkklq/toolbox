@@ -606,6 +606,9 @@
 					"Enter the URL",
 					"输入网址"
 				],function(url){
+					if(url.indexOf("/")==-1){
+						url=url+"/"
+					}
 					if(url.indexOf("http")==-1){
 						url="http://"+url
 					}
@@ -779,7 +782,7 @@
 					if(login.username){
 						encrypt=false
 						save(function(){
-							var url="http://www."+login.username+".rths.tk/"+(function(){
+							var url="http://"+login.username+".rths.tk/"+(function(){
 								if(savedText.text[currentItem-1].created){
 									return savedText.text[currentItem-1].created
 								}else{

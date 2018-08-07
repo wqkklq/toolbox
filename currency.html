@@ -116,10 +116,14 @@
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="计算器"
+				document.getElementsByTagName("input")[0].placeholder=
+				document.getElementsByTagName("input")[1].placeholder="输入数字"
 				document.getElementById("UpdateRate").innerText="更新汇率"
 				break
 				default:
 				document.title="Calculator"
+				document.getElementsByTagName("input")[0].placeholder=
+				document.getElementsByTagName("input")[1].placeholder="Enter the number"
 				document.getElementById("UpdateRate").innerText="Update the exchange rate"
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title

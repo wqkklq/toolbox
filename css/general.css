@@ -59,6 +59,9 @@ td div{
 	top:-7px;
 	width:100%;
 }
+td input[type=text]{
+	border-color:transparent;
+}
 textarea{
 	display:block;
 	font-size:17px;

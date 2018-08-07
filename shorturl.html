@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--Code written by Shangzhen Yang-->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
+		<meta name="theme-color" content="#0066cc">
+		<link href="css/mui.min.css" rel="stylesheet">
+		<link href="css/general.css" rel="stylesheet">
+		<style>
+			button,
+			#MyURL{
+				margin-top:15px;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title"></header>
+		<div class="mui-content">
+			<table width="100%">
+				<tbody>
+					<tr>
+						<td width="30%">
+							<div id="From"></div>
+						</td>
+						<td width="70%">
+							<input id="ShortURL" type="text">
+						</td>
+					</tr>
+					<tr>
+						<td width="30%">
+							<div id="To"></div>
+						</td>
+						<td width="70%">
+							<input id="OriginalURL" type="text">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<ul class="menu card">
+				<li id="Preview" class="menu"></li>
+			</ul>
+			<div class="btn-bg-img">
+				<button type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
+			</div>
+			<ul id="MyURL" class="menu"></ul>
+		</div>
+		<script src="cordova.js"></script>
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/md5.min.js"></script>
+		<script src="js/general.js"></script>
+		<script type="text/javascript">
+			var defaultShortURL,
+			myURL=localStorage.getItem("MyURL")
+			function load(){
+				defaultShortURL=Math.round(new Date().getTime()/1000*Math.random()).toString(36)
+				document.getElementById("ShortURL").value=defaultShortURL
+				document.getElementById("OriginalURL").value=""
+				loadPreview()
+				$.ajax({
+					"url":backend+"userdata/domain/get.php",
+					"data":{
+						"shorturl":true,
+						"username":login.username
+					},
+					"dataType":"json",
+					"success":function(e){
+						myURL=e
+						localStorage.setItem("MyURL",JSON.stringify(myURL))
+						loadMyURL()
+					}
+				})
+			}
+			function loadMyURL(){
+				document.getElementById("MyURL").innerHTML=""
+				for(var i=0;i<myURL.length;i++){
+					var newLi=document.createElement("li")
+					newLi.classList.add("menu")
+					newLi.innerText=myURL[i].name
+					newLi.setAttribute("number",i+1)
+					newLi.oncontextmenu=
+					newLi.onclick=function(mouse){
+						var index=this.getAttribute("number")*1-1
+						showMenu(mouse,[{
+							"onclick":function(){
+								showPrompt(null,function(){
+									openWebPage(myURL[index].to)
+								},null,"http://"+myURL[index].name+".rths.tk/")
+								closeMenu()
+							},
+							"text":[
+								"Open",
+								"打开"
+							]
+						},{
+							"onclick":function(){
+								showPrompt([
+									"Change "+myURL[index].to+" to",
+									"把 "+myURL[index].to+" 更改为"
+								],function(e){
+									$.post(backend+"userdata/upload.php",{
+										"dir":"domain/",
+										"filename":"list",
+										"key1":myURL[index].name,
+										"key2":"to",
+										"text":e
+									},function(){
+										showToast([
+											"Changes are saved",
+											"更改已保存"
+										])
+										load()
+									})
+								},null,myURL[index].to)
+								closeMenu()
+							},
+							"text":[
+								"Change",
+								"更改"
+							]
+						},{
+							"onclick":function(){
+								showConfirm([
+									"Do you want to delete "+myURL[index].name+"?",
+									"您想删除 "+myURL[index].name+" 吗？"
+								],function(){
+									$.post(backend+"userdata/domain/del.php",{
+										"domain":myURL[index].name,
+										"username":login.username
+									},function(e){
+										if(e.success){
+											load()
+										}else{
+											showAlert([
+												"Unable to delete "+myURL[index].name,
+												"无法删除 "+myURL[index].name
+											])
+										}
+									},"json")
+								})
+								closeMenu()
+							},
+							"text":[
+								"Delete",
+								"删除"
+							]
+						}])
+						return false
+					}
+					document.getElementById("MyURL").appendChild(newLi)
+				}
+			}
+			function loadPreview(){
+				var value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9]/g,"")
+				if(value){
+					document.getElementById("Preview").innerText="http://"+value+".rths.tk"
+				}else{
+					document.getElementById("Preview").innerText="http://"+defaultShortURL+".rths.tk"
+				}
+			}
+			document.getElementById("ShortURL").oninput=loadPreview
+			document.getElementsByTagName("button")[0].onclick=function(){
+				if(login.username){
+					if(document.getElementById("OriginalURL").value){
+						var originalURL=document.getElementById("OriginalURL").value,
+						value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9]/g,"")
+						if(originalURL.indexOf("rths.tk")!=-1&&originalURL.indexOf(".html")==-1){
+							showAlert([
+								"Short URLs cannot be the original URL",
+								"短网址不能作为原网址"
+							])
+						}else{
+							if(!value){
+								value=defaultShortURL
+							}
+							if(originalURL.indexOf("/")==-1){
+								originalURL=originalURL+"/"
+							}
+							if(originalURL.indexOf("http")==-1){
+								originalURL="http://"+originalURL
+							}
+							document.getElementById("OriginalURL").value=originalURL
+							$.post(backend+"userdata/domain/add.php",{
+								"domain":value,
+								"redirect":302,
+								"to":originalURL,
+								"username":login.username
+							},function(e){
+								if(e.success){
+									load()
+									showPrompt(null,function(){
+										openWebPage(originalURL)
+									},null,"http://"+value+".rths.tk/")
+									closeMenu()
+								}else{
+									var extraInfo=""
+									switch(language){
+										case "SimplifiedChinese":
+										if(e.username=="admin"){
+											extraInfo="管理员"
+										}else if(e.username==login.username){
+											extraInfo="您"
+										}
+										break
+										default:
+										if(e.username=="admin"){
+											extraInfo=" by the administrator"
+										}else if(e.username==login.username){
+											extraInfo=" by you"
+										}
+									}
+									showAlert([
+										"This short URL has been taken"+extraInfo,
+										"此短网址已被"+extraInfo+"占用"
+									])
+								}
+							},"json")
+						}
+					}else{
+						showAlert([
+							"Please enter the original URL",
+							"请输入原网址"
+						])
+					}
+				}else if(!localStorage.getItem("Username")){
+					loginDialog()
+				}else{
+					showAlert([
+						"Unable to connect to the server",
+						"无法连接服务器"
+					])
+				}
+			}
+			switch(language){
+				case "SimplifiedChinese":
+				document.title="短网址"
+				document.getElementById("From").innerText="从"
+				document.getElementById("ShortURL").placeholder="输入名称"
+				document.getElementById("To").innerText="到"
+				document.getElementById("OriginalURL").placeholder="输入原网址"
+				document.getElementsByTagName("button")[0].innerText="创建"
+				break
+				default:
+				document.title="Short URL"
+				document.getElementById("From").innerText="From"
+				document.getElementById("ShortURL").placeholder="Enter the name"
+				document.getElementById("To").innerText="To"
+				document.getElementById("OriginalURL").placeholder="Enter the original URL"
+				document.getElementsByTagName("button")[0].innerText="Create"
+			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			if(myURL){
+				myURL=JSON.parse(myURL)
+				loadMyURL()
+			}
+			load()
+		</script>
+	</body>
+</html>

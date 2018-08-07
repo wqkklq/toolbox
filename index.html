@@ -150,6 +150,7 @@
 			<div class="home-menu">
 				<ul>
 					<li id="WordList"></li>
+					<li id="ShortURL"></li>
 					<li id="Timer"></li>
 					<li id="Calculator"></li>
 					<li id="Chatbot"></li>
@@ -178,7 +179,8 @@
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var currentHour=new Date().getHours(),
-			dateCountdown=localStorage.getItem("DateCountdown")
+			dateCountdown=localStorage.getItem("DateCountdown"),
+			menu=document.getElementsByClassName("home-menu")[0].getElementsByTagName("li")
 			function displayDateCountdown(){
 				if(dateCountdown&&dateCountdown.date&&dateCountdown.name){
 					switch(language){
@@ -293,14 +295,10 @@
 					})
 				}
 			}
-			document.getElementById("WordList").onclick=
-			document.getElementById("Timer").onclick=
-			document.getElementById("Calculator").onclick=
-			document.getElementById("Chatbot").onclick=
-			document.getElementById("RandomNumber").onclick=
-			document.getElementById("Search").onclick=
-			document.getElementById("TextEditor").onclick=function(){
-				openWindow(this.id.toLowerCase())
+			for(var i=0;i<menu.length;i++){
+				menu[i].onclick=function(){
+					openWindow(this.id.toLowerCase())
+				}
 			}
 			document.getElementsByClassName("mui-icon-settings")[0].onclick=function(){
 				openWindow("settings")
@@ -313,6 +311,7 @@
 				document.title="RTH 工具箱"
 				document.getElementsByClassName("get")[0].innerText="下载 RTH 工具箱"
 				document.getElementById("WordList").innerText="单词表"
+				document.getElementById("ShortURL").innerText="短网址"
 				document.getElementById("Timer").innerText="计时器"
 				document.getElementById("Calculator").innerText="计算器"
 				document.getElementById("Chatbot").innerText="聊天机器人"
@@ -333,6 +332,7 @@
 				document.title="RTH Toolbox"
 				document.getElementsByClassName("get")[0].innerText="Download RTH Toolbox"
 				document.getElementById("WordList").innerText="Word List"
+				document.getElementById("ShortURL").innerText="Short URL"
 				document.getElementById("Timer").innerText="Timer"
 				document.getElementById("Calculator").innerText="Calculator"
 				document.getElementById("Chatbot").innerText="Chatbot"
