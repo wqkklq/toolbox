@@ -66,6 +66,7 @@
 					},
 					"dataType":"json",
 					"success":function(e){
+						closeLoading()
 						myURL=e
 						localStorage.setItem("MyURL",JSON.stringify(myURL))
 						loadMyURL()
@@ -139,10 +140,10 @@
 										"domain":myURL[index].name,
 										"username":login.username
 									},function(e){
-										closeLoading()
 										if(e.success){
 											load()
 										}else{
+											closeLoading()
 											showAlert([
 												"Unable to delete "+myURL[index].name,
 												"无法删除 "+myURL[index].name
