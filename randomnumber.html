@@ -265,16 +265,14 @@
 				savedNames.time=new Date().getTime()
 				localStorage.setItem("Names",JSON.stringify(savedNames))
 				if(login.username){
-					showToast([
-						"Submitting",
-						"正在提交"
-					])
+					showLoading()
 					$.post(backend+"userdata/upload",{
 						"dir":"names/",
 						"filename":login.username,
 						"text":JSON.stringify(savedNames)
 					},function(){
 						load()
+						closeLoading()
 						showToast([
 							"Changes are saved",
 							"更改已保存"

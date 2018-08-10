@@ -426,7 +426,7 @@ function loginDialog(){
 			newConfirmPasswordInput.placeholder="确认密码"
 			newSignUpButton.innerText="注册"
 			newLoginButton.innerText="登录"
-			newDescriptionDiv.innerText="登录后，您可以在 https://t.rths.tk/ 查看您保存的单词表和文本文档。"
+			newDescriptionDiv.innerText="登录后，您可以在 https://rths.tk/ 查看您保存的单词表和文本文档。"
 			break
 			default:
 			newH1.innerText="Login"
@@ -435,7 +435,7 @@ function loginDialog(){
 			newConfirmPasswordInput.placeholder="Confirm Password"
 			newSignUpButton.innerText="Sign Up"
 			newLoginButton.innerText="Login"
-			newDescriptionDiv.innerText="After logging in, you can view your saved word lists and text documents at https://t.rths.tk/."
+			newDescriptionDiv.innerText="After logging in, you can view your saved word lists and text documents at https://rths.tk/."
 		}
 		newDiv.appendChild(newH1)
 		newDiv.appendChild(newEmailInput)
@@ -665,6 +665,7 @@ function showMenu(e,menu){
 	},25)
 }
 function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInput){
+	closeLoading()
 	var newDiv=document.createElement("div"),
 	newInput=document.createElement("input"),
 	newCancelButton=document.createElement("button"),

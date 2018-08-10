@@ -487,10 +487,7 @@
 				savedText.time=new Date().getTime()
 				localStorage.setItem("SavedText",JSON.stringify(savedText))
 				if(login.username){
-					showToast([
-						"Submitting",
-						"正在提交"
-					])
+					showLoading()
 					var postData={
 						"dir":"text/",
 						"filename":login.username,
@@ -509,6 +506,7 @@
 						if(callback){
 							callback()
 						}
+						closeLoading()
 						showToast([
 							"Changes are saved",
 							"更改已保存"
@@ -798,7 +796,6 @@
 									"to":url,
 									"username":login.username
 								},function(e){
-									closeLoading()
 									if(e.available){
 										showPrompt(null,function(){
 											openWebPage(url)

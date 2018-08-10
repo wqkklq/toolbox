@@ -67,15 +67,13 @@
 			function submit(){
 				localStorage.setItem("DateCountdown",JSON.stringify(dateCountdown))
 				if(login.username){
-					showToast([
-						"Submitting",
-						"正在提交"
-					])
+					showLoading()
 					$.post(backend+"userdata/upload",{
 						"dir":"datecountdown/",
 						"filename":login.username,
 						"text":JSON.stringify(dateCountdown)
 					},function(){
+						closeLoading()
 						showToast([
 							"Changes are saved",
 							"更改已保存"

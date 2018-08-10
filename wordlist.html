@@ -1203,7 +1203,6 @@
 							"to":url,
 							"username":login.username
 						},function(e){
-							closeLoading()
 							if(e.available){
 								showPrompt(null,function(){
 									openWebPage(url)
@@ -1215,7 +1214,6 @@
 							}
 						},"json")
 					}else{
-						closeLoading()
 						showPrompt(null,function(){
 							openWebPage(url)
 						},null,url)

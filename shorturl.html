@@ -200,7 +200,6 @@
 								"to":originalURL,
 								"username":login.username
 							},function(e){
-								closeLoading()
 								if(e.success){
 									load()
 									showPrompt(null,function(){
@@ -208,6 +207,7 @@
 									},null,"https://rths.tk/"+value)
 									closeMenu()
 								}else{
+									closeLoading()
 									var extraInfo=""
 									switch(language){
 										case "SimplifiedChinese":
