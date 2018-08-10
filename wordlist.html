@@ -59,6 +59,7 @@
 				<ul id="OptionUl" class="menu">
 					<li id="Export" class="menu"></li>
 					<li id="CloseDocument" class="menu"></li>
+					<li id="Share" class="menu"></li>
 					<li id="Delete" class="menu"></li>
 					<li id="FlashCard" class="menu"></li>
 				</ul>
@@ -146,7 +147,8 @@
 		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var correctDefinition,
+			var back,
+			correctDefinition,
 			correctInt=0,
 			currentItem,
 			currentList=[],
@@ -281,7 +283,7 @@
 										"Unable to speak this word",
 										"无法朗读此单词"
 									],function(){
-										if(location.href.indexOf("https")!=-1){
+										if(isWeb){
 											location.reload()
 										}
 									})
@@ -308,14 +310,8 @@
 								"您想删除 "+currentList[index].word+" 吗？"
 							],function(){
 								currentList.splice(index,1)
-								switch(language){
-									case "SimplifiedChinese":
-									document.getElementById("WordListUl").innerHTML="<li class=\"menu\">正在加载</li>"
-									break
-									default:
-									document.getElementById("WordListUl").innerHTML="<li class=\"menu\">Loading</li>"
-								}
-								save(null,true)
+								showLoading()
+								save(closeLoading,true)
 							})
 							closeMenu()
 						},
@@ -721,26 +717,35 @@
 				document.getElementsByClassName("mui-title")[0].innerText=document.title
 				switch(className){
 					case "edit":
-					document.getElementsByClassName("start")[0].style.display="none"
-					document.getElementsByClassName("edit")[0].style.display="block"
-					document.getElementsByClassName("quiz")[0].style.display=""
-					document.getElementsByTagName("footer")[0].style.display="block"
-					document.getElementsByClassName("back")[0].onclick=closeDoc
+					if(!document.getElementsByClassName("edit")[0].style.display){
+						scrollTo(0,0)
+						document.getElementsByClassName("start")[0].style.display="none"
+						document.getElementsByClassName("edit")[0].style.display="block"
+						document.getElementsByClassName("quiz")[0].style.display=""
+						document.getElementsByTagName("footer")[0].style.display="block"
+						document.getElementsByClassName("back")[0].onclick=closeDoc
+					}
 					break
 					case "quiz":
-					document.getElementsByClassName("start")[0].style.display="none"
-					document.getElementsByClassName("edit")[0].style.display=""
-					document.getElementsByClassName("quiz")[0].style.display="block"
-					document.getElementsByTagName("footer")[0].style.display=""
-					document.getElementsByClassName("back")[0].onclick=end
-					restartQuiz()
+					if(!document.getElementsByClassName("quiz")[0].style.display){
+						scrollTo(0,0)
+						document.getElementsByClassName("start")[0].style.display="none"
+						document.getElementsByClassName("edit")[0].style.display=""
+						document.getElementsByClassName("quiz")[0].style.display="block"
+						document.getElementsByTagName("footer")[0].style.display=""
+						document.getElementsByClassName("back")[0].onclick=end
+						restartQuiz()
+					}
 					break
 					case "start":
-					document.getElementsByClassName("start")[0].style.display=
-					document.getElementsByClassName("edit")[0].style.display=
-					document.getElementsByClassName("quiz")[0].style.display=
-					document.getElementsByTagName("footer")[0].style.display=""
-					document.getElementsByClassName("back")[0].onclick=mui.back
+					if(document.getElementsByClassName("start")[0].style.display){
+						scrollTo(0,0)
+						document.getElementsByClassName("start")[0].style.display=
+						document.getElementsByClassName("edit")[0].style.display=
+						document.getElementsByClassName("quiz")[0].style.display=
+						document.getElementsByTagName("footer")[0].style.display=""
+						document.getElementsByClassName("back")[0].onclick=back
+					}
 				}
 			}
 			function openLWL(file){
@@ -851,7 +856,6 @@
 				}
 			}
 			function reload(){
-				scrollTo(0,0)
 				currentList=[]
 				document.getElementById("WordListUl").innerHTML=
 				document.getElementById("MyWordList").innerHTML=
@@ -903,6 +907,7 @@
 					},JSON.stringify(savedWordList.list[currentItem-1]),"list",currentItem)
 				}else{
 					savedWordList.list.push({
+						"created":new Date().getTime(),
 						"list":currentList,
 						"title":document.getElementById("TitleInput").value
 					})
@@ -934,7 +939,7 @@
 						"您想导出此单词表吗？"
 					],function(){
 						save(function(){
-							var url="https://www.rthsoftware.cn/backend/userdata/getwordlist.php?dl=rth&index="+currentItem+"&username="+login.username
+							var url=backend+"userdata/getwordlist.php?dl=rth&index="+currentItem+"&username="+login.username
 							if(isApp){
 								openWebPage(url)
 							}else{
@@ -943,26 +948,31 @@
 						})
 					})
 				}else if(!isEdge&&!isLinux&&!isMobile){
-					var filename=document.getElementById("TitleInput").value
-					if(filename==""){
-						filename=document.title
-					}
-					if(filename.indexOf(".")==-1){
-						filename+=".rth"
-					}
-					var dl=document.createElement("a")
-					dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(JSON.stringify({
-						"list":currentList,
-						"title":document.getElementById("TitleInput").value
-					})))
-					dl.setAttribute("download",filename)
-					if(document.createEvent){
-						var event=document.createEvent("MouseEvents")
-						event.initEvent("click",true,true)
-						dl.dispatchEvent(event)
-					}else{
-						dl.click()
-					}
+					showConfirm([
+						"Do you want to export the word list?",
+						"您想导出此单词表吗？"
+					],function(){
+						var filename=document.getElementById("TitleInput").value
+						if(filename==""){
+							filename=document.title
+						}
+						if(filename.indexOf(".")==-1){
+							filename+=".rth"
+						}
+						var dl=document.createElement("a")
+						dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(JSON.stringify({
+							"list":currentList,
+							"title":document.getElementById("TitleInput").value
+						})))
+						dl.setAttribute("download",filename)
+						if(document.createEvent){
+							var event=document.createEvent("MouseEvents")
+							event.initEvent("click",true,true)
+							dl.dispatchEvent(event)
+						}else{
+							dl.click()
+						}
+					})
 				}else if(!localStorage.getItem("Username")){
 					loginDialog()
 				}else{
@@ -1173,8 +1183,44 @@
 			document.getElementById("Add").onclick=function(){
 				add()
 			}
-			document.getElementById("CloseDocument").onclick=closeDoc
 			document.getElementById("Export").onclick=exportWL
+			document.getElementById("CloseDocument").onclick=closeDoc
+			document.getElementById("Share").onclick=function(){
+				loginRequired(function(){
+					var short=document.getElementById("TitleInput").value.toLowerCase().replace(/[^a-z0-9]/g,""),
+					url="https://www.rthsoftware.cn/toolbox/wordlist.html?index="+(function(){
+						if(savedWordList.list[currentItem-1].created){
+							return savedWordList.list[currentItem-1].created
+						}else{
+							return currentItem
+						}
+					})()+"&username="+login.username
+					if(short){
+						showLoading()
+						$.post(backend+"userdata/domain/add.php",{
+							"domain":short,
+							"redirect":302,
+							"to":url,
+							"username":login.username
+						},function(e){
+							closeLoading()
+							if(e.available){
+								showPrompt(null,function(){
+									openWebPage(url)
+								},null,"https://rths.tk/"+short)
+							}else{
+								showPrompt(null,function(){
+									openWebPage(url)
+								},null,url)
+							}
+						},"json")
+					}else{
+						showPrompt(null,function(){
+							openWebPage(url)
+						},null,url)
+					}
+				})
+			}
 			document.getElementById("Delete").onclick=function(){
 				showConfirm([
 					"Do you want to delete the word list?",
@@ -1251,10 +1297,11 @@
 				document.getElementById("TitleInput").placeholder="标题"
 				document.getElementById("Export").innerText="导出"
 				document.getElementById("CloseDocument").innerText="关闭文档"
+				document.getElementById("Share").innerText="共享"
+				document.getElementById("Delete").innerText="删除"
 				document.getElementById("FlashCard").innerText="学习卡"
 				document.getElementById("Quiz").innerText="测验"
 				document.getElementById("Add").innerText="添加"
-				document.getElementById("Delete").innerText="删除"
 				document.getElementById("WordLabel").innerText="单词"
 				document.getElementById("EnteredWord").placeholder="在这里输入"
 				document.getElementById("DefinitionLabel").innerText="释义"
@@ -1285,10 +1332,11 @@
 				document.getElementById("TitleInput").placeholder="Title"
 				document.getElementById("Export").innerText="Export"
 				document.getElementById("CloseDocument").innerText="Close Document"
+				document.getElementById("Share").innerText="Share"
+				document.getElementById("Delete").innerText="Delete"
 				document.getElementById("FlashCard").innerText="Flash Card"
 				document.getElementById("Quiz").innerText="Quiz"
 				document.getElementById("Add").innerText="Add"
-				document.getElementById("Delete").innerText="Delete"
 				document.getElementById("WordLabel").innerText="Word"
 				document.getElementById("EnteredWord").placeholder="Enter here"
 				document.getElementById("DefinitionLabel").innerText="Definition"
@@ -1318,7 +1366,27 @@
 			if(!window.speechSynthesis){
 				document.getElementById("SpeakDefinitionsLi").style.display="none"
 			}
-			load()
+			if(searchURL("index")&&searchURL("username")){
+				back=function(){
+					openWindow("index")
+				}
+				showLoading()
+				$.ajax({
+					"url":backend+"userdata/getwordlist.php",
+					"data":{
+						"index":searchURL("index"),
+						"username":searchURL("username")
+					},
+					"dataType":"json",
+					"success":function(e){
+						closeLoading()
+						applyItem(0,e)
+					}
+				})
+			}else{
+				back=mui.back
+				load()
+			}
 		</script>
 	</body>
 </html>

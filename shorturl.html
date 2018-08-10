@@ -95,6 +95,15 @@
 							]
 						},{
 							"onclick":function(){
+								showQRCode(myURL[index].to)
+								closeMenu()
+							},
+							"text":[
+								"QR Code",
+								"二维码"
+							]
+						},{
+							"onclick":function(){
 								showPrompt([
 									"Change "+myURL[index].to+" to",
 									"把 "+myURL[index].to+" 更改为"
@@ -125,10 +134,12 @@
 									"Do you want to delete "+myURL[index].name+"?",
 									"您想删除 "+myURL[index].name+" 吗？"
 								],function(){
+									showLoading()
 									$.post(backend+"userdata/domain/del.php",{
 										"domain":myURL[index].name,
 										"username":login.username
 									},function(e){
+										closeLoading()
 										if(e.success){
 											load()
 										}else{
@@ -161,7 +172,7 @@
 			}
 			document.getElementById("ShortURL").oninput=loadPreview
 			document.getElementsByTagName("button")[0].onclick=function(){
-				if(login.username){
+				loginRequired(function(){
 					if(document.getElementById("OriginalURL").value){
 						var originalURL=document.getElementById("OriginalURL").value,
 						value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9]/g,"")
@@ -181,12 +192,14 @@
 								originalURL="http://"+originalURL
 							}
 							document.getElementById("OriginalURL").value=originalURL
+							showLoading()
 							$.post(backend+"userdata/domain/add.php",{
 								"domain":value,
 								"redirect":302,
 								"to":originalURL,
 								"username":login.username
 							},function(e){
+								closeLoading()
 								if(e.success){
 									load()
 									showPrompt(null,function(){
@@ -223,14 +236,7 @@
 							"请输入原网址"
 						])
 					}
-				}else if(!localStorage.getItem("Username")){
-					loginDialog()
-				}else{
-					showAlert([
-						"Unable to connect to the server",
-						"无法连接服务器"
-					])
-				}
+				})
 			}
 			switch(language){
 				case "SimplifiedChinese":

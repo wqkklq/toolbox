@@ -1,6 +1,6 @@
 /*Code written by Shangzhen Yang*/
 var appliedTheme,
-backend=localStorage.getItem("Backend"),
+backend="https://www.rthsoftware.cn/backend/",
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
 isChinese=/[\u4E00-\u9FA5]+/,
@@ -14,8 +14,10 @@ isLinux=/Linux/i.test(navigator.userAgent),
 isMac=/Macintosh/i.test(navigator.userAgent),
 isNumber=/[0-9]+/,
 isUpperCase=/[A-Z]+/,
+isWeb=location.href.indexOf("https")!=-1,
 isWindows=/Windows/i.test(navigator.userAgent),
 language=localStorage.getItem("Language"),
+loadingId,
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -125,6 +127,12 @@ function clearLocalStorage(){
 	}
 	restart()
 }
+function closeLoading(){
+	clearInterval(loadingId)
+	try{
+		document.body.removeChild(document.getElementsByClassName("loading")[0])
+	}catch(e){}
+}
 function closeMenu(){
 	if(document.getElementsByClassName("popup-menu")[0]){
 		document.getElementsByClassName("popup-menu")[0].style.opacity="0"
@@ -151,25 +159,7 @@ function dateDiff(startDate,endDate){
 }
 function getJSON(url,callback,errorCallback,min){
 	if(!min){
-		if(!document.getElementsByClassName("loading")[0]){
-			var newDiv=document.createElement("div")
-			newDiv.classList.add("loading")
-			newDiv.innerText="0%"
-			document.body.appendChild(newDiv)
-		}
-		var intervalId=setInterval(function(){
-			if(document.getElementsByClassName("loading")[0]){
-				var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
-				if(newNum>100){
-					clearInterval(intervalId)
-					try{
-						document.body.removeChild(document.getElementsByClassName("loading")[0])
-					}catch(e){}
-				}else{
-					document.getElementsByClassName("loading")[0].innerText=newNum+"%"
-				}
-			}
-		},timeout/100)
+		showLoading()
 	}
 	$.ajax({
 		"url":backend+"get.php",
@@ -182,10 +172,7 @@ function getJSON(url,callback,errorCallback,min){
 		"timeout":timeout,
 		"success":function(e){
 			if(!min){
-				clearInterval(intervalId)
-				try{
-					document.body.removeChild(document.getElementsByClassName("loading")[0])
-				}catch(e){}
+				closeLoading()
 			}
 			if(callback){
 				callback(e)
@@ -193,10 +180,7 @@ function getJSON(url,callback,errorCallback,min){
 		},
 		"error":function(e){
 			if(!min){
-				clearInterval(intervalId)
-				try{
-					document.body.removeChild(document.getElementsByClassName("loading")[0])
-				}catch(e){}
+				closeLoading()
 			}
 			if(errorCallback){
 				errorCallback(e)
@@ -468,15 +452,28 @@ function loginDialog(){
 		},25)
 	}
 }
+function loginRequired(callback){
+	if(login.username){
+		if(callback){
+			callback()
+		}
+	}else if(!localStorage.getItem("Username")){
+		loginDialog()
+	}else{
+		showAlert([
+			"Unable to connect to the server",
+			"无法连接服务器"
+		])
+	}
+}
 function logOut(){
+	login.email=
+	login.password=
+	login.username=null
 	localStorage.removeItem("Email")
 	localStorage.removeItem("Password")
 	localStorage.removeItem("Username")
-	localStorage.removeItem("DateCountdown")
-	localStorage.removeItem("Names")
-	localStorage.removeItem("SavedText")
-	localStorage.removeItem("SavedWordList")
-	restart()
+	clearLocalStorage()
 }
 function openDialog(){
 	document.getElementsByClassName("open-file")[0].value=""
@@ -612,6 +609,27 @@ function showImage(src){
 		newDiv.style.opacity="1"
 	},25)
 }
+function showLoading(){
+	if(!document.getElementsByClassName("loading")[0]){
+		var newDiv=document.createElement("div")
+		newDiv.classList.add("loading")
+		newDiv.innerText="0%"
+		document.body.appendChild(newDiv)
+	}
+	loadingId=setInterval(function(){
+		if(document.getElementsByClassName("loading")[0]){
+			var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
+			if(newNum>100){
+				clearInterval(loadingId)
+				try{
+					document.body.removeChild(document.getElementsByClassName("loading")[0])
+				}catch(e){}
+			}else{
+				document.getElementsByClassName("loading")[0].innerText=newNum+"%"
+			}
+		}
+	},timeout/100)
+}
 function showMenu(e,menu){
 	var addedMenuDiv=document.getElementsByClassName("popup-menu")[0]
 	if(addedMenuDiv){
@@ -729,6 +747,9 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 		newDiv.style.opacity="1"
 	},25)
 }
+function showQRCode(text){
+	showImage(backend+"get.php?type=image&url="+encodeURIComponent("http://qr.topscan.com/api.php?text="+text))
+}
 function showToast(text){
 	switch(language){
 		case "SimplifiedChinese":
@@ -770,29 +791,26 @@ function translate(query,from,to,callback){
 		}
 	})
 }
-if(!backend){
-	if(navigator.language=="zh-CN"){
-		backend="https://www.rthsoftware.cn/backend/"
-	}else{
-		backend="https://rthapi.tk/"
-	}
-	localStorage.setItem("Backend",backend)
-}
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){
-		window.onerror=null
-		if(msg!="Script error."){
-			$.get(backend+"feedback.php",{
-				"email":login.email,
-				"lang":language,
-				"name":login.username,
-				"text":msg+" at "+url+" : "+lineNo,
-				"ver":ver
-			},function(){
-				if(url.indexOf("html")!=-1){
-					clearLocalStorage()
-				}
-			})
+		var text=msg+" at "+url+" : "+lineNo
+		if(isApp){
+			window.onerror=null
+			if(msg!="Script error."){
+				$.get(backend+"feedback.php",{
+					"email":login.email,
+					"lang":language,
+					"name":login.username,
+					"text":text,
+					"ver":ver
+				},function(){
+					if(header){
+						clearLocalStorage()
+					}
+				})
+			}
+		}else{
+			mui.toast(text)
 		}
 	}
 }
@@ -895,15 +913,17 @@ if(appliedTheme=="Bing"){
 	if(savedBingWallpaper){
 		loadWallpaper()
 	}
-	$.ajax({
-		"url":backend+"bing/base64.php",
-		"success":function(e){
-			savedBingWallpaper="url("+e+")"
-			localStorage.setItem("bing-wallpaper",savedBingWallpaper)
-			loadWallpaper()
-		}
-	})
-}else if(theme!="Bing"&&location.href.indexOf("https")==-1){
+	if(!savedBingWallpaper||!header){
+		$.ajax({
+			"url":backend+"bing/base64.php",
+			"success":function(e){
+				savedBingWallpaper="url("+e+")"
+				localStorage.setItem("bing-wallpaper",savedBingWallpaper)
+				loadWallpaper()
+			}
+		})
+	}
+}else if(theme!="Bing"&&!isWeb){
 	localStorage.removeItem("bing-wallpaper")
 }
 if(isElectron){
@@ -955,27 +975,29 @@ if(isElectron){
 	}
 }
 if(login.username){
-	$.ajax({
-		"url":backend+"userdata/verify.php",
-		"data":{
-			"email":login.email,
-			"password":login.password,
-			"time":new Date().getTime()
-		},
-		"dataType":"json",
-		"timeout":timeout,
-		"success":function(e){
-			if(!e.pass){
-				showAlert([
-					"Incorrect password",
-					"密码错误"
-				],logOut)
+	if(!header||!isApp){
+		$.ajax({
+			"url":backend+"userdata/verify.php",
+			"data":{
+				"email":login.email,
+				"password":login.password,
+				"time":new Date().getTime()
+			},
+			"dataType":"json",
+			"timeout":timeout,
+			"success":function(e){
+				if(!e.pass){
+					showAlert([
+						"Incorrect password",
+						"密码错误"
+					],logOut)
+				}
+			},
+			"error":function(){
+				login.username=null
 			}
-		},
-		"error":function(){
-			login.username=null
-		}
-	})
+		})
+	}
 }else if(!header&&!searchURL("action")){
 	loginDialog()
 }
