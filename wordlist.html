@@ -935,7 +935,7 @@
 					})
 				}else if(login.username){
 					showConfirm([
-						"Do you want to export the word list?",
+						"Do you want to export this word list?",
 						"您想导出此单词表吗？"
 					],function(){
 						save(function(){
@@ -949,7 +949,7 @@
 					})
 				}else if(!isEdge&&!isLinux&&!isMobile){
 					showConfirm([
-						"Do you want to export the word list?",
+						"Do you want to export this word list?",
 						"您想导出此单词表吗？"
 					],function(){
 						var filename=document.getElementById("TitleInput").value
@@ -1186,7 +1186,7 @@
 			document.getElementById("Export").onclick=exportWL
 			document.getElementById("CloseDocument").onclick=closeDoc
 			document.getElementById("Share").onclick=function(){
-				loginRequired(function(){
+				var share=function(){
 					var short=document.getElementById("TitleInput").value.toLowerCase().replace(/[^a-z0-9]/g,""),
 					url="https://www.rthsoftware.cn/toolbox/wordlist.html?index="+(function(){
 						if(savedWordList.list[currentItem-1].created){
@@ -1215,15 +1215,24 @@
 							}
 						},"json")
 					}else{
+						closeLoading()
 						showPrompt(null,function(){
 							openWebPage(url)
 						},null,url)
 					}
-				})
+				}
+				if(currentItem){
+					loginRequired(share)
+				}else{
+					loginRequired(function(){
+						showLoading()
+						save(share)
+					})
+				}
 			}
 			document.getElementById("Delete").onclick=function(){
 				showConfirm([
-					"Do you want to delete the word list?",
+					"Do you want to delete this word list?",
 					"您想删除此单词表吗？"
 				],function(){
 					if(currentItem){
@@ -1381,6 +1390,14 @@
 					"success":function(e){
 						closeLoading()
 						applyItem(0,e)
+					},
+					"error":function(){
+						closeLoading()
+						showAlert([
+							"This word list has been deleted",
+							"此单词表已被删除"
+						])
+						load()
 					}
 				})
 			}else{

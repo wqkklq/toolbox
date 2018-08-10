@@ -794,7 +794,7 @@ function translate(query,from,to,callback){
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){
 		var text=msg+" at "+url+" : "+lineNo
-		if(isApp){
+		if(isApp||login.username){
 			window.onerror=null
 			if(msg!="Script error."){
 				$.get(backend+"feedback.php",{
