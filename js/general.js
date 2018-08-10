@@ -162,7 +162,7 @@ function getJSON(url,callback,errorCallback,min){
 		showLoading()
 	}
 	$.ajax({
-		"url":backend+"get.php",
+		"url":backend+"get",
 		"data":{
 			"min":min,
 			"time":new Date().getTime(),
@@ -284,7 +284,7 @@ function loginDialog(){
 				newSignUpButton.onclick=
 				newLoginButton.onclick=null
 				$.ajax({
-					"url":backend+"userdata/verify.php",
+					"url":backend+"userdata/verify",
 					"data":{
 						"email":email,
 						"password":password,
@@ -314,7 +314,7 @@ function loginDialog(){
 									newPasswordInput.value=""
 									newConfirmPasswordInput.value=""
 									var newPassword=(new Date().getTime()*(Math.round(Math.random()*99)+1)).toString(36)
-									$.post(backend+"reset.php",{
+									$.post(backend+"reset",{
 										"index":e.index,
 										"password":newPassword,
 										"passwordmd5":MD5(newPassword)
@@ -336,7 +336,7 @@ function loginDialog(){
 									newConfirmPasswordInput.focus()
 								}else{
 									var username=email.split("@")[0]+new Date().getTime().toString(36)
-									$.post(backend+"userdata/signup.php",{
+									$.post(backend+"userdata/signup",{
 										"email":email,
 										"password":password,
 										"username":username
@@ -490,7 +490,7 @@ function openWebPage(href){
 	}
 }
 function openWindow(name){
-	if(name.indexOf("?")!=-1){
+	if(name.indexOf("?")!=-1||isWeb){
 		location.href=name
 	}else{
 		location.href=name+".html"
@@ -748,7 +748,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 	},25)
 }
 function showQRCode(text){
-	showImage(backend+"get.php?type=image&url="+encodeURIComponent("http://qr.topscan.com/api.php?text="+text))
+	showImage(backend+"get?type=image&url="+encodeURIComponent("http://qr.topscan.com/api.php?text="+text))
 }
 function showToast(text){
 	switch(language){
@@ -797,7 +797,7 @@ if(!isIE){
 		if(isApp||login.username){
 			window.onerror=null
 			if(msg!="Script error."){
-				$.get(backend+"feedback.php",{
+				$.get(backend+"feedback",{
 					"email":login.email,
 					"lang":language,
 					"name":login.username,
@@ -915,7 +915,7 @@ if(appliedTheme=="Bing"){
 	}
 	if(!savedBingWallpaper||!header){
 		$.ajax({
-			"url":backend+"bing/base64.php",
+			"url":backend+"bing/base64",
 			"success":function(e){
 				savedBingWallpaper="url("+e+")"
 				localStorage.setItem("bing-wallpaper",savedBingWallpaper)
@@ -977,7 +977,7 @@ if(isElectron){
 if(login.username){
 	if(!header||!isApp){
 		$.ajax({
-			"url":backend+"userdata/verify.php",
+			"url":backend+"userdata/verify",
 			"data":{
 				"email":login.email,
 				"password":login.password,

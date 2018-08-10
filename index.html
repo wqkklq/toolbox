@@ -288,7 +288,7 @@
 			function submitDateCountdown(){
 				displayDateCountdown()
 				if(login.username){
-					$.post(backend+"userdata/upload.php",{
+					$.post(backend+"userdata/upload",{
 						"dir":"datecountdown/",
 						"filename":login.username,
 						"text":JSON.stringify(dateCountdown)

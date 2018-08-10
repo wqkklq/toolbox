@@ -479,7 +479,7 @@
 					var friendEmail=localStorage.getItem("FriendEmail")
 					if(friendEmail&&friendEmail){
 						$.ajax({
-							"url":backend+"userdata/getwordlist.php",
+							"url":backend+"userdata/getwordlist",
 							"data":{
 								"email":friendEmail,
 							},
@@ -512,7 +512,7 @@
 									newLi.setAttribute("number",i+1)
 									newLi.onclick=function(){
 										$.ajax({
-											"url":backend+"userdata/getwordlist.php",
+											"url":backend+"userdata/getwordlist",
 											"data":{
 												"email":friendEmail,
 												"index":this.getAttribute("number")*1
@@ -535,7 +535,7 @@
 						})
 					}
 					$.ajax({
-						"url":backend+"userdata/getwordlist.php",
+						"url":backend+"userdata/getwordlist",
 						"data":{
 							"language":language,
 							"username":"admin"
@@ -563,7 +563,7 @@
 								newLi.setAttribute("number",e[i].index+1)
 								newLi.onclick=function(){
 									$.ajax({
-										"url":backend+"userdata/getwordlist.php",
+										"url":backend+"userdata/getwordlist",
 										"data":{
 											"index":this.getAttribute("number")*1,
 											"username":"admin"
@@ -939,7 +939,7 @@
 						"您想导出此单词表吗？"
 					],function(){
 						save(function(){
-							var url=backend+"userdata/getwordlist.php?dl=rth&index="+currentItem+"&username="+login.username
+							var url=backend+"userdata/getwordlist?dl=rth&index="+currentItem+"&username="+login.username
 							if(isApp){
 								openWebPage(url)
 							}else{
@@ -1022,7 +1022,7 @@
 						postData.text=text
 						postData["time"]=savedWordList.time
 					}
-					$.post(backend+"userdata/upload.php",postData,function(){
+					$.post(backend+"userdata/upload",postData,function(){
 						if(callback){
 							callback()
 						}
@@ -1197,7 +1197,7 @@
 					})()+"&username="+login.username
 					if(short){
 						showLoading()
-						$.post(backend+"userdata/domain/add.php",{
+						$.post(backend+"userdata/domain/add",{
 							"domain":short,
 							"redirect":302,
 							"to":url,
@@ -1381,7 +1381,7 @@
 				}
 				showLoading()
 				$.ajax({
-					"url":backend+"userdata/getwordlist.php",
+					"url":backend+"userdata/getwordlist",
 					"data":{
 						"index":searchURL("index"),
 						"username":searchURL("username")

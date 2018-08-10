@@ -505,7 +505,7 @@
 						postData.text=text
 						postData["time"]=savedText.time
 					}
-					$.post(backend+"userdata/upload.php",postData,function(){
+					$.post(backend+"userdata/upload",postData,function(){
 						if(callback){
 							callback()
 						}
@@ -632,7 +632,7 @@
 						}
 					},timeout/100)
 					$.ajax({
-						"url":backend+"get.php",
+						"url":backend+"get",
 						"data":{
 							"time":new Date().getTime(),
 							"url":url
@@ -792,7 +792,7 @@
 								}
 							})()+".html"
 							if(short){
-								$.post(backend+"userdata/domain/add.php",{
+								$.post(backend+"userdata/domain/add",{
 									"domain":short,
 									"redirect":302,
 									"to":url,

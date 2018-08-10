@@ -269,7 +269,7 @@
 						"Submitting",
 						"正在提交"
 					])
-					$.post(backend+"userdata/upload.php",{
+					$.post(backend+"userdata/upload",{
 						"dir":"names/",
 						"filename":login.username,
 						"text":JSON.stringify(savedNames)

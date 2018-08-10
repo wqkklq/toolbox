@@ -225,7 +225,7 @@
 							})
 						}else if(isCordova){
 							if(isAndroid){
-								openWebPage(backend+"alert.php?text="+encodeURIComponent(document.getElementById("CreateMessageBoxInput").value)+"&title="+encodeURIComponent(document.title))
+								openWebPage(backend+"alert?text="+encodeURIComponent(document.getElementById("CreateMessageBoxInput").value)+"&title="+encodeURIComponent(document.title))
 							}else if(isiOS){
 								cordova.plugins.notification.local.schedule({
 									title:document.title,

@@ -59,7 +59,7 @@
 				document.getElementById("OriginalURL").value=""
 				loadPreview()
 				$.ajax({
-					"url":backend+"userdata/domain/get.php",
+					"url":backend+"userdata/domain/get",
 					"data":{
 						"shorturl":true,
 						"username":login.username
@@ -109,7 +109,7 @@
 									"Change "+myURL[index].to+" to",
 									"把 "+myURL[index].to+" 更改为"
 								],function(e){
-									$.post(backend+"userdata/upload.php",{
+									$.post(backend+"userdata/upload",{
 										"dir":"domain/",
 										"filename":"list",
 										"key1":myURL[index].name,
@@ -136,7 +136,7 @@
 									"您想删除 "+myURL[index].name+" 吗？"
 								],function(){
 									showLoading()
-									$.post(backend+"userdata/domain/del.php",{
+									$.post(backend+"userdata/domain/del",{
 										"domain":myURL[index].name,
 										"username":login.username
 									},function(e){
@@ -194,7 +194,7 @@
 							}
 							document.getElementById("OriginalURL").value=originalURL
 							showLoading()
-							$.post(backend+"userdata/domain/add.php",{
+							$.post(backend+"userdata/domain/add",{
 								"domain":value,
 								"redirect":302,
 								"to":originalURL,
