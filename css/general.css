@@ -200,6 +200,8 @@ textarea{
 	margin-left:-40px;
 	overflow:hidden;
 	padding:10px 15px;
+	text-overflow:ellipsis;
+	white-space:nowrap;
 	word-break:break-word;
 }
 .menu p{

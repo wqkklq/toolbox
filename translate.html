@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--Code written by Shangzhen Yang-->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
+		<meta name="theme-color" content="#0066cc">
+		<link href="css/mui.min.css" rel="stylesheet">
+		<link href="css/general.css" rel="stylesheet">
+		<style>
+			ul{
+				display:none;
+			}
+			.mui-btn{
+				margin-bottom:15px;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title"></header>
+		<div class="mui-content">
+			<table width="100%">
+				<tbody>
+					<tr>
+						<td width="30%">
+							<div id="From"></div>
+						</td>
+						<td width="70%">
+							<select id="FromSelect"></select>
+						</td>
+					</tr>
+					<tr>
+						<td width="30%">
+							<div id="To"></div>
+						</td>
+						<td width="70%">
+							<select id="ToSelect"></select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<button id="ExchangeButton" type="button" class="mui-btn mui-btn-block"></button>
+			<textarea id="Original"></textarea>
+			<div class="btn-bg-img">
+				<button id="TranslateButton" type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
+			</div>
+			<textarea id="Translated"></textarea>
+			<ul class="menu">
+				<span id="SavedText"></span>
+			</ul>
+		</div>
+		<script src="cordova.js"></script>
+		<script src="js/mui.min.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/md5.min.js"></script>
+		<script src="js/general.js"></script>
+		<script type="text/javascript">
+			var hist=[],langOpt
+			function add(text,saved){
+				if((function(){
+					for(var i=0;i<hist.length;i++){
+						if(hist[i]==text){
+							return false
+						}
+					}
+					return true
+				})()){
+					hist.push(text)
+					if(!document.getElementsByTagName("ul")[0].style.display){
+						document.getElementsByTagName("ul")[0].style.display="block"
+					}
+					var newLi=document.createElement("li")
+					newLi.classList.add("menu")
+					newLi.innerText=text
+					newLi.onclick=function(){
+						scrollTo(0,0)
+						document.getElementById("Original").value=this.innerText
+						translateText()
+					}
+					if(saved){
+						document.getElementById("SavedText").appendChild(newLi)
+					}else{
+						document.getElementsByTagName("ul")[0].appendChild(newLi)
+					}
+				}
+			}
+			function loadSavedText(e){
+				if(e&&e.text){
+					for(var i=0;i<e.text.length;i++){
+						if(e.text[i].encrypt){
+							add(decrypt(e.text[i].text,"RTH"),true)
+						}else{
+							add(e.text[i].text,true)
+						}
+					}
+				}
+			}
+			function translateText(){
+				showLoading()
+				translate(
+					document.getElementById("Original").value,
+					document.getElementById("FromSelect").value,
+					document.getElementById("ToSelect").value,
+					function(e,data){
+						closeLoading()
+						document.getElementById("FromSelect").value=data.from
+						document.getElementById("Translated").value=e
+						add(document.getElementById("Original").value)
+					}
+				)
+			}
+			document.getElementById("ExchangeButton").onclick=function(){
+				var from=document.getElementById("FromSelect").value
+				if(from!="auto"){
+					document.getElementById("FromSelect").value=document.getElementById("ToSelect").value
+					document.getElementById("ToSelect").value=from
+					document.getElementById("Original").value=document.getElementById("Translated").value
+					document.getElementById("Translated").value=""
+					if(document.getElementById("Original").value){
+						translateText()
+					}
+				}
+			}
+			document.getElementById("TranslateButton").onclick=translateText
+			switch(language){
+				case "SimplifiedChinese":
+				document.title="翻译"
+				langOpt=[
+					["简体中文","zh"],
+					["繁体中文","cht"],
+					["英语","en"],
+					["粤语","yue"],
+					["文言文","wyw"],
+					["日语","jp"],
+					["韩语","kor"],
+					["法语","fra"],
+					["西班牙语","spa"],
+					["泰语","th"],
+					["阿拉伯语","ara"],
+					["俄语","ru"],
+					["葡萄牙语","pt"],
+					["德语","de"],
+					["意大利语","it"],
+					["希腊语","el"],
+					["荷兰语","nl"],
+					["波兰语","pl"],
+					["保加利亚语","bul"],
+					["爱沙尼亚语","est"],
+					["丹麦语","dan"],
+					["芬兰语","fin"],
+					["捷克语","cs"],
+					["罗马尼亚语","rom"],
+					["斯洛文尼亚语","slo"],
+					["瑞典语","swe"],
+					["匈牙利语","hu"],
+					["越南语","vie"]
+				]
+				document.getElementById("From").innerText="从"
+				document.getElementById("FromSelect").options.add(new Option("检测语言","auto"))
+				document.getElementById("To").innerText="到"
+				document.getElementById("TranslateButton").innerText="翻译"
+				document.getElementById("ExchangeButton").innerText="交换"
+				break
+				default:
+				document.title="Translate"
+				langOpt=[
+					["Simplified Chinese","zh"],
+					["Traditional Chinese","cht"],
+					["English","en"],
+					["Cantonese","yue"],
+					["Classical Chinese","wyw"],
+					["Japanese","jp"],
+					["Korean","kor"],
+					["French","fra"],
+					["Spanish","spa"],
+					["Thai","th"],
+					["Arabic","ara"],
+					["Russia","ru"],
+					["Portuguese","pt"],
+					["German","de"],
+					["Italian","it"],
+					["Greek","el"],
+					["Dutch","nl"],
+					["Polish","pl"],
+					["Bulgarian","bul"],
+					["Estonian","est"],
+					["Danish","dan"],
+					["Finnish","fin"],
+					["Czech","cs"],
+					["Romanian","rom"],
+					["Slovenian","slo"],
+					["Swedish","swe"],
+					["Hungarian","hu"],
+					["Vietnamese","vie"]
+				]
+				document.getElementById("From").innerText="From"
+				document.getElementById("FromSelect").options.add(new Option("Detect Language","auto"))
+				document.getElementById("To").innerText="To"
+				document.getElementById("TranslateButton").innerText="Translate"
+				document.getElementById("ExchangeButton").innerText="Exchange"
+			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			for(var i=0;i<langOpt.length;i++){
+				document.getElementById("FromSelect").options.add(new Option(langOpt[i][0],langOpt[i][1]))
+				document.getElementById("ToSelect").options.add(new Option(langOpt[i][0],langOpt[i][1]))
+			}
+			switch(language){
+				case "SimplifiedChinese":
+				document.getElementById("ToSelect").value="zh"
+				break
+				default:
+				document.getElementById("ToSelect").value="en"
+			}
+			loadSavedText(JSON.parse(localStorage.getItem("SavedText")))
+			if(login.username){
+				getJSON("userdata/text/"+login.username+".txt",loadSavedText,null,true)
+			}
+		</script>
+	</body>
+</html>

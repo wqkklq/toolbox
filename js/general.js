@@ -26,7 +26,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 timeout=10000,
-ver="12.1"
+ver="13.0"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -154,6 +154,20 @@ function dateDiff(startDate,endDate){
 			return result+" days"
 		}else{
 			return result+" day"
+		}
+	}
+}
+function decrypt(text,password){
+	var encrypted=text.split("9"),
+	str=""
+	for(var i=0;i<encrypted.length;i++){
+		str+=String.fromCharCode(parseInt(encrypted[i],8)/8)
+	}
+	if(str.indexOf("丨")!=-1){
+		if(password&&MD5(password)==str.substr(str.indexOf("丨")+1,32)){
+			return str.substr(0,str.indexOf("丨"))
+		}else{
+			return text
 		}
 	}
 }
@@ -787,7 +801,7 @@ function translate(query,from,to,callback){
 		},
 		"success":function(data){
 			if(data.trans_result&&callback){
-				callback(data.trans_result[0].dst)
+				callback(data.trans_result[0].dst,data)
 			}
 		}
 	})

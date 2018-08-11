@@ -68,7 +68,6 @@
 				</ul>
 				<ul class="menu">
 					<li id="FindReplace" class="menu"></li>
-					<li id="Translate" class="menu"></li>
 					<li id="Decode" class="menu"></li>
 					<li id="Speak" class="menu"></li>
 				</ul>
@@ -124,20 +123,6 @@
 					}
 				}else{
 					return code
-				}
-			}
-			function decrypt(text,password){
-				var encrypted=text.split("9"),
-				str=""
-				for(var i=0;i<encrypted.length;i++){
-					str+=String.fromCharCode(parseInt(encrypted[i],8)/8)
-				}
-				if(str.indexOf("丨")!=-1){
-					if(password&&MD5(password)==str.substr(str.indexOf("丨")+1,32)){
-						return str.substr(0,str.indexOf("丨"))
-					}else{
-						return text
-					}
 				}
 			}
 			function edit(edit){
@@ -522,13 +507,6 @@
 					}
 				}
 			}
-			function translateText(){
-				if(!isEmpty()){
-					translate(document.getElementsByTagName("textarea")[0].value.replace(/\s/g," "),"auto","auto",function(e){
-						showPrompt(null,null,null,e)
-					})
-				}
-			}
 			window.onkeydown=function(e){
 				if(e.ctrlKey||e.metaKey){
 					switch(e.keyCode){
@@ -707,7 +685,6 @@
 			document.getElementById("FindReplace").onclick=function(){
 				find()
 			}
-			document.getElementById("Translate").onclick=translateText
 			document.getElementById("Decode").onclick=function(){
 				if(!isEmpty()){
 					var encoded=document.getElementsByTagName("textarea")[0].value,
@@ -877,7 +854,6 @@
 				document.getElementById("SaveAs").innerText="另存为"
 				document.getElementById("Delete").innerText="删除"
 				document.getElementById("FindReplace").innerText="查找和替换"
-				document.getElementById("Translate").innerText="翻译"
 				document.getElementById("Decode").innerText="解码"
 				document.getElementById("Speak").innerText="朗读"
 				document.getElementById("CreateMessageBox").innerText="创建消息框"
@@ -904,7 +880,6 @@
 				document.getElementById("SaveAs").innerText="Save As"
 				document.getElementById("Delete").innerText="Delete"
 				document.getElementById("FindReplace").innerText="Find & Replace"
-				document.getElementById("Translate").innerText="Translate"
 				document.getElementById("Decode").innerText="Decode"
 				document.getElementById("Speak").innerText="Speak"
 				document.getElementById("CreateMessageBox").innerText="Create Message Box"
