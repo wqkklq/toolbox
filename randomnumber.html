@@ -238,7 +238,9 @@
 						return false
 					}
 				})()){
-					random()
+					try{
+						random()
+					}catch(e){}
 				}else{
 					if(hide&&scrolling){
 						document.getElementsByClassName("number")[0].innerText="?"

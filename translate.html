@@ -105,6 +105,12 @@
 						closeLoading()
 						document.getElementById("FromSelect").value=data.from
 						document.getElementById("Translated").value=e
+						if(data.trans_result.length>1){
+							for(var i=1;i<data.trans_result.length;i++){
+								document.getElementById("Translated").value+="\n"
+								document.getElementById("Translated").value+=data.trans_result[i].dst
+							}
+						}
 						add(document.getElementById("Original").value)
 					}
 				)
@@ -121,16 +127,24 @@
 					}
 				}
 			}
+			document.getElementById("Original").onkeydown=function(e){
+				if(e.ctrlKey||e.metaKey){
+					switch(e.keyCode){
+						case 13:
+						translateText()
+					}
+				}
+			}
 			document.getElementById("TranslateButton").onclick=translateText
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="翻译"
 				langOpt=[
+					["英语","en"],
 					["简体中文","zh"],
 					["繁体中文","cht"],
-					["英语","en"],
-					["粤语","yue"],
 					["文言文","wyw"],
+					["粤语","yue"],
 					["日语","jp"],
 					["韩语","kor"],
 					["法语","fra"],
@@ -158,17 +172,17 @@
 				document.getElementById("From").innerText="从"
 				document.getElementById("FromSelect").options.add(new Option("检测语言","auto"))
 				document.getElementById("To").innerText="到"
-				document.getElementById("TranslateButton").innerText="翻译"
 				document.getElementById("ExchangeButton").innerText="交换"
+				document.getElementById("TranslateButton").innerText="翻译"
 				break
 				default:
 				document.title="Translate"
 				langOpt=[
+					["English","en"],
 					["Simplified Chinese","zh"],
 					["Traditional Chinese","cht"],
-					["English","en"],
-					["Cantonese","yue"],
 					["Classical Chinese","wyw"],
+					["Cantonese","yue"],
 					["Japanese","jp"],
 					["Korean","kor"],
 					["French","fra"],
@@ -196,8 +210,8 @@
 				document.getElementById("From").innerText="From"
 				document.getElementById("FromSelect").options.add(new Option("Detect Language","auto"))
 				document.getElementById("To").innerText="To"
-				document.getElementById("TranslateButton").innerText="Translate"
 				document.getElementById("ExchangeButton").innerText="Exchange"
+				document.getElementById("TranslateButton").innerText="Translate"
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			for(var i=0;i<langOpt.length;i++){
