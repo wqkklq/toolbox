@@ -37,7 +37,6 @@ footer div:active,
 	transition:all .25s;
 }
 input,
-select,
 textarea,
 .mui-input-row label{
 	font-family:"Helvetica Neue",Helvetica,sans-serif,"等线";
@@ -45,6 +44,10 @@ textarea,
 legend,
 p{
 	cursor:default;
+}
+select{
+	font-family:"Helvetica Neue",Helvetica,sans-serif,"等线";
+	font-size:15px;
 }
 td{
 	padding:0px 5px;
