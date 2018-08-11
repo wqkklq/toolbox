@@ -58,6 +58,7 @@
 				document.getElementById("ShortURL").value=defaultShortURL
 				document.getElementById("OriginalURL").value=""
 				loadPreview()
+				showLoading()
 				$.ajax({
 					"url":backend+"userdata/domain/get",
 					"data":{
