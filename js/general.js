@@ -16,6 +16,7 @@ isNumber=/[0-9]+/,
 isUpperCase=/[A-Z]+/,
 isWeb=location.href.indexOf("https")!=-1,
 isWindows=/Windows/i.test(navigator.userAgent),
+langOpt,
 language=localStorage.getItem("Language"),
 loadingId,
 login={
@@ -787,6 +788,7 @@ function translate(query,from,to,callback){
 	}
 	var str1=appid+query+salt+key
 	var sign=MD5(str1)
+	showLoading()
 	$.ajax({
 		"url":"https://api.fanyi.baidu.com/api/trans/vip/translate",
 		"type":"get",
@@ -800,6 +802,7 @@ function translate(query,from,to,callback){
 			"sign":sign
 		},
 		"success":function(data){
+			closeLoading()
 			if(data.trans_result&&callback){
 				callback(data.trans_result[0].dst,data)
 			}
@@ -1015,4 +1018,69 @@ if(login.username){
 	}
 }else if(!header&&!searchURL("action")){
 	loginDialog()
+}
+switch(language){
+	case "SimplifiedChinese":
+	langOpt=[
+		["英语","en"],
+		["简体中文","zh"],
+		["繁体中文","cht"],
+		["文言文","wyw"],
+		["粤语","yue"],
+		["日语","jp"],
+		["韩语","kor"],
+		["法语","fra"],
+		["西班牙语","spa"],
+		["泰语","th"],
+		["阿拉伯语","ara"],
+		["俄语","ru"],
+		["葡萄牙语","pt"],
+		["德语","de"],
+		["意大利语","it"],
+		["希腊语","el"],
+		["荷兰语","nl"],
+		["波兰语","pl"],
+		["保加利亚语","bul"],
+		["爱沙尼亚语","est"],
+		["丹麦语","dan"],
+		["芬兰语","fin"],
+		["捷克语","cs"],
+		["罗马尼亚语","rom"],
+		["斯洛文尼亚语","slo"],
+		["瑞典语","swe"],
+		["匈牙利语","hu"],
+		["越南语","vie"]
+	]
+	break
+	default:
+	langOpt=[
+		["English","en"],
+		["Simplified Chinese","zh"],
+		["Traditional Chinese","cht"],
+		["Classical Chinese","wyw"],
+		["Cantonese","yue"],
+		["Japanese","jp"],
+		["Korean","kor"],
+		["French","fra"],
+		["Spanish","spa"],
+		["Thai","th"],
+		["Arabic","ara"],
+		["Russia","ru"],
+		["Portuguese","pt"],
+		["German","de"],
+		["Italian","it"],
+		["Greek","el"],
+		["Dutch","nl"],
+		["Polish","pl"],
+		["Bulgarian","bul"],
+		["Estonian","est"],
+		["Danish","dan"],
+		["Finnish","fin"],
+		["Czech","cs"],
+		["Romanian","rom"],
+		["Slovenian","slo"],
+		["Swedish","swe"],
+		["Hungarian","hu"],
+		["Vietnamese","vie"]
+	]
 }

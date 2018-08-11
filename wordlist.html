@@ -56,6 +56,7 @@
 				<div class="mui-input-row">
 					<input id="TitleInput" type="text" class="mui-input-clear">
 				</div>
+				<select></select>
 				<ul id="OptionUl" class="menu">
 					<li id="Export" class="menu"></li>
 					<li id="CloseDocument" class="menu"></li>
@@ -172,37 +173,50 @@
 					],function(newDefinition){
 						addWord(newWord,newDefinition)
 					},null,null,function(){
-						var wordWithoutSpace=newWord.replace(/\s/g,"").toLowerCase()
-						if(localStorage.getItem(wordWithoutSpace+"_CNDef")){
-							var CNDef=localStorage.getItem(wordWithoutSpace+"_CNDef"),
-							ENDef=localStorage.getItem(wordWithoutSpace+"_ENDef")
-							if(language=="SimplifiedChinese"&&CNDef){
-								addWord(newWord,CNDef)
-							}else if(ENDef){
-								addWord(newWord,ENDef)
+						if(document.getElementsByTagName("select")[0].value=="en"){
+							var wordWithoutSpace=newWord.replace(/\s/g,"").toLowerCase()
+							if(localStorage.getItem(wordWithoutSpace+"_CNDef")){
+								var CNDef=localStorage.getItem(wordWithoutSpace+"_CNDef"),
+								ENDef=localStorage.getItem(wordWithoutSpace+"_ENDef")
+								if(language=="SimplifiedChinese"&&CNDef){
+									addWord(newWord,CNDef)
+								}else if(ENDef){
+									addWord(newWord,ENDef)
+								}
+							}else{
+								getJSON("http://api.shanbay.com/bdc/search/?word="+encodeURIComponent(newWord),function(e){
+									if(e.msg=="SUCCESS"){
+										if(language=="SimplifiedChinese"&&e.data.cn_definition.defn){
+											addWord(newWord,e.data.cn_definition.defn)
+										}else if(e.data.en_definition.defn){
+											addWord(newWord,e.data.en_definition.defn)
+										}
+										localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
+										localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
+										localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
+									}else{
+										alert(e.msg)
+										add(newWord)
+									}
+								},function(){
+									showAlert([
+										"Unable to connect to the server",
+										"无法连接服务器"
+									],function(){
+										add(newWord)
+									})
+								})
 							}
 						}else{
-							getJSON("http://api.shanbay.com/bdc/search/?word="+encodeURIComponent(newWord),function(e){
-								if(e.msg=="SUCCESS"){
-									if(language=="SimplifiedChinese"&&e.data.cn_definition.defn){
-										addWord(newWord,e.data.cn_definition.defn)
-									}else if(e.data.en_definition.defn){
-										addWord(newWord,e.data.en_definition.defn)
-									}
-									localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
-									localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
-									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
-								}else{
-									alert(e.msg)
-									add(newWord)
+							translate(newWord,document.getElementsByTagName("select")[0].value,(function(){
+								switch(language){
+									case "SimplifiedChinese":
+									return "zh"
+									default:
+									return "en"
 								}
-							},function(){
-								showAlert([
-									"Unable to connect to the server",
-									"无法连接服务器"
-								],function(){
-									add(newWord)
-								})
+							})(),function(e){
+								addWord(newWord,e)
 							})
 						}
 					},function(){
@@ -1364,6 +1378,10 @@
 				}
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			for(var i=0;i<langOpt.length;i++){
+				document.getElementsByTagName("select")[0].options.add(new Option(langOpt[i][0],langOpt[i][1]))
+			}
+			document.getElementsByTagName("select")[0].value="en"
 			if(!isMobile){
 				document.getElementById("LookUpInput").focus()
 			}

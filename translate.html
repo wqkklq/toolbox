@@ -55,7 +55,7 @@
 		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var hist=[],langOpt
+			var hist=[]
 			function add(text,saved){
 				if((function(){
 					for(var i=0;i<hist.length;i++){
@@ -96,24 +96,17 @@
 				}
 			}
 			function translateText(){
-				showLoading()
-				translate(
-					document.getElementById("Original").value,
-					document.getElementById("FromSelect").value,
-					document.getElementById("ToSelect").value,
-					function(e,data){
-						closeLoading()
-						document.getElementById("FromSelect").value=data.from
-						document.getElementById("Translated").value=e
-						if(data.trans_result.length>1){
-							for(var i=1;i<data.trans_result.length;i++){
-								document.getElementById("Translated").value+="\n"
-								document.getElementById("Translated").value+=data.trans_result[i].dst
-							}
+				translate(document.getElementById("Original").value,document.getElementById("FromSelect").value,document.getElementById("ToSelect").value,function(e,data){
+					document.getElementById("FromSelect").value=data.from
+					document.getElementById("Translated").value=e
+					if(data.trans_result.length>1){
+						for(var i=1;i<data.trans_result.length;i++){
+							document.getElementById("Translated").value+="\n"
+							document.getElementById("Translated").value+=data.trans_result[i].dst
 						}
-						add(document.getElementById("Original").value)
 					}
-				)
+					add(document.getElementById("Original").value)
+				})
 			}
 			document.getElementById("ExchangeButton").onclick=function(){
 				var from=document.getElementById("FromSelect").value
@@ -139,36 +132,6 @@
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="翻译"
-				langOpt=[
-					["英语","en"],
-					["简体中文","zh"],
-					["繁体中文","cht"],
-					["文言文","wyw"],
-					["粤语","yue"],
-					["日语","jp"],
-					["韩语","kor"],
-					["法语","fra"],
-					["西班牙语","spa"],
-					["泰语","th"],
-					["阿拉伯语","ara"],
-					["俄语","ru"],
-					["葡萄牙语","pt"],
-					["德语","de"],
-					["意大利语","it"],
-					["希腊语","el"],
-					["荷兰语","nl"],
-					["波兰语","pl"],
-					["保加利亚语","bul"],
-					["爱沙尼亚语","est"],
-					["丹麦语","dan"],
-					["芬兰语","fin"],
-					["捷克语","cs"],
-					["罗马尼亚语","rom"],
-					["斯洛文尼亚语","slo"],
-					["瑞典语","swe"],
-					["匈牙利语","hu"],
-					["越南语","vie"]
-				]
 				document.getElementById("From").innerText="从"
 				document.getElementById("FromSelect").options.add(new Option("检测语言","auto"))
 				document.getElementById("To").innerText="到"
@@ -177,36 +140,6 @@
 				break
 				default:
 				document.title="Translate"
-				langOpt=[
-					["English","en"],
-					["Simplified Chinese","zh"],
-					["Traditional Chinese","cht"],
-					["Classical Chinese","wyw"],
-					["Cantonese","yue"],
-					["Japanese","jp"],
-					["Korean","kor"],
-					["French","fra"],
-					["Spanish","spa"],
-					["Thai","th"],
-					["Arabic","ara"],
-					["Russia","ru"],
-					["Portuguese","pt"],
-					["German","de"],
-					["Italian","it"],
-					["Greek","el"],
-					["Dutch","nl"],
-					["Polish","pl"],
-					["Bulgarian","bul"],
-					["Estonian","est"],
-					["Danish","dan"],
-					["Finnish","fin"],
-					["Czech","cs"],
-					["Romanian","rom"],
-					["Slovenian","slo"],
-					["Swedish","swe"],
-					["Hungarian","hu"],
-					["Vietnamese","vie"]
-				]
 				document.getElementById("From").innerText="From"
 				document.getElementById("FromSelect").options.add(new Option("Detect Language","auto"))
 				document.getElementById("To").innerText="To"
