@@ -110,6 +110,12 @@
 									"Change "+myURL[index].to+" to",
 									"把 "+myURL[index].to+" 更改为"
 								],function(e){
+									if(e.indexOf("/")==-1){
+										e=e+"/"
+									}
+									if(e.indexOf("http")==-1){
+										e="http://"+e
+									}
 									$.post(backend+"userdata/upload",{
 										"dir":"domain/",
 										"filename":"list",
