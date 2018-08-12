@@ -588,43 +588,36 @@
 					if(url.indexOf("http")==-1){
 						url="http://"+url
 					}
-					if(!document.getElementsByClassName("loading")[0]){
-						var newDiv=document.createElement("div")
-						newDiv.classList.add("loading")
-						newDiv.innerText="0%"
-						document.body.appendChild(newDiv)
-					}
-					var intervalId=setInterval(function(){
-						if(document.getElementsByClassName("loading")[0]){
-							var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
-							if(newNum>100){
-								clearInterval(intervalId)
-								try{
-									document.body.removeChild(document.getElementsByClassName("loading")[0])
-								}catch(e){}
-							}else{
-								document.getElementsByClassName("loading")[0].innerText=newNum+"%"
+					if(/rthsoftware.cn|rths.tk|facebook.com|google.com|twitter.com|youtube.com/i.test(url)){
+						showAlert([
+							"Access denied",
+							"拒绝访问"
+						])
+					}else{
+						showLoading()
+						$.ajax({
+							"url":backend+"get",
+							"data":{
+								"time":new Date().getTime(),
+								"url":url
+							},
+							"timeout":timeout,
+							"success":function(e){
+								closeLoading()
+								setText(e)
+								document.getElementsByTagName("input")[0].value=url
+								document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+								applyItem(0)
+							},
+							"error":function(e){
+								closeLoading()
+								showAlert([
+									"Unable to connect to the server",
+									"无法连接服务器"
+								])
 							}
-						}
-					},timeout/100)
-					$.ajax({
-						"url":backend+"get",
-						"data":{
-							"time":new Date().getTime(),
-							"url":url
-						},
-						"timeout":timeout,
-						"success":function(e){
-							clearInterval(intervalId)
-							try{
-								document.body.removeChild(document.getElementsByClassName("loading")[0])
-							}catch(e){}
-							setText(e)
-							document.getElementsByTagName("input")[0].value=url
-							document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
-							applyItem(0)
-						}
-					})
+						})
+					}
 				})
 			}
 			document.getElementById("Save").onclick=function(){
