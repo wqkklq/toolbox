@@ -96,17 +96,24 @@
 				}
 			}
 			function translateText(){
-				translate(document.getElementById("Original").value,document.getElementById("FromSelect").value,document.getElementById("ToSelect").value,function(e,data){
-					document.getElementById("FromSelect").value=data.from
-					document.getElementById("Translated").value=e
-					if(data.trans_result.length>1){
-						for(var i=1;i<data.trans_result.length;i++){
-							document.getElementById("Translated").value+="\n"
-							document.getElementById("Translated").value+=data.trans_result[i].dst
+				if(document.getElementById("Original").value){
+					translate(document.getElementById("Original").value,document.getElementById("FromSelect").value,document.getElementById("ToSelect").value,function(e,data){
+						document.getElementById("FromSelect").value=data.from
+						document.getElementById("Translated").value=e
+						if(data.trans_result.length>1){
+							for(var i=1;i<data.trans_result.length;i++){
+								document.getElementById("Translated").value+="\n"
+								document.getElementById("Translated").value+=data.trans_result[i].dst
+							}
 						}
-					}
-					add(document.getElementById("Original").value)
-				})
+						add(document.getElementById("Original").value)
+					})
+				}else{
+					showAlert([
+						"Please enter the text you want to translate",
+						"请输入要翻译的文本"
+					])
+				}
 			}
 			document.getElementById("ExchangeButton").onclick=function(){
 				var from=document.getElementById("FromSelect").value
