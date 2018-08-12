@@ -43,7 +43,10 @@
 			<div class="btn-bg-img">
 				<button type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
 			</div>
-			<ul id="MyURL" class="menu"></ul>
+			<ul class="menu">
+				<li id="DeleteAll" class="menu"></li>
+				<span id="MyURL"></span>
+			</ul>
 		</div>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
@@ -246,6 +249,27 @@
 					}
 				})
 			}
+			document.getElementById("DeleteAll").onclick=function(){
+				showConfirm([
+					"Do you want to delete all the short URLs?",
+					"您想删除全部短网址吗？"
+				],function(){
+					showLoading()
+					$.post(backend+"userdata/domain/del",{
+						"username":login.username
+					},function(e){
+						if(e.success){
+							load()
+						}else{
+							closeLoading()
+							showAlert([
+								"Unable to delete all the short URLs",
+								"无法删除全部短网址"
+							])
+						}
+					},"json")
+				})
+			}
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="短网址"
@@ -254,6 +278,7 @@
 				document.getElementById("To").innerText="到"
 				document.getElementById("OriginalURL").placeholder="输入原网址"
 				document.getElementsByTagName("button")[0].innerText="创建"
+				document.getElementById("DeleteAll").innerText="删除全部"
 				break
 				default:
 				document.title="Short URL"
@@ -262,6 +287,7 @@
 				document.getElementById("To").innerText="To"
 				document.getElementById("OriginalURL").placeholder="Enter the original URL"
 				document.getElementsByTagName("button")[0].innerText="Create"
+				document.getElementById("DeleteAll").innerText="Delete All"
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(myURL){
