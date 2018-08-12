@@ -60,21 +60,24 @@
 				document.getElementById("ShortURL").value=defaultShortURL
 				document.getElementById("OriginalURL").value=""
 				loadPreview()
-				showLoading()
-				$.ajax({
-					"url":backend+"userdata/domain/get",
-					"data":{
-						"shorturl":true,
-						"username":login.username
-					},
-					"dataType":"json",
-					"success":function(e){
-						closeLoading()
-						myURL=e
-						localStorage.setItem("MyURL",JSON.stringify(myURL))
-						loadMyURL()
-					}
-				})
+				if(login.username){
+					showLoading()
+					$.ajax({
+						"url":backend+"userdata/domain/get",
+						"data":{
+							"shorturl":true,
+							"username":login.username
+						},
+						"dataType":"json",
+						"timeout":timeout,
+						"success":function(e){
+							closeLoading()
+							myURL=e
+							localStorage.setItem("MyURL",JSON.stringify(myURL))
+							loadMyURL()
+						}
+					})
+				}
 			}
 			function loadMyURL(){
 				document.getElementById("MyURL").innerHTML=""
@@ -183,6 +186,9 @@
 			document.getElementById("ShortURL").oninput=loadPreview
 			document.getElementsByTagName("button")[0].onclick=function(){
 				loginRequired(function(){
+					if(document.getElementById("OriginalURL").value.indexOf(".")==-1||document.getElementById("OriginalURL").value.indexOf(" ")!=-1){
+						document.getElementById("OriginalURL").value=""
+					}
 					if(document.getElementById("OriginalURL").value){
 						var originalURL=document.getElementById("OriginalURL").value,
 						value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9]/g,"")

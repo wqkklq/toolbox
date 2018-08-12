@@ -298,6 +298,7 @@ function loginDialog(){
 			}else{
 				newSignUpButton.onclick=
 				newLoginButton.onclick=null
+				showLoading()
 				$.ajax({
 					"url":backend+"userdata/verify",
 					"data":{
@@ -308,6 +309,7 @@ function loginDialog(){
 					"dataType":"json",
 					"timeout":timeout,
 					"success":function(e){
+						closeLoading()
 						newSignUpButton.onclick=signUp
 						newLoginButton.onclick=submitLogin
 						if(e.index){
@@ -376,6 +378,7 @@ function loginDialog(){
 						}
 					},
 					"error":function(){
+						closeLoading()
 						newSignUpButton.onclick=signUp
 						newLoginButton.onclick=submitLogin
 						showAlert([
