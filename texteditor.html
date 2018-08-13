@@ -668,8 +668,20 @@
 					"您想删除此文本文档吗？"
 				],function(){
 					if(currentItem){
-						savedText.text.splice(currentItem-1,1)
-						submit(reload)
+						showLoading()
+						$.post(backend+"userdata/domain/del",{
+							"url":"https://rths.tk/"+login.username+"/"+(function(){
+								if(savedText.text[currentItem-1].created){
+									return savedText.text[currentItem-1].created
+								}else{
+									return currentItem
+								}
+							})()+".html",
+							"username":login.username
+						},function(){
+							savedText.text.splice(currentItem-1,1)
+							submit(reload)
+						})
 					}else{
 						reload()
 					}

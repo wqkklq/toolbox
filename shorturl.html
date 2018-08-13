@@ -186,7 +186,7 @@
 			document.getElementById("ShortURL").oninput=loadPreview
 			document.getElementsByTagName("button")[0].onclick=function(){
 				loginRequired(function(){
-					if(document.getElementById("OriginalURL").value.indexOf(".")==-1||document.getElementById("OriginalURL").value.indexOf(" ")!=-1){
+					if(document.getElementById("OriginalURL").value.indexOf(".")==-1||/\s|\.\./.test(document.getElementById("OriginalURL").value)){
 						document.getElementById("OriginalURL").value=""
 					}
 					if(document.getElementById("OriginalURL").value){
@@ -262,17 +262,7 @@
 					showLoading()
 					$.post(backend+"userdata/domain/del",{
 						"username":login.username
-					},function(e){
-						if(e.success){
-							load()
-						}else{
-							closeLoading()
-							showAlert([
-								"Unable to delete all the short URLs",
-								"无法删除全部短网址"
-							])
-						}
-					},"json")
+					},load)
 				})
 			}
 			switch(language){
