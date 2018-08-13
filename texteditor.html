@@ -760,6 +760,7 @@
 								}
 							})()+".html"
 							if(short){
+								showLoading()
 								$.post(backend+"userdata/domain/add",{
 									"domain":short,
 									"redirect":302,
@@ -767,14 +768,11 @@
 									"username":login.username
 								},function(e){
 									if(e.available){
-										showPrompt(null,function(){
-											openWebPage(url)
-										},null,"https://rths.tk/"+short)
-									}else{
-										showPrompt(null,function(){
-											openWebPage(url)
-										},null,url)
+										url="https://rths.tk/"+short
 									}
+									showPrompt(null,function(){
+										openWebPage(url)
+									},null,url)
 								},"json")
 							}else{
 								showPrompt(null,function(){
