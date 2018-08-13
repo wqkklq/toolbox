@@ -751,7 +751,7 @@
 						encrypt=false
 						showLoading()
 						save(function(){
-							var short=document.getElementsByTagName("input")[0].value.toLowerCase().replace(/[^a-z0-9]/g,""),
+							var short=document.getElementsByTagName("input")[0].value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,""),
 							url="https://rths.tk/"+login.username+"/"+(function(){
 								if(savedText.text[currentItem-1].created){
 									return savedText.text[currentItem-1].created

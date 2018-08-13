@@ -176,7 +176,7 @@
 				}
 			}
 			function loadPreview(){
-				var value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9]/g,"")
+				var value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
 				if(value){
 					document.getElementById("Preview").innerText="https://rths.tk/"+value
 				}else{
@@ -191,7 +191,7 @@
 					}
 					if(document.getElementById("OriginalURL").value){
 						var originalURL=document.getElementById("OriginalURL").value,
-						value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9]/g,"")
+						value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
 						if(originalURL.indexOf("rths.tk")!=-1&&originalURL.indexOf(".html")==-1){
 							showAlert([
 								"Short URLs cannot be the original URL",
