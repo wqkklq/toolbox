@@ -1,28 +1,30 @@
 # rth-toolbox
 
-It is an app built with Electron.
+A toolbox that can help you with many things.
 
-这是一个使用 Electron 构建的应用。
+可助君为多事之工具。
 
 ---
 
 **The main features of RTH Toolbox:**
 
 - Helping you to learn words
+- Creating short URLs
 - Performing timed tasks
 - Calculating equations and functions
 - Generating numbers randomly
 - Using different search engines to search for the same content
-- Speaking the text you entered
+- Generating web pages
 
 **RTH 工具箱的主要功能：**
 
 - 背单词
+- 创建短网址
 - 执行定时任务
 - 计算方程和函数
 - 随机抽号
 - 使用不同的搜索引擎搜索相同的内容
-- 读出您输入的文本
+- 生成网页
 
 ---
 
