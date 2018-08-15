@@ -181,6 +181,7 @@
 		<script type="text/javascript">
 			var currentHour=new Date().getHours(),
 			dateCountdown=localStorage.getItem("DateCountdown"),
+			dateCountdownLoaded,
 			menu=document.getElementsByClassName("home-menu")[0].getElementsByTagName("li")
 			function displayDateCountdown(){
 				if(dateCountdown&&dateCountdown.date&&dateCountdown.name){
@@ -191,11 +192,10 @@
 						default:
 						document.getElementById("Quote").innerText=dateCountdown.name+": "+dateDiff(new Date(new Date().toLocaleDateString()).getTime(),dateCountdown.date)+" remaining"
 					}
+					dateCountdownLoaded=true
 					document.getElementById("Quote").onclick=function(){
 						openWindow("date")
 					}
-				}else{
-					getSentence()
 				}
 			}
 			function getSentence(){
@@ -214,7 +214,7 @@
 						"username":"shangzhenyjg9k10x4"
 					},
 					"success":function(e){
-						if(e){
+						if(e&&!dateCountdownLoaded){
 							document.getElementById("Quote").innerText=e
 							document.getElementById("Quote").oncontextmenu=
 							document.getElementById("Quote").onclick=function(mouse){
@@ -427,6 +427,7 @@
 					}
 				}
 			}
+			getSentence()
 			if(dateCountdown){
 				dateCountdown=JSON.parse(dateCountdown)
 			}
