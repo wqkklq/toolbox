@@ -1265,10 +1265,11 @@
 							"username":login.username
 						},function(){
 							savedWordList.list.splice(currentItem-1,1)
-							submit()
+							submit(closeTrue)
 						})
+					}else{
+						closeTrue()
 					}
-					closeTrue()
 				})
 			}
 			document.getElementById("FlashCard").onclick=function(){
