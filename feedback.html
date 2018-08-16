@@ -38,21 +38,31 @@
 				}else if(document.getElementsByTagName("textarea")[0].value==""){
 					document.getElementsByTagName("textarea")[0].style.background="rgb(255,192,203)"
 				}else{
-					showToast([
-						"Sending",
-						"正在发送"
-					])
-					$.get(backend+"feedback",{
-						"email":document.getElementById("Email").value,
-						"lang":language,
-						"name":document.getElementById("Name").value,
-						"text":document.getElementsByTagName("textarea")[0].value,
-						"ver":ver
-					},function(){
-						showAlert([
-							"Thank you for your feedback",
-							"感谢您的反馈"
-						])
+					showLoading()
+					$.ajax({
+						"url":backend+"feedback",
+						"data":{
+							"email":document.getElementById("Email").value,
+							"lang":language,
+							"name":document.getElementById("Name").value,
+							"text":document.getElementsByTagName("textarea")[0].value,
+							"ver":ver
+						},
+						"timeout":timeout,
+						"success":function(){
+							closeLoading()
+							showAlert([
+								"Thank you for your feedback",
+								"感谢您的反馈"
+							])
+						},
+						"error":function(){
+							closeLoading()
+							showAlert([
+								"Unable to connect to the server",
+								"无法连接服务器"
+							])
+						}
 					})
 				}
 			}

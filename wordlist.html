@@ -58,6 +58,7 @@
 				</div>
 				<select></select>
 				<ul id="OptionUl" class="menu">
+					<li id="Save" class="menu"></li>
 					<li id="Export" class="menu"></li>
 					<li id="CloseDocument" class="menu"></li>
 					<li id="Share" class="menu"></li>
@@ -1197,6 +1198,10 @@
 			document.getElementById("Add").onclick=function(){
 				add()
 			}
+			document.getElementById("Save").onclick=function(){
+				showLoading()
+				save(closeLoading)
+			}
 			document.getElementById("Export").onclick=exportWL
 			document.getElementById("CloseDocument").onclick=closeDoc
 			document.getElementById("Share").onclick=function(){
@@ -1328,6 +1333,7 @@
 				document.getElementById("SharingSettings").innerText="共享设置"
 				document.getElementById("ClearMistakes").innerText="清空错题"
 				document.getElementById("TitleInput").placeholder="标题"
+				document.getElementById("Save").innerText="保存"
 				document.getElementById("Export").innerText="导出"
 				document.getElementById("CloseDocument").innerText="关闭文档"
 				document.getElementById("Share").innerText="共享"
@@ -1363,6 +1369,7 @@
 				document.getElementById("SharingSettings").innerText="Sharing Settings"
 				document.getElementById("ClearMistakes").innerText="Clear Mistakes"
 				document.getElementById("TitleInput").placeholder="Title"
+				document.getElementById("Save").innerText="Save"
 				document.getElementById("Export").innerText="Export"
 				document.getElementById("CloseDocument").innerText="Close Document"
 				document.getElementById("Share").innerText="Share"
