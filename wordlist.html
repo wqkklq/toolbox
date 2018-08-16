@@ -349,7 +349,7 @@
 					localStorage.setItem("WordList",JSON.stringify(list))
 					localStorage.removeItem("WordListCurrentItem")
 				}else{
-					currentItem=serialNumber
+					currentItem=serialNumber*1
 					localStorage.setItem("WordList",JSON.stringify(savedWordList.list[currentItem-1]))
 					localStorage.setItem("WordListCurrentItem",currentItem)
 				}
@@ -454,7 +454,7 @@
 				localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
 				var openedWordList=localStorage.getItem("WordList")
 				if(openedWordList&&openedWordList!="undefined"){
-					currentItem=localStorage.getItem("WordListCurrentItem")
+					currentItem=localStorage.getItem("WordListCurrentItem")*1
 					openedWordList=convertFormat(openedWordList)
 					currentList=currentList.concat(openedWordList.list)
 					document.getElementById("TitleInput").value=openedWordList.title
