@@ -181,7 +181,8 @@ function getJSON(url,callback,errorCallback,min){
 		"data":{
 			"min":min,
 			"time":new Date().getTime(),
-			"url":url
+			"url":url,
+			"username":"admin"
 		},
 		"dataType":"json",
 		"timeout":timeout,
@@ -817,16 +818,22 @@ if(!isIE){
 		var text=msg+" at "+url+" : "+lineNo
 		if(isApp||login.username){
 			window.onerror=null
+			mui.toast(msg)
 			if(msg!="Script error."){
-				$.get(backend+"feedback",{
-					"email":login.email,
-					"lang":language,
-					"name":login.username,
-					"text":text,
-					"ver":ver
-				},function(){
-					if(header){
-						clearLocalStorage()
+				$.ajax({
+					"url":backend+"feedback",
+					"data":{
+						"email":login.email,
+						"lang":language,
+						"name":login.username,
+						"text":text,
+						"ver":ver
+					},
+					"timeout":timeout,
+					"success":function(){
+						if(header){
+							clearLocalStorage()
+						}
 					}
 				})
 			}
@@ -996,29 +1003,27 @@ if(isElectron){
 	}
 }
 if(login.username){
-	if(!header||!isApp){
-		$.ajax({
-			"url":backend+"userdata/verify",
-			"data":{
-				"email":login.email,
-				"password":login.password,
-				"time":new Date().getTime()
-			},
-			"dataType":"json",
-			"timeout":timeout,
-			"success":function(e){
-				if(!e.pass){
-					showAlert([
-						"Incorrect password",
-						"密码错误"
-					],logOut)
-				}
-			},
-			"error":function(){
-				login.username=null
+	$.ajax({
+		"url":backend+"userdata/verify",
+		"data":{
+			"email":login.email,
+			"password":login.password,
+			"time":new Date().getTime()
+		},
+		"dataType":"json",
+		"timeout":timeout,
+		"success":function(e){
+			if(!e.pass){
+				showAlert([
+					"Incorrect password",
+					"密码错误"
+				],logOut)
 			}
-		})
-	}
+		},
+		"error":function(){
+			login.username=null
+		}
+	})
 }else if(!header&&!searchURL("action")){
 	loginDialog()
 }

@@ -599,7 +599,8 @@
 							"url":backend+"get",
 							"data":{
 								"time":new Date().getTime(),
-								"url":url
+								"url":url,
+								"username":"shangzhenyjg9k10x4"
 							},
 							"timeout":timeout,
 							"success":function(e){
@@ -668,20 +669,25 @@
 					"您想删除此文本文档吗？"
 				],function(){
 					if(currentItem){
-						showLoading()
-						$.post(backend+"userdata/domain/del",{
-							"url":"https://rths.tk/"+login.username+"/"+(function(){
-								if(savedText.text[currentItem-1].created){
-									return savedText.text[currentItem-1].created
-								}else{
-									return currentItem
-								}
-							})()+".html",
-							"username":login.username
-						},function(){
+						if(login.username){
+							showLoading()
+							$.post(backend+"userdata/domain/del",{
+								"url":"https://rths.tk/"+login.username+"/"+(function(){
+									if(savedText.text[currentItem-1].created){
+										return savedText.text[currentItem-1].created
+									}else{
+										return currentItem
+									}
+								})()+".html",
+								"username":login.username
+							},function(){
+								savedText.text.splice(currentItem-1,1)
+								submit(reload)
+							})
+						}else{
 							savedText.text.splice(currentItem-1,1)
 							submit(reload)
-						})
+						}
 					}else{
 						reload()
 					}
