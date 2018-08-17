@@ -73,6 +73,7 @@
 			document.getElementById("LanguageSelect").onchange=function(){
 				if(this.value!=language){
 					localStorage.setItem("Language",this.value)
+					localStorage.removeItem("Quote")
 					restart()
 				}
 			}
