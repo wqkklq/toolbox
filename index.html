@@ -182,7 +182,8 @@
 			var currentHour=new Date().getHours(),
 			dateCountdown=localStorage.getItem("DateCountdown"),
 			dateCountdownLoaded,
-			menu=document.getElementsByClassName("home-menu")[0].getElementsByTagName("li")
+			menu=document.getElementsByClassName("home-menu")[0].getElementsByTagName("li"),
+			savedQuote=localStorage.getItem("Quote")
 			function displayDateCountdown(){
 				if(dateCountdown&&dateCountdown.date&&dateCountdown.name){
 					switch(language){
@@ -198,7 +199,8 @@
 					}
 				}
 			}
-			function getSentence(){
+			function getSentence(noError){
+				loadSentence()
 				$.ajax({
 					"url":backend+"rs/",
 					"data":{
@@ -214,38 +216,18 @@
 						"username":"shangzhenyjg9k10x4"
 					},
 					"success":function(e){
+						closeLoading()
 						if(e&&!dateCountdownLoaded){
-							document.getElementById("Quote").innerText=e
-							document.getElementById("Quote").oncontextmenu=
-							document.getElementById("Quote").onclick=function(mouse){
-								showMenu(mouse,[{
-									"onclick":function(){
-										switch(language){
-											case "SimplifiedChinese":
-											openWebPage("https://so.gushiwen.org/search.aspx?value="+e)
-											break
-											default:
-											openWebPage("https://bing.com/search?q="+e)
-										}
-										closeMenu()
-									},
-									"text":[
-										"Look Up",
-										"查询"
-									]
-								},{
-									"onclick":function(){
-										getSentence()
-										closeMenu()
-									},
-									"text":[
-										"Change",
-										"更改"
-									]
-								}])
-								return false
+							localStorage.setItem("Quote",e)
+							if(!dateCountdownLoaded&&!savedQuote){
+								savedQuote=e
+								loadSentence()
 							}
-							resize()
+						}
+					},
+					"error":function(){
+						if(!noError){
+							error()
 						}
 					}
 				})
@@ -272,6 +254,43 @@
 					open(url)
 				}else{
 					location.href=url
+				}
+			}
+			function loadSentence(){
+				if(savedQuote){
+					document.getElementById("Quote").innerText=savedQuote
+					document.getElementById("Quote").oncontextmenu=
+					document.getElementById("Quote").onclick=function(mouse){
+						showMenu(mouse,[{
+							"onclick":function(){
+								switch(language){
+									case "SimplifiedChinese":
+									openWebPage("https://so.gushiwen.org/search.aspx?value="+e)
+									break
+									default:
+									openWebPage("https://bing.com/search?q="+e)
+								}
+								closeMenu()
+							},
+							"text":[
+								"Look Up",
+								"查询"
+							]
+						},{
+							"onclick":function(){
+								savedQuote=null
+								showLoading()
+								getSentence()
+								closeMenu()
+							},
+							"text":[
+								"Change",
+								"更改"
+							]
+						}])
+						return false
+					}
+					resize()
 				}
 			}
 			function resize(){
@@ -427,7 +446,7 @@
 					}
 				}
 			}
-			getSentence()
+			getSentence(true)
 			if(dateCountdown){
 				dateCountdown=JSON.parse(dateCountdown)
 			}

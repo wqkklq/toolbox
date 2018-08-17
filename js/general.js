@@ -172,6 +172,13 @@ function decrypt(text,password){
 		}
 	}
 }
+function error(){
+	closeLoading()
+	showAlert([
+		"Unable to connect to the server",
+		"无法连接服务器"
+	])
+}
 function getJSON(url,callback,errorCallback,min){
 	if(!min){
 		showLoading()
@@ -379,13 +386,9 @@ function loginDialog(){
 						}
 					},
 					"error":function(){
-						closeLoading()
 						newSignUpButton.onclick=signUp
 						newLoginButton.onclick=submitLogin
-						showAlert([
-							"Unable to connect to the server",
-							"无法连接服务器"
-						])
+						error()
 					}
 				})
 			}
