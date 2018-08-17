@@ -578,41 +578,43 @@
 			document.getElementById("NewDocument").onclick=newDoc
 			document.getElementById("OpenLocalDocument").onclick=openDialog
 			document.getElementById("GetSource").onclick=function(){
-				showPrompt([
-					"Enter the URL",
-					"输入网址"
-				],function(url){
-					if(url.indexOf("/")==-1){
-						url=url+"/"
-					}
-					if(url.indexOf("http")==-1){
-						url="http://"+url
-					}
-					if(/rthsoftware.cn|rths.tk|facebook.com|google.com|twitter.com|youtube.com/i.test(url)){
-						showAlert([
-							"Access denied",
-							"拒绝访问"
-						])
-					}else{
-						showLoading()
-						$.ajax({
-							"url":backend+"get",
-							"data":{
-								"time":new Date().getTime(),
-								"url":url,
-								"username":"shangzhenyjg9k10x4"
-							},
-							"timeout":timeout,
-							"success":function(e){
-								closeLoading()
-								setText(e)
-								document.getElementsByTagName("input")[0].value=url
-								document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
-								applyItem(0)
-							},
-							"error":error
-						})
-					}
+				loginRequired(function(){
+					showPrompt([
+						"Enter the URL",
+						"输入网址"
+					],function(url){
+						if(url.indexOf("/")==-1){
+							url=url+"/"
+						}
+						if(url.indexOf("http")==-1){
+							url="http://"+url
+						}
+						if(/rthsoftware.cn|rths.tk|facebook.com|google.com|twitter.com|youtube.com/i.test(url)){
+							showAlert([
+								"Access denied",
+								"拒绝访问"
+							])
+						}else{
+							showLoading()
+							$.ajax({
+								"url":backend+"get",
+								"data":{
+									"time":new Date().getTime(),
+									"url":url,
+									"username":login.username
+								},
+								"timeout":timeout,
+								"success":function(e){
+									closeLoading()
+									setText(e)
+									document.getElementsByTagName("input")[0].value=url
+									document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+									applyItem(0)
+								},
+								"error":error
+							})
+						}
+					})
 				})
 			}
 			document.getElementById("Save").onclick=function(){
