@@ -217,7 +217,7 @@
 					},
 					"success":function(e){
 						closeLoading()
-						if(e&&!dateCountdownLoaded){
+						if(e){
 							localStorage.setItem("Quote",e)
 							if(!dateCountdownLoaded&&!savedQuote){
 								savedQuote=e
