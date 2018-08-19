@@ -219,10 +219,12 @@
 								return false
 							}
 						})()){
-							new Notification(document.title,{
-								body:document.getElementById("CreateMessageBoxInput").value,
-								icon:"electron/icon.png"
-							})
+							try{
+								new Notification(document.title,{
+									body:document.getElementById("CreateMessageBoxInput").value,
+									icon:"electron/icon.png"
+								})
+							}catch(e){}
 						}else if(isCordova){
 							if(isAndroid){
 								openWebPage(backend+"alert?text="+encodeURIComponent(document.getElementById("CreateMessageBoxInput").value)+"&title="+encodeURIComponent(document.title))
