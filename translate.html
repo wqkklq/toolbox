@@ -94,6 +94,7 @@
 			}
 			function loadSavedText(e){
 				document.getElementById("SavedText").innerHTML=""
+				hist=[]
 				if(e&&e.text){
 					for(var i=0;i<e.text.length;i++){
 						if(e.text[i].encrypt){
