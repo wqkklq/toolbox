@@ -59,7 +59,7 @@
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var hist=[]
-			function add(text,saved){
+			function add(text,saved,title){
 				if((function(){
 					for(var i=0;i<hist.length;i++){
 						if(hist[i]==text){
@@ -74,10 +74,15 @@
 					}
 					var newLi=document.createElement("li")
 					newLi.classList.add("menu")
-					newLi.innerText=text
+					if(title){
+						newLi.innerText=title
+					}else{
+						newLi.innerText=text
+					}
+					newLi.setAttribute("value",text)
 					newLi.onclick=function(){
 						scrollTo(0,0)
-						document.getElementById("Original").value=this.innerText
+						document.getElementById("Original").value=this.getAttribute("value")
 						translateText()
 					}
 					if(saved){
@@ -88,12 +93,13 @@
 				}
 			}
 			function loadSavedText(e){
+				document.getElementById("SavedText").innerHTML=""
 				if(e&&e.text){
 					for(var i=0;i<e.text.length;i++){
 						if(e.text[i].encrypt){
-							add(decrypt(e.text[i].text,"RTH"),true)
+							add(decrypt(e.text[i].text,"RTH"),true,e.text[i].title)
 						}else{
-							add(e.text[i].text,true)
+							add(e.text[i].text,true,e.text[i].title)
 						}
 					}
 				}
