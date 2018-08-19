@@ -267,10 +267,10 @@
 							"onclick":function(){
 								switch(language){
 									case "SimplifiedChinese":
-									openWebPage("https://so.gushiwen.org/search.aspx?value="+e)
+									openWebPage("https://so.gushiwen.org/search.aspx?value="+document.getElementById("Quote").innerText)
 									break
 									default:
-									openWebPage("https://bing.com/search?q="+e)
+									openWebPage("https://bing.com/search?q="+document.getElementById("Quote").innerText)
 								}
 								closeMenu()
 							},
