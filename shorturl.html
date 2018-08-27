@@ -93,7 +93,7 @@
 							"onclick":function(){
 								showPrompt(null,function(){
 									openWebPage(myURL[index].to)
-								},null,"https://rths.tk/"+myURL[index].name)
+								},null,"http://rths.tk/"+myURL[index].name)
 								closeMenu()
 							},
 							"text":[
@@ -178,9 +178,9 @@
 			function loadPreview(){
 				var value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
 				if(value){
-					document.getElementById("Preview").innerText="https://rths.tk/"+value
+					document.getElementById("Preview").innerText="http://rths.tk/"+value
 				}else{
-					document.getElementById("Preview").innerText="https://rths.tk/"+defaultShortURL
+					document.getElementById("Preview").innerText="http://rths.tk/"+defaultShortURL
 				}
 			}
 			document.getElementById("ShortURL").oninput=loadPreview
@@ -219,7 +219,7 @@
 									load()
 									showPrompt(null,function(){
 										openWebPage(originalURL)
-									},null,"https://rths.tk/"+value)
+									},null,"http://rths.tk/"+value)
 									closeMenu()
 								}else{
 									closeLoading()

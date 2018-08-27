@@ -396,7 +396,7 @@
 				}
 			}
 			if(isApp){
-				getJSON("toolbox.txt",function(e){
+				getJSON("toolbox",function(e){
 					if((function(){
 						var currentVer=ver.split("."),newVer
 						if(isAndroid){
@@ -453,7 +453,7 @@
 				dateCountdown=JSON.parse(dateCountdown)
 			}
 			if(login.username){
-				getJSON("userdata/datecountdown/"+login.username+".txt",function(e){
+				getJSON("userdata/datecountdown/"+login.username,function(e){
 					if(!dateCountdown||e.time>dateCountdown.time){
 						dateCountdown=e
 						localStorage.setItem("DateCountdown",JSON.stringify(e))

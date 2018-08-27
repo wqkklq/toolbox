@@ -177,7 +177,7 @@
 			}
 			loadSavedText(JSON.parse(localStorage.getItem("SavedText")))
 			if(login.username){
-				getJSON("userdata/text/"+login.username+".txt",loadSavedText,null,true)
+				getJSON("userdata/text/"+login.username,loadSavedText,null,true)
 			}
 		</script>
 	</body>

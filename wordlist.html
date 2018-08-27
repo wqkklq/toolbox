@@ -465,7 +465,7 @@
 				}else{
 					loadMyWordList()
 					if(login.username){
-						getJSON("userdata/wordlist/"+login.username+".txt",function(e){
+						getJSON("userdata/wordlist/"+login.username,function(e){
 							if(e.username==savedWordList.username){
 								if(e.time>savedWordList.time){
 									savedWordList=e
@@ -911,29 +911,31 @@
 				document.getElementById("NextButton").style.display=""
 			}
 			function save(callback,willReload){
-				if(currentItem){
-					savedWordList.list[currentItem-1].list=currentList
-					savedWordList.list[currentItem-1].title=document.getElementById("TitleInput").value
-					submit(function(){
-						if(callback){
-							callback()
-						}
-						applyItem(currentItem,null,willReload)
-					},JSON.stringify(savedWordList.list[currentItem-1]),"list",currentItem)
-				}else{
-					savedWordList.list.push({
-						"created":new Date().getTime(),
-						"list":currentList,
-						"title":document.getElementById("TitleInput").value
-					})
-					currentItem=savedWordList.list.length
-					submit(function(){
-						if(callback){
-							callback()
-						}
-						applyItem(currentItem,null,willReload)
-					})
-				}
+				loginRequired(function(){
+					if(currentItem){
+						savedWordList.list[currentItem-1].list=currentList
+						savedWordList.list[currentItem-1].title=document.getElementById("TitleInput").value
+						submit(function(){
+							if(callback){
+								callback()
+							}
+							applyItem(currentItem,null,willReload)
+						},JSON.stringify(savedWordList.list[currentItem-1]),"list",currentItem)
+					}else{
+						savedWordList.list.push({
+							"created":new Date().getTime(),
+							"list":currentList,
+							"title":document.getElementById("TitleInput").value
+						})
+						currentItem=savedWordList.list.length
+						submit(function(){
+							if(callback){
+								callback()
+							}
+							applyItem(currentItem,null,willReload)
+						})
+					}
+				},closeLoading)
 			}
 			function exportWL(){
 				if(isElectron&&!isLinux){
@@ -1209,7 +1211,7 @@
 			document.getElementById("Export").onclick=exportWL
 			document.getElementById("CloseDocument").onclick=closeDoc
 			document.getElementById("Share").onclick=function(){
-				var share=function(){
+				save(function(){
 					var short=document.getElementById("TitleInput").value.toLowerCase().replace(/[^a-z0-9]/g,""),
 					url="https://www.rthsoftware.cn/toolbox/wordlist?index="+(function(){
 						if(savedWordList.list[currentItem-1].created){
@@ -1218,38 +1220,27 @@
 							return currentItem
 						}
 					})()+"&username="+login.username
-					if(short){
-						showLoading()
-						$.post(backend+"userdata/domain/add",{
-							"domain":short,
-							"redirect":302,
-							"to":url,
-							"username":login.username
-						},function(e){
-							if(e.available){
-								showPrompt(null,function(){
-									openWebPage(url)
-								},null,"https://rths.tk/"+short)
-							}else{
-								showPrompt(null,function(){
-									openWebPage(url)
-								},null,url)
-							}
-						},"json")
-					}else{
-						showPrompt(null,function(){
-							openWebPage(url)
-						},null,url)
+					if(!short){
+						short=Math.round(new Date().getTime()/1000*Math.random()).toString(36)
 					}
-				}
-				if(currentItem){
-					loginRequired(share)
-				}else{
-					loginRequired(function(){
-						showLoading()
-						save(share)
-					})
-				}
+					showLoading()
+					$.post(backend+"userdata/domain/add",{
+						"domain":short,
+						"redirect":302,
+						"to":url,
+						"username":login.username
+					},function(e){
+						if(e.available){
+							showPrompt(null,function(){
+								openWebPage(url)
+							},null,"http://rths.tk/"+short)
+						}else{
+							showPrompt(null,function(){
+								openWebPage(url)
+							},null,url)
+						}
+					},"json")
+				})
 			}
 			document.getElementById("Delete").onclick=function(){
 				showConfirm([

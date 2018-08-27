@@ -27,7 +27,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 timeout=10000,
-ver="13.4"
+ver="13.5"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -474,14 +474,20 @@ function loginDialog(){
 		},25)
 	}
 }
-function loginRequired(callback){
+function loginRequired(callback,negativeCallback){
 	if(login.username){
 		if(callback){
 			callback()
 		}
 	}else if(!localStorage.getItem("Username")){
+		if(negativeCallback){
+			negativeCallback()
+		}
 		loginDialog()
 	}else{
+		if(negativeCallback){
+			negativeCallback()
+		}
 		showAlert([
 			"Unable to connect to the server",
 			"无法连接服务器"
@@ -642,10 +648,7 @@ function showLoading(){
 		if(document.getElementsByClassName("loading")[0]){
 			var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
 			if(newNum>100){
-				clearInterval(loadingId)
-				try{
-					document.body.removeChild(document.getElementsByClassName("loading")[0])
-				}catch(e){}
+				document.getElementsByClassName("loading")[0].innerText="0%"
 			}else{
 				document.getElementsByClassName("loading")[0].innerText=newNum+"%"
 			}
@@ -901,7 +904,7 @@ if(header){
 		header.style.height="65px"
 		newDiv.style.paddingTop="20px"
 	}
-	getJSON("ad.txt",function(e){
+	getJSON("ad",function(e){
 		if(e){
 			if((function(){
 				if(isApp){

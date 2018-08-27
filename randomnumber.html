@@ -487,7 +487,7 @@
 			}
 			load()
 			if(login.username){
-				getJSON("userdata/names/"+login.username+".txt",function(e){
+				getJSON("userdata/names/"+login.username,function(e){
 					if(e.time>savedNames.time){
 						savedNames=e
 					}

@@ -95,6 +95,7 @@ textarea{
 	line-height:30px;
 	-webkit-user-select:text;
 	user-select:text;
+	white-space:normal!important;
 }
 .formula{
 	line-height:30px;
