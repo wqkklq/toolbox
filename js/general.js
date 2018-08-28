@@ -904,31 +904,15 @@ if(header){
 		header.style.height="65px"
 		newDiv.style.paddingTop="20px"
 	}
-	getJSON("ad",function(e){
-		if(e){
-			if((function(){
-				if(isApp){
-					if(isAndroid){
-						return e.android[language]
-					}else if(isElectron){
-						return e.electron[language]
-					}else if(isiOS){
-						return e.ios[language]
-					}
-				}else{
-					return e.web[language]
-				}
-			})()){
-				var newAd=document.createElement("a")
-				newAd.classList.add("mui-pull-right")
-				newAd.classList.add("ad")
-				newAd.onclick=function(){
-					openWebPage(e.link)
-				}
-				document.getElementsByClassName("title-bg")[0].appendChild(newAd)
-			}
+	if(login.username&&login.username!="app"){
+		var newAd=document.createElement("a")
+		newAd.classList.add("mui-pull-right")
+		newAd.classList.add("ad")
+		newAd.onclick=function(){
+			openWebPage("http://rths.tk/ad")
 		}
-	},null,true)
+		document.getElementsByClassName("title-bg")[0].appendChild(newAd)
+	}
 }
 if(appliedTheme=="Bing"){
 	var savedBingWallpaper

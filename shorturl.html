@@ -86,11 +86,12 @@
 					newLi.oncontextmenu=
 					newLi.onclick=function(mouse){
 						var index=this.getAttribute("number")*1-1
+						var url="http://rths.tk/"+myURL[index].name
 						showMenu(mouse,[{
 							"onclick":function(){
 								showPrompt(null,function(){
-									openWebPage(myURL[index].to)
-								},null,"http://rths.tk/"+myURL[index].name)
+									openWebPage(url)
+								},null,url)
 								closeMenu()
 							},
 							"text":[
@@ -108,7 +109,7 @@
 							]
 						},{
 							"onclick":function(){
-								getJSON("http://rths.tk/"+myURL[index].name+"?get=open",function(e){
+								getJSON(url+"?get=open",function(e){
 									var time=" time"
 									if(Math.abs(e.open)>1){
 										time+="s"
@@ -142,7 +143,7 @@
 										"key1":myURL[index].name,
 										"key2":"to",
 										"text":e,
-										"url":"http://rths.tk/"+myURL[index].name
+										"url":url
 									},function(){
 										showToast([
 											"Changes are saved",
