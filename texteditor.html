@@ -103,9 +103,7 @@
 			fontSize=16,
 			savedText=JSON.parse(localStorage.getItem("SavedText"))
 			function applyItem(serialNumber){
-				if(serialNumber==0){
-					save()
-				}else{
+				if(serialNumber!=0){
 					currentItem=serialNumber*1
 				}
 				edit(true)
@@ -668,8 +666,8 @@
 								"timeout":timeout,
 								"success":function(e){
 									closeLoading()
-									setText(e)
 									document.getElementsByTagName("input")[0].value=url
+									setText(e)
 									document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
 									applyItem(0)
 								},
