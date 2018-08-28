@@ -137,6 +137,7 @@
 									if(e.indexOf("http")==-1){
 										e="http://"+e
 									}
+									showLoading()
 									$.post(backend+"userdata/upload",{
 										"dir":"domain/",
 										"filename":"list",
@@ -145,6 +146,7 @@
 										"text":e,
 										"url":url
 									},function(){
+										closeLoading()
 										showToast([
 											"Changes are saved",
 											"更改已保存"

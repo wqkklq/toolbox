@@ -1059,7 +1059,9 @@
 						postData.text=text
 						postData["time"]=savedWordList.time
 					}
+					showLoading()
 					$.post(backend+"userdata/upload",postData,function(){
+						closeLoading()
 						if(callback){
 							callback()
 						}

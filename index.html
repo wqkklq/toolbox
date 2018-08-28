@@ -310,11 +310,12 @@
 			function submitDateCountdown(){
 				displayDateCountdown()
 				if(login.username){
+					showLoading()
 					$.post(backend+"userdata/upload",{
 						"dir":"datecountdown/",
 						"filename":login.username,
 						"text":JSON.stringify(dateCountdown)
-					})
+					},closeLoading)
 				}
 			}
 			for(var i=0;i<menu.length;i++){

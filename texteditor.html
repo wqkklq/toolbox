@@ -531,7 +531,6 @@
 				savedText.time=new Date().getTime()
 				localStorage.setItem("SavedText",JSON.stringify(savedText))
 				if(login.username){
-					showLoading()
 					var postData={
 						"dir":"text/",
 						"filename":login.username,
@@ -549,6 +548,7 @@
 					if(getURL()){
 						postData["url"]=getURL().short
 					}
+					showLoading()
 					$.post(backend+"userdata/upload",postData,function(){
 						closeLoading()
 						if(callback){
