@@ -353,7 +353,7 @@
 				if(!document.getElementsByClassName("start")[0].style.display){
 					if(localStorage.getItem("Username")){
 						edit(true)
-						document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+						document.getElementById("Created").getElementsByTagName("span")[0].innerText=
 						document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
 					}else{
 						loginDialog()
@@ -389,7 +389,8 @@
 					reader.onload=function(e){
 						document.getElementsByTagName("input")[0].value=file.name
 						setText(this.result)
-						document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+						document.getElementById("Created").getElementsByTagName("span")[0].innerText=
+						document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
 						applyItem(0)
 					}
 					reader.readAsText(file)
@@ -668,7 +669,8 @@
 									closeLoading()
 									document.getElementsByTagName("input")[0].value=url
 									setText(e)
-									document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+									document.getElementById("Created").getElementsByTagName("span")[0].innerText=
+									document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
 									applyItem(0)
 								},
 								"error":error
@@ -970,7 +972,8 @@
 						if(e.text){
 							document.getElementsByTagName("input")[0].value=e.title
 							setText(e.text)
-							document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+							document.getElementById("Created").getElementsByTagName("span")[0].innerText=
+							document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
 							applyItem(0)
 						}else if(e.error){
 							switch(e.error){
