@@ -389,8 +389,8 @@
 					reader.onload=function(e){
 						document.getElementsByTagName("input")[0].value=file.name
 						setText(this.result)
-						document.getElementById("Created").getElementsByTagName("span")[0].innerText=
-						document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+						document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+						document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date(file.lastModified).toLocaleString()
 						applyItem(0)
 					}
 					reader.readAsText(file)
@@ -441,7 +441,7 @@
 						try{
 							var result=calc(code)
 							if(result!=undefined){
-								if(result.toString().indexOf("[object")!=-1){
+								if(typeof result!="string"){
 									result=JSON.stringify(result)
 								}
 								showPrompt(null,null,null,result)

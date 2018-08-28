@@ -651,7 +651,7 @@
 					}
 				}catch(e){
 					for(var i=0;i<savedWordList.list.length;i++){
-						if(savedWordList.list[i].toString().indexOf("[object")==-1){
+						if(typeof savedWordList.list[i]=="string"){
 							savedWordList.list[i]=JSON.parse(savedWordList.list[i])
 						}
 					}
