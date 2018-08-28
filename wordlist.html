@@ -149,8 +149,7 @@
 		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var back,
-			correctDefinition,
+			var correctDefinition,
 			correctInt=0,
 			currentItem,
 			currentList=[],
@@ -433,6 +432,27 @@
 				wordIndex=Math.round(Math.random()*currentList.length-1)+1
 				if(arrayContains(wordIndex,outOfOrder)||wordIndex==0){
 					generateOrder()
+				}
+			}
+			function getURL(){
+				if(currentItem&&savedWordList.list[currentItem-1]&&!savedWordList.list[currentItem-1].encrypt){
+					var index=(function(){
+						if(savedWordList.list[currentItem-1].created){
+							return savedWordList.list[currentItem-1].created
+						}else{
+							return currentItem
+						}
+					})(),
+					short=document.getElementById("TitleInput").value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
+					var url="https://www.rthsoftware.cn/toolbox/wordlist?index="+index+"&username="+login.username
+					if(!short){
+						short=MD5(login.username+index).substr(0,6)
+					}
+					return{
+						"domain":short,
+						"original":url,
+						"short":"http://rths.tk/"+short
+					}
 				}
 			}
 			function load(){
@@ -759,7 +779,7 @@
 						document.getElementsByClassName("edit")[0].style.display=
 						document.getElementsByClassName("quiz")[0].style.display=
 						document.getElementsByTagName("footer")[0].style.display=""
-						document.getElementsByClassName("back")[0].onclick=back
+						document.getElementsByClassName("back")[0].onclick=mui.back
 					}
 				}
 			}
@@ -1211,34 +1231,24 @@
 			document.getElementById("Export").onclick=exportWL
 			document.getElementById("CloseDocument").onclick=closeDoc
 			document.getElementById("Share").onclick=function(){
+				showLoading()
 				save(function(){
-					var short=document.getElementById("TitleInput").value.toLowerCase().replace(/[^a-z0-9]/g,""),
-					url="https://www.rthsoftware.cn/toolbox/wordlist?index="+(function(){
-						if(savedWordList.list[currentItem-1].created){
-							return savedWordList.list[currentItem-1].created
-						}else{
-							return currentItem
-						}
-					})()+"&username="+login.username
-					if(!short){
-						short=Math.round(new Date().getTime()/1000*Math.random()).toString(36)
-					}
 					showLoading()
 					$.post(backend+"userdata/domain/add",{
-						"domain":short,
+						"domain":getURL().domain,
 						"redirect":302,
-						"to":url,
+						"to":getURL().original,
 						"username":login.username
 					},function(e){
+						var url
 						if(e.available){
-							showPrompt(null,function(){
-								openWebPage(url)
-							},null,"http://rths.tk/"+short)
+							url=getURL().short
 						}else{
-							showPrompt(null,function(){
-								openWebPage(url)
-							},null,url)
+							url=getURL().original
 						}
+						showPrompt(null,function(){
+							openWebPage(url)
+						},null,url)
 					},"json")
 				})
 			}
@@ -1251,13 +1261,7 @@
 						if(login.username){
 							showLoading()
 							$.post(backend+"userdata/domain/del",{
-								"url":"https://www.rthsoftware.cn/toolbox/wordlist?index="+(function(){
-									if(savedWordList.list[currentItem-1].created){
-										return savedWordList.list[currentItem-1].created
-									}else{
-										return currentItem
-									}
-								})()+"&username="+login.username,
+								"url":getURL().original,
 								"username":login.username
 							},function(){
 								savedWordList.list.splice(currentItem-1,1)
@@ -1412,7 +1416,7 @@
 				document.getElementById("SpeakDefinitionsLi").style.display="none"
 			}
 			if(searchURL("index")&&searchURL("username")){
-				back=function(){
+				mui.back=function(){
 					openWindow("index")
 				}
 				showLoading()
@@ -1437,7 +1441,6 @@
 					}
 				})
 			}else{
-				back=mui.back
 				load()
 			}
 		</script>

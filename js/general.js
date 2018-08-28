@@ -151,7 +151,7 @@ function dateDiff(startDate,endDate){
 		case "SimplifiedChinese":
 		return result+" 天"
 		default:
-		if(Math.abs(result>1)){
+		if(Math.abs(result)>1){
 			return result+" days"
 		}else{
 			return result+" day"

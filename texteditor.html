@@ -63,6 +63,7 @@
 				<p id="Created"></p>
 				<p id="Modified"></p>
 				<ul class="menu">
+					<li id="Share" class="menu"></li>
 					<li id="SaveAs" class="menu"></li>
 					<li id="Delete" class="menu"></li>
 				</ul>
@@ -201,6 +202,61 @@
 					}
 				})
 			}
+			function generateWebPage(edit){
+				loginRequired(function(){
+					if(!isEmpty()){
+						encrypt=false
+						showLoading()
+						save(function(){
+							showLoading()
+							$.post(backend+"userdata/domain/add",{
+								"domain":getURL().domain,
+								"redirect":302,
+								"to":getURL().original,
+								"username":login.username
+							},function(e){
+								var url
+								if(e.available){
+									url=getURL().short
+								}else{
+									url=getURL().original
+								}
+								if(edit){
+									url+="?edit=true"
+								}
+								showPrompt(null,function(){
+									if(edit){
+										openWebPage(url)
+									}else{
+										openWebPage(url.replace("http:","https:"))
+									}
+								},null,url)
+							},"json")
+						})
+					}
+				})
+			}
+			function getURL(){
+				if(currentItem&&savedText.text[currentItem-1]&&!savedText.text[currentItem-1].encrypt){
+					var index=(function(){
+						if(savedText.text[currentItem-1].created){
+							return savedText.text[currentItem-1].created
+						}else{
+							return currentItem
+						}
+					})(),
+					short=document.getElementsByTagName("input")[0].value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
+					var url="https://rths.tk/"+login.username+"/"+index+".html"
+					if(!short){
+						short=MD5(login.username+index).substr(0,6)
+					}
+					return{
+						"domain":short,
+						"original":url,
+						"short":"http://rths.tk/"+short
+					}
+				}
+			}
 			function isEmpty(){
 				if(document.getElementsByTagName("textarea")[0].value==""){
 					setText(document.getElementsByTagName("textarea")[0].value.replace(/\/\*\s|\s\*\//g,"").trim())
@@ -335,6 +391,7 @@
 					reader.onload=function(e){
 						document.getElementsByTagName("input")[0].value=file.name
 						setText(this.result)
+						document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
 						applyItem(0)
 					}
 					reader.readAsText(file)
@@ -489,6 +546,9 @@
 						postData.text=text
 						postData["time"]=savedText.time
 					}
+					if(getURL()){
+						postData["url"]=getURL().short
+					}
 					$.post(backend+"userdata/upload",postData,function(){
 						closeLoading()
 						if(callback){
@@ -625,6 +685,9 @@
 			document.getElementById("RunJSCode").onclick=function(){
 				runJSCode(false)
 			}
+			document.getElementById("Share").onclick=function(){
+				generateWebPage(true)
+			}
 			document.getElementById("SaveAs").onclick=function(){
 				if(isElectron&&!isLinux){
 					require("electron").remote.dialog.showSaveDialog({
@@ -670,13 +733,7 @@
 						if(login.username&&!savedText.text[currentItem-1].encrypt){
 							showLoading()
 							$.post(backend+"userdata/domain/del",{
-								"url":"https://rths.tk/"+login.username+"/"+(function(){
-									if(savedText.text[currentItem-1].created){
-										return savedText.text[currentItem-1].created
-									}else{
-										return currentItem
-									}
-								})()+".html",
+								"url":getURL().original,
 								"username":login.username
 							},function(){
 								savedText.text.splice(currentItem-1,1)
@@ -762,39 +819,7 @@
 				}
 			}
 			document.getElementById("GenerateWebPage").onclick=function(){
-				if(!isEmpty()){
-					loginRequired(function(){
-						encrypt=false
-						showLoading()
-						save(function(){
-							var short=document.getElementsByTagName("input")[0].value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,""),
-							url="https://rths.tk/"+login.username+"/"+(function(){
-								if(savedText.text[currentItem-1].created){
-									return savedText.text[currentItem-1].created
-								}else{
-									return currentItem
-								}
-							})()+".html"
-							if(!short){
-								short=Math.round(new Date().getTime()/1000*Math.random()).toString(36)
-							}
-							showLoading()
-							$.post(backend+"userdata/domain/add",{
-								"domain":short,
-								"redirect":302,
-								"to":url,
-								"username":login.username
-							},function(e){
-								if(e.available){
-									url="http://rths.tk/"+short
-								}
-								showPrompt(null,function(){
-									openWebPage(url)
-								},null,url)
-							},"json")
-						})
-					})
-				}
+				generateWebPage()
 			}
 			document.getElementById("Base64Encode").onclick=function(){
 				if(!isEmpty()){
@@ -850,6 +875,7 @@
 				document.getElementById("WordCount").innerHTML="字数统计：<span>0</span>"
 				document.getElementById("Created").innerHTML="创建时间：<span></span>"
 				document.getElementById("Modified").innerHTML="修改时间：<span></span>"
+				document.getElementById("Share").innerText="共享"
 				document.getElementById("SaveAs").innerText="另存为"
 				document.getElementById("Delete").innerText="删除"
 				document.getElementById("FindReplace").innerText="查找和替换"
@@ -876,6 +902,7 @@
 				document.getElementById("WordCount").innerHTML="Word Count: <span>0</span>"
 				document.getElementById("Created").innerHTML="Created: <span></span>"
 				document.getElementById("Modified").innerHTML="Modified: <span></span>"
+				document.getElementById("Share").innerText="Share"
 				document.getElementById("SaveAs").innerText="Save As"
 				document.getElementById("Delete").innerText="Delete"
 				document.getElementById("FindReplace").innerText="Find & Replace"
@@ -928,7 +955,50 @@
 			if(isEdge||isLinux||isMobile){
 				document.getElementById("SaveAs").style.display="none"
 			}
-			load()
+			if(searchURL("index")&&searchURL("username")){
+				mui.back=function(){
+					openWindow("index")
+				}
+				showLoading()
+				$.ajax({
+					"url":backend+"getpage",
+					"data":{
+						"index":searchURL("index"),
+						"username":searchURL("username")
+					},
+					"dataType":"json",
+					"success":function(e){
+						closeLoading()
+						if(e.text){
+							document.getElementsByTagName("input")[0].value=e.title
+							setText(e.text)
+							document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+							applyItem(0)
+						}else if(e.error){
+							switch(e.error){
+								case 403:
+								showAlert([
+									"This text document has been encrypted",
+									"此文本文档已被加密"
+								])
+								break
+								case 404:
+								showAlert([
+									"This text document has been deleted",
+									"此文本文档已被删除"
+								])
+							}
+							load()
+						}
+					},
+					"error":function(){
+						closeLoading()
+						load()
+					}
+				})
+			}else{
+				load()
+			}
 		</script>
 	</body>
 </html>

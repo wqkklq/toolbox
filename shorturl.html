@@ -42,10 +42,7 @@
 			<div class="btn-bg-img">
 				<button type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
 			</div>
-			<ul class="menu">
-				<li id="DeleteAll" class="menu"></li>
-				<span id="MyURL"></span>
-			</ul>
+			<ul id="MyURL" class="menu"></ul>
 		</div>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
@@ -111,6 +108,24 @@
 							]
 						},{
 							"onclick":function(){
+								getJSON("http://rths.tk/"+myURL[index].name+"?get=open",function(e){
+									var time=" time"
+									if(Math.abs(e.open)>1){
+										time+="s"
+									}
+									showAlert([
+										"This link has been opened "+e.open+time,
+										"此链接已被打开 "+e.open+" 次"
+									])
+								},error)
+								closeMenu()
+							},
+							"text":[
+								"Analytics",
+								"分析"
+							]
+						},{
+							"onclick":function(){
 								showPrompt([
 									"Change "+myURL[index].to+" to",
 									"把 "+myURL[index].to+" 更改为"
@@ -126,7 +141,8 @@
 										"filename":"list",
 										"key1":myURL[index].name,
 										"key2":"to",
-										"text":e
+										"text":e,
+										"url":"http://rths.tk/"+myURL[index].name
 									},function(){
 										showToast([
 											"Changes are saved",
@@ -254,17 +270,6 @@
 					}
 				})
 			}
-			document.getElementById("DeleteAll").onclick=function(){
-				showConfirm([
-					"Do you want to delete all the short URLs?",
-					"您想删除全部短网址吗？"
-				],function(){
-					showLoading()
-					$.post(backend+"userdata/domain/del",{
-						"username":login.username
-					},load)
-				})
-			}
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="短网址"
@@ -273,7 +278,6 @@
 				document.getElementById("To").innerText="到"
 				document.getElementById("OriginalURL").placeholder="输入原网址"
 				document.getElementsByTagName("button")[0].innerText="创建"
-				document.getElementById("DeleteAll").innerText="删除全部"
 				break
 				default:
 				document.title="Short URL"
@@ -282,7 +286,6 @@
 				document.getElementById("To").innerText="To"
 				document.getElementById("OriginalURL").placeholder="Enter the original URL"
 				document.getElementsByTagName("button")[0].innerText="Create"
-				document.getElementById("DeleteAll").innerText="Delete All"
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(myURL){
