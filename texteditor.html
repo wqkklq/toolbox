@@ -731,7 +731,7 @@
 						if(login.username&&!savedText.text[currentItem-1].encrypt){
 							showLoading()
 							$.post(backend+"userdata/domain/del",{
-								"url":getURL().original,
+								"domain":getURL().domain,
 								"username":login.username
 							},function(){
 								savedText.text.splice(currentItem-1,1)

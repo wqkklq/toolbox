@@ -1263,7 +1263,7 @@
 						if(login.username){
 							showLoading()
 							$.post(backend+"userdata/domain/del",{
-								"url":getURL().original,
+								"domain":getURL().domain,
 								"username":login.username
 							},function(){
 								savedWordList.list.splice(currentItem-1,1)
