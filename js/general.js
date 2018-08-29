@@ -27,7 +27,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 timeout=10000,
-ver="13.5"
+ver="13.6"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -821,11 +821,11 @@ function translate(query,from,to,callback){
 }
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){
-		var text=msg+" at "+url+" : "+lineNo
-		if(isApp||login.username){
-			window.onerror=null
-			mui.toast(msg)
-			if(msg!="Script error."){
+		if(msg!="Script error."&&lineNo!=1){
+			var text=msg+" at "+url+" : "+lineNo
+			if(isApp||login.username){
+				window.onerror=null
+				mui.toast(msg)
 				$.ajax({
 					"url":backend+"feedback",
 					"data":{
@@ -842,9 +842,9 @@ if(!isIE){
 						}
 					}
 				})
+			}else{
+				mui.toast(text)
 			}
-		}else{
-			mui.toast(text)
 		}
 	}
 }

@@ -223,11 +223,7 @@
 									url+="?edit=true"
 								}
 								showPrompt(null,function(){
-									if(edit){
-										openWebPage(url)
-									}else{
-										openWebPage(url.replace("http:","https:"))
-									}
+									openWebPage(url)
 								},null,url)
 							},"json")
 						})
