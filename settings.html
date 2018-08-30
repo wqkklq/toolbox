@@ -110,16 +110,22 @@
 									],function(confirmPassword){
 										if(confirmPassword==newPassword){
 											localStorage.setItem("Password",MD5(newPassword))
-											$.post(backend+"reset",{
-												"index":verifyResult.index,
-												"passwordmd5":MD5(newPassword)
-											},function(){
-												showAlert([
-													"The password is changed",
-													"密码已更改"
-												],function(){
-													location.reload()
-												})
+											$.ajax({
+												"url":backend+"reset",
+												"data":{
+													"index":verifyResult.index,
+													"passwordmd5":MD5(newPassword)
+												},
+												"method":"POST",
+												"success":function(){
+													showAlert([
+														"The password is changed",
+														"密码已更改"
+													],function(){
+														location.reload()
+													})
+												},
+												"error":error
 											})
 										}else{
 											showAlert([
@@ -181,16 +187,22 @@
 												],function(confirmEmail){
 													if(confirmEmail==newEmail){
 														localStorage.setItem("Email",newEmail)
-														$.post(backend+"reset",{
-															"index":verifyResult.index,
-															"newemail":newEmail
-														},function(){
-															showAlert([
-																"The email address is changed",
-																"电子邮箱地址已更改"
-															],function(){
-																location.reload()
-															})
+														$.ajax({
+															"url":backend+"reset",
+															"data":{
+																"index":verifyResult.index,
+																"newemail":newEmail
+															},
+															"method":"POST",
+															"success":function(){
+																showAlert([
+																	"The email address is changed",
+																	"电子邮箱地址已更改"
+																],function(){
+																	location.reload()
+																})
+															},
+															"error":error
 														})
 													}else{
 														showAlert([
@@ -200,7 +212,8 @@
 													}
 												},"email")
 											}
-										}
+										},
+										"error":error
 									})
 								},"email")
 							}else{
@@ -209,7 +222,8 @@
 									"密码错误"
 								])
 							}
-						}
+						},
+						"error":error
 					})
 				},"password")
 			}
@@ -222,6 +236,7 @@
 						"Enter your current password",
 						"输入您的当前密码"
 					],function(e){
+						showLoading()
 						$.ajax({
 							"url":backend+"userdata/verify",
 							"data":{
@@ -233,17 +248,25 @@
 							"timeout":timeout,
 							"success":function(verifyResult){
 								if(verifyResult.pass){
-									$.post(backend+"userdata/remove",{
-										"index":verifyResult.index,
-										"username":login.username
-									},logOut)
+									$.ajax({
+										"url":backend+"userdata/remove",
+										"data":{
+											"index":verifyResult.index,
+											"username":login.username
+										},
+										"method":"POST",
+										"success":logOut,
+										"error":error
+									})
 								}else{
+									closeLoading()
 									showAlert([
 										"Incorrect password",
 										"密码错误"
 									])
 								}
-							}
+							},
+							"error":error
 						})
 					},"password")
 				})

@@ -66,25 +66,30 @@
 			var dateCountdown=localStorage.getItem("DateCountdown")
 			function submit(){
 				localStorage.setItem("DateCountdown",JSON.stringify(dateCountdown))
-				if(login.username){
-					showLoading()
-					$.post(backend+"userdata/upload",{
+				showLoading()
+				$.ajax({
+					"url":backend+"userdata/upload",
+					"data":{
 						"dir":"datecountdown/",
 						"filename":login.username,
 						"text":JSON.stringify(dateCountdown)
-					},function(){
+					},
+					"method":"POST",
+					"success":function(){
 						closeLoading()
 						showToast([
 							"Changes are saved",
 							"更改已保存"
 						])
-					})
-				}else{
-					showToast([
-						"Changes are saved",
-						"更改已保存"
-					])
-				}
+					},
+					"error":function(){
+						closeLoading()
+						showToast([
+							"Changes are saved locally",
+							"更改已本地保存"
+						])
+					}
+				})
 			}
 			document.getElementById("StartDate").oninput=
 			document.getElementById("EndDate").oninput=function(){

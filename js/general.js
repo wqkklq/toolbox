@@ -339,15 +339,21 @@ function loginDialog(){
 									newPasswordInput.value=""
 									newConfirmPasswordInput.value=""
 									var newPassword=(new Date().getTime()*(Math.round(Math.random()*99)+1)).toString(36)
-									$.post(backend+"reset",{
-										"index":e.index,
-										"password":newPassword,
-										"passwordmd5":MD5(newPassword)
-									},function(){
-										showAlert([
-											"We will send your new password to your email",
-											"我们会将您的新密码发送到您的邮箱"
-										])
+									$.ajax({
+										"url":backend+"reset",
+										"data":{
+											"index":e.index,
+											"password":newPassword,
+											"passwordmd5":MD5(newPassword)
+										},
+										"method":"POST",
+										"success":function(){
+											showAlert([
+												"We will send your new password to your email",
+												"我们会将您的新密码发送到您的邮箱"
+											])
+										},
+										"error":error
 									})
 								},function(){
 									newPasswordInput.value=""
@@ -361,20 +367,26 @@ function loginDialog(){
 									newConfirmPasswordInput.focus()
 								}else{
 									var username=email.split("@")[0]+new Date().getTime().toString(36)
-									$.post(backend+"userdata/signup",{
-										"email":email,
-										"password":password,
-										"username":username
-									},function(){
-										showAlert([
-											"Log in successfully",
-											"已成功登录"
-										],function(){
-											localStorage.setItem("Email",email)
-											localStorage.setItem("Password",password)
-											localStorage.setItem("Username",username)
-											location.reload()
-										})
+									$.ajax({
+										"url":backend+"userdata/signup",
+										"data":{
+											"email":email,
+											"password":password,
+											"username":username
+										},
+										"method":"POST",
+										"success":function(){
+											showAlert([
+												"Log in successfully",
+												"已成功登录"
+											],function(){
+												localStorage.setItem("Email",email)
+												localStorage.setItem("Password",password)
+												localStorage.setItem("Username",username)
+												location.reload()
+											})
+										},
+										"error":error
 									})
 								}
 							}else{
@@ -474,7 +486,7 @@ function loginDialog(){
 		},25)
 	}
 }
-function loginRequired(callback,negativeCallback){
+function loginRequired(callback,negativeCallback,offline){
 	if(login.username){
 		if(callback){
 			callback()
@@ -485,13 +497,19 @@ function loginRequired(callback,negativeCallback){
 		}
 		loginDialog()
 	}else{
-		if(negativeCallback){
-			negativeCallback()
+		if(offline){
+			if(callback){
+				callback()
+			}
+		}else{
+			if(negativeCallback){
+				negativeCallback()
+			}
+			showAlert([
+				"Unable to connect to the server",
+				"无法连接服务器"
+			])
 		}
-		showAlert([
-			"Unable to connect to the server",
-			"无法连接服务器"
-		])
 	}
 }
 function logOut(){

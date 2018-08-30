@@ -207,25 +207,32 @@
 						showLoading()
 						save(function(){
 							showLoading()
-							$.post(backend+"userdata/domain/add",{
-								"domain":getURL().domain,
-								"redirect":302,
-								"to":getURL().original,
-								"username":login.username
-							},function(e){
-								var url
-								if(e.available){
-									url=getURL().short
-								}else{
-									url=getURL().original
-								}
-								if(edit){
-									url+="?edit=true"
-								}
-								showPrompt(null,function(){
-									openWebPage(url)
-								},null,url)
-							},"json")
+							$.ajax({
+								"url":backend+"userdata/domain/add",
+								"data":{
+									"domain":getURL().domain,
+									"redirect":302,
+									"to":getURL().original,
+									"username":login.username
+								},
+								"method":"POST",
+								"dataType":"json",
+								"success":function(e){
+									var url
+									if(e.available){
+										url=getURL().short
+									}else{
+										url=getURL().original
+									}
+									if(edit){
+										url+="?edit=true"
+									}
+									showPrompt(null,function(){
+										openWebPage(url)
+									},null,url)
+								},
+								"error":error
+							})
 						})
 					}
 				})
@@ -505,7 +512,7 @@
 							savedText.text=[JSON.parse(savedText.text)]
 						}
 					}
-				},closeLoading)
+				},closeLoading,true)
 			}
 			function setText(text,noScrolling){
 				document.getElementsByTagName("textarea")[0].value=text
@@ -525,26 +532,29 @@
 			function submit(callback,text,key1,key2){
 				savedText.time=new Date().getTime()
 				localStorage.setItem("SavedText",JSON.stringify(savedText))
-				if(login.username){
-					var postData={
-						"dir":"text/",
-						"filename":login.username,
-						"text":JSON.stringify(savedText),
-						"ver":ver.split(".")[0]
+				var postData={
+					"dir":"text/",
+					"filename":login.username,
+					"text":JSON.stringify(savedText),
+					"ver":ver.split(".")[0]
+				}
+				if(key1){
+					postData["key1"]=key1
+					if(key2){
+						postData["key2"]=key2
 					}
-					if(key1){
-						postData["key1"]=key1
-						if(key2){
-							postData["key2"]=key2
-						}
-						postData.text=text
-						postData["time"]=savedText.time
-					}
-					if(getURL()){
-						postData["url"]=getURL().short
-					}
-					showLoading()
-					$.post(backend+"userdata/upload",postData,function(){
+					postData.text=text
+					postData["time"]=savedText.time
+				}
+				if(getURL()){
+					postData["url"]=getURL().short
+				}
+				showLoading()
+				$.ajax({
+					"url":backend+"userdata/upload",
+					"data":postData,
+					"method":"POST",
+					"success":function(){
 						closeLoading()
 						if(callback){
 							callback()
@@ -553,16 +563,18 @@
 							"Changes are saved",
 							"更改已保存"
 						])
-					})
-				}else{
-					showToast([
-						"Changes are saved",
-						"更改已保存"
-					])
-					if(callback){
-						callback()
+					},
+					"error":function(){
+						closeLoading()
+						if(callback){
+							callback()
+						}
+						showToast([
+							"Changes are saved locally",
+							"更改已本地保存"
+						])
 					}
-				}
+				})
 			}
 			window.onkeydown=function(e){
 				if(e.ctrlKey||e.metaKey){
@@ -726,18 +738,25 @@
 					"您想删除此文本文档吗？"
 				],function(){
 					if(currentItem){
-						if(login.username&&!savedText.text[currentItem-1].encrypt){
-							showLoading()
-							$.post(backend+"userdata/domain/del",{
-								"domain":getURL().domain,
-								"username":login.username
-							},function(){
-								savedText.text.splice(currentItem-1,1)
-								submit(reload)
-							})
-						}else{
+						if(savedText.text[currentItem-1].encrypt){
 							savedText.text.splice(currentItem-1,1)
 							submit(reload)
+						}else{
+							showLoading()
+							$.ajax({
+								"url":backend+"userdata/domain/del",
+								"data":{
+									"domain":getURL().domain,
+									"username":login.username
+								},
+								"method":"POST",
+								"success":function(){
+									closeLoading()
+									savedText.text.splice(currentItem-1,1)
+									submit(reload)
+								},
+								"error":error
+							})
 						}
 					}else{
 						reload()

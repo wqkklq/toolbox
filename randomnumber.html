@@ -266,27 +266,32 @@
 			function submit(){
 				savedNames.time=new Date().getTime()
 				localStorage.setItem("Names",JSON.stringify(savedNames))
-				if(login.username){
-					showLoading()
-					$.post(backend+"userdata/upload",{
+				showLoading()
+				$.ajax({
+					"url":backend+"userdata/upload",
+					"data":{
 						"dir":"names/",
 						"filename":login.username,
 						"text":JSON.stringify(savedNames)
-					},function(){
+					},
+					"method":"POST",
+					"success":function(){
 						load()
 						closeLoading()
 						showToast([
 							"Changes are saved",
 							"更改已保存"
 						])
-					})
-				}else{
-					showToast([
-						"Changes are saved",
-						"更改已保存"
-					])
-					load()
-				}
+					},
+					"error":function(){
+						load()
+						closeLoading()
+						showToast([
+							"Changes are saved locally",
+							"更改已本地保存"
+						])
+					}
+				})
 			}
 			document.getElementsByTagName("button")[0].onclick=function(){
 				var closeDialog=function(){

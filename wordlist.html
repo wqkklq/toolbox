@@ -555,7 +555,8 @@
 											"dataType":"json",
 											"success":function(e){
 												applyItem(0,e)
-											}
+											},
+											"error":error
 										})
 									}
 									document.getElementById("FriendWordList").appendChild(newLi)
@@ -606,7 +607,8 @@
 										"dataType":"json",
 										"success":function(e){
 											applyItem(0,e)
-										}
+										},
+										"error":error
 									})
 								}
 								document.getElementById("AdminWordList").appendChild(newLi)
@@ -955,7 +957,7 @@
 							applyItem(currentItem,null,willReload)
 						})
 					}
-				},closeLoading)
+				},closeLoading,true)
 			}
 			function exportWL(){
 				if(isElectron&&!isLinux){
@@ -1044,23 +1046,26 @@
 			function submit(callback,text,key1,key2){
 				savedWordList.time=new Date().getTime()
 				localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
-				if(login.username){
-					var postData={
-						"dir":"wordlist/",
-						"filename":login.username,
-						"text":JSON.stringify(savedWordList),
-						"ver":ver.split(".")[0]
+				var postData={
+					"dir":"wordlist/",
+					"filename":login.username,
+					"text":JSON.stringify(savedWordList),
+					"ver":ver.split(".")[0]
+				}
+				if(key1){
+					postData["key1"]=key1
+					if(key2){
+						postData["key2"]=key2
 					}
-					if(key1){
-						postData["key1"]=key1
-						if(key2){
-							postData["key2"]=key2
-						}
-						postData.text=text
-						postData["time"]=savedWordList.time
-					}
-					showLoading()
-					$.post(backend+"userdata/upload",postData,function(){
+					postData.text=text
+					postData["time"]=savedWordList.time
+				}
+				showLoading()
+				$.ajax({
+					"url":backend+"userdata/upload",
+					"data":postData,
+					"method":"POST",
+					"success":function(){
 						closeLoading()
 						if(callback){
 							callback()
@@ -1069,16 +1074,18 @@
 							"Changes are saved",
 							"更改已保存"
 						])
-					})
-				}else{
-					if(callback){
-						callback()
+					},
+					"error":function(){
+						closeLoading()
+						if(callback){
+							callback()
+						}
+						showToast([
+							"Changes are saved locally",
+							"更改已本地保存"
+						])
 					}
-					showToast([
-						"Changes are saved",
-						"更改已保存"
-					])
-				}
+				})
 			}
 			window.onkeydown=function(e){
 				if(e.ctrlKey||e.metaKey){
@@ -1236,22 +1243,29 @@
 				showLoading()
 				save(function(){
 					showLoading()
-					$.post(backend+"userdata/domain/add",{
-						"domain":getURL().domain,
-						"redirect":302,
-						"to":getURL().original,
-						"username":login.username
-					},function(e){
-						var url
-						if(e.available){
-							url=getURL().short
-						}else{
-							url=getURL().original
-						}
-						showPrompt(null,function(){
-							openWebPage(url)
-						},null,url)
-					},"json")
+					$.ajax({
+						"url":backend+"userdata/domain/add",
+						"data":{
+							"domain":getURL().domain,
+							"redirect":302,
+							"to":getURL().original,
+							"username":login.username
+						},
+						"method":"POST",
+						"dataType":"json",
+						"success":function(e){
+							var url
+							if(e.available){
+								url=getURL().short
+							}else{
+								url=getURL().original
+							}
+							showPrompt(null,function(){
+								openWebPage(url)
+							},null,url)
+						},
+						"error":error
+					})
 				})
 			}
 			document.getElementById("Delete").onclick=function(){
@@ -1260,19 +1274,23 @@
 					"您想删除此单词表吗？"
 				],function(){
 					if(currentItem){
-						if(login.username){
-							showLoading()
-							$.post(backend+"userdata/domain/del",{
+						showLoading()
+						$.ajax({
+							"url":backend+"userdata/domain/del",
+							"data":{
 								"domain":getURL().domain,
 								"username":login.username
-							},function(){
+							},
+							"method":"POST",
+							"success":function(){
 								savedWordList.list.splice(currentItem-1,1)
 								submit(closeTrue)
-							})
-						}else{
-							savedWordList.list.splice(currentItem-1,1)
-							submit(closeTrue)
-						}
+							},
+							"error":function(){
+								savedWordList.list.splice(currentItem-1,1)
+								submit(closeTrue)
+							}
+						})
 					}else{
 						closeTrue()
 					}

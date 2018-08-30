@@ -138,20 +138,26 @@
 										e="http://"+e
 									}
 									showLoading()
-									$.post(backend+"userdata/upload",{
-										"dir":"domain/",
-										"filename":"list",
-										"key1":myURL[index].name,
-										"key2":"to",
-										"text":e,
-										"url":url
-									},function(){
-										closeLoading()
-										showToast([
-											"Changes are saved",
-											"更改已保存"
-										])
-										load()
+									$.ajax({
+										"url":backend+"userdata/upload",
+										"data":{
+											"dir":"domain/",
+											"filename":"list",
+											"key1":myURL[index].name,
+											"key2":"to",
+											"text":e,
+											"url":url
+										},
+										"method":"POST",
+										"success":function(){
+											closeLoading()
+											showToast([
+												"Changes are saved",
+												"更改已保存"
+											])
+											load()
+										},
+										"error":error
 									})
 								},null,myURL[index].to)
 								closeMenu()
@@ -167,20 +173,27 @@
 									"您想删除 "+myURL[index].name+" 吗？"
 								],function(){
 									showLoading()
-									$.post(backend+"userdata/domain/del",{
-										"domain":myURL[index].name,
-										"username":login.username
-									},function(e){
-										if(e.success){
-											load()
-										}else{
-											closeLoading()
-											showAlert([
-												"Unable to delete "+myURL[index].name,
-												"无法删除 "+myURL[index].name
-											])
-										}
-									},"json")
+									$.ajax({
+										"url":backend+"userdata/domain/del",
+										"data":{
+											"domain":myURL[index].name,
+											"username":login.username
+										},
+										"method":"POST",
+										"dataType":"json",
+										"success":function(e){
+											if(e.success){
+												load()
+											}else{
+												closeLoading()
+												showAlert([
+													"Unable to delete "+myURL[index].name,
+													"无法删除 "+myURL[index].name
+												])
+											}
+										},
+										"error":error
+									})
 								})
 								closeMenu()
 							},
@@ -228,42 +241,49 @@
 							}
 							document.getElementById("OriginalURL").value=originalURL
 							showLoading()
-							$.post(backend+"userdata/domain/add",{
-								"domain":value,
-								"redirect":302,
-								"to":originalURL,
-								"username":login.username
-							},function(e){
-								if(e.success){
-									load()
-									showPrompt(null,function(){
-										openWebPage(originalURL)
-									},null,"http://rths.tk/"+value)
-									closeMenu()
-								}else{
-									closeLoading()
-									var extraInfo=""
-									switch(language){
-										case "SimplifiedChinese":
-										if(e.username=="admin"){
-											extraInfo="管理员"
-										}else if(e.username==login.username){
-											extraInfo="您"
+							$.ajax({
+								"url":backend+"userdata/domain/add",
+								"data":{
+									"domain":value,
+									"redirect":302,
+									"to":originalURL,
+									"username":login.username
+								},
+								"method":"POST",
+								"dataType":"json",
+								"success":function(e){
+									if(e.success){
+										load()
+										showPrompt(null,function(){
+											openWebPage(originalURL)
+										},null,"http://rths.tk/"+value)
+										closeMenu()
+									}else{
+										closeLoading()
+										var extraInfo=""
+										switch(language){
+											case "SimplifiedChinese":
+											if(e.username=="admin"){
+												extraInfo="管理员"
+											}else if(e.username==login.username){
+												extraInfo="您"
+											}
+											break
+											default:
+											if(e.username=="admin"){
+												extraInfo=" by the administrator"
+											}else if(e.username==login.username){
+												extraInfo=" by you"
+											}
 										}
-										break
-										default:
-										if(e.username=="admin"){
-											extraInfo=" by the administrator"
-										}else if(e.username==login.username){
-											extraInfo=" by you"
-										}
+										showAlert([
+											"This short URL has been taken"+extraInfo,
+											"此短网址已被"+extraInfo+"占用"
+										])
 									}
-									showAlert([
-										"This short URL has been taken"+extraInfo,
-										"此短网址已被"+extraInfo+"占用"
-									])
-								}
-							},"json")
+								},
+								"error":error
+							})
 						}
 					}else{
 						showAlert([
