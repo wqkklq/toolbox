@@ -815,12 +815,14 @@ function translate(query,from,to,callback){
 			"to":to,
 			"sign":sign
 		},
+		"timeout":timeout,
 		"success":function(data){
 			closeLoading()
 			if(data.trans_result&&callback){
 				callback(data.trans_result[0].dst,data)
 			}
-		}
+		},
+		"error":error
 	})
 }
 if(!isIE){

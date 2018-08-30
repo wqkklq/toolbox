@@ -167,47 +167,13 @@
 					"Enter a new word",
 					"输入新单词"
 				],function(newWord){
-					showPrompt([
-						"Enter the definition of the new word",
-						"输入新单词的释义"
-					],function(newDefinition){
-						addWord(newWord,newDefinition)
-					},null,null,function(){
-						if(document.getElementsByTagName("select")[0].value=="en"){
-							var wordWithoutSpace=newWord.replace(/\s/g,"").toLowerCase()
-							if(localStorage.getItem(wordWithoutSpace+"_CNDef")){
-								var CNDef=localStorage.getItem(wordWithoutSpace+"_CNDef"),
-								ENDef=localStorage.getItem(wordWithoutSpace+"_ENDef")
-								if(language=="SimplifiedChinese"&&CNDef){
-									addWord(newWord,CNDef)
-								}else if(ENDef){
-									addWord(newWord,ENDef)
-								}
-							}else{
-								getJSON("http://api.shanbay.com/bdc/search/?word="+encodeURIComponent(newWord),function(e){
-									if(e.msg=="SUCCESS"){
-										if(language=="SimplifiedChinese"&&e.data.cn_definition.defn){
-											addWord(newWord,e.data.cn_definition.defn)
-										}else if(e.data.en_definition.defn){
-											addWord(newWord,e.data.en_definition.defn)
-										}
-										localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
-										localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
-										localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
-									}else{
-										alert(e.msg)
-										add(newWord)
-									}
-								},function(){
-									showAlert([
-										"Unable to connect to the server",
-										"无法连接服务器"
-									],function(){
-										add(newWord)
-									})
-								})
-							}
-						}else{
+					var enterDef=function(){
+						showPrompt([
+							"Enter the definition of the new word",
+							"输入新单词的释义"
+						],function(newDefinition){
+							addWord(newWord,newDefinition)
+						},null,null,function(){
 							translate(newWord,document.getElementsByTagName("select")[0].value,(function(){
 								switch(language){
 									case "SimplifiedChinese":
@@ -218,10 +184,44 @@
 							})(),function(e){
 								addWord(newWord,e)
 							})
+						},function(){
+							add(newWord)
+						})
+					}
+					if(document.getElementsByTagName("select")[0].value=="en"){
+						var wordWithoutSpace=newWord.replace(/\s/g,"").toLowerCase()
+						if(localStorage.getItem(wordWithoutSpace+"_CNDef")){
+							var CNDef=localStorage.getItem(wordWithoutSpace+"_CNDef"),
+							ENDef=localStorage.getItem(wordWithoutSpace+"_ENDef")
+							if(language=="SimplifiedChinese"&&CNDef){
+								addWord(newWord,CNDef)
+							}else if(ENDef){
+								addWord(newWord,ENDef)
+							}
+						}else{
+							getJSON("http://api.shanbay.com/bdc/search/?word="+encodeURIComponent(newWord),function(e){
+								if(e.msg=="SUCCESS"){
+									if(language=="SimplifiedChinese"&&e.data.cn_definition.defn){
+										addWord(newWord,e.data.cn_definition.defn)
+									}else if(e.data.en_definition.defn){
+										addWord(newWord,e.data.en_definition.defn)
+									}
+									localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
+									localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
+									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
+								}else{
+									alert(e.msg)
+									if(e.msg.indexOf("未找到单词")!=-1){
+										enterDef()
+									}else{
+										add(newWord)
+									}
+								}
+							},enterDef)
 						}
-					},function(){
-						add(newWord)
-					})
+					}else{
+						enterDef()
+					}
 				},null,word)
 			}
 			function addMistake(word,definition){
