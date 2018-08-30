@@ -789,7 +789,7 @@ function showToast(text){
 		mui.toast(text[0])
 	}
 }
-function translate(query,from,to,callback){
+function translate(query,from,to,callback,negativeCallback){
 	var appid="20171109000093780",
 	key="ZR6EGbP8ZzwU7GookTvy",
 	salt=new Date().getTime()
@@ -822,7 +822,12 @@ function translate(query,from,to,callback){
 				callback(data.trans_result[0].dst,data)
 			}
 		},
-		"error":error
+		"error":function(){
+			error()
+			if(negativeCallback){
+				negativeCallback()
+			}
+		}
 	})
 }
 if(!isIE){

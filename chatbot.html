@@ -123,7 +123,7 @@
 							newChildDiv.innerText=e
 							document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
 							appendMsg()
-						})
+						},noConnection)
 					}
 				},noConnection)
 			}
@@ -169,7 +169,7 @@
 							if(isEnglish.test(document.getElementsByTagName("input")[0].value)&&login.username){
 								translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
 									chatbotReply(e)
-								})
+								},noConnection)
 							}else{
 								chatbotReply(document.getElementsByTagName("input")[0].value)
 							}
