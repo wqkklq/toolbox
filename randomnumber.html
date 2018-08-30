@@ -76,7 +76,6 @@
 			<fieldset>
 				<legend id="Names" class="menu"></legend>
 				<ul class="menu">
-					<li id="NamesSave" class="menu"></li>
 					<li id="NamesAdd" class="menu"></li>
 					<li id="NamesClear" class="menu"></li>
 				</ul>
@@ -122,7 +121,7 @@
 						savedNames.names.push(e)
 						loadNames(savedNames.names.length-1)
 						count()
-						addName()
+						submit(addName)
 					})
 				}else{
 					loginDialog()
@@ -263,7 +262,7 @@
 				intervalId=setInterval(randScroll,interval)
 				scrolling=true
 			}
-			function submit(){
+			function submit(callback){
 				savedNames.time=new Date().getTime()
 				localStorage.setItem("Names",JSON.stringify(savedNames))
 				showLoading()
@@ -278,6 +277,9 @@
 					"success":function(){
 						load()
 						closeLoading()
+						if(callback){
+							callback()
+						}
 						showToast([
 							"Changes are saved",
 							"更改已保存"
@@ -286,6 +288,9 @@
 					"error":function(){
 						load()
 						closeLoading()
+						if(callback){
+							callback()
+						}
 						showToast([
 							"Changes are saved locally",
 							"更改已本地保存"
@@ -418,7 +423,6 @@
 			document.getElementById("Clear").onclick=function(){
 				clearHistory()
 			}
-			document.getElementById("NamesSave").onclick=submit
 			document.getElementById("NamesAdd").onclick=addName
 			document.getElementById("NamesClear").onclick=function(){
 				showConfirm([
@@ -447,7 +451,6 @@
 				document.getElementById("Add").innerText="添加"
 				document.getElementById("Clear").innerText="清空"
 				document.getElementById("Names").innerText="名字"
-				document.getElementById("NamesSave").innerText="保存"
 				document.getElementById("NamesAdd").innerText="添加"
 				document.getElementById("NamesClear").innerText="清空"
 				break
@@ -467,7 +470,6 @@
 				document.getElementById("Add").innerText="Add"
 				document.getElementById("Clear").innerText="Clear"
 				document.getElementById("Names").innerText="Names"
-				document.getElementById("NamesSave").innerText="Save"
 				document.getElementById("NamesAdd").innerText="Add"
 				document.getElementById("NamesClear").innerText="Clear"
 			}
@@ -490,7 +492,6 @@
 				}
 				localStorage.setItem("Names",JSON.stringify(savedNames))
 			}
-			load()
 			if(login.username){
 				getJSON("userdata/names/"+login.username,function(e){
 					if(e.time>savedNames.time){
@@ -505,6 +506,8 @@
 						load()
 					}
 				},load,true)
+			}else{
+				load()
 			}
 			intervalId=setInterval(function(){
 				randScroll()

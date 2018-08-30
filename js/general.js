@@ -491,25 +491,11 @@ function loginRequired(callback,negativeCallback,offline){
 		if(callback){
 			callback()
 		}
-	}else if(!localStorage.getItem("Username")){
+	}else{
 		if(negativeCallback){
 			negativeCallback()
 		}
 		loginDialog()
-	}else{
-		if(offline){
-			if(callback){
-				callback()
-			}
-		}else{
-			if(negativeCallback){
-				negativeCallback()
-			}
-			showAlert([
-				"Unable to connect to the server",
-				"无法连接服务器"
-			])
-		}
 	}
 }
 function logOut(){
@@ -1027,9 +1013,6 @@ if(login.username){
 					"密码错误"
 				],logOut)
 			}
-		},
-		"error":function(){
-			login.username=null
 		}
 	})
 }else if(!header&&!searchURL("action")){
