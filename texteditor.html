@@ -738,7 +738,7 @@
 					"您想删除此文本文档吗？"
 				],function(){
 					if(currentItem){
-						if(savedText.text[currentItem-1].encrypt){
+						if(!login.username||savedText.text[currentItem-1].encrypt){
 							savedText.text.splice(currentItem-1,1)
 							submit(reload)
 						}else{

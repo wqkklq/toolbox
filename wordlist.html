@@ -1274,23 +1274,28 @@
 					"您想删除此单词表吗？"
 				],function(){
 					if(currentItem){
-						showLoading()
-						$.ajax({
-							"url":backend+"userdata/domain/del",
-							"data":{
-								"domain":getURL().domain,
-								"username":login.username
-							},
-							"method":"POST",
-							"success":function(){
-								savedWordList.list.splice(currentItem-1,1)
-								submit(closeTrue)
-							},
-							"error":function(){
-								savedWordList.list.splice(currentItem-1,1)
-								submit(closeTrue)
-							}
-						})
+						if(login.username){
+							showLoading()
+							$.ajax({
+								"url":backend+"userdata/domain/del",
+								"data":{
+									"domain":getURL().domain,
+									"username":login.username
+								},
+								"method":"POST",
+								"success":function(){
+									savedWordList.list.splice(currentItem-1,1)
+									submit(closeTrue)
+								},
+								"error":function(){
+									savedWordList.list.splice(currentItem-1,1)
+									submit(closeTrue)
+								}
+							})
+						}else{
+							savedWordList.list.splice(currentItem-1,1)
+							submit(closeTrue)
+						}
 					}else{
 						closeTrue()
 					}
