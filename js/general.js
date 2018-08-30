@@ -823,9 +823,11 @@ function translate(query,from,to,callback,negativeCallback){
 			}
 		},
 		"error":function(){
-			error()
 			if(negativeCallback){
+				closeLoading()
 				negativeCallback()
+			}else{
+				error()
 			}
 		}
 	})
