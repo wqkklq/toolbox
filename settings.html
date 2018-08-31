@@ -89,6 +89,7 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
+					showLoading()
 					$.ajax({
 						"url":backend+"userdata/verify",
 						"data":{
@@ -110,6 +111,7 @@
 									],function(confirmPassword){
 										if(confirmPassword==newPassword){
 											localStorage.setItem("Password",MD5(newPassword))
+											showLoading()
 											$.ajax({
 												"url":backend+"reset",
 												"data":{
@@ -118,12 +120,12 @@
 												},
 												"method":"POST",
 												"success":function(){
+													closeLoading()
 													showAlert([
 														"The password is changed",
 														"密码已更改"
-													],function(){
-														location.reload()
-													})
+													])
+													location.reload()
 												},
 												"error":error
 											})
@@ -136,6 +138,7 @@
 									},"password")
 								},"password")
 							}else{
+								closeLoading()
 								showAlert([
 									"Incorrect password",
 									"密码错误"
@@ -150,6 +153,7 @@
 					"Enter your current password",
 					"输入您的当前密码"
 				],function(e){
+					showLoading()
 					$.ajax({
 						"url":backend+"userdata/verify",
 						"data":{
@@ -165,6 +169,7 @@
 									"Enter the new email address",
 									"输入新电子邮箱地址"
 								],function(newEmail){
+									showLoading()
 									$.ajax({
 										"url":backend+"userdata/verify",
 										"data":{
@@ -176,6 +181,7 @@
 										"timeout":timeout,
 										"success":function(newVerify){
 											if(newVerify.index>0){
+												closeLoading()
 												showAlert([
 													"This email address has already been occupied",
 													"此电子邮箱地址已被占用"
@@ -187,6 +193,7 @@
 												],function(confirmEmail){
 													if(confirmEmail==newEmail){
 														localStorage.setItem("Email",newEmail)
+														showLoading()
 														$.ajax({
 															"url":backend+"reset",
 															"data":{
@@ -195,12 +202,12 @@
 															},
 															"method":"POST",
 															"success":function(){
+																closeLoading()
 																showAlert([
 																	"The email address is changed",
 																	"电子邮箱地址已更改"
-																],function(){
-																	location.reload()
-																})
+																])
+																location.reload()
 															},
 															"error":error
 														})
@@ -217,6 +224,7 @@
 									})
 								},"email")
 							}else{
+								closeLoading()
 								showAlert([
 									"Incorrect password",
 									"密码错误"

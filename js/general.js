@@ -325,39 +325,24 @@ function loginDialog(){
 								showAlert([
 									"Log in successfully",
 									"已成功登录"
-								],function(){
-									localStorage.setItem("Email",email)
-									localStorage.setItem("Password",password)
-									localStorage.setItem("Username",e.username)
-									location.reload()
-								})
+								])
+								localStorage.setItem("Email",email)
+								localStorage.setItem("Password",password)
+								localStorage.setItem("Username",e.username)
+								location.reload()
 							}else if(email!="admin"){
+								newPasswordInput.value=""
+								newConfirmPasswordInput.value=""
 								showConfirm([
 									"Incorrect password. Do you want to reset the password?",
 									"密码错误。您想重置密码吗？"
 								],function(){
-									newPasswordInput.value=""
-									newConfirmPasswordInput.value=""
-									var newPassword=(new Date().getTime()*(Math.round(Math.random()*99)+1)).toString(36)
-									$.ajax({
-										"url":backend+"reset",
-										"data":{
-											"index":e.index,
-											"password":newPassword,
-											"passwordmd5":MD5(newPassword)
-										},
-										"method":"POST",
-										"success":function(){
-											showAlert([
-												"We will send your new password to your email",
-												"我们会将您的新密码发送到您的邮箱"
-											])
-										},
-										"error":error
-									})
-								},function(){
-									newPasswordInput.value=""
-									newConfirmPasswordInput.value=""
+									var url="https://www.rthsoftware.cn/login?email="+encodeURIComponent(email)+"&page=resetpassword"
+									if(isApp){
+										openWebPage(url)
+									}else{
+										location.href=url
+									}
 								})
 							}
 						}else{
@@ -379,12 +364,11 @@ function loginDialog(){
 											showAlert([
 												"Log in successfully",
 												"已成功登录"
-											],function(){
-												localStorage.setItem("Email",email)
-												localStorage.setItem("Password",password)
-												localStorage.setItem("Username",username)
-												location.reload()
-											})
+											])
+											localStorage.setItem("Email",email)
+											localStorage.setItem("Password",password)
+											localStorage.setItem("Username",username)
+											location.reload()
 										},
 										"error":error
 									})
@@ -393,7 +377,8 @@ function loginDialog(){
 								showAlert([
 									"This user does not exist",
 									"此用户不存在"
-								],signUp)
+								])
+								signUp()
 							}
 						}
 					},
@@ -548,16 +533,13 @@ function searchURL(key,url){
 		return unescape(decodeURI(match[2]))
 	}
 }
-function showAlert(text,callback){
+function showAlert(text){
 	switch(language){
 		case "SimplifiedChinese":
 		alert(text[1])
 		break
 		default:
 		alert(text[0])
-	}
-	if(callback){
-		callback()
 	}
 }
 function showConfirm(text,positiveCallback,negativeCallback){
@@ -1020,7 +1002,8 @@ if(login.username){
 				showAlert([
 					"Incorrect password",
 					"密码错误"
-				],logOut)
+				])
+				logOut()
 			}
 		}
 	})

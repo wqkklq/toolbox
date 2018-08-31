@@ -296,11 +296,10 @@
 									showAlert([
 										"Unable to speak this word",
 										"无法朗读此单词"
-									],function(){
-										if(isWeb){
-											location.reload()
-										}
-									})
+									])
+									if(isWeb){
+										location.reload()
+									}
 								}
 								audio.play()
 							}else if(window.speechSynthesis){
@@ -426,7 +425,8 @@
 				showAlert([
 					"Correct rate: "+correctRate+"%",
 					"正确率："+correctRate+"%"
-				],reload)
+				])
+				reload()
 			}
 			function generateOrder(){
 				wordIndex=Math.round(Math.random()*currentList.length-1)+1
