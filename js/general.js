@@ -118,9 +118,6 @@ function calc(code){
 	return calcResult
 }
 function clearLocalStorage(){
-	if(localStorage.getItem("Username")&&!login.username){
-		login.username=localStorage.getItem("Username")
-	}
 	localStorage.clear()
 	if(login.username){
 		localStorage.setItem("Email",login.email)

@@ -667,32 +667,25 @@
 						if(url.indexOf("http")==-1){
 							url="http://"+url
 						}
-						if(/rthsoftware.cn|rths.tk|facebook.com|google.com|twitter.com|youtube.com/i.test(url)){
-							showAlert([
-								"Access denied",
-								"拒绝访问"
-							])
-						}else{
-							showLoading()
-							$.ajax({
-								"url":backend+"get",
-								"data":{
-									"time":new Date().getTime(),
-									"url":url,
-									"username":login.username
-								},
-								"timeout":timeout,
-								"success":function(e){
-									closeLoading()
-									document.getElementsByTagName("input")[0].value=url
-									setText(e)
-									document.getElementById("Created").getElementsByTagName("span")[0].innerText=
-									document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
-									applyItem(0)
-								},
-								"error":error
-							})
-						}
+						showLoading()
+						$.ajax({
+							"url":backend+"get",
+							"data":{
+								"time":new Date().getTime(),
+								"url":url,
+								"username":login.username
+							},
+							"timeout":timeout,
+							"success":function(e){
+								closeLoading()
+								document.getElementsByTagName("input")[0].value=url
+								setText(e)
+								document.getElementById("Created").getElementsByTagName("span")[0].innerText=
+								document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+								applyItem(0)
+							},
+							"error":error
+						})
 					})
 				})
 			}
