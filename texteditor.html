@@ -109,7 +109,15 @@
 				edit(true)
 			}
 			function count(){
-				document.getElementById("WordCount").getElementsByTagName("span")[0].innerText=(document.getElementsByTagName("textarea")[0].value.match(/[a-z]+|[\u4E00-\uFA29]/gi)||[]).length
+				var text=document.getElementsByTagName("textarea")[0].value
+				var all=(text.match(/[a-z]+|[\u4E00-\uFA29]/gi)||[]).length
+				var selectedText=text.substring(document.getElementsByTagName("textarea")[0].selectionStart,document.getElementsByTagName("textarea")[0].selectionEnd)
+				if(selectedText){
+					text=selectedText
+					document.getElementById("WordCount").getElementsByTagName("span")[0].innerText=(text.match(/[a-z]+|[\u4E00-\uFA29]/gi)||[]).length+"/"+all
+				}else{
+					document.getElementById("WordCount").getElementsByTagName("span")[0].innerText=all
+				}
 			}
 			function decodeUnicode(code){
 				if(code.indexOf("\\u")!=-1){
@@ -648,6 +656,11 @@
 					return false
 				}
 			}
+			document.getElementsByTagName("textarea")[0].onmouseup=function(){
+				setTimeout(count,1)
+			}
+			document.getElementsByTagName("textarea")[0].onselect=
+			document.getElementsByTagName("textarea")[0].ontouchstart=count
 			document.getElementsByClassName("text-view")[0].onclick=function(){
 				this.style.display="none"
 				document.getElementsByTagName("textarea")[0].style.display="block"
