@@ -234,7 +234,7 @@
 					}
 				})
 			}
-			function getToolbox(newWindow){
+			function getToolbox(){
 				var url
 				if(isAndroid){
 					if(navigator.language=="zh-CN"){
@@ -243,7 +243,6 @@
 						url="https://play.google.com/store/apps/details?id=shangzhenyang.rthtoolbox"
 					}
 				}else if(isiOS){
-					newWindow=false
 					url="https://itunes.apple.com/app/rth-toolbox/id1294479577"
 				}else if(isWindows){
 					url="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Windows_2.zip"
@@ -252,11 +251,7 @@
 				}else if(isLinux){
 					url="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Linux.zip"
 				}
-				if(newWindow){
-					open(url)
-				}else{
-					location.href=url
-				}
+				location.href=url
 			}
 			function loadSentence(){
 				if(savedQuote){
@@ -322,6 +317,17 @@
 					"error":closeLoading
 				})
 			}
+			window.onkeydown=function(e){
+				if(e.ctrlKey||e.metaKey){
+					switch(e.keyCode){
+						case 83:
+						if(!isApp){
+							getToolbox()
+						}
+						return false
+					}
+				}
+			}
 			for(var i=0;i<menu.length;i++){
 				menu[i].onclick=function(){
 					openWindow(this.id.toLowerCase())
@@ -330,9 +336,7 @@
 			document.getElementsByClassName("mui-icon-settings")[0].onclick=function(){
 				openWindow("settings")
 			}
-			document.getElementsByTagName("button")[0].onclick=function(){
-				getToolbox(true)
-			}
+			document.getElementsByTagName("button")[0].onclick=getToolbox
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="RTH 工具箱"
@@ -389,9 +393,7 @@
 					showConfirm([
 						"Do you want to download RTH Toolbox?",
 						"您想下载 RTH 工具箱吗？"
-					],function(){
-						getToolbox(false)
-					},function(){
+					],getToolbox,function(){
 						if(window.history.length>1){
 							history.go(-1)
 						}else{
@@ -431,9 +433,7 @@
 							showConfirm([
 								"There is an update available. Do you want to update?",
 								"有更新可用。您想更新吗？"
-							],function(){
-								getToolbox(false)
-							})
+							],getToolbox)
 						}
 					}
 				},null,true)
