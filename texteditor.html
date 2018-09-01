@@ -979,6 +979,7 @@
 			if(isEdge||isLinux||isMobile){
 				document.getElementById("SaveAs").style.display="none"
 			}
+			load()
 			if(searchURL("index")&&searchURL("username")){
 				loginRequired(function(){
 					mui.back=function(){
@@ -1000,7 +1001,6 @@
 								document.getElementById("Created").getElementsByTagName("span")[0].innerText=
 								document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
 								applyItem(0)
-								load()
 							}else if(e.error){
 								switch(e.error){
 									case 403:
@@ -1015,17 +1015,11 @@
 										"此文本文档已被删除"
 									])
 								}
-								load()
 							}
 						},
-						"error":function(){
-							closeLoading()
-							load()
-						}
+						"error":closeLoading
 					})
-				})
-			}else{
-				load()
+				},null,null,true)
 			}
 		</script>
 	</body>

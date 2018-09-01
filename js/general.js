@@ -472,7 +472,7 @@ function loginDialog(){
 		},25)
 	}
 }
-function loginRequired(callback,negativeCallback,offline){
+function loginRequired(callback,negativeCallback,offline,redirect){
 	if(login.username){
 		if(callback){
 			callback()
@@ -481,10 +481,10 @@ function loginRequired(callback,negativeCallback,offline){
 		if(negativeCallback){
 			negativeCallback()
 		}
-		if(isApp){
-			loginDialog()
-		}else{
+		if(redirect&&isWeb){
 			location.href="../login"
+		}else{
+			loginDialog()
 		}
 	}
 }

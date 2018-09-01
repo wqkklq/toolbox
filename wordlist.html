@@ -1438,6 +1438,7 @@
 			if(!window.speechSynthesis){
 				document.getElementById("SpeakDefinitionsLi").style.display="none"
 			}
+			load()
 			if(searchURL("index")&&searchURL("username")){
 				loginRequired(function(){
 					mui.back=function(){
@@ -1461,12 +1462,9 @@
 								"This word list has been deleted",
 								"此单词表已被删除"
 							])
-							load()
 						}
 					})
-				})
-			}else{
-				load()
+				},null,null,true)
 			}
 		</script>
 	</body>
