@@ -18,6 +18,7 @@ isWeb=location.href.indexOf("https")!=-1,
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
+lastUpdated=new Date("2018/9/1").toLocaleDateString(),
 loadingId,
 login={
 	"email":localStorage.getItem("Email"),
@@ -27,7 +28,7 @@ login={
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 timeout=10000,
-ver="13.6"
+ver="13.7"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -480,7 +481,11 @@ function loginRequired(callback,negativeCallback,offline){
 		if(negativeCallback){
 			negativeCallback()
 		}
-		loginDialog()
+		if(isApp){
+			loginDialog()
+		}else{
+			location.href="../login"
+		}
 	}
 }
 function logOut(){

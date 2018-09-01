@@ -472,6 +472,34 @@
 					}
 				}
 				localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
+				loadMyWordList()
+				if(login.username){
+					getJSON("userdata/wordlist/"+login.username,function(e){
+						if(e.username==savedWordList.username){
+							if(e.time>savedWordList.time){
+								savedWordList=e
+							}
+						}else{
+							savedWordList.list=savedWordList.list.concat(e.list)
+							savedWordList.time=new Date().getTime()
+							savedWordList.username=login.username
+						}
+						if(JSON.stringify(savedWordList)!=JSON.stringify(e)&&savedWordList.list.length>0){
+							submit(loadMyWordList)
+						}else if(savedWordList.list.length<=0){
+							savedWordList=e
+							loadMyWordList()
+						}else{
+							loadMyWordList()
+						}
+					},function(e){
+						if(e.status!=0&&savedWordList.list.length>0){
+							submit(loadMyWordList)
+						}else{
+							loadMyWordList()
+						}
+					})
+				}
 				var openedWordList=localStorage.getItem("WordList")
 				if(openedWordList&&openedWordList!="undefined"){
 					currentItem=localStorage.getItem("WordListCurrentItem")*1
@@ -483,34 +511,6 @@
 					}
 					openDiv("edit")
 				}else{
-					loadMyWordList()
-					if(login.username){
-						getJSON("userdata/wordlist/"+login.username,function(e){
-							if(e.username==savedWordList.username){
-								if(e.time>savedWordList.time){
-									savedWordList=e
-								}
-							}else{
-								savedWordList.list=savedWordList.list.concat(e.list)
-								savedWordList.time=new Date().getTime()
-								savedWordList.username=login.username
-							}
-							if(JSON.stringify(savedWordList)!=JSON.stringify(e)&&savedWordList.list.length>0){
-								submit(loadMyWordList)
-							}else if(savedWordList.list.length<=0){
-								savedWordList=e
-								loadMyWordList()
-							}else{
-								loadMyWordList()
-							}
-						},function(e){
-							if(e.status!=0&&savedWordList.list.length>0){
-								submit(loadMyWordList)
-							}else{
-								loadMyWordList()
-							}
-						})
-					}
 					var friendEmail=localStorage.getItem("FriendEmail")
 					if(friendEmail&&friendEmail){
 						$.ajax({
@@ -1122,12 +1122,10 @@
 				lookUp()
 			}
 			document.getElementById("NewWL").onclick=function(){
-				if(localStorage.getItem("Username")){
+				loginRequired(function(){
 					document.getElementById("TitleInput").value=""
 					openDiv("edit")
-				}else{
-					loginDialog()
-				}
+				})
 			}
 			document.getElementById("Open").onclick=openDialog
 			document.getElementById("SharingSettings").onclick=function(){
@@ -1441,29 +1439,31 @@
 				document.getElementById("SpeakDefinitionsLi").style.display="none"
 			}
 			if(searchURL("index")&&searchURL("username")){
-				mui.back=function(){
-					openWindow("index")
-				}
-				showLoading()
-				$.ajax({
-					"url":backend+"userdata/getwordlist",
-					"data":{
-						"index":searchURL("index"),
-						"username":searchURL("username")
-					},
-					"dataType":"json",
-					"success":function(e){
-						closeLoading()
-						applyItem(0,e)
-					},
-					"error":function(){
-						closeLoading()
-						showAlert([
-							"This word list has been deleted",
-							"此单词表已被删除"
-						])
-						load()
+				loginRequired(function(){
+					mui.back=function(){
+						openWindow("index")
 					}
+					showLoading()
+					$.ajax({
+						"url":backend+"userdata/getwordlist",
+						"data":{
+							"index":searchURL("index"),
+							"username":searchURL("username")
+						},
+						"dataType":"json",
+						"success":function(e){
+							closeLoading()
+							applyItem(0,e)
+						},
+						"error":function(){
+							closeLoading()
+							showAlert([
+								"This word list has been deleted",
+								"此单词表已被删除"
+							])
+							load()
+						}
+					})
 				})
 			}else{
 				load()

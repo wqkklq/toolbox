@@ -363,13 +363,11 @@
 			}
 			function newDoc(){
 				if(!document.getElementsByClassName("start")[0].style.display){
-					if(localStorage.getItem("Username")){
+					loginRequired(function(){
 						edit(true)
 						document.getElementById("Created").getElementsByTagName("span")[0].innerText=
 						document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
-					}else{
-						loginDialog()
-					}
+					})
 				}else{
 					if(document.getElementsByTagName("textarea")[0].value){
 						showConfirm([
@@ -518,7 +516,9 @@
 								applyItem(currentItem)
 							})
 						}catch(e){
-							savedText.text=[JSON.parse(savedText.text)]
+							if(savedText&&savedText.text){
+								savedText.text=[JSON.parse(savedText.text)]
+							}
 						}
 					}
 				},closeLoading)
@@ -980,46 +980,49 @@
 				document.getElementById("SaveAs").style.display="none"
 			}
 			if(searchURL("index")&&searchURL("username")){
-				mui.back=function(){
-					openWindow("index")
-				}
-				showLoading()
-				$.ajax({
-					"url":backend+"getpage",
-					"data":{
-						"index":searchURL("index"),
-						"username":searchURL("username")
-					},
-					"dataType":"json",
-					"success":function(e){
-						closeLoading()
-						if(e.text){
-							document.getElementsByTagName("input")[0].value=e.title
-							setText(e.text)
-							document.getElementById("Created").getElementsByTagName("span")[0].innerText=
-							document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
-							applyItem(0)
-						}else if(e.error){
-							switch(e.error){
-								case 403:
-								showAlert([
-									"This text document has been encrypted",
-									"此文本文档已被加密"
-								])
-								break
-								case 404:
-								showAlert([
-									"This text document has been deleted",
-									"此文本文档已被删除"
-								])
+				loginRequired(function(){
+					mui.back=function(){
+						openWindow("index")
+					}
+					showLoading()
+					$.ajax({
+						"url":backend+"getpage",
+						"data":{
+							"index":searchURL("index"),
+							"username":searchURL("username")
+						},
+						"dataType":"json",
+						"success":function(e){
+							closeLoading()
+							if(e.text){
+								document.getElementsByTagName("input")[0].value=e.title
+								setText(e.text)
+								document.getElementById("Created").getElementsByTagName("span")[0].innerText=
+								document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+								applyItem(0)
+								load()
+							}else if(e.error){
+								switch(e.error){
+									case 403:
+									showAlert([
+										"This text document has been encrypted",
+										"此文本文档已被加密"
+									])
+									break
+									case 404:
+									showAlert([
+										"This text document has been deleted",
+										"此文本文档已被删除"
+									])
+								}
+								load()
 							}
+						},
+						"error":function(){
+							closeLoading()
 							load()
 						}
-					},
-					"error":function(){
-						closeLoading()
-						load()
-					}
+					})
 				})
 			}else{
 				load()

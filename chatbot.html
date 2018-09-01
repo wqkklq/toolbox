@@ -147,50 +147,46 @@
 				scrollTo(0,document.body.scrollHeight)
 			}
 			document.getElementById("SendMessage").onclick=function(){
-				if(localStorage.getItem("Username")){
-					var sendMsg=function(e){
-						lastBotInfo=e
-						var newMyDiv=document.createElement("div"),
-						newMyChildDiv=document.createElement("div")
-						newMyDiv.classList.add("msg-row")
-						newMyChildDiv.classList.add("msg")
-						newMyChildDiv.classList.add("msg-me")
-						newMyChildDiv.innerText=document.getElementsByTagName("input")[0].value
-						newMyDiv.appendChild(newMyChildDiv)
-						document.getElementsByClassName("mui-content")[0].appendChild(newMyDiv)
-						scrollTo(0,document.body.scrollHeight)
-						switch(language){
-							case "SimplifiedChinese":
-							document.getElementsByClassName("mui-title")[0].innerText="对方正在输入"
+				var sendMsg=function(e){
+					lastBotInfo=e
+					var newMyDiv=document.createElement("div"),
+					newMyChildDiv=document.createElement("div")
+					newMyDiv.classList.add("msg-row")
+					newMyChildDiv.classList.add("msg")
+					newMyChildDiv.classList.add("msg-me")
+					newMyChildDiv.innerText=document.getElementsByTagName("input")[0].value
+					newMyDiv.appendChild(newMyChildDiv)
+					document.getElementsByClassName("mui-content")[0].appendChild(newMyDiv)
+					scrollTo(0,document.body.scrollHeight)
+					switch(language){
+						case "SimplifiedChinese":
+						document.getElementsByClassName("mui-title")[0].innerText="对方正在输入"
+						chatbotReply(document.getElementsByTagName("input")[0].value)
+						break
+						default:
+						document.getElementsByClassName("mui-title")[0].innerText="Typing"
+						if(isEnglish.test(document.getElementsByTagName("input")[0].value)&&login.username){
+							translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
+								chatbotReply(e)
+							},noConnection)
+						}else{
 							chatbotReply(document.getElementsByTagName("input")[0].value)
-							break
-							default:
-							document.getElementsByClassName("mui-title")[0].innerText="Typing"
-							if(isEnglish.test(document.getElementsByTagName("input")[0].value)&&login.username){
-								translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
-									chatbotReply(e)
-								},noConnection)
-							}else{
-								chatbotReply(document.getElementsByTagName("input")[0].value)
-							}
 						}
 					}
+				}
+				showPrompt([
+					"Enter the message",
+					"输入消息"
+				],function(e){
+					sendMsg(e)
+				},null,null,function(){
 					showPrompt([
 						"Enter the message",
 						"输入消息"
 					],function(e){
 						sendMsg(e)
-					},null,null,function(){
-						showPrompt([
-							"Enter the message",
-							"输入消息"
-						],function(e){
-							sendMsg(e)
-						},null,lastBotInfo)
-					})
-				}else{
-					loginDialog()
-				}
+					},null,lastBotInfo)
+				})
 			}
 			switch(language){
 				case "SimplifiedChinese":

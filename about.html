@@ -55,7 +55,6 @@
 		<script src="js/jquery.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
-			var date=new Date("2018/8/31").toLocaleDateString()
 			document.getElementById("Feedback").onclick=function(){
 				openWindow("feedback")
 			}
@@ -92,7 +91,7 @@
 				document.title="关于"
 				document.getElementsByClassName("app-name")[0].innerText="RTH 工具箱"
 				document.getElementById("Version").innerText="版本："+ver
-				document.getElementById("LastUpdated").innerText="更新日期："+date
+				document.getElementById("LastUpdated").innerText="更新日期："+lastUpdated
 				document.getElementById("Developer").innerText="开发者：尚臻"
 				document.getElementById("Feedback").innerText="反馈"
 				document.getElementById("Donate").innerText="捐赠"
@@ -104,7 +103,7 @@
 				document.title="About"
 				document.getElementsByClassName("app-name")[0].innerText="RTH Toolbox"
 				document.getElementById("Version").innerText="Version: "+ver
-				document.getElementById("LastUpdated").innerText="Last Updated: "+date
+				document.getElementById("LastUpdated").innerText="Last Updated: "+lastUpdated
 				document.getElementById("Developer").innerText="Developer: Shangzhen"
 				document.getElementById("Feedback").innerText="Feedback"
 				document.getElementById("Donate").innerText="Donate"

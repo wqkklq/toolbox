@@ -113,7 +113,7 @@
 				}
 			}
 			function addName(){
-				if(localStorage.getItem("Username")){
+				loginRequired(function(){
 					showPrompt([
 						"Enter a person's name",
 						"输入一个人的名字"
@@ -123,9 +123,7 @@
 						count()
 						submit(addName)
 					})
-				}else{
-					loginDialog()
-				}
+				})
 			}
 			function clearHistory(negativeCallback){
 				if(document.getElementById("HistoryUl").innerHTML){

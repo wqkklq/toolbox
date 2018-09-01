@@ -132,7 +132,7 @@
 				}
 			}
 			document.getElementById("Save").onclick=function(){
-				if(localStorage.getItem("Username")){
+				loginRequired(function(){
 					if(dateCountdown){
 						dateCountdown.date=new Date(document.getElementById("Date").value).getTime()
 						dateCountdown.name=document.getElementById("Name").value
@@ -145,9 +145,7 @@
 						}
 					}
 					submit()
-				}else{
-					loginDialog()
-				}
+				})
 			}
 			document.getElementById("Delete").onclick=function(){
 				document.getElementById("Name").value=
