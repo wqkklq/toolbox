@@ -18,7 +18,7 @@ isWeb=location.href.indexOf("https")!=-1,
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/1").toLocaleDateString(),
+lastUpdated=new Date("2018/9/2").toLocaleDateString(),
 loadingId,
 login={
 	"email":localStorage.getItem("Email"),
@@ -821,7 +821,7 @@ function translate(query,from,to,callback,negativeCallback){
 }
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){
-		if(msg!="Script error."&&lineNo!=1){
+		if(msg!="Script error."&&lineNo!=1&&msg.indexOf("RangeError")==-1){
 			var text=msg+" at "+url+" : "+lineNo
 			if(isApp||login.username){
 				window.onerror=null
