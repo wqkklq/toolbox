@@ -36,6 +36,12 @@ footer div:active,
 	background-color:rgb(235,235,235);
 	transition:all .25s;
 }
+footer .mui-btn-link{
+	bottom:45px;
+	position:fixed;
+	transition:all .25s;
+	width:100%;
+}
 input,
 textarea,
 .mui-input-row label{
