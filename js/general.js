@@ -818,7 +818,7 @@ function translate(query,from,to,callback,negativeCallback){
 }
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){
-		if(msg!="Script error."&&lineNo!=1&&msg.indexOf("RangeError")==-1){
+		if(msg!="Script error."&&lineNo!=1){
 			var text=msg+" at "+url+" : "+lineNo
 			if(isApp||login.username){
 				window.onerror=null

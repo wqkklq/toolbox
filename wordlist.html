@@ -619,7 +619,7 @@
 			}
 			function loadMyWordList(){
 				try{
-					if(savedWordList&&savedWordList.list){
+					if(savedWordList&&savedWordList.list&&savedWordList.list[0]){
 						document.getElementById("MyWordList").innerHTML=""
 						for(var i=savedWordList.list.length-1;i>=0;i--){
 							var newLi=document.createElement("li")

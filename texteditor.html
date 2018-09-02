@@ -314,7 +314,7 @@
 				}
 				localStorage.setItem("SavedText",JSON.stringify(savedText))
 				var loadSavedText=function(){
-					if(savedText&&savedText.text){
+					if(savedText&&savedText.text&&savedText.text[0]){
 						document.getElementById("SavedText").innerHTML=""
 						for(var i=savedText.text.length-1;i>=0;i--){
 							var newLi=document.createElement("li")
