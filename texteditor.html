@@ -509,13 +509,23 @@
 						},JSON.stringify(savedText.text[currentItem-1]),"text",currentItem)
 					}else{
 						try{
-							savedText.text.push({
-								"created":new Date().getTime(),
-								"encrypt":encrypt,
-								"text":text,
-								"time":time,
-								"title":document.getElementsByTagName("input")[0].value
-							})
+							if(savedText.text[0]){
+								savedText.text.push({
+									"created":new Date().getTime(),
+									"encrypt":encrypt,
+									"text":text,
+									"time":time,
+									"title":document.getElementsByTagName("input")[0].value
+								})
+							}else{
+								savedText.text=[{
+									"created":new Date().getTime(),
+									"encrypt":encrypt,
+									"text":text,
+									"time":time,
+									"title":document.getElementsByTagName("input")[0].value
+								}]
+							}
 							currentItem=savedText.text.length
 							submit(function(){
 								if(callback){

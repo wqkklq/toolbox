@@ -944,11 +944,19 @@
 							applyItem(currentItem,null,willReload)
 						},JSON.stringify(savedWordList.list[currentItem-1]),"list",currentItem)
 					}else{
-						savedWordList.list.push({
-							"created":new Date().getTime(),
-							"list":currentList,
-							"title":document.getElementById("TitleInput").value
-						})
+						if(savedWordList.list[0]){
+							savedWordList.list.push({
+								"created":new Date().getTime(),
+								"list":currentList,
+								"title":document.getElementById("TitleInput").value
+							})
+						}else{
+							savedWordList.list=[{
+								"created":new Date().getTime(),
+								"list":currentList,
+								"title":document.getElementById("TitleInput").value
+							}]
+						}
 						currentItem=savedWordList.list.length
 						submit(function(){
 							if(callback){
