@@ -194,7 +194,7 @@
 				document.getElementById("Previous").innerText="Previous"
 				document.getElementById("Next").innerText="Next"
 			}
-			if(openedWordList){
+			if(!wordURL&&openedWordList){
 				window.onkeydown=function(e){
 					switch(e.keyCode){
 						case 32:
@@ -218,7 +218,7 @@
 				if(wordURL){
 					lookUp(wordURL)
 				}else{
-					lookUp("undefined")
+					lookUp("morning")
 				}
 			}
 		</script>
