@@ -5,8 +5,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<link href="css/mui.min.css" rel="stylesheet">
-		<link href="css/general.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/general.css">
 		<style>
 			.mui-btn{
 				margin:15px 0px;
@@ -46,7 +46,6 @@
 		</div>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
-		<script src="js/jquery.min.js"></script>
 		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
@@ -59,14 +58,13 @@
 				loadPreview()
 				if(login.username){
 					showLoading()
-					$.ajax({
+					ajax({
 						"url":backend+"userdata/domain/get",
 						"data":{
 							"shorturl":true,
 							"username":login.username
 						},
 						"dataType":"json",
-						"timeout":timeout,
 						"success":function(e){
 							closeLoading()
 							myURL=e
@@ -109,16 +107,27 @@
 							]
 						},{
 							"onclick":function(){
-								getJSON(url+"?get=open",function(e){
-									var time=" time"
-									if(Math.abs(e.open)>1){
-										time+="s"
-									}
-									showAlert([
-										"This link has been opened "+e.open+time,
-										"此链接已被打开 "+e.open+" 次"
-									])
-								},error)
+								showLoading()
+								ajax({
+									"url":url,
+									"data":{
+										"get":"open"
+									},
+									"dataType":"json",
+									"crossOrigin":true,
+									"success":function(e){
+										closeLoading()
+										var time=" time"
+										if(Math.abs(e.open)>1){
+											time+="s"
+										}
+										showAlert([
+											"This link has been opened "+e.open+time,
+											"此链接已被打开 "+e.open+" 次"
+										])
+									},
+									"error":error
+								})
 								closeMenu()
 							},
 							"text":[
@@ -138,7 +147,7 @@
 										e="http://"+e
 									}
 									showLoading()
-									$.ajax({
+									ajax({
 										"url":backend+"userdata/upload",
 										"data":{
 											"dir":"domain/",
@@ -173,7 +182,7 @@
 									"您想删除 "+myURL[index].name+" 吗？"
 								],function(){
 									showLoading()
-									$.ajax({
+									ajax({
 										"url":backend+"userdata/domain/del",
 										"data":{
 											"domain":myURL[index].name,
@@ -241,7 +250,7 @@
 							}
 							document.getElementById("OriginalURL").value=originalURL
 							showLoading()
-							$.ajax({
+							ajax({
 								"url":backend+"userdata/domain/add",
 								"data":{
 									"domain":value,

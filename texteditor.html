@@ -5,8 +5,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<link href="css/mui.min.css" rel="stylesheet">
-		<link href="css/general.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/general.css">
 		<style>
 			footer{
 				display:none;
@@ -94,7 +94,6 @@
 		<input class="open-file" type="file">
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
-		<script src="js/jquery.min.js"></script>
 		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
@@ -223,7 +222,7 @@
 							showLoading()
 							save(function(){
 								showLoading()
-								$.ajax({
+								ajax({
 									"url":backend+"userdata/domain/add",
 									"data":{
 										"domain":getURL().domain,
@@ -342,7 +341,7 @@
 				}
 				loadSavedText()
 				if(login.username){
-					getJSON("userdata/text/"+login.username,function(e){
+					getUserData("text",function(e){
 						if(e.username==savedText.username){
 							if(e.time>savedText.time){
 								savedText=e
@@ -577,7 +576,7 @@
 					postData["url"]=getURL().short
 				}
 				showLoading()
-				$.ajax({
+				ajax({
 					"url":backend+"userdata/upload",
 					"data":postData,
 					"method":"POST",
@@ -696,14 +695,12 @@
 							url="http://"+url
 						}
 						showLoading()
-						$.ajax({
+						ajax({
 							"url":backend+"get",
 							"data":{
-								"time":new Date().getTime(),
 								"url":url,
 								"username":login.username
 							},
-							"timeout":timeout,
 							"success":function(e){
 								closeLoading()
 								document.getElementsByTagName("input")[0].value=url
@@ -773,7 +770,7 @@
 							submit(reload)
 						}else{
 							showLoading()
-							$.ajax({
+							ajax({
 								"url":backend+"userdata/domain/del",
 								"data":{
 									"domain":getURL().domain,
@@ -1007,7 +1004,7 @@
 						openWindow("index")
 					}
 					showLoading()
-					$.ajax({
+					ajax({
 						"url":backend+"getpage",
 						"data":{
 							"index":searchURL("index"),

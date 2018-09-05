@@ -5,8 +5,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<link href="css/mui.min.css" rel="stylesheet">
-		<link href="css/general.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/general.css">
 		<style>
 			footer div{
 				width:50%;
@@ -36,7 +36,6 @@
 		</footer>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
-		<script src="js/jquery.min.js"></script>
 		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
@@ -101,18 +100,28 @@
 						document.getElementById("Translate").innerText=e
 						dictChanged()
 					})
-					getJSON("http://api.shanbay.com/bdc/search/?word="+encodeURIComponent(word),function(e){
-						if(e.msg=="SUCCESS"){
-							document.getElementById("Pronunciation").innerText=e.data.pronunciation
-							document.getElementById("CNDefinition").innerText=e.data.cn_definition.defn
-							document.getElementById("ENDefinition").innerText=e.data.en_definition.defn
-							dictChanged()
-							if(wordWithoutSpace.indexOf(" ")==-1){
-								localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
-								localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
-								localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
+					showLoading()
+					ajax({
+						"url":"http://api.shanbay.com/bdc/search/",
+						"data":{
+							"word":word
+						},
+						"dataType":"json",
+						"crossOrigin":true,
+						"success":function(e){
+							closeLoading()
+							if(e.msg=="SUCCESS"){
+								document.getElementById("Pronunciation").innerText=e.data.pronunciation
+								document.getElementById("CNDefinition").innerText=e.data.cn_definition.defn
+								document.getElementById("ENDefinition").innerText=e.data.en_definition.defn
+								dictChanged()
+								if(wordWithoutSpace.indexOf(" ")==-1){
+									localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
+									localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
+									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
+								}
+								translateENDef()
 							}
-							translateENDef()
 						}
 					})
 				}

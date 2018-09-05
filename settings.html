@@ -5,8 +5,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<link href="css/mui.min.css" rel="stylesheet">
-		<link href="css/general.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/general.css">
 		<style>
 			footer div{
 				width:100%;
@@ -66,7 +66,6 @@
 		</footer>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
-		<script src="js/jquery.min.js"></script>
 		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
@@ -90,15 +89,13 @@
 					"输入您的当前密码"
 				],function(e){
 					showLoading()
-					$.ajax({
+					ajax({
 						"url":backend+"userdata/verify",
 						"data":{
 							"email":login.email,
-							"password":MD5(e),
-							"time":new Date().getTime()
+							"password":MD5(e)
 						},
 						"dataType":"json",
-						"timeout":timeout,
 						"success":function(verifyResult){
 							if(verifyResult.pass){
 								showPrompt([
@@ -112,7 +109,7 @@
 										if(confirmPassword==newPassword){
 											localStorage.setItem("Password",MD5(newPassword))
 											showLoading()
-											$.ajax({
+											ajax({
 												"url":backend+"reset",
 												"data":{
 													"index":verifyResult.index,
@@ -154,15 +151,13 @@
 					"输入您的当前密码"
 				],function(e){
 					showLoading()
-					$.ajax({
+					ajax({
 						"url":backend+"userdata/verify",
 						"data":{
 							"email":login.email,
-							"password":MD5(e),
-							"time":new Date().getTime()
+							"password":MD5(e)
 						},
 						"dataType":"json",
-						"timeout":timeout,
 						"success":function(verifyResult){
 							if(verifyResult.pass){
 								showPrompt([
@@ -170,15 +165,13 @@
 									"输入新电子邮箱地址"
 								],function(newEmail){
 									showLoading()
-									$.ajax({
+									ajax({
 										"url":backend+"userdata/verify",
 										"data":{
 											"email":newEmail,
-											"password":login.password,
-											"time":new Date().getTime()
+											"password":login.password
 										},
 										"dataType":"json",
-										"timeout":timeout,
 										"success":function(newVerify){
 											if(newVerify.index>0){
 												closeLoading()
@@ -194,7 +187,7 @@
 													if(confirmEmail==newEmail){
 														localStorage.setItem("Email",newEmail)
 														showLoading()
-														$.ajax({
+														ajax({
 															"url":backend+"reset",
 															"data":{
 																"index":verifyResult.index,
@@ -245,18 +238,16 @@
 						"输入您的当前密码"
 					],function(e){
 						showLoading()
-						$.ajax({
+						ajax({
 							"url":backend+"userdata/verify",
 							"data":{
 								"email":login.email,
-								"password":MD5(e),
-								"time":new Date().getTime()
+								"password":MD5(e)
 							},
 							"dataType":"json",
-							"timeout":timeout,
 							"success":function(verifyResult){
 								if(verifyResult.pass){
-									$.ajax({
+									ajax({
 										"url":backend+"userdata/remove",
 										"data":{
 											"index":verifyResult.index,

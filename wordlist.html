@@ -5,8 +5,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<link href="css/mui.min.css" rel="stylesheet">
-		<link href="css/general.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/general.css">
 		<style>
 			footer,
 			.quiz,
@@ -145,7 +145,6 @@
 		<input class="open-file" type="file">
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
-		<script src="js/jquery.min.js"></script>
 		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
@@ -199,25 +198,36 @@
 								addWord(newWord,ENDef)
 							}
 						}else{
-							getJSON("http://api.shanbay.com/bdc/search/?word="+encodeURIComponent(newWord),function(e){
-								if(e.msg=="SUCCESS"){
-									if(language=="SimplifiedChinese"&&e.data.cn_definition.defn){
-										addWord(newWord,e.data.cn_definition.defn)
-									}else if(e.data.en_definition.defn){
-										addWord(newWord,e.data.en_definition.defn)
-									}
-									localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
-									localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
-									localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
-								}else{
-									alert(e.msg)
-									if(e.msg.indexOf("未找到单词")!=-1){
-										enterDef()
+							showLoading()
+							ajax({
+								"url":"http://api.shanbay.com/bdc/search/",
+								"data":{
+									"word":newWord
+								},
+								"dataType":"json",
+								"crossOrigin":true,
+								"success":function(e){
+									closeLoading()
+									if(e.msg=="SUCCESS"){
+										if(language=="SimplifiedChinese"&&e.data.cn_definition.defn){
+											addWord(newWord,e.data.cn_definition.defn)
+										}else if(e.data.en_definition.defn){
+											addWord(newWord,e.data.en_definition.defn)
+										}
+										localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
+										localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
+										localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
 									}else{
-										add(newWord)
+										alert(e.msg)
+										if(e.msg.indexOf("未找到单词")!=-1){
+											enterDef()
+										}else{
+											add(newWord)
+										}
 									}
-								}
-							},enterDef)
+								},
+								"error":enterDef
+							})
 						}
 					}else{
 						enterDef()
@@ -474,7 +484,7 @@
 				localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
 				loadMyWordList()
 				if(login.username){
-					getJSON("userdata/wordlist/"+login.username,function(e){
+					getUserData("wordlist",function(e){
 						if(e.username==savedWordList.username){
 							if(e.time>savedWordList.time){
 								savedWordList=e
@@ -513,13 +523,12 @@
 				}else{
 					var friendEmail=localStorage.getItem("FriendEmail")
 					if(friendEmail&&friendEmail){
-						$.ajax({
+						ajax({
 							"url":backend+"userdata/getwordlist",
 							"data":{
 								"email":friendEmail,
 							},
 							"dataType":"json",
-							"timeout":timeout,
 							"success":function(e){
 								for(var i=e.length-1;i>=0;i--){
 									var newLi=document.createElement("li")
@@ -546,7 +555,7 @@
 									}
 									newLi.setAttribute("number",i+1)
 									newLi.onclick=function(){
-										$.ajax({
+										ajax({
 											"url":backend+"userdata/getwordlist",
 											"data":{
 												"email":friendEmail,
@@ -570,14 +579,13 @@
 							}
 						})
 					}
-					$.ajax({
+					ajax({
 						"url":backend+"userdata/getwordlist",
 						"data":{
 							"language":language,
 							"username":"admin"
 						},
 						"dataType":"json",
-						"timeout":timeout,
 						"success":function(e){
 							var count=0
 							for(var i=e.length-1;i>=0;i--){
@@ -598,7 +606,7 @@
 								}
 								newLi.setAttribute("number",e[i].index+1)
 								newLi.onclick=function(){
-									$.ajax({
+									ajax({
 										"url":backend+"userdata/getwordlist",
 										"data":{
 											"index":this.getAttribute("number")*1,
@@ -1069,7 +1077,7 @@
 					postData["time"]=savedWordList.time
 				}
 				showLoading()
-				$.ajax({
+				ajax({
 					"url":backend+"userdata/upload",
 					"data":postData,
 					"method":"POST",
@@ -1249,7 +1257,7 @@
 				showLoading()
 				save(function(){
 					showLoading()
-					$.ajax({
+					ajax({
 						"url":backend+"userdata/domain/add",
 						"data":{
 							"domain":getURL().domain,
@@ -1282,7 +1290,7 @@
 					if(currentItem){
 						if(login.username){
 							showLoading()
-							$.ajax({
+							ajax({
 								"url":backend+"userdata/domain/del",
 								"data":{
 									"domain":getURL().domain,
@@ -1453,7 +1461,7 @@
 						openWindow("index")
 					}
 					showLoading()
-					$.ajax({
+					ajax({
 						"url":backend+"userdata/getwordlist",
 						"data":{
 							"index":searchURL("index"),

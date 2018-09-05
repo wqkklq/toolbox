@@ -5,8 +5,8 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<link href="css/mui.min.css" rel="stylesheet">
-		<link href="css/general.css" rel="stylesheet">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/general.css">
 		<style>
 			footer div{
 				width:100%;
@@ -73,7 +73,6 @@
 		</footer>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
-		<script src="js/jquery.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
 			var rate=localStorage.getItem("Rate")
@@ -100,11 +99,21 @@
 				}
 			}
 			function updateRate(){
-				getJSON("http://www.apilayer.net/api/live?access_key=305f5a80f4da12a238c9ebfe5479c648",function(e){
-					if(e.success){
-						rate=e
-						localStorage.setItem("Rate",JSON.stringify(e))
-						document.getElementsByTagName("table")[0].style.display="table"
+				showLoading()
+				ajax({
+					"url":"http://www.apilayer.net/api/live",
+					"data":{
+						"access_key":"305f5a80f4da12a238c9ebfe5479c648"
+					},
+					"dataType":"json",
+					"crossOrigin":true,
+					"success":function(e){
+						closeLoading()
+						if(e.success){
+							rate=e
+							localStorage.setItem("Rate",JSON.stringify(e))
+							document.getElementsByTagName("table")[0].style.display="table"
+						}
 					}
 				})
 			}

@@ -18,7 +18,7 @@ isWeb=location.href.indexOf("https")!=-1,
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/2").toLocaleDateString(),
+lastUpdated=new Date("2018/9/5").toLocaleDateString(),
 loadingId,
 login={
 	"email":localStorage.getItem("Email"),
@@ -27,7 +27,6 @@ login={
 },
 recentInput=0,
 theme=localStorage.getItem("Theme"),
-timeout=10000,
 ver="13.7"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
@@ -35,6 +34,61 @@ isiOSApp=isCordova&&isiOS,
 isMobile=isAndroid||isiOS
 function addZero(num,length){
 	return (Array(length).join("0")+num).slice(-length)
+}
+function ajax(settings){
+	var data
+	if(settings.data){
+		data=[]
+		for(var key in settings.data){
+			if(settings.data[key]){
+				data.push(key+"="+encodeURIComponent(settings.data[key]))
+			}
+		}
+		data=data.join("&")
+	}
+	var xhr=new XMLHttpRequest()
+	xhr.onreadystatechange=function(){
+		if(xhr.readyState==4){
+			if(xhr.status==200&&xhr.responseText||xhr.status==200&&settings.method=="POST"){
+				if(settings.success){
+					if(settings.dataType&&settings.dataType.indexOf("json")!=-1){
+						settings.success(JSON.parse(xhr.responseText))
+					}else{
+						settings.success(xhr.responseText)
+					}
+				}else if(settings.dataType=="jsonp"&&xhr.responseText){
+					eval(xhr.responseText)
+				}
+			}else if(settings.error){
+				settings.error({
+					"status":xhr.status
+				})
+			}
+		}
+	}
+	if(settings.timeout){
+		xhr.timeout=settings.timeout
+	}
+	if(settings.method&&settings.method=="POST"){
+		xhr.open("POST",settings.url)
+		xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+		xhr.send(data)
+	}else{
+		var url
+		if(data){
+			url=settings.url+"?"+data
+		}else{
+			url=settings.url
+		}
+		if(settings.crossOrigin||settings.dataType&&settings.dataType=="jsonp"||location.href.indexOf("https")!=-1&&url.indexOf("http")!=-1&&url.indexOf("https")==-1){
+			url=backend+"get?url="+encodeURIComponent(url)+"&username=admin"
+		}
+		if(!settings.timeout){
+			xhr.timeout=10000
+		}
+		xhr.open("GET",url)
+		xhr.send()
+	}
 }
 function arrayContains(obj,array){
 	for(var i=0;i<array.length;i++){
@@ -177,32 +231,22 @@ function error(){
 		"无法连接服务器"
 	])
 }
-function getJSON(url,callback,errorCallback,min){
-	if(!min){
+function getUserData(dir,callback,errorCallback,hideLoading){
+	if(!hideLoading){
 		showLoading()
 	}
-	$.ajax({
-		"url":backend+"get",
-		"data":{
-			"min":min,
-			"time":new Date().getTime(),
-			"url":url,
-			"username":"admin"
-		},
+	ajax({
+		"url":"userdata/"+dir+"/"+login.username,
 		"dataType":"json",
-		"timeout":timeout,
+		"crossOrigin":true,
 		"success":function(e){
-			if(!min){
-				closeLoading()
-			}
+			closeLoading()
 			if(callback){
 				callback(e)
 			}
 		},
 		"error":function(e){
-			if(!min){
-				closeLoading()
-			}
+			closeLoading()
 			if(errorCallback){
 				errorCallback(e)
 			}
@@ -305,15 +349,13 @@ function loginDialog(){
 				newSignUpButton.onclick=
 				newLoginButton.onclick=null
 				showLoading()
-				$.ajax({
+				ajax({
 					"url":backend+"userdata/verify",
 					"data":{
 						"email":email,
-						"password":password,
-						"time":new Date().getTime()
+						"password":password
 					},
 					"dataType":"json",
-					"timeout":timeout,
 					"success":function(e){
 						closeLoading()
 						newSignUpButton.onclick=signUp
@@ -350,7 +392,7 @@ function loginDialog(){
 									newConfirmPasswordInput.focus()
 								}else{
 									var username=email.split("@")[0]+new Date().getTime().toString(36)
-									$.ajax({
+									ajax({
 										"url":backend+"userdata/signup",
 										"data":{
 											"email":email,
@@ -641,7 +683,7 @@ function showLoading(){
 				document.getElementsByClassName("loading")[0].innerText=newNum+"%"
 			}
 		}
-	},timeout/100)
+	},100)
 }
 function showMenu(e,menu){
 	var addedMenuDiv=document.getElementsByClassName("popup-menu")[0]
@@ -787,10 +829,8 @@ function translate(query,from,to,callback,negativeCallback){
 	var str1=appid+query+salt+key
 	var sign=MD5(str1)
 	showLoading()
-	$.ajax({
-		"url":"https://api.fanyi.baidu.com/api/trans/vip/translate",
-		"type":"get",
-		"dataType":"jsonp",
+	ajax({
+		"url":"http://api.fanyi.baidu.com/api/trans/vip/translate",
 		"data":{
 			"q":query,
 			"appid":appid,
@@ -799,7 +839,8 @@ function translate(query,from,to,callback,negativeCallback){
 			"to":to,
 			"sign":sign
 		},
-		"timeout":timeout,
+		"dataType":"json",
+		"crossOrigin":true,
 		"success":function(data){
 			closeLoading()
 			if(data.trans_result&&callback){
@@ -823,7 +864,7 @@ if(!isIE){
 			if(isApp||login.username){
 				window.onerror=null
 				mui.toast(msg)
-				$.ajax({
+				ajax({
 					"url":backend+"feedback",
 					"data":{
 						"email":login.email,
@@ -832,7 +873,7 @@ if(!isIE){
 						"text":text,
 						"ver":ver
 					},
-					"timeout":timeout,
+					"method":"POST",
 					"success":function(){
 						if(header){
 							clearLocalStorage()
@@ -929,7 +970,7 @@ if(appliedTheme=="Bing"){
 		loadWallpaper()
 	}
 	if(!savedBingWallpaper||!header){
-		$.ajax({
+		ajax({
 			"url":backend+"bing/base64",
 			"success":function(e){
 				savedBingWallpaper="url("+e+")"
@@ -990,15 +1031,13 @@ if(isElectron){
 	}
 }
 if(login.username){
-	$.ajax({
+	ajax({
 		"url":backend+"userdata/verify",
 		"data":{
 			"email":login.email,
-			"password":login.password,
-			"time":new Date().getTime()
+			"password":login.password
 		},
 		"dataType":"json",
-		"timeout":timeout,
 		"success":function(e){
 			if(!e.pass){
 				showAlert([

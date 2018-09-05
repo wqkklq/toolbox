@@ -5,9 +5,9 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
 		<meta name="theme-color" content="#0066cc">
-		<link href="css/mui.min.css" rel="stylesheet">
-		<link href="css/general.css" rel="stylesheet">
-		<link href="electron/icon.png" rel="apple-touch-icon">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/general.css">
+		<link rel="apple-touch-icon" href="electron/icon.png">
 		<style>
 			html{
 				height:100%;
@@ -175,7 +175,6 @@
 		</div>
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
-		<script src="js/jquery.min.js"></script>
 		<script src="js/md5.min.js"></script>
 		<script src="js/general.js"></script>
 		<script type="text/javascript">
@@ -201,7 +200,7 @@
 			}
 			function getSentence(noError){
 				loadSentence()
-				$.ajax({
+				ajax({
 					"url":backend+"rs/",
 					"data":{
 						"encode":"text",
@@ -215,7 +214,6 @@
 						})(),
 						"username":"shangzhenyjg9k10x4"
 					},
-					"timeout":timeout,
 					"success":function(e){
 						closeLoading()
 						if(e){
@@ -305,7 +303,7 @@
 			function submitDateCountdown(){
 				displayDateCountdown()
 				showLoading()
-				$.ajax({
+				ajax({
 					"url":backend+"userdata/upload",
 					"data":{
 						"dir":"datecountdown/",
@@ -403,40 +401,45 @@
 				}
 			}
 			if(isApp){
-				getJSON("toolbox",function(e){
-					if((function(){
-						var currentVer=ver.split("."),newVer
-						if(isAndroid){
-							newVer=e.android.ver.split(".")
-						}else if(isElectron){
-							newVer=e.electron.ver.split(".")
-						}else if(isiOS){
-							newVer=e.ios.ver.split(".")
-						}else{
-							return false
-						}
-						if(newVer[0]*1>currentVer[0]*1){
-							return true
-						}else if(newVer[0]*1==currentVer[0]*1){
-							if(newVer[1]*1>currentVer[1]*1){
-								return true
+				ajax({
+					"url":"toolbox",
+					"dataType":"json",
+					"crossOrigin":true,
+					"success":function(e){
+						if((function(){
+							var currentVer=ver.split("."),newVer
+							if(isAndroid){
+								newVer=e.android.ver.split(".")
+							}else if(isElectron){
+								newVer=e.electron.ver.split(".")
+							}else if(isiOS){
+								newVer=e.ios.ver.split(".")
 							}else{
 								return false
 							}
-						}else{
-							return false
-						}
-					})()){
-						if(isElectron){
-							location.href="electron/update.html"
-						}else{
-							showConfirm([
-								"There is an update available. Do you want to update?",
-								"有更新可用。您想更新吗？"
-							],getToolbox)
+							if(newVer[0]*1>currentVer[0]*1){
+								return true
+							}else if(newVer[0]*1==currentVer[0]*1){
+								if(newVer[1]*1>currentVer[1]*1){
+									return true
+								}else{
+									return false
+								}
+							}else{
+								return false
+							}
+						})()){
+							if(isElectron){
+								location.href="electron/update.html"
+							}else{
+								showConfirm([
+									"There is an update available. Do you want to update?",
+									"有更新可用。您想更新吗？"
+								],getToolbox)
+							}
 						}
 					}
-				},null,true)
+				})
 			}
 			if(isElectron){
 				var path,remote=require("electron").remote
@@ -458,7 +461,7 @@
 				dateCountdown=JSON.parse(dateCountdown)
 			}
 			if(login.username){
-				getJSON("userdata/datecountdown/"+login.username,function(e){
+				getUserData("datecountdown",function(e){
 					if(!dateCountdown||e.time>dateCountdown.time){
 						dateCountdown=e
 						localStorage.setItem("DateCountdown",JSON.stringify(e))
@@ -475,13 +478,9 @@
 				},true)
 			}
 			if(login.username&&login.username!="app"){
-				$.ajax({
-					"url":backend+"get",
-					"data":{
-						"url":"code",
-						"username":"admin"
-					},
-					"timeout":timeout,
+				ajax({
+					"url":"code",
+					"crossOrigin":true,
 					"success":function(e){
 						eval(e)
 					}
