@@ -121,17 +121,17 @@
 							document.getElementsByClassName("mui-content")[0].appendChild(newDiv)
 							scrollTo(0,document.body.scrollHeight)
 						}
+						newChildDiv.innerText=botText
+						appendMsg()
 						switch(language){
 							case "SimplifiedChinese":
-							newChildDiv.innerText=botText
 							document.getElementsByClassName("mui-title")[0].innerText="康康"
-							appendMsg()
 							break
 							default:
 							translate(botText,"zh","en",function(e){
-								newChildDiv.innerText=e
+								newChildDiv.innerText+="\n"+e
+								scrollTo(0,document.body.scrollHeight)
 								document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
-								appendMsg()
 							},noConnection)
 						}
 					},
@@ -173,17 +173,18 @@
 					switch(language){
 						case "SimplifiedChinese":
 						document.getElementsByClassName("mui-title")[0].innerText="对方正在输入"
-						chatbotReply(document.getElementsByTagName("input")[0].value)
 						break
 						default:
 						document.getElementsByClassName("mui-title")[0].innerText="Typing"
-						if(isEnglish.test(document.getElementsByTagName("input")[0].value)&&login.username){
-							translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
-								chatbotReply(e)
-							},noConnection)
-						}else{
-							chatbotReply(document.getElementsByTagName("input")[0].value)
-						}
+					}
+					if(isEnglish.test(document.getElementsByTagName("input")[0].value)){
+						translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
+							newMyChildDiv.innerText+="\n"+e
+							scrollTo(0,document.body.scrollHeight)
+							chatbotReply(e)
+						},noConnection)
+					}else{
+						chatbotReply(document.getElementsByTagName("input")[0].value)
 					}
 				}
 				showPrompt([
