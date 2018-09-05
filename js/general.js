@@ -18,7 +18,7 @@ isWeb=location.href.indexOf("https")!=-1,
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/5").toLocaleDateString(),
+lastUpdated=new Date("2018/9/6").toLocaleDateString(),
 loadingId,
 login={
 	"email":localStorage.getItem("Email"),

@@ -38,6 +38,7 @@ footer div:active,
 }
 footer .mui-btn-link{
 	bottom:45px;
+	cursor:default;
 	position:fixed;
 	transition:all .25s;
 	width:100%;
