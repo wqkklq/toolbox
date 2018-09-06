@@ -80,14 +80,25 @@ function ajax(settings){
 		}else{
 			url=settings.url
 		}
-		if(settings.crossOrigin||settings.dataType&&settings.dataType=="jsonp"||location.href.indexOf("https")!=-1&&url.indexOf("http")!=-1&&url.indexOf("https")==-1){
-			url=backend+"get?url="+encodeURIComponent(url)+"&username=admin"
-		}
 		if(!settings.timeout){
 			xhr.timeout=10000
 		}
-		xhr.open("GET",url)
-		xhr.send()
+		if(settings.crossOrigin){
+			ajax({
+				"url":backend+"get",
+				"data":{
+					"url":url,
+					"username":"admin"
+				},
+				"dataType":settings.dataType,
+				"timeout":settings.timeout,
+				"success":settings.success,
+				"error":settings.error
+			})
+		}else{
+			xhr.open("GET",url)
+			xhr.send()
+		}
 	}
 }
 function arrayContains(obj,array){
