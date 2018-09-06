@@ -80,9 +80,6 @@ function ajax(settings){
 		}else{
 			url=settings.url
 		}
-		if(!settings.timeout){
-			xhr.timeout=10000
-		}
 		if(settings.crossOrigin){
 			ajax({
 				"url":backend+"get",
@@ -97,6 +94,9 @@ function ajax(settings){
 			})
 		}else{
 			xhr.open("GET",url)
+			if(!settings.timeout){
+				xhr.timeout=10000
+			}
 			xhr.send()
 		}
 	}
@@ -247,9 +247,12 @@ function getUserData(dir,callback,errorCallback,hideLoading){
 		showLoading()
 	}
 	ajax({
-		"url":"userdata/"+dir+"/"+login.username,
+		"url":backend+"get",
+		"data":{
+			"url":"userdata/"+dir+"/"+login.username,
+			"username":"admin"
+		},
 		"dataType":"json",
-		"crossOrigin":true,
 		"success":function(e){
 			closeLoading()
 			if(callback){
