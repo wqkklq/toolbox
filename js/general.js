@@ -574,6 +574,8 @@ function openWindow(name){
 function restart(){
 	if(isAndroidApp||isElectron){
 		mui.back()
+	}else if(isWeb){
+		location.href="https://www.rthsoftware.cn/toolbox/"
 	}else{
 		openWindow("index")
 	}
