@@ -565,7 +565,9 @@ function openWebPage(href){
 	}
 }
 function openWindow(name){
-	if(name.indexOf("?")!=-1||isWeb){
+	if(isWeb&&name=="index"){
+		location.href="https://www.rthsoftware.cn/toolbox/"
+	}else if(name.indexOf("?")!=-1||isWeb){
 		location.href=name
 	}else{
 		location.href=name+".html"
@@ -574,8 +576,6 @@ function openWindow(name){
 function restart(){
 	if(isAndroidApp||isElectron){
 		mui.back()
-	}else if(isWeb){
-		location.href="https://www.rthsoftware.cn/toolbox/"
 	}else{
 		openWindow("index")
 	}
