@@ -833,7 +833,7 @@ function showToast(text){
 }
 function speak(text,lan){
 	if(text){
-		if(!lan||lan=="cht"||lan=="wyw"){
+		if(!lan||lan=="auto"||lan=="cht"||lan=="wyw"){
 			lan=(function(){
 				if(isChinese.test(text)){
 					return "zh"
