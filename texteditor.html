@@ -465,7 +465,7 @@
 							}
 						}catch(e){
 							if(fromShortcut){
-								speak()
+								speak(document.getElementsByTagName("textarea")[0].value)
 							}else{
 								mui.toast(e.message)
 							}
@@ -549,11 +549,6 @@
 					scrollTo(0,0)
 				}
 				count()
-			}
-			function speak(){
-				if(!isEmpty()&&window.speechSynthesis){
-					window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementsByTagName("textarea")[0].value))
-				}
 			}
 			function submit(callback,text,key1,key2){
 				savedText.time=new Date().getTime()
@@ -844,7 +839,11 @@
 					}
 				}
 			}
-			document.getElementById("Speak").onclick=speak
+			document.getElementById("Speak").onclick=function(){
+				if(!isEmpty()){
+					speak(document.getElementsByTagName("textarea")[0].value)
+				}
+			}
 			document.getElementById("CreateMessageBox").onclick=function(){
 				if(!isEmpty()){
 					alert(document.getElementsByTagName("textarea")[0].value)
@@ -990,9 +989,6 @@
 				document.getElementsByTagName("textarea")[0].oncontextmenu=function(e){
 					inputMenu.popup(remote.getCurrentWindow())
 				}
-			}
-			if(!window.speechSynthesis){
-				document.getElementById("Speak").style.display="none"
 			}
 			if(isEdge||isLinux||isMobile){
 				document.getElementById("SaveAs").style.display="none"

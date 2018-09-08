@@ -18,7 +18,7 @@ isWeb=location.hostname=="www.rthsoftware.cn",
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/7").toLocaleDateString(),
+lastUpdated=new Date("2018/9/9").toLocaleDateString(),
 loadingId,
 login={
 	"email":localStorage.getItem("Email"),
@@ -830,6 +830,26 @@ function showToast(text){
 		default:
 		mui.toast(text[0])
 	}
+}
+function speak(text,lan){
+	if(!lan||lan=="cht"||lan=="wyw"){
+		lan=(function(){
+			if(isChinese.test(text)){
+				return "zh"
+			}else{
+				return "en"
+			}
+		})()
+	}
+	var audio=new Audio("https://fanyi.baidu.com/gettts?lan="+lan+"&spd=6&text="+encodeURIComponent(text))
+	audio.onerror=function(){
+		if(window.speechSynthesis){
+			window.speechSynthesis.speak(new SpeechSynthesisUtterance(text))
+		}else{
+			error()
+		}
+	}
+	audio.play()
 }
 function translate(query,from,to,callback,negativeCallback){
 	var appid="20171109000093780",

@@ -200,11 +200,7 @@
 					}
 				}
 				if(document.getElementById("SpeakCheck").checked){
-					if(document.getElementById("SpeakInput").readOnly){
-						new Audio("https://www.rthsoftware.cn/toolbox/audio/timeout_"+language+".mp3").play()
-					}else if(window.speechSynthesis){
-						window.speechSynthesis.speak(new SpeechSynthesisUtterance(document.getElementById("SpeakInput").value))
-					}
+					speak(document.getElementById("SpeakInput").value)
 				}
 				if(document.getElementById("OpenWebPageCheck").checked){
 					openWebPage(document.getElementById("OpenWebPageInput").value)
@@ -263,14 +259,6 @@
 			document.getElementById("Second").onchange=timeChanged
 			document.getElementById("StartButton").onclick=start
 			document.getElementById("PauseButton").onclick=pause
-			document.getElementById("SpeakInput").onclick=function(){
-				if(this.readOnly){
-					showAlert([
-						"You cannot change this value",
-						"您不能修改此值"
-					])
-				}
-			}
 			document.getElementById("PreviewButton").onclick=task
 			document.getElementById("Add").onclick=function(){
 				var date=new Date()
@@ -357,9 +345,6 @@
 				document.getElementById("Clear").innerText="Clear"
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
-			if(!window.speechSynthesis){
-				document.getElementById("SpeakInput").readOnly=true
-			}
 			if(isElectron){
 				window.onbeforeunload=function(){
 					var win=require("electron").remote.getCurrentWindow()

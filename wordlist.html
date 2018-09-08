@@ -105,7 +105,7 @@
 							<div class="mui-switch-handle"></div>
 						</div>
 					</li>
-					<li id="SpeakDefinitionsLi" class="menu">
+					<li class="menu">
 						<span id="SpeakDefinitions"></span>
 						<div id="SpeakDefinitionsSwitch" class="mui-switch mui-switch-blue mui-switch-mini">
 							<div class="mui-switch-handle"></div>
@@ -300,26 +300,7 @@
 						]
 					},{
 						"onclick":function(){
-							if(isEnglish.test(currentList[index].word)){
-								var audio=new Audio("https://media.shanbay.com/audio/us/"+currentList[index].word.replace(/\s/g,"_")+".mp3")
-								audio.onerror=function(){
-									showAlert([
-										"Unable to speak this word",
-										"无法朗读此单词"
-									])
-									if(isWeb){
-										location.reload()
-									}
-								}
-								audio.play()
-							}else if(window.speechSynthesis){
-								window.speechSynthesis.speak(new SpeechSynthesisUtterance(currentList[index].word))
-							}else{
-								showAlert([
-									"Unable to speak this word",
-									"无法朗读此单词"
-								])
-							}
+							speak(currentList[index].word,document.getElementsByTagName("select")[0].value)
 							closeMenu()
 						},
 						"text":[
@@ -742,7 +723,20 @@
 						document.getElementById("Show").innerText="There is nothing to show"
 					}
 				}
-				speak()
+				var speakDef=document.getElementById("SpeakDefinitionsSwitch").classList.contains("mui-active")
+				speakWord=document.getElementById("SpeakWordsSwitch").classList.contains("mui-active")
+				if(speakWord&&!speakDef&&isEnglish.test(correctWord)){
+					speak(correctWord,document.getElementsByTagName("select")[0].value)
+				}else{
+					var speakText=""
+					if(speakWord){
+						speakText+=correctWord+". "
+					}
+					if(speakDef){
+						speakText+=correctDefinition+". "
+					}
+					speak(speakText)
+				}
 			}
 			function lookUp(word){
 				if(!word){
@@ -1035,28 +1029,6 @@
 						"Unable to connect to the server",
 						"无法连接服务器"
 					])
-				}
-			}
-			function speak(){
-				var speakDef=document.getElementById("SpeakDefinitionsSwitch").classList.contains("mui-active")
-				speakWord=document.getElementById("SpeakWordsSwitch").classList.contains("mui-active")
-				if(speakWord&&!speakDef&&isEnglish.test(correctWord)){
-					var audio=new Audio("https://media.shanbay.com/audio/us/"+correctWord.replace(/\s/g,"_")+".mp3")
-					audio.onerror=function(){
-						if(window.speechSynthesis){
-							window.speechSynthesis.speak(new SpeechSynthesisUtterance(correctWord))
-						}
-					}
-					audio.play()
-				}else if(window.speechSynthesis){
-					var speakText=""
-					if(speakWord){
-						speakText+=correctWord+". "
-					}
-					if(speakDef){
-						speakText+=correctDefinition+". "
-					}
-					window.speechSynthesis.speak(new SpeechSynthesisUtterance(speakText))
 				}
 			}
 			function submit(callback,text,key1,key2){
@@ -1450,9 +1422,6 @@
 			}
 			if(isiOS){
 				document.getElementById("Export").style.display="none"
-			}
-			if(!window.speechSynthesis){
-				document.getElementById("SpeakDefinitionsLi").style.display="none"
 			}
 			load()
 			if(searchURL("index")&&searchURL("username")){
