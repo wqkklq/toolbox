@@ -832,24 +832,30 @@ function showToast(text){
 	}
 }
 function speak(text,lan){
-	if(!lan||lan=="cht"||lan=="wyw"){
-		lan=(function(){
-			if(isChinese.test(text)){
-				return "zh"
-			}else{
-				return "en"
-			}
-		})()
-	}
-	var audio=new Audio("https://fanyi.baidu.com/gettts?lan="+lan+"&spd=6&text="+encodeURIComponent(text))
-	audio.onerror=function(){
-		if(window.speechSynthesis){
-			window.speechSynthesis.speak(new SpeechSynthesisUtterance(text))
-		}else{
-			error()
+	if(text){
+		if(!lan||lan=="cht"||lan=="wyw"){
+			lan=(function(){
+				if(isChinese.test(text)){
+					return "zh"
+				}else{
+					return "en"
+				}
+			})()
 		}
+		showToast([
+			"Loading audio",
+			"正在加载音频"
+		])
+		var audio=new Audio("https://fanyi.baidu.com/gettts?lan="+lan+"&spd=6&text="+encodeURIComponent(text))
+		audio.onerror=function(){
+			if(window.speechSynthesis){
+				window.speechSynthesis.speak(new SpeechSynthesisUtterance(text))
+			}else{
+				error()
+			}
+		}
+		audio.play()
 	}
-	audio.play()
 }
 function translate(query,from,to,callback,negativeCallback){
 	var appid="20171109000093780",

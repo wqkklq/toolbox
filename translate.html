@@ -10,12 +10,17 @@
 		<style>
 			textarea{
 				height:137.5px;
+				margin:0px;
 			}
-			ul{
+			ul.menu{
 				display:none;
+				margin-top:25px;
 			}
 			.mui-btn{
 				margin-bottom:15px;
+			}
+			.mui-btn-blue{
+				margin-top:25px;
 			}
 		</style>
 	</head>
@@ -44,10 +49,12 @@
 			</table>
 			<button id="ExchangeButton" type="button" class="mui-btn mui-btn-block"></button>
 			<textarea id="Original"></textarea>
+			<div class="speaker"></div>
 			<div class="btn-bg-img">
 				<button id="TranslateButton" type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
 			</div>
 			<textarea id="Translated"></textarea>
+			<div class="speaker"></div>
 			<ul class="menu">
 				<span id="SavedText"></span>
 			</ul>
@@ -144,7 +151,13 @@
 					}
 				}
 			}
+			document.getElementsByClassName("speaker")[0].onclick=function(){
+				speak(document.getElementById("Original").value,document.getElementById("FromSelect").value)
+			}
 			document.getElementById("TranslateButton").onclick=translateText
+			document.getElementsByClassName("speaker")[1].onclick=function(){
+				speak(document.getElementById("Translated").value,document.getElementById("ToSelect").value)
+			}
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="翻译"

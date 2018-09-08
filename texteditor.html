@@ -17,6 +17,9 @@
 			p{
 				margin:5px;
 			}
+			p:first-of-type{
+				margin-top:25px;
+			}
 			textarea{
 				display:none;
 				margin:0px;
@@ -25,9 +28,8 @@
 				display:none;
 				margin-bottom:60px;
 			}
-			p:first-of-type,
 			.edit ul.menu{
-				margin-top:15px
+				margin-top:15px;
 			}
 			.text-view{
 				background-color:white;
@@ -59,6 +61,7 @@
 				</div>
 				<textarea></textarea>
 				<div class="text-view"></div>
+				<div class="speaker"></div>
 				<p id="WordCount"></p>
 				<p id="Created"></p>
 				<p id="Modified"></p>
@@ -70,7 +73,6 @@
 				<ul class="menu">
 					<li id="FindReplace" class="menu"></li>
 					<li id="Decode" class="menu"></li>
-					<li id="Speak" class="menu"></li>
 				</ul>
 				<ul class="menu">
 					<li id="CreateMessageBox" class="menu"></li>
@@ -645,36 +647,6 @@
 					}
 				}
 			}
-			document.getElementsByTagName("textarea")[0].ondrop=function(e){
-				setText(event.dataTransfer.getData("Text"))
-				try{
-					openLText(e.dataTransfer.files[0])
-				}catch(e){}
-				return false
-			}
-			document.getElementsByTagName("textarea")[0].oninput=count
-			document.getElementsByTagName("textarea")[0].onkeydown=function(e){
-				switch(e.keyCode){
-					case 9:
-					document.execCommand("insertText",null,"\u0009")
-					return false
-					case 37:
-					case 38:
-					case 39:
-					case 40:
-					setTimeout(count,1)
-				}
-			}
-			document.getElementsByTagName("textarea")[0].onmouseup=function(){
-				setTimeout(count,1)
-			}
-			document.getElementsByTagName("textarea")[0].onselect=
-			document.getElementsByTagName("textarea")[0].ontouchstart=count
-			document.getElementsByClassName("text-view")[0].onclick=function(){
-				this.style.display="none"
-				document.getElementsByTagName("textarea")[0].style.display="block"
-				document.getElementsByTagName("textarea")[0].focus()
-			}
 			document.getElementById("NewDocument").onclick=newDoc
 			document.getElementById("OpenLocalDocument").onclick=openDialog
 			document.getElementById("GetSource").onclick=function(){
@@ -708,6 +680,41 @@
 						})
 					})
 				})
+			}
+			document.getElementsByTagName("textarea")[0].ondrop=function(e){
+				setText(event.dataTransfer.getData("Text"))
+				try{
+					openLText(e.dataTransfer.files[0])
+				}catch(e){}
+				return false
+			}
+			document.getElementsByTagName("textarea")[0].oninput=count
+			document.getElementsByTagName("textarea")[0].onkeydown=function(e){
+				switch(e.keyCode){
+					case 9:
+					document.execCommand("insertText",null,"\u0009")
+					return false
+					case 37:
+					case 38:
+					case 39:
+					case 40:
+					setTimeout(count,1)
+				}
+			}
+			document.getElementsByTagName("textarea")[0].onmouseup=function(){
+				setTimeout(count,1)
+			}
+			document.getElementsByTagName("textarea")[0].onselect=
+			document.getElementsByTagName("textarea")[0].ontouchstart=count
+			document.getElementsByClassName("text-view")[0].onclick=function(){
+				this.style.display="none"
+				document.getElementsByTagName("textarea")[0].style.display="block"
+				document.getElementsByTagName("textarea")[0].focus()
+			}
+			document.getElementsByClassName("speaker")[0].onclick=function(){
+				if(!isEmpty()){
+					speak(document.getElementsByTagName("textarea")[0].value)
+				}
 			}
 			document.getElementById("Save").onclick=function(){
 				save()
@@ -839,11 +846,6 @@
 					}
 				}
 			}
-			document.getElementById("Speak").onclick=function(){
-				if(!isEmpty()){
-					speak(document.getElementsByTagName("textarea")[0].value)
-				}
-			}
 			document.getElementById("CreateMessageBox").onclick=function(){
 				if(!isEmpty()){
 					alert(document.getElementsByTagName("textarea")[0].value)
@@ -921,7 +923,6 @@
 				document.getElementById("Delete").innerText="删除"
 				document.getElementById("FindReplace").innerText="查找和替换"
 				document.getElementById("Decode").innerText="解码"
-				document.getElementById("Speak").innerText="朗读"
 				document.getElementById("CreateMessageBox").innerText="创建消息框"
 				document.getElementById("GenerateQRCode").innerText="生成二维码"
 				document.getElementById("GenerateMD5Value").innerText="生成 MD5 值"
@@ -948,7 +949,6 @@
 				document.getElementById("Delete").innerText="Delete"
 				document.getElementById("FindReplace").innerText="Find & Replace"
 				document.getElementById("Decode").innerText="Decode"
-				document.getElementById("Speak").innerText="Speak"
 				document.getElementById("CreateMessageBox").innerText="Create Message Box"
 				document.getElementById("GenerateQRCode").innerText="Generate QR Code"
 				document.getElementById("GenerateMD5Value").innerText="Generate MD5 Value"
