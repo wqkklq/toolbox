@@ -984,15 +984,6 @@ if(header){
 		header.style.height="65px"
 		newDiv.style.paddingTop="20px"
 	}
-	if(login.username&&login.username!="app"){
-		var newAd=document.createElement("a")
-		newAd.classList.add("mui-pull-right")
-		newAd.classList.add("ad")
-		newAd.onclick=function(){
-			openWebPage("http://rths.tk/ad")
-		}
-		document.getElementsByClassName("title-bg")[0].appendChild(newAd)
-	}
 }
 if(appliedTheme=="Bing"){
 	var savedBingWallpaper
