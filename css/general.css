@@ -208,6 +208,7 @@ textarea{
 }
 .menu p{
 	margin-bottom:0px;
+	white-space:normal!important;
 }
 .menu ul{
 	width:100%;

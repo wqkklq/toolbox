@@ -18,7 +18,7 @@ isWeb=location.hostname=="www.rthsoftware.cn",
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/9").toLocaleDateString(),
+lastUpdated=new Date("2018/9/14").toLocaleDateString(),
 loadingId,
 login={
 	"email":localStorage.getItem("Email"),
@@ -27,7 +27,7 @@ login={
 },
 recentInput=0,
 theme=localStorage.getItem("Theme"),
-ver="13.7"
+ver="13.8"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
