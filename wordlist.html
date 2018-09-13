@@ -419,6 +419,68 @@
 				])
 				reload()
 			}
+			function expWL(){
+				if(isElectron&&!isLinux){
+					require("electron").remote.dialog.showSaveDialog({
+						defaultPath:document.getElementById("TitleInput").value,
+						filters:[{name:"RTH Toolbox Files",extensions:["rth"]}]
+					},function(filename){
+						if(filename){
+							require("fs").writeFileSync(filename,JSON.stringify({
+								"list":currentList,
+								"title":document.getElementById("TitleInput").value
+							}))
+						}
+					})
+				}else if(login.username){
+					showConfirm([
+						"Do you want to export this word list?",
+						"您想导出此单词表吗？"
+					],function(){
+						save(function(){
+							var url=backend+"userdata/getwordlist?dl=rth&index="+currentItem+"&username="+login.username
+							if(isApp){
+								openWebPage(url)
+							}else{
+								location.href=url
+							}
+						})
+					})
+				}else if(!isEdge&&!isLinux&&!isMobile){
+					showConfirm([
+						"Do you want to export this word list?",
+						"您想导出此单词表吗？"
+					],function(){
+						var filename=document.getElementById("TitleInput").value
+						if(filename==""){
+							filename=document.title
+						}
+						if(filename.indexOf(".")==-1){
+							filename+=".rth"
+						}
+						var dl=document.createElement("a")
+						dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(JSON.stringify({
+							"list":currentList,
+							"title":document.getElementById("TitleInput").value
+						})))
+						dl.setAttribute("download",filename)
+						if(document.createEvent){
+							var event=document.createEvent("MouseEvents")
+							event.initEvent("click",true,true)
+							dl.dispatchEvent(event)
+						}else{
+							dl.click()
+						}
+					})
+				}else if(!login.username){
+					loginDialog()
+				}else{
+					showAlert([
+						"Unable to connect to the server",
+						"无法连接服务器"
+					])
+				}
+			}
 			function generateOrder(){
 				wordIndex=Math.round(Math.random()*currentList.length-1)+1
 				if(arrayContains(wordIndex,outOfOrder)||wordIndex==0){
@@ -723,20 +785,7 @@
 						document.getElementById("Show").innerText="There is nothing to show"
 					}
 				}
-				var speakDef=document.getElementById("SpeakDefinitionsSwitch").classList.contains("mui-active")
-				speakWord=document.getElementById("SpeakWordsSwitch").classList.contains("mui-active")
-				if(speakWord&&!speakDef&&isEnglish.test(correctWord)){
-					speak(correctWord,document.getElementsByTagName("select")[0].value)
-				}else{
-					var speakText=""
-					if(speakWord){
-						speakText+=correctWord+". "
-					}
-					if(speakDef){
-						speakText+=correctDefinition+". "
-					}
-					speak(speakText)
-				}
+				speakQuestion()
 			}
 			function lookUp(word){
 				if(!word){
@@ -969,66 +1018,20 @@
 					}
 				},closeLoading)
 			}
-			function exportWL(){
-				if(isElectron&&!isLinux){
-					require("electron").remote.dialog.showSaveDialog({
-						defaultPath:document.getElementById("TitleInput").value,
-						filters:[{name:"RTH Toolbox Files",extensions:["rth"]}]
-					},function(filename){
-						if(filename){
-							require("fs").writeFileSync(filename,JSON.stringify({
-								"list":currentList,
-								"title":document.getElementById("TitleInput").value
-							}))
-						}
-					})
-				}else if(login.username){
-					showConfirm([
-						"Do you want to export this word list?",
-						"您想导出此单词表吗？"
-					],function(){
-						save(function(){
-							var url=backend+"userdata/getwordlist?dl=rth&index="+currentItem+"&username="+login.username
-							if(isApp){
-								openWebPage(url)
-							}else{
-								location.href=url
-							}
-						})
-					})
-				}else if(!isEdge&&!isLinux&&!isMobile){
-					showConfirm([
-						"Do you want to export this word list?",
-						"您想导出此单词表吗？"
-					],function(){
-						var filename=document.getElementById("TitleInput").value
-						if(filename==""){
-							filename=document.title
-						}
-						if(filename.indexOf(".")==-1){
-							filename+=".rth"
-						}
-						var dl=document.createElement("a")
-						dl.setAttribute("href","data:text/plain;charset=utf-8,"+encodeURIComponent(JSON.stringify({
-							"list":currentList,
-							"title":document.getElementById("TitleInput").value
-						})))
-						dl.setAttribute("download",filename)
-						if(document.createEvent){
-							var event=document.createEvent("MouseEvents")
-							event.initEvent("click",true,true)
-							dl.dispatchEvent(event)
-						}else{
-							dl.click()
-						}
-					})
-				}else if(!login.username){
-					loginDialog()
+			function speakQuestion(){
+				var speakDef=document.getElementById("SpeakDefinitionsSwitch").classList.contains("mui-active")
+				speakWord=document.getElementById("SpeakWordsSwitch").classList.contains("mui-active")
+				if(speakWord&&!speakDef&&isEnglish.test(correctWord)){
+					speak(correctWord,document.getElementsByTagName("select")[0].value)
 				}else{
-					showAlert([
-						"Unable to connect to the server",
-						"无法连接服务器"
-					])
+					var speakText=""
+					if(speakWord){
+						speakText+=correctWord+"。"
+					}
+					if(speakDef){
+						speakText+=correctDefinition+"。"
+					}
+					speak(speakText.replace(/\n/g,"。"))
 				}
 			}
 			function submit(callback,text,key1,key2){
@@ -1082,7 +1085,7 @@
 						openDialog()
 						return false
 						case 83:
-						exportWL()
+						expWL()
 						return false
 					}
 				}else{
@@ -1223,7 +1226,7 @@
 				showLoading()
 				save(closeLoading)
 			}
-			document.getElementById("Export").onclick=exportWL
+			document.getElementById("Export").onclick=expWL
 			document.getElementById("CloseDocument").onclick=closeDoc
 			document.getElementById("Share").onclick=function(){
 				showLoading()
@@ -1330,7 +1333,7 @@
 					"您想重新开始测验吗？"
 				],restartQuiz)
 			}
-			document.getElementById("Speak").onclick=speak
+			document.getElementById("Speak").onclick=speakQuestion
 			for(var i=0;i<handle.length;i++){
 				handle[i].onclick=function(){
 					settingsChanged=true
