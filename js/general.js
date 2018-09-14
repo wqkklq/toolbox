@@ -18,7 +18,7 @@ isWeb=location.hostname=="www.rthsoftware.cn",
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/14").toLocaleDateString(),
+lastUpdated=new Date("2018/9/15").toLocaleDateString(),
 loadingId,
 login={
 	"email":localStorage.getItem("Email"),
@@ -655,7 +655,11 @@ function showImage(src){
 		},250)
 	}
 	newSaveDiv.onclick=function(){
-		openWebPage(src)
+		if(src.indexOf(backend+"get")!=-1){
+			openWebPage(searchURL("url",src))
+		}else{
+			openWebPage(src)
+		}
 	}
 	switch(language){
 		case "SimplifiedChinese":
@@ -820,7 +824,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 	},25)
 }
 function showQRCode(text){
-	showImage(backend+"get?type=image&url="+encodeURIComponent("http://qr.topscan.com/api.php?text="+text))
+	showImage(backend+"get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text="+text)+"&username=shangzhenyjg9k10x4")
 }
 function showToast(text){
 	switch(language){
@@ -846,7 +850,7 @@ function speak(text,lan){
 			"Loading audio",
 			"正在加载音频"
 		])
-		var audio=new Audio("https://fanyi.baidu.com/gettts?lan="+lan+"&spd=6&text="+encodeURIComponent(text))
+		var audio=new Audio(backend+"get?url="+encodeURIComponent("https://fanyi.baidu.com/gettts?lan="+lan+"&spd=6&text="+text)+"&username=shangzhenyjg9k10x4")
 		audio.onerror=function(){
 			if(window.speechSynthesis){
 				window.speechSynthesis.speak(new SpeechSynthesisUtterance(text))
