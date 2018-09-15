@@ -97,12 +97,12 @@
 									name=this.innerText
 									showMenu(mouse,[{
 										"onclick":function(){
-											downloadFile(index)
+											showQRCode("https://www.rthsoftware.cn/toolbox/filetransfer?code="+index)
 											closeMenu()
 										},
 										"text":[
-											"Download",
-											"下载"
+											"QR Code",
+											"二维码"
 										]
 									},{
 										"onclick":function(){
@@ -127,6 +127,15 @@
 										"text":[
 											"Delete",
 											"删除"
+										]
+									},{
+										"onclick":function(){
+											downloadFile(index)
+											closeMenu()
+										},
+										"text":[
+											"Download",
+											"下载"
 										]
 									}])
 									return false
@@ -248,6 +257,8 @@
 			if(login.username){
 				showLoading()
 				load()
+			}else{
+				loginDialog()
 			}
 			if(searchURL("code")){
 				if(isTencent){
