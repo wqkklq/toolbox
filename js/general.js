@@ -695,26 +695,33 @@ function showImage(src){
 		newDiv.style.opacity="1"
 	},25)
 }
-function showLoading(interval){
+function showLoading(second){
 	if(!document.getElementsByClassName("loading")[0]){
 		var newDiv=document.createElement("div")
 		newDiv.classList.add("loading")
-		newDiv.innerText="0%"
 		document.body.appendChild(newDiv)
 	}
-	if(!interval){
-		interval=100
-	}
-	loadingId=setInterval(function(){
-		if(document.getElementsByClassName("loading")[0]){
-			var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
-			if(newNum>100){
-				document.getElementsByClassName("loading")[0].innerText="0%"
-			}else{
-				document.getElementsByClassName("loading")[0].innerText=newNum+"%"
+	if(second){
+		newDiv.innerText="0s"
+		loadingId=setInterval(function(){
+			if(document.getElementsByClassName("loading")[0]){
+				var newNum=document.getElementsByClassName("loading")[0].innerText.replace("s","")*1+1
+				document.getElementsByClassName("loading")[0].innerText=newNum+"s"
 			}
-		}
-	},interval)
+		},1000)
+	}else{
+		newDiv.innerText="0%"
+		loadingId=setInterval(function(){
+			if(document.getElementsByClassName("loading")[0]){
+				var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
+				if(newNum>100){
+					document.getElementsByClassName("loading")[0].innerText="0%"
+				}else{
+					document.getElementsByClassName("loading")[0].innerText=newNum+"%"
+				}
+			}
+		},100)
+	}
 }
 function showMenu(e,menu){
 	var addedMenuDiv=document.getElementsByClassName("popup-menu")[0]

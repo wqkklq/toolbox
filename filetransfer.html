@@ -170,7 +170,7 @@
 						"文件超过 300MB，无法传输"
 					])
 				}else{
-					showLoading(file.size/1000)
+					showLoading(true)
 					var formData=new FormData()
 					formData.append("file",file)
 					if(login.username){
