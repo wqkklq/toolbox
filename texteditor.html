@@ -133,11 +133,13 @@
 			}
 			function edit(edit){
 				if(edit){
+					pullToRefresh=false
 					document.getElementsByClassName("start")[0].style.display="none"
 					document.getElementsByClassName("edit")[0].style.display="block"
 					document.getElementsByTagName("footer")[0].style.display="block"
 					document.getElementsByClassName("back")[0].onclick=newDoc
 				}else{
+					pullToRefresh=true
 					document.getElementsByClassName("start")[0].style.display=
 					document.getElementsByClassName("edit")[0].style.display=
 					document.getElementsByTagName("footer")[0].style.display=""
