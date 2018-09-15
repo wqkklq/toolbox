@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--Code written by Shangzhen Yang-->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
+		<meta name="theme-color" content="#0066cc">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/general.css">
+		<style>
+			p{
+				margin-top:10px;
+				padding:0px 5px;
+			}
+			.unavailable{
+				text-decoration:line-through;
+			}
+		</style>
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title"></header>
+		<div class="mui-content">
+			<ul class="menu">
+				<li id="SendFile" class="menu"></li>
+				<li id="ReceiveFile" class="menu"></li>
+				<span id="MyFile"></span>
+			</ul>
+			<p></p>
+		</div>
+		<input id="OpenFile" type="file">
+		<script src="cordova.js"></script>
+		<script src="js/mui.min.js"></script>
+		<script src="js/md5.min.js"></script>
+		<script src="js/general.js"></script>
+		<script>
+			function downloadFile(code){
+				if(code){
+					showLoading()
+					ajax({
+						"url":backend+"userdata/file/getinfo",
+						"data":{
+							"code":code
+						},
+						"dataType":"json",
+						"success":function(e){
+							closeLoading()
+							showConfirm([
+								"Do you want to download "+e.name+"?",
+								"您想下载 "+e.name+" 吗？"
+							],function(){
+								if(document.getElementById("File"+code)){
+									document.getElementById("File"+code).classList.add("unavailable")
+								}
+								if(isApp){
+									openWebPage(e.download)
+								}else{
+									location.href=e.download
+								}
+							})
+						},
+						"error":function(e){
+							if(e.status==200){
+								closeLoading()
+								showAlert([
+									"File does not exist",
+									"文件不存在"
+								])
+							}else{
+								error()
+							}
+						}
+					})
+				}
+			}
+			function load(){
+				if(login.username){
+					document.getElementById("MyFile").innerHTML=""
+					ajax({
+						"url":backend+"userdata/file/get",
+						"data":{
+							"username":login.username
+						},
+						"dataType":"json",
+						"success":function(e){
+							closeLoading()
+							for(var i=e.length-1;i>=0;i--){
+								var newLi=document.createElement("li")
+								newLi.classList.add("menu")
+								if(e[i].download){
+									newLi.classList.add("unavailable")
+								}
+								newLi.id="File"+e[i].code
+								newLi.innerText=e[i].name
+								newLi.oncontextmenu=
+								newLi.onclick=function(mouse){
+									var index=this.id.replace("File","")*1,
+									name=this.innerText
+									showMenu(mouse,[{
+										"onclick":function(){
+											downloadFile(index)
+											closeMenu()
+										},
+										"text":[
+											"Download",
+											"下载"
+										]
+									},{
+										"onclick":function(){
+											showConfirm([
+												"Do you want to delete "+name+"?",
+												"您想删除 "+name+" 吗？"
+											],function(){
+												showLoading()
+												ajax({
+													"url":backend+"userdata/file/del",
+													"data":{
+														"code":index,
+														"username":login.username
+													},
+													"method":"POST",
+													"success":load,
+													"error":error
+												})
+											})
+											closeMenu()
+										},
+										"text":[
+											"Delete",
+											"删除"
+										]
+									}])
+									return false
+								}
+								document.getElementById("MyFile").appendChild(newLi)
+							}
+						},
+						"error":error
+					})
+				}
+			}
+			document.getElementById("SendFile").onclick=function(){
+				document.getElementById("OpenFile").value=""
+				document.getElementById("OpenFile").click()
+			}
+			document.getElementById("ReceiveFile").onclick=function(){
+				showPrompt([
+					"Enter the code",
+					"输入密码"
+				],downloadFile)
+			}
+			document.getElementById("OpenFile").onchange=function(e){
+				var file=e.target.files[0]
+				if(file.type=="text/php"){
+					showAlert([
+						"This type of file is not allowed to be transferred",
+						"不允许传输的文件类型"
+					])
+				}else if(file.size>314572800){
+					showAlert([
+						"File exceeds 300MB and cannot be transferred",
+						"文件超过 300MB，无法传输"
+					])
+				}else{
+					showLoading(file.size/100)
+					var formData=new FormData()
+					formData.append("file",file)
+					if(login.username){
+						formData.append("username",login.username)
+					}
+					var xhr=new XMLHttpRequest()
+					xhr.open("POST",backend+"userdata/file/upload")
+					xhr.onreadystatechange=function(){
+						if(xhr.readyState==4){
+							closeLoading()
+							if(xhr.status==200&&xhr.responseText){
+								var info=JSON.parse(xhr.responseText)
+								if(info.error){
+									alert(info.error)
+								}else{
+									var closeDialog=function(){
+										if(document.getElementsByClassName("popup")[0]){
+											document.getElementsByClassName("popup")[0].style.opacity=""
+											setTimeout(function(){
+												try{
+													document.body.removeChild(document.getElementsByClassName("popup")[0])
+												}catch(e){}
+											},250)
+										}
+									},
+									newDiv=document.createElement("div"),
+									newH1=document.createElement("h1"),
+									newNumDiv=document.createElement("div"),
+									newButton=document.createElement("button"),
+									newCloseDiv=document.createElement("div")
+									newDiv.classList.add("popup")
+									newNumDiv.classList.add("number")
+									newNumDiv.innerText=info.code
+									newButton.style.width="100%"
+									newButton.onclick=function(){
+										closeDialog()
+										showQRCode("https://www.rthsoftware.cn/toolbox/filetransfer?code="+info.code)
+									}
+									newCloseDiv.classList.add("close")
+									newCloseDiv.innerText="×"
+									newCloseDiv.onclick=closeDialog
+									switch(language){
+										case "SimplifiedChinese":
+										newH1.innerText="密码"
+										newButton.innerText="查看二维码"
+										break
+										default:
+										newH1.innerText="Code"
+										newButton.innerText="View QR Code"
+									}
+									newDiv.appendChild(newH1)
+									newDiv.appendChild(newNumDiv)
+									newDiv.appendChild(newButton)
+									newDiv.appendChild(newCloseDiv)
+									document.body.appendChild(newDiv)
+									newDiv.style.top="calc(50% - "+(newDiv.offsetHeight/2)+"px)"
+									setTimeout(function(){
+										newDiv.style.opacity="1"
+									},25)
+									load()
+								}
+							}else{
+								error()
+							}
+						}
+					}
+					xhr.send(formData)
+				}
+			}
+			switch(language){
+				case "SimplifiedChinese":
+				document.title="文件传输"
+				document.getElementById("SendFile").innerText="发送文件"
+				document.getElementById("ReceiveFile").innerText="接收文件"
+				document.getElementsByTagName("p")[0].innerText="您发送的文件将在一小时后失效。"
+				break
+				default:
+				document.title="File Transfer"
+				document.getElementById("SendFile").innerText="Send File"
+				document.getElementById("ReceiveFile").innerText="Receive File"
+				document.getElementsByTagName("p")[0].innerText="Files you sent will expire in an hour."
+			}
+			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			if(login.username){
+				showLoading()
+				load()
+			}
+			if(searchURL("code")){
+				downloadFile(searchURL("code"))
+			}
+		</script>
+	</body>
+</html>

@@ -142,7 +142,7 @@
 			<div id="Quiz"></div>
 			<div id="Add"></div>
 		</footer>
-		<input class="open-file" type="file">
+		<input id="OpenFile" type="file">
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
 		<script src="js/md5.min.js"></script>
@@ -375,12 +375,6 @@
 			}
 			function closeDoc(){
 				closeMenu()
-				showConfirm([
-					"Do you want to close the document?",
-					"您想关闭文档吗？"
-				],closeTrue)
-			}
-			function closeTrue(){
 				document.getElementById("TitleInput").value=""
 				localStorage.removeItem("WordList")
 				currentItem=null
@@ -807,6 +801,7 @@
 					case "edit":
 					if(!document.getElementsByClassName("edit")[0].style.display){
 						scrollTo(0,0)
+						pullToRefresh=false
 						document.getElementsByClassName("start")[0].style.display="none"
 						document.getElementsByClassName("edit")[0].style.display="block"
 						document.getElementsByClassName("quiz")[0].style.display=""
@@ -817,6 +812,7 @@
 					case "quiz":
 					if(!document.getElementsByClassName("quiz")[0].style.display){
 						scrollTo(0,0)
+						pullToRefresh=false
 						document.getElementsByClassName("start")[0].style.display="none"
 						document.getElementsByClassName("edit")[0].style.display=""
 						document.getElementsByClassName("quiz")[0].style.display="block"
@@ -828,6 +824,7 @@
 					case "start":
 					if(document.getElementsByClassName("start")[0].style.display){
 						scrollTo(0,0)
+						pullToRefresh=true
 						document.getElementsByClassName("start")[0].style.display=
 						document.getElementsByClassName("edit")[0].style.display=
 						document.getElementsByClassName("quiz")[0].style.display=
@@ -1208,7 +1205,7 @@
 					if(login.username){
 						submit()
 					}
-					closeTrue()
+					closeDoc()
 				})
 			}
 			document.getElementById("TitleInput").onkeydown=function(e){
@@ -1274,19 +1271,19 @@
 								"method":"POST",
 								"success":function(){
 									savedWordList.list.splice(currentItem-1,1)
-									submit(closeTrue)
+									submit(closeDoc)
 								},
 								"error":function(){
 									savedWordList.list.splice(currentItem-1,1)
-									submit(closeTrue)
+									submit(closeDoc)
 								}
 							})
 						}else{
 							savedWordList.list.splice(currentItem-1,1)
-							submit(closeTrue)
+							submit(closeDoc)
 						}
 					}else{
-						closeTrue()
+						closeDoc()
 					}
 				})
 			}
@@ -1339,7 +1336,7 @@
 					settingsChanged=true
 				}
 			}
-			document.getElementsByClassName("open-file")[0].onchange=function(e){
+			document.getElementById("OpenFile").onchange=function(e){
 				openLWL(e.target.files[0])
 			}
 			switch(language){

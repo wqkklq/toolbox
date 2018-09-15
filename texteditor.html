@@ -91,7 +91,7 @@
 			<div id="Save"></div>
 			<div id="RunJSCode"></div>
 		</footer>
-		<input class="open-file" type="file">
+		<input id="OpenFile" type="file">
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
 		<script src="js/md5.min.js"></script>
@@ -376,14 +376,7 @@
 						document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
 					})
 				}else{
-					if(document.getElementsByTagName("textarea")[0].value){
-						showConfirm([
-							"Do you want to close the current document?",
-							"您想关闭当前文档吗？"
-						],reload)
-					}else{
-						reload()
-					}
+					reload()
 				}
 			}
 			function only(regExp,text){
@@ -901,7 +894,7 @@
 					setText(encodeURIComponent(document.getElementsByTagName("textarea")[0].value))
 				}
 			}
-			document.getElementsByClassName("open-file")[0].onchange=function(e){
+			document.getElementById("OpenFile").onchange=function(e){
 				openLText(e.target.files[0])
 			}
 			switch(language){

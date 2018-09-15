@@ -25,9 +25,10 @@ login={
 	"password":localStorage.getItem("Password"),
 	"username":localStorage.getItem("Username")
 },
+pullToRefresh=true,
 recentInput=0,
 theme=localStorage.getItem("Theme"),
-ver="13.8"
+ver="14.0"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -551,8 +552,8 @@ function logOut(){
 	clearLocalStorage()
 }
 function openDialog(){
-	document.getElementsByClassName("open-file")[0].value=""
-	document.getElementsByClassName("open-file")[0].click()
+	document.getElementById("OpenFile").value=""
+	document.getElementById("OpenFile").click()
 }
 function openWebPage(href){
 	href=encodeURI(href)
@@ -594,30 +595,34 @@ function searchURL(key,url){
 	}
 }
 function showAlert(text){
-	switch(language){
-		case "SimplifiedChinese":
-		alert(text[1])
-		break
-		default:
-		alert(text[0])
-	}
+	setTimeout(function(){
+		switch(language){
+			case "SimplifiedChinese":
+			alert(text[1])
+			break
+			default:
+			alert(text[0])
+		}
+	},25)
 }
 function showConfirm(text,positiveCallback,negativeCallback){
-	var value
-	switch(language){
-		case "SimplifiedChinese":
-		value=confirm(text[1])
-		break
-		default:
-		value=confirm(text[0])
-	}
-	if(value){
-		if(positiveCallback){
-			positiveCallback()
+	setTimeout(function(){
+		var value
+		switch(language){
+			case "SimplifiedChinese":
+			value=confirm(text[1])
+			break
+			default:
+			value=confirm(text[0])
 		}
-	}else if(negativeCallback){
-		negativeCallback()
-	}
+		if(value){
+			if(positiveCallback){
+				positiveCallback()
+			}
+		}else if(negativeCallback){
+			negativeCallback()
+		}
+	},25)
 }
 function showImage(src){
 	var addedImageDiv=document.getElementsByClassName("image")[0]
@@ -687,12 +692,15 @@ function showImage(src){
 		newDiv.style.opacity="1"
 	},25)
 }
-function showLoading(){
+function showLoading(interval){
 	if(!document.getElementsByClassName("loading")[0]){
 		var newDiv=document.createElement("div")
 		newDiv.classList.add("loading")
 		newDiv.innerText="0%"
 		document.body.appendChild(newDiv)
+	}
+	if(!interval){
+		interval=100
 	}
 	loadingId=setInterval(function(){
 		if(document.getElementsByClassName("loading")[0]){
@@ -703,7 +711,7 @@ function showLoading(){
 				document.getElementsByClassName("loading")[0].innerText=newNum+"%"
 			}
 		}
-	},100)
+	},interval)
 }
 function showMenu(e,menu){
 	var addedMenuDiv=document.getElementsByClassName("popup-menu")[0]
@@ -1068,7 +1076,7 @@ if(isElectron){
 	}
 }
 window.ontouchstart=function(e){
-	if(document.documentElement.scrollTop==0&&!document.getElementsByClassName("loading")[0]){
+	if(pullToRefresh&&isApp&&document.documentElement.scrollTop==0&&!document.getElementsByClassName("loading")[0]){
 		var initialY=e.touches[0].clientY,
 		newDiv=document.createElement("div")
 		newDiv.classList.add("loading")
@@ -1088,10 +1096,11 @@ window.ontouchstart=function(e){
 	}
 }
 window.ontouchend=function(){
-	if(window.ontouchmove&&document.getElementsByClassName("loading")[0]){
+	if(pullToRefresh&&isApp&&window.ontouchmove&&document.getElementsByClassName("loading")[0]){
 		window.ontouchmove=null
 		var distance=document.getElementsByClassName("loading")[0].style.top.replace("px","")+50
 		if(distance>window.innerHeight/2-50){
+			closeLoading()
 			location.reload()
 		}else{
 			document.getElementsByClassName("loading")[0].style.transition="all .25s"

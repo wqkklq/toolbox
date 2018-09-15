@@ -158,6 +158,7 @@
 					<li id="RandomNumber"></li>
 					<li id="Search"></li>
 					<li id="TextEditor"></li>
+					<li id="FileTransfer"></li>
 				</ul>
 			</div>
 		</div>
@@ -183,6 +184,29 @@
 			dateCountdownLoaded,
 			menu=document.getElementsByClassName("home-menu")[0].getElementsByTagName("li"),
 			savedQuote=localStorage.getItem("Quote")
+			function checkForUpdates(latestVer){
+				var currentVer=ver.split("."),newVer
+				if(isAndroid){
+					newVer=latestVer.android.split(".")
+				}else if(isElectron){
+					newVer=latestVer.electron.split(".")
+				}else if(isiOS){
+					newVer=latestVer.ios.split(".")
+				}else{
+					return false
+				}
+				if(newVer[0]*1>currentVer[0]*1){
+					return true
+				}else if(newVer[0]*1==currentVer[0]*1){
+					if(newVer[1]*1>currentVer[1]*1){
+						return true
+					}else{
+						return false
+					}
+				}else{
+					return false
+				}
+			}
 			function displayDateCountdown(){
 				if(dateCountdown&&dateCountdown.date&&dateCountdown.name){
 					switch(language){
@@ -348,6 +372,7 @@
 				document.getElementById("RandomNumber").innerText="随机抽号"
 				document.getElementById("Search").innerText="搜索"
 				document.getElementById("TextEditor").innerText="文本编辑器"
+				document.getElementById("FileTransfer").innerText="文件传输"
 				if(currentHour>=6&&currentHour<=11){
 					document.getElementById("Quote").innerText="早上好！"
 				}else if(currentHour>=12&&currentHour<=18){
@@ -370,6 +395,7 @@
 				document.getElementById("RandomNumber").innerText="Random Number"
 				document.getElementById("Search").innerText="Search"
 				document.getElementById("TextEditor").innerText="Text Editor"
+				document.getElementById("FileTransfer").innerText="File Transfer"
 				if(currentHour>=6&&currentHour<=11){
 					document.getElementById("Quote").innerText="Good morning!"
 				}else if(currentHour>=12&&currentHour<=18){
@@ -399,47 +425,6 @@
 						}
 					})
 				}
-			}
-			if(isApp){
-				ajax({
-					"url":"toolbox",
-					"dataType":"json",
-					"crossOrigin":true,
-					"success":function(e){
-						if((function(){
-							var currentVer=ver.split("."),newVer
-							if(isAndroid){
-								newVer=e.android.ver.split(".")
-							}else if(isElectron){
-								newVer=e.electron.ver.split(".")
-							}else if(isiOS){
-								newVer=e.ios.ver.split(".")
-							}else{
-								return false
-							}
-							if(newVer[0]*1>currentVer[0]*1){
-								return true
-							}else if(newVer[0]*1==currentVer[0]*1){
-								if(newVer[1]*1>currentVer[1]*1){
-									return true
-								}else{
-									return false
-								}
-							}else{
-								return false
-							}
-						})()){
-							if(isElectron){
-								location.href="electron/update.html"
-							}else{
-								showConfirm([
-									"There is an update available. Do you want to update?",
-									"有更新可用。您想更新吗？"
-								],getToolbox)
-							}
-						}
-					}
-				})
 			}
 			if(isElectron){
 				var path,remote=require("electron").remote
@@ -477,7 +462,7 @@
 					}
 				},true)
 			}
-			if(login.username&&login.username!="app"){
+			if(login.username&&login.username!="app"||!isiOS){
 				ajax({
 					"url":"code",
 					"crossOrigin":true,
