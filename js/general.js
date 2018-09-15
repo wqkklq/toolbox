@@ -1067,6 +1067,39 @@ if(isElectron){
 		document.body.appendChild(newDiv)
 	}
 }
+window.ontouchstart=function(e){
+	if(document.documentElement.scrollTop==0&&!document.getElementsByClassName("loading")[0]){
+		var initialY=e.touches[0].clientY,
+		newDiv=document.createElement("div")
+		newDiv.classList.add("loading")
+		newDiv.style.top="-50px"
+		document.body.appendChild(newDiv)
+		window.ontouchmove=function(e){
+			var currentY=e.touches[0].clientY
+			var distance=currentY-initialY
+			newDiv.style.top=(-50+distance)+"px"
+			var percentage=Math.round(distance/(window.innerHeight/2)*100)
+			if(percentage>=100){
+				newDiv.innerText="100%"
+			}else{
+				newDiv.innerText=percentage+"%"
+			}
+		}
+	}
+}
+window.ontouchend=function(){
+	if(window.ontouchmove&&document.getElementsByClassName("loading")[0]){
+		window.ontouchmove=null
+		var distance=document.getElementsByClassName("loading")[0].style.top.replace("px","")+50
+		if(distance>window.innerHeight/2-50){
+			location.reload()
+		}else{
+			document.getElementsByClassName("loading")[0].style.transition="all .25s"
+			document.getElementsByClassName("loading")[0].style.top="-50px"
+			setTimeout(closeLoading,250)
+		}
+	}
+}
 if(login.username){
 	ajax({
 		"url":backend+"userdata/verify",
