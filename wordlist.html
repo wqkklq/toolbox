@@ -414,7 +414,12 @@
 				reload()
 			}
 			function expWL(){
-				if(isElectron&&!isLinux){
+				if(isTencent){
+					showAlert([
+						"Please open this page in the browser",
+						"请在浏览器中打开此页面"
+					])
+				}else if(isElectron&&!isLinux){
 					require("electron").remote.dialog.showSaveDialog({
 						defaultPath:document.getElementById("TitleInput").value,
 						filters:[{name:"RTH Toolbox Files",extensions:["rth"]}]

@@ -6,15 +6,17 @@ isAndroid=/Android/i.test(navigator.userAgent),
 isChinese=/[\u4E00-\u9FA5]+/,
 isCordova=!!window.cordova,
 isEdge=/Edge/i.test(navigator.userAgent),
-isElectron=/Electron/i.test(navigator.userAgent),
+isElectron=/Electron\//i.test(navigator.userAgent),
 isEnglish=/[A-Za-z]+/,
 isIE=/MSIE|Trident/i.test(navigator.userAgent),
 isiOS=/iPhone|iPad/i.test(navigator.userAgent),
 isLinux=/Linux/i.test(navigator.userAgent),
 isMac=/Macintosh/i.test(navigator.userAgent),
 isNumber=/[0-9]+/,
+isQQ=/QQ\//i.test(navigator.userAgent),
 isUpperCase=/[A-Z]+/,
 isWeb=location.hostname=="www.rthsoftware.cn",
+isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
@@ -32,7 +34,8 @@ ver="14.0"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
-isMobile=isAndroid||isiOS
+isMobile=isAndroid||isiOS,
+isTencent=isQQ||isWeChat
 function addZero(num,length){
 	return (Array(length).join("0")+num).slice(-length)
 }
