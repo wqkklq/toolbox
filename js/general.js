@@ -704,7 +704,7 @@ function showLoading(second){
 	if(second){
 		newDiv.innerText="0s"
 		loadingId=setInterval(function(){
-			if(document.getElementsByClassName("loading")[0]){
+			if(document.getElementsByClassName("loading")[0]&&document.getElementsByClassName("loading")[0].innerText.indexOf("s")!=-1){
 				var newNum=document.getElementsByClassName("loading")[0].innerText.replace("s","")*1+1
 				document.getElementsByClassName("loading")[0].innerText=newNum+"s"
 			}
@@ -712,7 +712,7 @@ function showLoading(second){
 	}else{
 		newDiv.innerText="0%"
 		loadingId=setInterval(function(){
-			if(document.getElementsByClassName("loading")[0]){
+			if(document.getElementsByClassName("loading")[0]&&document.getElementsByClassName("loading")[0].innerText.indexOf("%")!=-1){
 				var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
 				if(newNum>100){
 					document.getElementsByClassName("loading")[0].innerText="0%"
