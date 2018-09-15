@@ -18,7 +18,7 @@ isWeb=location.hostname=="www.rthsoftware.cn",
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/15").toLocaleDateString(),
+lastUpdated=new Date("2018/9/16").toLocaleDateString(),
 loadingId,
 login={
 	"email":localStorage.getItem("Email"),
