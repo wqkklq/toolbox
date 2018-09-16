@@ -20,7 +20,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/16").toLocaleDateString(),
+lastUpdated=new Date("2018/9/17").toLocaleDateString(),
 loadingId,
 login={
 	"email":localStorage.getItem("Email"),
@@ -696,31 +696,32 @@ function showImage(src){
 	},25)
 }
 function showLoading(second){
-	if(!document.getElementsByClassName("loading")[0]){
+	if(document.getElementsByClassName("loading")[0]){
+		if(second){
+			document.getElementsByClassName("loading")[0].innerText="0s"
+			loadingId=setInterval(function(){
+				if(document.getElementsByClassName("loading")[0]&&document.getElementsByClassName("loading")[0].innerText.indexOf("s")!=-1){
+					var newNum=document.getElementsByClassName("loading")[0].innerText.replace("s","")*1+1
+					document.getElementsByClassName("loading")[0].innerText=newNum+"s"
+				}
+			},1000)
+		}else{
+			document.getElementsByClassName("loading")[0].innerText="0%"
+			loadingId=setInterval(function(){
+				if(document.getElementsByClassName("loading")[0]&&document.getElementsByClassName("loading")[0].innerText.indexOf("%")!=-1){
+					var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
+					if(newNum>100){
+						document.getElementsByClassName("loading")[0].innerText="0%"
+					}else{
+						document.getElementsByClassName("loading")[0].innerText=newNum+"%"
+					}
+				}
+			},100)
+		}
+	}else{
 		var newDiv=document.createElement("div")
 		newDiv.classList.add("loading")
 		document.body.appendChild(newDiv)
-	}
-	if(second){
-		newDiv.innerText="0s"
-		loadingId=setInterval(function(){
-			if(document.getElementsByClassName("loading")[0]&&document.getElementsByClassName("loading")[0].innerText.indexOf("s")!=-1){
-				var newNum=document.getElementsByClassName("loading")[0].innerText.replace("s","")*1+1
-				document.getElementsByClassName("loading")[0].innerText=newNum+"s"
-			}
-		},1000)
-	}else{
-		newDiv.innerText="0%"
-		loadingId=setInterval(function(){
-			if(document.getElementsByClassName("loading")[0]&&document.getElementsByClassName("loading")[0].innerText.indexOf("%")!=-1){
-				var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
-				if(newNum>100){
-					document.getElementsByClassName("loading")[0].innerText="0%"
-				}else{
-					document.getElementsByClassName("loading")[0].innerText=newNum+"%"
-				}
-			}
-		},100)
 	}
 }
 function showMenu(e,menu){
