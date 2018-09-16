@@ -34,7 +34,12 @@
 		<script src="js/general.js"></script>
 		<script>
 			function downloadFile(code){
-				if(code){
+				if(isTencent){
+					showAlert([
+						"Please open this page in the browser",
+						"请在浏览器中打开此页面"
+					])
+				}else if(code){
 					showLoading()
 					ajax({
 						"url":backend+"userdata/file/getinfo",
@@ -164,10 +169,10 @@
 						"This type of file is not allowed to be transferred",
 						"不允许传输的文件类型"
 					])
-				}else if(file.size>314572800){
+				}else if(file.size>104857600){
 					showAlert([
-						"File exceeds 300MB and cannot be transferred",
-						"文件超过 300MB，无法传输"
+						"File exceeds 100MB and cannot be transferred",
+						"文件超过 100MB，无法传输"
 					])
 				}else{
 					showLoading(true)
@@ -261,14 +266,7 @@
 				loginDialog()
 			}
 			if(searchURL("code")){
-				if(isTencent){
-					showAlert([
-						"Please open this page in the browser",
-						"请在浏览器中打开此页面"
-					])
-				}else{
-					downloadFile(searchURL("code"))
-				}
+				downloadFile(searchURL("code"))
 			}
 		</script>
 	</body>
