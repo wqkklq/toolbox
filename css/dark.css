@@ -76,6 +76,9 @@ textarea::placeholder,
 .image{
 	box-shadow:0px 0px 10px black;
 }
+.loading{
+	background-color:rgba(255,255,255,.25);
+}
 .msg-me{
 	background-color:rgb(0,68,136);
 }
