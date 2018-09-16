@@ -696,6 +696,11 @@ function showImage(src){
 	},25)
 }
 function showLoading(second){
+	if(!document.getElementsByClassName("loading")[0]){
+		var newDiv=document.createElement("div")
+		newDiv.classList.add("loading")
+		document.body.appendChild(newDiv)
+	}
 	if(document.getElementsByClassName("loading")[0]){
 		if(second){
 			document.getElementsByClassName("loading")[0].innerText="0s"
@@ -718,10 +723,6 @@ function showLoading(second){
 				}
 			},100)
 		}
-	}else{
-		var newDiv=document.createElement("div")
-		newDiv.classList.add("loading")
-		document.body.appendChild(newDiv)
 	}
 }
 function showMenu(e,menu){
