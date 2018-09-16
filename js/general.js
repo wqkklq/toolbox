@@ -636,7 +636,7 @@ function showImage(src){
 	newTitleDiv=document.createElement("div"),
 	newContentDiv=document.createElement("div"),
 	newLoadDiv=document.createElement("div"),
-	newImg=document.createElement("img"),
+	newImg=new Image(),
 	newButtonDiv=document.createElement("div"),
 	newCloseDiv=document.createElement("div"),
 	newSaveDiv=document.createElement("div")
