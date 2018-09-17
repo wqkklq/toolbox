@@ -380,10 +380,6 @@ function loginDialog(){
 						newLoginButton.onclick=submitLogin
 						if(e.index){
 							if(e.pass){
-								showAlert([
-									"Log in successfully",
-									"已成功登录"
-								])
 								localStorage.setItem("Email",email)
 								localStorage.setItem("Password",password)
 								localStorage.setItem("Username",e.username)
