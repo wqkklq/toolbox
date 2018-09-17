@@ -670,17 +670,17 @@
 								applyItem(0)
 							},
 							"error":function(e){
-								if(e.status==200){
-									closeLoading()
-									showAlert([
-										"404 Not Found",
-										"404 未找到"
-									])
-								}else if(e.status==403){
+								if(e.status==403){
 									closeLoading()
 									showAlert([
 										"Access denied",
 										"拒绝访问"
+									])
+								}else if(e.status==404){
+									closeLoading()
+									showAlert([
+										"404 Not Found",
+										"404 未找到"
 									])
 								}else{
 									error()
