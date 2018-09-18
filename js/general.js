@@ -45,14 +45,23 @@ function ajax(settings){
 		document.body.appendChild(newDiv)
 	}
 	var data
-	if(settings.data&&settings.processData!=false){
-		data=[]
-		for(var key in settings.data){
-			if(settings.data[key]){
-				data.push(key+"="+encodeURIComponent(settings.data[key]))
+	if(settings.data){
+		if(settings.processData==false){
+			data=new FormData()
+			for(var key in settings.data){
+				if(settings.data[key]){
+					data.append(key,settings.data[key])
+				}
 			}
+		}else{
+			data=[]
+			for(var key in settings.data){
+				if(settings.data[key]){
+					data.push(key+"="+encodeURIComponent(settings.data[key]))
+				}
+			}
+			data=data.join("&")
 		}
-		data=data.join("&")
 	}
 	var xhr=new XMLHttpRequest()
 	xhr.onreadystatechange=function(){
@@ -118,12 +127,10 @@ function ajax(settings){
 	}
 	if(settings.method&&settings.method=="POST"){
 		xhr.open("POST",settings.url)
-		if(settings.processData==false){
-			xhr.send(settings.data)
-		}else{
+		if(settings.processData!=false){
 			xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
-			xhr.send(data)
 		}
+		xhr.send(data)
 	}else{
 		var url
 		if(data){

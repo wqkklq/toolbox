@@ -172,14 +172,12 @@
 						"文件超过 100MB，无法传输"
 					])
 				}else{
-					var formData=new FormData()
-					formData.append("file",file)
-					if(login.username){
-						formData.append("username",login.username)
-					}
 					ajax({
 						"url":backend+"userdata/file/upload",
-						"data":formData,
+						"data":{
+							"file":file,
+							"username":login.username
+						},
 						"dataType":"json",
 						"method":"POST",
 						"processData":false,
