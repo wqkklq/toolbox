@@ -799,12 +799,12 @@
 				openWindow(encodeURI("flashcard.html?word="+word))
 			}
 			function openDiv(className){
-				document.getElementsByClassName("mui-title")[0].innerText=document.title
+				newTitle.innerText=document.title
 				switch(className){
 					case "edit":
 					if(!document.getElementsByClassName("edit")[0].style.display){
 						scrollTo(0,0)
-						pullToRefresh=false
+						pullToRefresh=null
 						document.getElementsByClassName("start")[0].style.display="none"
 						document.getElementsByClassName("edit")[0].style.display="block"
 						document.getElementsByClassName("quiz")[0].style.display=""
@@ -815,7 +815,7 @@
 					case "quiz":
 					if(!document.getElementsByClassName("quiz")[0].style.display){
 						scrollTo(0,0)
-						pullToRefresh=false
+						pullToRefresh=null
 						document.getElementsByClassName("start")[0].style.display="none"
 						document.getElementsByClassName("edit")[0].style.display=""
 						document.getElementsByClassName("quiz")[0].style.display="block"
@@ -827,7 +827,7 @@
 					case "start":
 					if(document.getElementsByClassName("start")[0].style.display){
 						scrollTo(0,0)
-						pullToRefresh=true
+						pullToRefresh=reload
 						document.getElementsByClassName("start")[0].style.display=
 						document.getElementsByClassName("edit")[0].style.display=
 						document.getElementsByClassName("quiz")[0].style.display=
@@ -955,7 +955,7 @@
 				load()
 			}
 			function restartQuiz(){
-				document.getElementsByClassName("mui-title")[0].innerHTML=document.getElementById("Quiz").innerText+" (<span id=\"Progress\">1</span>/"+currentList.length+")"
+				newTitle.innerHTML=document.getElementById("Quiz").innerText+" (<span id=\"Progress\">1</span>/"+currentList.length+")"
 				settingsChanged=false
 				progress=1
 				outOfOrder=[]
@@ -1411,7 +1411,7 @@
 					"title":"Mistakes"
 				}
 			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			newTitle.innerText=document.title
 			for(var i=0;i<langOpt.length;i++){
 				document.getElementsByTagName("select")[0].options.add(new Option(langOpt[i][0],langOpt[i][1]))
 			}
@@ -1422,6 +1422,7 @@
 			if(isiOS){
 				document.getElementById("Export").style.display="none"
 			}
+			pullToRefresh=reload
 			load()
 			if(searchURL("index")&&searchURL("username")){
 				loginRequired(function(){

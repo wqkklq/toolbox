@@ -311,7 +311,7 @@
 				document.getElementById("Introduction").innerText="After logging in, you can view your saved word lists and text documents at www.rthsoftware.cn"
 				document.getElementById("About").innerText="About RTH Toolbox"
 			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			newTitle.innerText=document.title
 			document.getElementById("LanguageSelect").value=language
 			document.getElementById("ThemeSelect").value=theme
 			if(document.referrer.indexOf("https://www.rthsoftware.cn")!=-1&&searchURL("account")){

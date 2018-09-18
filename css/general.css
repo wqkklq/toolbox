@@ -177,6 +177,7 @@ textarea{
 	border-radius:10px;
 	color:white;
 	cursor:default;
+	display:none;
 	font-size:16px;
 	left:calc(50% - 55px);
 	line-height:30px;

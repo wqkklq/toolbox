@@ -26,7 +26,9 @@ login={
 	"password":localStorage.getItem("Password"),
 	"username":localStorage.getItem("Username")
 },
-pullToRefresh=true,
+newLoading=document.createElement("div"),
+newTitle=document.createElement("h1"),
+pullToRefresh,
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 ver="14.0"
@@ -39,10 +41,8 @@ function addZero(num,length){
 	return (Array(length).join("0")+num).slice(-length)
 }
 function ajax(settings){
-	if(settings.showLoading&&!document.getElementsByClassName("loading")[0]){
-		var newDiv=document.createElement("div")
-		newDiv.classList.add("loading")
-		document.body.appendChild(newDiv)
+	if(settings.showLoading){
+		newLoading.style.display="block"
 	}
 	var data
 	if(settings.data){
@@ -88,41 +88,37 @@ function ajax(settings){
 		xhr.timeout=settings.timeout
 	}
 	xhr.onloadstart=function(){
-		if(document.getElementsByClassName("loading")[0]){
-			if(settings.method=="POST"){
-				if(settings.processData==false){
-					switch(language){
-						case "SimplifiedChinese":
-						document.getElementsByClassName("loading")[0].innerText="正在上传"
-						break;
-						default:
-						document.getElementsByClassName("loading")[0].innerText="Uploading"
-					}
-				}else{
-					switch(language){
-						case "SimplifiedChinese":
-						document.getElementsByClassName("loading")[0].innerText="正在同步"
-						break;
-						default:
-						document.getElementsByClassName("loading")[0].innerText="Syncing"
-					}
+		if(settings.method=="POST"){
+			if(settings.processData==false){
+				switch(language){
+					case "SimplifiedChinese":
+					newLoading.innerText="正在上传"
+					break;
+					default:
+					newLoading.innerText="Uploading"
 				}
 			}else{
 				switch(language){
 					case "SimplifiedChinese":
-					document.getElementsByClassName("loading")[0].innerText="等待响应"
+					newLoading.innerText="正在同步"
 					break;
 					default:
-					document.getElementsByClassName("loading")[0].innerText="Pending"
+					newLoading.innerText="Syncing"
 				}
+			}
+		}else{
+			switch(language){
+				case "SimplifiedChinese":
+				newLoading.innerText="等待响应"
+				break;
+				default:
+				newLoading.innerText="Pending"
 			}
 		}
 	}
 	xhr.onprogress=function(e){
-		if(document.getElementsByClassName("loading")[0]){
-			if(e.lengthComputable){
-				document.getElementsByClassName("loading")[0].innerText=Math.round(e.loaded/e.total*100)+"%"
-			}
+		if(e.lengthComputable){
+			newLoading.innerText=Math.round(e.loaded/e.total*100)+"%"
 		}
 	}
 	if(settings.method&&settings.method=="POST"){
@@ -250,9 +246,10 @@ function clearLocalStorage(){
 	restart()
 }
 function closeLoading(){
-	try{
-		document.body.removeChild(document.getElementsByClassName("loading")[0])
-	}catch(e){}
+	newLoading.innerText=
+	newLoading.style.left=
+	newLoading.style.top=
+	newLoading.style.display=""
 }
 function closeMenu(){
 	if(document.getElementsByClassName("popup-menu")[0]){
@@ -327,7 +324,7 @@ function initCalculator(max,calculate){
 		default:
 		document.title="Calculator"
 	}
-	document.getElementsByClassName("mui-title")[0].innerText=document.title
+	newTitle.innerText=document.title
 	var input=document.getElementsByTagName("input")
 	for(var i=0;i<=max;i++){
 		switch(language){
@@ -368,6 +365,11 @@ function initCalculator(max,calculate){
 					document.getElementById(id).oninput()
 				})
 			}
+		}
+	}
+	pullToRefresh=function(){
+		for(var i=0;i<=max;i++){
+			input[i].value=""
 		}
 	}
 }
@@ -991,8 +993,7 @@ if(appliedTheme!="Light"){
 }
 if(header){
 	var newDiv=document.createElement("div"),
-	newA=document.createElement("a"),
-	newH1=document.createElement("h1")
+	newA=document.createElement("a")
 	newDiv.classList.add("title-bg")
 	newA.classList.add("mui-icon")
 	newA.classList.add("mui-icon-left-nav")
@@ -1009,9 +1010,9 @@ if(header){
 	}else{
 		newA.onclick=mui.back
 	}
-	newH1.classList.add("mui-title")
+	newTitle.classList.add("mui-title")
 	newDiv.appendChild(newA)
-	newDiv.appendChild(newH1)
+	newDiv.appendChild(newTitle)
 	header.appendChild(newDiv)
 	if(!isApp||isMac){
 		document.getElementsByClassName("mui-content")[0].style.marginTop="40px"
@@ -1019,6 +1020,8 @@ if(header){
 		newDiv.style.paddingTop="20px"
 	}
 }
+newLoading.classList.add("loading")
+document.body.appendChild(newLoading)
 if(appliedTheme=="Bing"){
 	var savedBingWallpaper
 	var loadWallpaper=function(){
@@ -1098,36 +1101,51 @@ if(isElectron){
 	}
 }
 window.ontouchstart=function(e){
-	if(pullToRefresh&&isApp&&document.documentElement.scrollTop==0&&!document.getElementsByClassName("loading")[0]){
-		var initialY=e.touches[0].clientY,
-		newDiv=document.createElement("div")
-		newDiv.classList.add("loading")
-		newDiv.style.top="-50px"
-		document.body.appendChild(newDiv)
+	if(pullToRefresh&&isApp&&document.documentElement.scrollTop==0){
+		var initialY=e.touches[0].clientY
 		window.ontouchmove=function(e){
-			var currentY=e.touches[0].clientY
-			var distance=currentY-initialY
-			newDiv.style.top=(-50+distance)+"px"
-			var percentage=Math.round(distance/(window.innerHeight/2)*100)
-			if(percentage>=100){
-				newDiv.innerText="100%"
+			if(document.documentElement.scrollTop==0){
+				var currentY=e.touches[0].clientY
+				var distance=currentY-initialY
+				newLoading.style.top=(currentY-25)+"px"
+				if(e.touches[0].clientX>window.innerWidth/2){
+					newLoading.style.left=(e.touches[0].clientX-110)+"px"
+				}else{
+					newLoading.style.left=(e.touches[0].clientX)+"px"
+				}
+				if(distance>150){
+					switch(language){
+						case "SimplifiedChinese":
+						newLoading.innerText="刷新"
+						break;
+						default:
+						newLoading.innerText="Refresh"
+					}
+				}else{
+					switch(language){
+						case "SimplifiedChinese":
+						newLoading.innerText="你好"
+						break;
+						default:
+						newLoading.innerText="Hello"
+					}
+				}
+				if(!newLoading.style.display){
+					newLoading.style.display="block"
+				}
 			}else{
-				newDiv.innerText=percentage+"%"
+				closeLoading()
 			}
 		}
 	}
 }
 window.ontouchend=function(){
-	if(pullToRefresh&&isApp&&window.ontouchmove&&document.getElementsByClassName("loading")[0]){
+	if(pullToRefresh&&isApp&&window.ontouchmove&&newLoading.style.display){
 		window.ontouchmove=null
-		var distance=document.getElementsByClassName("loading")[0].style.top.replace("px","")+50
-		if(distance>window.innerHeight/2-50){
-			closeLoading()
-			location.reload()
+		if(/Refresh|刷新/.test(newLoading.innerText)){
+			pullToRefresh()
 		}else{
-			document.getElementsByClassName("loading")[0].style.transition="all .25s"
-			document.getElementsByClassName("loading")[0].style.top="-50px"
-			setTimeout(closeLoading,250)
+			closeLoading()
 		}
 	}
 }

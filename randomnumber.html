@@ -463,7 +463,7 @@
 				document.getElementById("NamesAdd").innerText="Add"
 				document.getElementById("NamesClear").innerText="Clear"
 			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			newTitle.innerText=document.title
 			var currentNamesValue=localStorage.getItem("Names")
 			if(currentNamesValue&&currentNamesValue.indexOf("{")!=-1){
 				savedNames=JSON.parse(currentNamesValue)

@@ -295,16 +295,6 @@
 								"Look Up",
 								"查询"
 							]
-						},{
-							"onclick":function(){
-								savedQuote=null
-								getSentence(true)
-								closeMenu()
-							},
-							"text":[
-								"Change",
-								"更改"
-							]
 						}])
 						return false
 					}
@@ -437,6 +427,10 @@
 						openWindow("wordlist")
 					}
 				}
+			}
+			pullToRefresh=function(){
+				savedQuote=null
+				getSentence(true)
 			}
 			getSentence()
 			if(dateCountdown){

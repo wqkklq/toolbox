@@ -82,7 +82,7 @@
 			}
 			function lookUp(word){
 				window.onkeydown=null
-				document.getElementsByClassName("mui-title")[0].innerText=document.title
+				newTitle.innerText=document.title
 				reset()
 				showingDefinition=true
 				document.getElementById("ShowDefinition").style.display="none"
@@ -219,10 +219,10 @@
 					}
 				}
 				currentList=JSON.parse(openedWordList).list
-				document.getElementsByClassName("mui-title")[0].innerHTML=document.title+" (<span id=\"Progress\">1</span>/"+currentList.length+")"
+				newTitle.innerHTML=document.title+" (<span id=\"Progress\">1</span>/"+currentList.length+")"
 				loadWord()
 			}else{
-				document.getElementsByClassName("mui-title")[0].innerText=document.title
+				newTitle.innerText=document.title
 				if(wordURL){
 					lookUp(wordURL)
 				}else{

@@ -98,11 +98,17 @@
 					}
 				}
 			}
+			function load(){
+				loadSavedText(JSON.parse(localStorage.getItem("SavedText")))
+				if(login.username){
+					getUserData("text",loadSavedText,null,true)
+				}
+			}
 			function loadSavedText(e){
 				document.getElementById("SavedText").innerHTML=""
 				hist=[]
 				if(e&&e.text){
-					for(var i=0;i<e.text.length;i++){
+					for(var i=e.text.length-1;i>=0;i--){
 						if(e.text[i].encrypt){
 							add(decrypt(e.text[i].text,"RTH"),true,e.text[i].title)
 						}else{
@@ -175,7 +181,7 @@
 				document.getElementById("ExchangeButton").innerText="Exchange"
 				document.getElementById("TranslateButton").innerText="Translate"
 			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			newTitle.innerText=document.title
 			for(var i=0;i<langOpt.length;i++){
 				document.getElementById("FromSelect").options.add(new Option(langOpt[i][0],langOpt[i][1]))
 				document.getElementById("ToSelect").options.add(new Option(langOpt[i][0],langOpt[i][1]))
@@ -187,10 +193,8 @@
 				default:
 				document.getElementById("ToSelect").value="en"
 			}
-			loadSavedText(JSON.parse(localStorage.getItem("SavedText")))
-			if(login.username){
-				getUserData("text",loadSavedText,null,true)
-			}
+			pullToRefresh=load
+			load()
 		</script>
 	</body>
 </html>

@@ -133,13 +133,13 @@
 			}
 			function edit(edit){
 				if(edit){
-					pullToRefresh=false
+					pullToRefresh=null
 					document.getElementsByClassName("start")[0].style.display="none"
 					document.getElementsByClassName("edit")[0].style.display="block"
 					document.getElementsByTagName("footer")[0].style.display="block"
 					document.getElementsByClassName("back")[0].onclick=newDoc
 				}else{
-					pullToRefresh=true
+					pullToRefresh=reload
 					document.getElementsByClassName("start")[0].style.display=
 					document.getElementsByClassName("edit")[0].style.display=
 					document.getElementsByTagName("footer")[0].style.display=""
@@ -961,7 +961,7 @@
 				document.getElementById("UnicodeEncode").innerText="Unicode Encode"
 				document.getElementById("URIComponentEncode").innerText="URI Component Encode"
 			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			newTitle.innerText=document.title
 			if(isElectron){
 				var remote=require("electron").remote
 				var Menu=remote.Menu
@@ -995,6 +995,7 @@
 			if(isEdge||isLinux||isMobile){
 				document.getElementById("SaveAs").style.display="none"
 			}
+			pullToRefresh=reload
 			load()
 			if(searchURL("index")&&searchURL("username")){
 				loginRequired(function(){

@@ -124,13 +124,13 @@
 						appendMsg()
 						switch(language){
 							case "SimplifiedChinese":
-							document.getElementsByClassName("mui-title")[0].innerText="康康"
+							newTitle.innerText="康康"
 							break
 							default:
 							translate(botText,"zh","en",function(e){
 								newChildDiv.innerText+="\n"+e
 								scrollTo(0,document.body.scrollHeight)
-								document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
+								newTitle.innerText="Kangkang"
 							},noConnection)
 						}
 					},
@@ -146,11 +146,11 @@
 				switch(language){
 					case "SimplifiedChinese":
 					newChildDiv.innerText="无法连接服务器。"
-					document.getElementsByClassName("mui-title")[0].innerText="康康"
+					newTitle.innerText="康康"
 					break
 					default:
 					newChildDiv.innerText="Unable to connect to the server."
-					document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
+					newTitle.innerText="Kangkang"
 				}
 				newDiv.appendChild(newChildDiv)
 				document.getElementsByClassName("mui-content")[0].appendChild(newDiv)
@@ -170,10 +170,10 @@
 					scrollTo(0,document.body.scrollHeight)
 					switch(language){
 						case "SimplifiedChinese":
-						document.getElementsByClassName("mui-title")[0].innerText="对方正在输入"
+						newTitle.innerText="对方正在输入"
 						break
 						default:
-						document.getElementsByClassName("mui-title")[0].innerText="Typing"
+						newTitle.innerText="Typing"
 					}
 					if(isEnglish.test(document.getElementsByTagName("input")[0].value)){
 						translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
@@ -202,13 +202,13 @@
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="聊天机器人"
-				document.getElementsByClassName("mui-title")[0].innerText="康康"
+				newTitle.innerText="康康"
 				document.getElementById("Welcome").innerText="我们一起来聊天吧！"
 				document.getElementById("SendMessage").innerText="发送消息"
 				break
 				default:
 				document.title="Chatbot"
-				document.getElementsByClassName("mui-title")[0].innerText="Kangkang"
+				newTitle.innerText="Kangkang"
 				document.getElementById("Welcome").innerText="Let's chat!"
 				document.getElementById("SendMessage").innerText="Send Message"
 			}

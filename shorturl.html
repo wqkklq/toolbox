@@ -314,11 +314,12 @@
 				document.getElementById("OriginalURL").placeholder="Enter the original URL"
 				document.getElementsByTagName("button")[0].innerText="Create"
 			}
-			document.getElementsByClassName("mui-title")[0].innerText=document.title
+			newTitle.innerText=document.title
 			if(myURL){
 				myURL=JSON.parse(myURL)
 				loadMyURL()
 			}
+			pullToRefresh=load
 			load()
 		</script>
 	</body>
