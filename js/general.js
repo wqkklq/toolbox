@@ -21,7 +21,6 @@ isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
 lastUpdated=new Date("2018/9/17").toLocaleDateString(),
-loadingId,
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -40,8 +39,13 @@ function addZero(num,length){
 	return (Array(length).join("0")+num).slice(-length)
 }
 function ajax(settings){
+	if(settings.showLoading&&!document.getElementsByClassName("loading")[0]){
+		var newDiv=document.createElement("div")
+		newDiv.classList.add("loading")
+		document.body.appendChild(newDiv)
+	}
 	var data
-	if(settings.data){
+	if(settings.data&&settings.processData!=false){
 		data=[]
 		for(var key in settings.data){
 			if(settings.data[key]){
@@ -53,6 +57,7 @@ function ajax(settings){
 	var xhr=new XMLHttpRequest()
 	xhr.onreadystatechange=function(){
 		if(xhr.readyState==4){
+			closeLoading()
 			if(xhr.status==200&&xhr.responseText||xhr.status==200&&settings.method=="POST"){
 				if(settings.success){
 					if(settings.dataType&&settings.dataType.indexOf("json")!=-1){
@@ -73,10 +78,52 @@ function ajax(settings){
 	if(settings.timeout){
 		xhr.timeout=settings.timeout
 	}
+	xhr.onloadstart=function(){
+		if(document.getElementsByClassName("loading")[0]){
+			if(settings.method=="POST"){
+				if(settings.processData==false){
+					switch(language){
+						case "SimplifiedChinese":
+						document.getElementsByClassName("loading")[0].innerText="正在上传"
+						break;
+						default:
+						document.getElementsByClassName("loading")[0].innerText="Uploading"
+					}
+				}else{
+					switch(language){
+						case "SimplifiedChinese":
+						document.getElementsByClassName("loading")[0].innerText="正在同步"
+						break;
+						default:
+						document.getElementsByClassName("loading")[0].innerText="Syncing"
+					}
+				}
+			}else{
+				switch(language){
+					case "SimplifiedChinese":
+					document.getElementsByClassName("loading")[0].innerText="等待响应"
+					break;
+					default:
+					document.getElementsByClassName("loading")[0].innerText="Pending"
+				}
+			}
+		}
+	}
+	xhr.onprogress=function(e){
+		if(document.getElementsByClassName("loading")[0]){
+			if(e.lengthComputable){
+				document.getElementsByClassName("loading")[0].innerText=Math.round(e.loaded/e.total*100)+"%"
+			}
+		}
+	}
 	if(settings.method&&settings.method=="POST"){
 		xhr.open("POST",settings.url)
-		xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
-		xhr.send(data)
+		if(settings.processData==false){
+			xhr.send(settings.data)
+		}else{
+			xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
+			xhr.send(data)
+		}
 	}else{
 		var url
 		if(data){
@@ -196,7 +243,6 @@ function clearLocalStorage(){
 	restart()
 }
 function closeLoading(){
-	clearInterval(loadingId)
 	try{
 		document.body.removeChild(document.getElementsByClassName("loading")[0])
 	}catch(e){}
@@ -240,16 +286,12 @@ function decrypt(text,password){
 	}
 }
 function error(){
-	closeLoading()
 	showAlert([
 		"Unable to connect to the server",
 		"无法连接服务器"
 	])
 }
 function getUserData(dir,callback,errorCallback,hideLoading){
-	if(!hideLoading){
-		showLoading()
-	}
 	ajax({
 		"url":backend+"get",
 		"data":{
@@ -257,14 +299,13 @@ function getUserData(dir,callback,errorCallback,hideLoading){
 			"username":"admin"
 		},
 		"dataType":"json",
+		"showLoading":!hideLoading,
 		"success":function(e){
-			closeLoading()
 			if(callback){
 				callback(e)
 			}
 		},
 		"error":function(e){
-			closeLoading()
 			if(errorCallback){
 				errorCallback(e)
 			}
@@ -366,7 +407,6 @@ function loginDialog(){
 			}else{
 				newSignUpButton.onclick=
 				newLoginButton.onclick=null
-				showLoading()
 				ajax({
 					"url":backend+"userdata/verify",
 					"data":{
@@ -374,8 +414,8 @@ function loginDialog(){
 						"password":password
 					},
 					"dataType":"json",
+					"showLoading":true,
 					"success":function(e){
-						closeLoading()
 						newSignUpButton.onclick=signUp
 						newLoginButton.onclick=submitLogin
 						if(e.index){
@@ -691,36 +731,6 @@ function showImage(src){
 		newDiv.style.opacity="1"
 	},25)
 }
-function showLoading(second){
-	if(!document.getElementsByClassName("loading")[0]){
-		var newDiv=document.createElement("div")
-		newDiv.classList.add("loading")
-		document.body.appendChild(newDiv)
-	}
-	if(document.getElementsByClassName("loading")[0]){
-		if(second){
-			document.getElementsByClassName("loading")[0].innerText="0s"
-			loadingId=setInterval(function(){
-				if(document.getElementsByClassName("loading")[0]&&document.getElementsByClassName("loading")[0].innerText.indexOf("s")!=-1){
-					var newNum=document.getElementsByClassName("loading")[0].innerText.replace("s","")*1+1
-					document.getElementsByClassName("loading")[0].innerText=newNum+"s"
-				}
-			},1000)
-		}else{
-			document.getElementsByClassName("loading")[0].innerText="0%"
-			loadingId=setInterval(function(){
-				if(document.getElementsByClassName("loading")[0]&&document.getElementsByClassName("loading")[0].innerText.indexOf("%")!=-1){
-					var newNum=document.getElementsByClassName("loading")[0].innerText.replace("%","")*1+1
-					if(newNum>100){
-						document.getElementsByClassName("loading")[0].innerText="0%"
-					}else{
-						document.getElementsByClassName("loading")[0].innerText=newNum+"%"
-					}
-				}
-			},100)
-		}
-	}
-}
 function showMenu(e,menu){
 	var addedMenuDiv=document.getElementsByClassName("popup-menu")[0]
 	if(addedMenuDiv){
@@ -756,7 +766,6 @@ function showMenu(e,menu){
 	},25)
 }
 function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInput){
-	closeLoading()
 	var newDiv=document.createElement("div"),
 	newInput=document.createElement("input"),
 	newCancelButton=document.createElement("button"),
@@ -890,7 +899,6 @@ function translate(query,from,to,callback,negativeCallback){
 	}
 	var str1=appid+query+salt+key
 	var sign=MD5(str1)
-	showLoading()
 	ajax({
 		"url":"http://api.fanyi.baidu.com/api/trans/vip/translate",
 		"data":{
@@ -903,15 +911,14 @@ function translate(query,from,to,callback,negativeCallback){
 		},
 		"dataType":"json",
 		"crossOrigin":true,
+		"showLoading":true,
 		"success":function(data){
-			closeLoading()
 			if(data.trans_result&&callback){
 				callback(data.trans_result[0].dst,data)
 			}
 		},
 		"error":function(){
 			if(negativeCallback){
-				closeLoading()
 				negativeCallback()
 			}else{
 				error()

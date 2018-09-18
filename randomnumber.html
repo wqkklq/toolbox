@@ -257,7 +257,6 @@
 			function submit(callback){
 				savedNames.time=new Date().getTime()
 				localStorage.setItem("Names",JSON.stringify(savedNames))
-				showLoading()
 				ajax({
 					"url":backend+"userdata/upload",
 					"data":{
@@ -266,9 +265,9 @@
 						"text":JSON.stringify(savedNames)
 					},
 					"method":"POST",
+					"showLoading":true,
 					"success":function(){
 						load()
-						closeLoading()
 						if(callback){
 							callback()
 						}
@@ -279,7 +278,6 @@
 					},
 					"error":function(){
 						load()
-						closeLoading()
 						if(callback){
 							callback()
 						}

@@ -221,9 +221,7 @@
 					loginRequired(function(){
 						if(!isEmpty()){
 							encrypt=false
-							showLoading()
 							save(function(){
-								showLoading()
 								ajax({
 									"url":backend+"userdata/domain/add",
 									"data":{
@@ -234,6 +232,7 @@
 									},
 									"method":"POST",
 									"dataType":"json",
+									"showLoading":true,
 									"success":function(e){
 										var url
 										if(e.available){
@@ -533,7 +532,7 @@
 							}
 						}
 					}
-				},closeLoading)
+				})
 			}
 			function setText(text,noScrolling){
 				document.getElementsByTagName("textarea")[0].value=text
@@ -565,13 +564,12 @@
 				if(getURL()){
 					postData["url"]=getURL().short
 				}
-				showLoading()
 				ajax({
 					"url":backend+"userdata/upload",
 					"data":postData,
 					"method":"POST",
+					"showLoading":true,
 					"success":function(){
-						closeLoading()
 						if(callback){
 							callback()
 						}
@@ -581,7 +579,6 @@
 						])
 					},
 					"error":function(){
-						closeLoading()
 						if(callback){
 							callback()
 						}
@@ -654,15 +651,14 @@
 						if(url.indexOf("http")==-1){
 							url="http://"+url
 						}
-						showLoading()
 						ajax({
 							"url":backend+"get",
 							"data":{
 								"url":url,
 								"username":login.username
 							},
+							"showLoading":true,
 							"success":function(e){
-								closeLoading()
 								document.getElementsByTagName("input")[0].value=url
 								setText(e)
 								document.getElementById("Created").getElementsByTagName("span")[0].innerText=
@@ -671,13 +667,11 @@
 							},
 							"error":function(e){
 								if(e.status==403){
-									closeLoading()
 									showAlert([
 										"Access denied",
 										"拒绝访问"
 									])
 								}else if(e.status==404){
-									closeLoading()
 									showAlert([
 										"404 Not Found",
 										"404 未找到"
@@ -780,7 +774,6 @@
 							savedText.text.splice(currentItem-1,1)
 							submit(reload)
 						}else{
-							showLoading()
 							ajax({
 								"url":backend+"userdata/domain/del",
 								"data":{
@@ -788,8 +781,8 @@
 									"username":login.username
 								},
 								"method":"POST",
+								"showLoading":true,
 								"success":function(){
-									closeLoading()
 									savedText.text.splice(currentItem-1,1)
 									submit(reload)
 								},
@@ -1008,7 +1001,6 @@
 					mui.back=function(){
 						openWindow("index")
 					}
-					showLoading()
 					ajax({
 						"url":backend+"getpage",
 						"data":{
@@ -1016,8 +1008,8 @@
 							"username":searchURL("username")
 						},
 						"dataType":"json",
+						"showLoading":true,
 						"success":function(e){
-							closeLoading()
 							if(e.text){
 								document.getElementsByTagName("input")[0].value=e.title
 								setText(e.text)
@@ -1039,8 +1031,7 @@
 									])
 								}
 							}
-						},
-						"error":closeLoading
+						}
 					})
 				},null,null,true)
 			}

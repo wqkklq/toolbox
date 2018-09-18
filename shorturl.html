@@ -57,7 +57,6 @@
 				document.getElementById("OriginalURL").value=""
 				loadPreview()
 				if(login.username){
-					showLoading()
 					ajax({
 						"url":backend+"userdata/domain/get",
 						"data":{
@@ -65,8 +64,8 @@
 							"username":login.username
 						},
 						"dataType":"json",
+						"showLoading":true,
 						"success":function(e){
-							closeLoading()
 							myURL=e
 							localStorage.setItem("MyURL",JSON.stringify(myURL))
 							loadMyURL()
@@ -107,7 +106,6 @@
 							]
 						},{
 							"onclick":function(){
-								showLoading()
 								ajax({
 									"url":url,
 									"data":{
@@ -115,8 +113,8 @@
 									},
 									"dataType":"json",
 									"crossOrigin":true,
+									"showLoading":true,
 									"success":function(e){
-										closeLoading()
 										var time=" time"
 										if(Math.abs(e.open)>1){
 											time+="s"
@@ -146,7 +144,6 @@
 									if(e.indexOf("http")==-1){
 										e="http://"+e
 									}
-									showLoading()
 									ajax({
 										"url":backend+"userdata/upload",
 										"data":{
@@ -158,8 +155,8 @@
 											"url":url
 										},
 										"method":"POST",
+										"showLoading":true,
 										"success":function(){
-											closeLoading()
 											showToast([
 												"Changes are saved",
 												"更改已保存"
@@ -181,7 +178,6 @@
 									"Do you want to delete "+myURL[index].name+"?",
 									"您想删除 "+myURL[index].name+" 吗？"
 								],function(){
-									showLoading()
 									ajax({
 										"url":backend+"userdata/domain/del",
 										"data":{
@@ -190,11 +186,11 @@
 										},
 										"method":"POST",
 										"dataType":"json",
+										"showLoading":true,
 										"success":function(e){
 											if(e.success){
 												load()
 											}else{
-												closeLoading()
 												showAlert([
 													"Unable to delete "+myURL[index].name,
 													"无法删除 "+myURL[index].name
@@ -249,7 +245,6 @@
 								originalURL="http://"+originalURL
 							}
 							document.getElementById("OriginalURL").value=originalURL
-							showLoading()
 							ajax({
 								"url":backend+"userdata/domain/add",
 								"data":{
@@ -260,6 +255,7 @@
 								},
 								"method":"POST",
 								"dataType":"json",
+								"showLoading":true,
 								"success":function(e){
 									if(e.success){
 										load()
@@ -268,7 +264,6 @@
 										},null,"http://rths.tk/"+value)
 										closeMenu()
 									}else{
-										closeLoading()
 										var extraInfo=""
 										switch(language){
 											case "SimplifiedChinese":

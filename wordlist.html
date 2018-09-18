@@ -198,7 +198,6 @@
 								addWord(newWord,ENDef)
 							}
 						}else{
-							showLoading()
 							ajax({
 								"url":"http://api.shanbay.com/bdc/search/",
 								"data":{
@@ -206,8 +205,8 @@
 								},
 								"dataType":"json",
 								"crossOrigin":true,
+								"showLoading":true,
 								"success":function(e){
-									closeLoading()
 									if(e.msg=="SUCCESS"){
 										if(language=="SimplifiedChinese"&&e.data.cn_definition.defn){
 											addWord(newWord,e.data.cn_definition.defn)
@@ -255,7 +254,7 @@
 				})
 				addWordLi(word,definition,currentList.length-1)
 				scrollTo(0,document.body.scrollHeight)
-				save()
+				save(null,null,true)
 				add()
 			}
 			function addWordLi(word,definition,i){
@@ -314,8 +313,7 @@
 								"您想删除 "+currentList[index].word+" 吗？"
 							],function(){
 								currentList.splice(index,1)
-								showLoading()
-								save(closeLoading,true)
+								save(null,true)
 							})
 							closeMenu()
 						},
@@ -985,7 +983,7 @@
 				}
 				document.getElementById("NextButton").style.display=""
 			}
-			function save(callback,willReload){
+			function save(callback,willReload,hideLoading){
 				loginRequired(function(){
 					if(currentItem){
 						savedWordList.list[currentItem-1].list=currentList
@@ -995,7 +993,7 @@
 								callback()
 							}
 							applyItem(currentItem,null,willReload)
-						},JSON.stringify(savedWordList.list[currentItem-1]),"list",currentItem)
+						},JSON.stringify(savedWordList.list[currentItem-1]),"list",currentItem,hideLoading)
 					}else{
 						if(savedWordList.list[0]){
 							savedWordList.list.push({
@@ -1016,9 +1014,9 @@
 								callback()
 							}
 							applyItem(currentItem,null,willReload)
-						})
+						},null,null,null,hideLoading)
 					}
-				},closeLoading)
+				})
 			}
 			function speakQuestion(){
 				var speakDef=document.getElementById("SpeakDefinitionsSwitch").classList.contains("mui-active")
@@ -1036,7 +1034,7 @@
 					speak(speakText.replace(/\n/g,"。"))
 				}
 			}
-			function submit(callback,text,key1,key2){
+			function submit(callback,text,key1,key2,hideLoading){
 				savedWordList.time=new Date().getTime()
 				localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
 				var postData={
@@ -1053,13 +1051,12 @@
 					postData.text=text
 					postData["time"]=savedWordList.time
 				}
-				showLoading()
 				ajax({
 					"url":backend+"userdata/upload",
 					"data":postData,
 					"method":"POST",
+					"showLoading":!hideLoading,
 					"success":function(){
-						closeLoading()
 						if(callback){
 							callback()
 						}
@@ -1069,7 +1066,6 @@
 						])
 					},
 					"error":function(){
-						closeLoading()
 						if(callback){
 							callback()
 						}
@@ -1225,15 +1221,12 @@
 				add()
 			}
 			document.getElementById("Save").onclick=function(){
-				showLoading()
-				save(closeLoading)
+				save()
 			}
 			document.getElementById("Export").onclick=expWL
 			document.getElementById("CloseDocument").onclick=closeDoc
 			document.getElementById("Share").onclick=function(){
-				showLoading()
 				save(function(){
-					showLoading()
 					ajax({
 						"url":backend+"userdata/domain/add",
 						"data":{
@@ -1244,6 +1237,7 @@
 						},
 						"method":"POST",
 						"dataType":"json",
+						"showLoading":true,
 						"success":function(e){
 							var url
 							if(e.available){
@@ -1266,7 +1260,6 @@
 				],function(){
 					if(currentItem){
 						if(login.username){
-							showLoading()
 							ajax({
 								"url":backend+"userdata/domain/del",
 								"data":{
@@ -1274,6 +1267,7 @@
 									"username":login.username
 								},
 								"method":"POST",
+								"showLoading":true,
 								"success":function(){
 									savedWordList.list.splice(currentItem-1,1)
 									submit(closeDoc)
@@ -1434,7 +1428,6 @@
 					mui.back=function(){
 						openWindow("index")
 					}
-					showLoading()
 					ajax({
 						"url":backend+"userdata/getwordlist",
 						"data":{
@@ -1442,12 +1435,11 @@
 							"username":searchURL("username")
 						},
 						"dataType":"json",
+						"showLoading":true,
 						"success":function(e){
-							closeLoading()
 							applyItem(0,e)
 						},
 						"error":function(){
-							closeLoading()
 							showAlert([
 								"This word list has been deleted",
 								"此单词表已被删除"

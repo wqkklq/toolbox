@@ -37,7 +37,6 @@
 				}else if(document.getElementsByTagName("textarea")[0].value==""){
 					document.getElementsByTagName("textarea")[0].style.background="rgb(255,192,203)"
 				}else{
-					showLoading()
 					ajax({
 						"url":backend+"feedback",
 						"data":{
@@ -48,8 +47,8 @@
 							"ver":ver
 						},
 						"method":"POST",
+						"showLoading":true,
 						"success":function(){
-							closeLoading()
 							showAlert([
 								"Thank you for your feedback",
 								"感谢您的反馈"

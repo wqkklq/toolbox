@@ -100,7 +100,6 @@
 						document.getElementById("Translate").innerText=e
 						dictChanged()
 					})
-					showLoading()
 					ajax({
 						"url":"http://api.shanbay.com/bdc/search/",
 						"data":{
@@ -108,8 +107,8 @@
 						},
 						"dataType":"json",
 						"crossOrigin":true,
+						"showLoading":true,
 						"success":function(e){
-							closeLoading()
 							if(e.msg=="SUCCESS"){
 								document.getElementById("Pronunciation").innerText=e.data.pronunciation
 								document.getElementById("CNDefinition").innerText=e.data.cn_definition.defn

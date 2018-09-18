@@ -40,32 +40,25 @@
 						"请在浏览器中打开此页面"
 					])
 				}else if(code){
-					showLoading()
 					ajax({
 						"url":backend+"userdata/file/getinfo",
 						"data":{
 							"code":code
 						},
 						"dataType":"json",
+						"showLoading":true,
 						"success":function(e){
-							closeLoading()
-							showConfirm([
-								"Do you want to download "+e.name+"?",
-								"您想下载 "+e.name+" 吗？"
-							],function(){
-								if(document.getElementById("File"+code)){
-									document.getElementById("File"+code).classList.add("unavailable")
-								}
-								if(isApp){
-									openWebPage(e.download)
-								}else{
-									location.href=e.download
-								}
-							})
+							if(document.getElementById("File"+code)){
+								document.getElementById("File"+code).classList.add("unavailable")
+							}
+							if(isApp){
+								openWebPage(e.download)
+							}else{
+								location.href=e.download
+							}
 						},
 						"error":function(e){
 							if(e.status==200){
-								closeLoading()
 								showAlert([
 									"File does not exist",
 									"文件不存在"
@@ -86,8 +79,8 @@
 							"username":login.username
 						},
 						"dataType":"json",
+						"showLoading":true,
 						"success":function(e){
-							closeLoading()
 							for(var i=e.length-1;i>=0;i--){
 								var newLi=document.createElement("li")
 								newLi.classList.add("menu")
@@ -115,7 +108,6 @@
 												"Do you want to delete "+name+"?",
 												"您想删除 "+name+" 吗？"
 											],function(){
-												showLoading()
 												ajax({
 													"url":backend+"userdata/file/del",
 													"data":{
@@ -123,6 +115,7 @@
 														"username":login.username
 													},
 													"method":"POST",
+													"showLoading":true,
 													"success":load,
 													"error":error
 												})
@@ -135,7 +128,12 @@
 										]
 									},{
 										"onclick":function(){
-											downloadFile(index)
+											showConfirm([
+												"Do you want to download "+name+"?",
+												"您想下载 "+name+" 吗？"
+											],function(){
+												downloadFile(index)
+											})
 											closeMenu()
 										},
 										"text":[
@@ -147,8 +145,7 @@
 								}
 								document.getElementById("MyFile").appendChild(newLi)
 							}
-						},
-						"error":error
+						}
 					})
 				}
 			}
@@ -160,7 +157,7 @@
 				showPrompt([
 					"Enter the code",
 					"输入密码"
-				],downloadFile)
+				],downloadFile,"number")
 			}
 			document.getElementById("OpenFile").onchange=function(e){
 				var file=e.target.files[0]
@@ -175,74 +172,71 @@
 						"文件超过 100MB，无法传输"
 					])
 				}else{
-					showLoading(true)
 					var formData=new FormData()
 					formData.append("file",file)
 					if(login.username){
 						formData.append("username",login.username)
 					}
-					var xhr=new XMLHttpRequest()
-					xhr.open("POST",backend+"userdata/file/upload")
-					xhr.onreadystatechange=function(){
-						if(xhr.readyState==4){
-							closeLoading()
-							if(xhr.status==200&&xhr.responseText){
-								var info=JSON.parse(xhr.responseText)
-								if(info.error){
-									alert(info.error)
-								}else{
-									var closeDialog=function(){
-										if(document.getElementsByClassName("popup")[0]){
-											document.getElementsByClassName("popup")[0].style.opacity=""
-											setTimeout(function(){
-												try{
-													document.body.removeChild(document.getElementsByClassName("popup")[0])
-												}catch(e){}
-											},250)
-										}
-									},
-									newDiv=document.createElement("div"),
-									newH1=document.createElement("h1"),
-									newNumDiv=document.createElement("div"),
-									newButton=document.createElement("button"),
-									newCloseDiv=document.createElement("div")
-									newDiv.classList.add("popup")
-									newNumDiv.classList.add("number")
-									newNumDiv.innerText=info.code
-									newButton.style.width="100%"
-									newButton.onclick=function(){
-										closeDialog()
-										showQRCode("https://www.rthsoftware.cn/toolbox/filetransfer?code="+info.code)
-									}
-									newCloseDiv.classList.add("close")
-									newCloseDiv.innerText="×"
-									newCloseDiv.onclick=closeDialog
-									switch(language){
-										case "SimplifiedChinese":
-										newH1.innerText="密码"
-										newButton.innerText="查看二维码"
-										break
-										default:
-										newH1.innerText="Code"
-										newButton.innerText="View QR Code"
-									}
-									newDiv.appendChild(newH1)
-									newDiv.appendChild(newNumDiv)
-									newDiv.appendChild(newButton)
-									newDiv.appendChild(newCloseDiv)
-									document.body.appendChild(newDiv)
-									newDiv.style.top="calc(50% - "+(newDiv.offsetHeight/2)+"px)"
-									setTimeout(function(){
-										newDiv.style.opacity="1"
-									},25)
-									load()
-								}
+					ajax({
+						"url":backend+"userdata/file/upload",
+						"data":formData,
+						"dataType":"json",
+						"method":"POST",
+						"processData":false,
+						"showLoading":true,
+						"success":function(e){
+							if(e.error){
+								alert(e.error)
 							}else{
-								error()
+								var closeDialog=function(){
+									if(document.getElementsByClassName("popup")[0]){
+										document.getElementsByClassName("popup")[0].style.opacity=""
+										setTimeout(function(){
+											try{
+												document.body.removeChild(document.getElementsByClassName("popup")[0])
+											}catch(e){}
+										},250)
+									}
+								},
+								newDiv=document.createElement("div"),
+								newH1=document.createElement("h1"),
+								newNumDiv=document.createElement("div"),
+								newButton=document.createElement("button"),
+								newCloseDiv=document.createElement("div")
+								newDiv.classList.add("popup")
+								newNumDiv.classList.add("number")
+								newNumDiv.innerText=e.code
+								newButton.style.width="100%"
+								newButton.onclick=function(){
+									closeDialog()
+									showQRCode("https://www.rthsoftware.cn/toolbox/filetransfer?code="+e.code)
+								}
+								newCloseDiv.classList.add("close")
+								newCloseDiv.innerText="×"
+								newCloseDiv.onclick=closeDialog
+								switch(language){
+									case "SimplifiedChinese":
+									newH1.innerText="密码"
+									newButton.innerText="查看二维码"
+									break
+									default:
+									newH1.innerText="Code"
+									newButton.innerText="View QR Code"
+								}
+								newDiv.appendChild(newH1)
+								newDiv.appendChild(newNumDiv)
+								newDiv.appendChild(newButton)
+								newDiv.appendChild(newCloseDiv)
+								document.body.appendChild(newDiv)
+								newDiv.style.top="calc(50% - "+(newDiv.offsetHeight/2)+"px)"
+								setTimeout(function(){
+									newDiv.style.opacity="1"
+								},25)
+								load()
 							}
-						}
-					}
-					xhr.send(formData)
+						},
+						"error":error
+					})
 				}
 			}
 			switch(language){
@@ -260,7 +254,6 @@
 			}
 			document.getElementsByClassName("mui-title")[0].innerText=document.title
 			if(login.username){
-				showLoading()
 				load()
 			}else{
 				loginDialog()

@@ -96,7 +96,6 @@
 		<script type="text/javascript">
 			var lastBotInfo
 			function chatbotReply(botInfo){
-				showLoading()
 				ajax({
 					"url":"http://www.tuling123.com/openapi/api",
 					"data":{
@@ -105,8 +104,8 @@
 					},
 					"dataType":"json",
 					"crossOrigin":true,
+					"showLoading":true,
 					"success":function(e){
-						closeLoading()
 						var botText=e.text,
 						newDiv=document.createElement("div"),
 						newChildDiv=document.createElement("div")
@@ -139,7 +138,6 @@
 				})
 			}
 			function noConnection(){
-				closeLoading()
 				var newDiv=document.createElement("div"),
 				newChildDiv=document.createElement("div")
 				newDiv.classList.add("msg-row")

@@ -222,7 +222,7 @@
 					}
 				}
 			}
-			function getSentence(noError){
+			function getSentence(manual){
 				loadSentence()
 				ajax({
 					"url":backend+"rs/",
@@ -238,19 +238,19 @@
 						})(),
 						"username":"shangzhenyjg9k10x4"
 					},
+					"showLoading":manual,
 					"success":function(e){
-						closeLoading()
 						if(e){
 							localStorage.setItem("Quote",e)
 							if(!dateCountdownLoaded&&!savedQuote){
 								savedQuote=e
 								loadSentence()
-								getSentence(true)
+								getSentence()
 							}
 						}
 					},
 					"error":function(){
-						if(!noError){
+						if(manual){
 							error()
 						}
 					}
@@ -298,8 +298,7 @@
 						},{
 							"onclick":function(){
 								savedQuote=null
-								showLoading()
-								getSentence()
+								getSentence(true)
 								closeMenu()
 							},
 							"text":[
@@ -326,7 +325,6 @@
 			}
 			function submitDateCountdown(){
 				displayDateCountdown()
-				showLoading()
 				ajax({
 					"url":backend+"userdata/upload",
 					"data":{
@@ -335,8 +333,7 @@
 						"text":JSON.stringify(dateCountdown)
 					},
 					"method":"POST",
-					"success":closeLoading,
-					"error":closeLoading
+					"showLoading":true
 				})
 			}
 			window.onkeydown=function(e){
@@ -441,7 +438,7 @@
 					}
 				}
 			}
-			getSentence(true)
+			getSentence()
 			if(dateCountdown){
 				dateCountdown=JSON.parse(dateCountdown)
 			}

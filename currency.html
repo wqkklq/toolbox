@@ -99,7 +99,6 @@
 				}
 			}
 			function updateRate(){
-				showLoading()
 				ajax({
 					"url":"http://www.apilayer.net/api/live",
 					"data":{
@@ -107,8 +106,8 @@
 					},
 					"dataType":"json",
 					"crossOrigin":true,
+					"showLoading":true,
 					"success":function(e){
-						closeLoading()
 						if(e.success){
 							rate=e
 							localStorage.setItem("Rate",JSON.stringify(e))
