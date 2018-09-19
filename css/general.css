@@ -324,6 +324,11 @@ textarea{
 	margin-top:20px;
 	text-align:left;
 }
+.popup .number{
+	cursor:text;
+	-webkit-user-select:text;
+	user-select:text;
+}
 .popup.prompt{
 	height:132px;
 	top:calc(50% - 66px);
