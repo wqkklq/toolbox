@@ -133,13 +133,11 @@
 			}
 			function edit(edit){
 				if(edit){
-					pullToRefresh=null
 					document.getElementsByClassName("start")[0].style.display="none"
 					document.getElementsByClassName("edit")[0].style.display="block"
 					document.getElementsByTagName("footer")[0].style.display="block"
 					document.getElementsByClassName("back")[0].onclick=newDoc
 				}else{
-					pullToRefresh=reload
 					document.getElementsByClassName("start")[0].style.display=
 					document.getElementsByClassName("edit")[0].style.display=
 					document.getElementsByTagName("footer")[0].style.display=""
@@ -995,7 +993,6 @@
 			if(isEdge||isLinux||isMobile){
 				document.getElementById("SaveAs").style.display="none"
 			}
-			pullToRefresh=reload
 			load()
 			if(searchURL("index")&&searchURL("username")){
 				loginRequired(function(){

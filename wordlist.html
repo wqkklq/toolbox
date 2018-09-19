@@ -804,7 +804,6 @@
 					case "edit":
 					if(!document.getElementsByClassName("edit")[0].style.display){
 						scrollTo(0,0)
-						pullToRefresh=null
 						document.getElementsByClassName("start")[0].style.display="none"
 						document.getElementsByClassName("edit")[0].style.display="block"
 						document.getElementsByClassName("quiz")[0].style.display=""
@@ -815,7 +814,6 @@
 					case "quiz":
 					if(!document.getElementsByClassName("quiz")[0].style.display){
 						scrollTo(0,0)
-						pullToRefresh=null
 						document.getElementsByClassName("start")[0].style.display="none"
 						document.getElementsByClassName("edit")[0].style.display=""
 						document.getElementsByClassName("quiz")[0].style.display="block"
@@ -827,7 +825,6 @@
 					case "start":
 					if(document.getElementsByClassName("start")[0].style.display){
 						scrollTo(0,0)
-						pullToRefresh=reload
 						document.getElementsByClassName("start")[0].style.display=
 						document.getElementsByClassName("edit")[0].style.display=
 						document.getElementsByClassName("quiz")[0].style.display=
@@ -1422,7 +1419,6 @@
 			if(isiOS){
 				document.getElementById("Export").style.display="none"
 			}
-			pullToRefresh=reload
 			load()
 			if(searchURL("index")&&searchURL("username")){
 				loginRequired(function(){

@@ -20,7 +20,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/19").toLocaleDateString(),
+lastUpdated=new Date("2018/9/20").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -28,10 +28,9 @@ login={
 },
 newLoading=document.createElement("div"),
 newTitle=document.createElement("h1"),
-pullToRefresh,
 recentInput=0,
 theme=localStorage.getItem("Theme"),
-ver="14.0"
+ver="14.1"
 var isApp=isCordova||isElectron,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -66,7 +65,8 @@ function ajax(settings){
 	var xhr=new XMLHttpRequest()
 	xhr.onreadystatechange=function(){
 		if(xhr.readyState==4){
-			closeLoading()
+			newLoading.innerText=
+			newLoading.style.display=""
 			if(xhr.status==200&&xhr.responseText||xhr.status==200&&settings.method=="POST"){
 				if(settings.success){
 					if(settings.dataType&&settings.dataType.indexOf("json")!=-1){
@@ -245,12 +245,6 @@ function clearLocalStorage(){
 	}
 	restart()
 }
-function closeLoading(){
-	newLoading.innerText=
-	newLoading.style.left=
-	newLoading.style.top=
-	newLoading.style.display=""
-}
 function closeMenu(){
 	if(document.getElementsByClassName("popup-menu")[0]){
 		document.getElementsByClassName("popup-menu")[0].style.opacity="0"
@@ -365,11 +359,6 @@ function initCalculator(max,calculate){
 					document.getElementById(id).oninput()
 				})
 			}
-		}
-	}
-	pullToRefresh=function(){
-		for(var i=0;i<=max;i++){
-			input[i].value=""
 		}
 	}
 }
@@ -1098,55 +1087,6 @@ if(isElectron){
 		}
 		newDiv.appendChild(newCloseDiv)
 		document.body.appendChild(newDiv)
-	}
-}
-window.ontouchstart=function(e){
-	if(pullToRefresh&&isApp&&document.documentElement.scrollTop==0){
-		var initialY=e.touches[0].clientY
-		window.ontouchmove=function(e){
-			if(document.documentElement.scrollTop==0){
-				var currentY=e.touches[0].clientY
-				var distance=currentY-initialY
-				newLoading.style.top=(currentY-25)+"px"
-				if(e.touches[0].clientX>window.innerWidth/2){
-					newLoading.style.left=(e.touches[0].clientX-110)+"px"
-				}else{
-					newLoading.style.left=(e.touches[0].clientX)+"px"
-				}
-				if(distance>150){
-					switch(language){
-						case "SimplifiedChinese":
-						newLoading.innerText="刷新"
-						break;
-						default:
-						newLoading.innerText="Refresh"
-					}
-				}else{
-					switch(language){
-						case "SimplifiedChinese":
-						newLoading.innerText="你好"
-						break;
-						default:
-						newLoading.innerText="Hello"
-					}
-				}
-				if(!newLoading.style.display){
-					newLoading.style.display="block"
-				}
-			}else{
-				closeLoading()
-			}
-		}
-	}
-}
-window.ontouchend=function(){
-	if(pullToRefresh&&isApp&&window.ontouchmove&&newLoading.style.display){
-		window.ontouchmove=null
-		if(/Refresh|刷新/.test(newLoading.innerText)){
-			pullToRefresh()
-		}else{
-			closeLoading()
-		}
 	}
 }
 if(login.username){
