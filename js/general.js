@@ -453,10 +453,6 @@ function loginDialog(){
 										},
 										"method":"POST",
 										"success":function(){
-											showAlert([
-												"Log in successfully",
-												"已成功登录"
-											])
 											localStorage.setItem("Email",email)
 											localStorage.setItem("Password",password)
 											localStorage.setItem("Username",username)
@@ -632,34 +628,30 @@ function searchURL(key,url){
 	}
 }
 function showAlert(text){
-	setTimeout(function(){
-		switch(language){
-			case "SimplifiedChinese":
-			alert(text[1])
-			break
-			default:
-			alert(text[0])
-		}
-	},25)
+	switch(language){
+		case "SimplifiedChinese":
+		alert(text[1])
+		break
+		default:
+		alert(text[0])
+	}
 }
 function showConfirm(text,positiveCallback,negativeCallback){
-	setTimeout(function(){
-		var value
-		switch(language){
-			case "SimplifiedChinese":
-			value=confirm(text[1])
-			break
-			default:
-			value=confirm(text[0])
+	var value
+	switch(language){
+		case "SimplifiedChinese":
+		value=confirm(text[1])
+		break
+		default:
+		value=confirm(text[0])
+	}
+	if(value){
+		if(positiveCallback){
+			positiveCallback()
 		}
-		if(value){
-			if(positiveCallback){
-				positiveCallback()
-			}
-		}else if(negativeCallback){
-			negativeCallback()
-		}
-	},25)
+	}else if(negativeCallback){
+		negativeCallback()
+	}
 }
 function showImage(src){
 	var addedImageDiv=document.getElementsByClassName("image")[0]
