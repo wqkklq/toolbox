@@ -154,6 +154,7 @@ function ajax(settings){
 			xhr.send()
 		}
 	}
+	return xhr
 }
 function arrayContains(obj,array){
 	for(var i=0;i<array.length;i++){
