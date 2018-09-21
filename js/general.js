@@ -134,7 +134,7 @@ function ajax(settings){
 		}
 		if(settings.crossOrigin){
 			ajax({
-				"url":backend+"get",
+				"url":"https://www.rthsoftware.cn/backend/get",
 				"data":{
 					"url":url,
 					"username":"admin"
@@ -955,7 +955,7 @@ if(!language){
 	localStorage.setItem("Language",language)
 }
 if(!theme){
-	theme="Automatic"
+	theme="Light"
 }
 if(theme=="Automatic"){
 	var currentHour=new Date().getHours()
