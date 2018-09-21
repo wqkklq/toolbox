@@ -409,16 +409,7 @@
 			if(searchURL("action")){
 				switch(searchURL("action").toLowerCase()){
 					case "dl":
-					showConfirm([
-						"Do you want to download RTH Toolbox?",
-						"您想下载 RTH 工具箱吗？"
-					],getToolbox,function(){
-						if(window.history.length>1){
-							history.go(-1)
-						}else{
-							close()
-						}
-					})
+					getToolbox()
 				}
 			}
 			if(isElectron){
