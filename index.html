@@ -188,8 +188,6 @@
 				var currentVer=ver.split("."),newVer
 				if(isAndroid){
 					newVer=latestVer.android.split(".")
-				}else if(isElectron){
-					newVer=latestVer.electron.split(".")
 				}else if(isiOS){
 					newVer=latestVer.ios.split(".")
 				}else{
@@ -410,21 +408,6 @@
 				switch(searchURL("action").toLowerCase()){
 					case "dl":
 					getToolbox()
-				}
-			}
-			if(isElectron){
-				var path,remote=require("electron").remote
-				if(process.platform=="darwin"){
-					path=remote.getGlobal("sharedObj").path
-				}else if(process.platform=="win32"){
-					path=remote.getGlobal("sharedObj").path[1]
-				}
-				if(path){
-					if(path.indexOf("://")==-1){
-						localStorage.setItem("WordList",require("fs").readFileSync(path,"utf8"))
-						localStorage.removeItem("WordListCurrentItem")
-						openWindow("wordlist")
-					}
 				}
 			}
 			getSentence()

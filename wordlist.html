@@ -419,18 +419,6 @@
 						"Please open this page in the browser",
 						"请在浏览器中打开此页面"
 					])
-				}else if(isElectron&&!isLinux){
-					require("electron").remote.dialog.showSaveDialog({
-						defaultPath:document.getElementById("TitleInput").value,
-						filters:[{name:"RTH Toolbox Files",extensions:["rth"]}]
-					},function(filename){
-						if(filename){
-							require("fs").writeFileSync(filename,JSON.stringify({
-								"list":currentList,
-								"title":document.getElementById("TitleInput").value
-							}))
-						}
-					})
 				}else if(login.username){
 					showConfirm([
 						"Do you want to export this word list?",
@@ -463,13 +451,7 @@
 							"title":document.getElementById("TitleInput").value
 						})))
 						dl.setAttribute("download",filename)
-						if(document.createEvent){
-							var event=document.createEvent("MouseEvents")
-							event.initEvent("click",true,true)
-							dl.dispatchEvent(event)
-						}else{
-							dl.click()
-						}
+						dl.click()
 					})
 				}else if(!login.username){
 					loginDialog()

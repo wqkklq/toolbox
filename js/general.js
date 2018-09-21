@@ -6,7 +6,6 @@ isAndroid=/Android/i.test(navigator.userAgent),
 isChinese=/[\u4E00-\u9FA5]+/,
 isCordova=!!window.cordova,
 isEdge=/Edge/i.test(navigator.userAgent),
-isElectron=/Electron\//i.test(navigator.userAgent),
 isEnglish=/[A-Za-z]+/,
 isIE=/MSIE|Trident/i.test(navigator.userAgent),
 isiOS=/iPhone|iPad/i.test(navigator.userAgent),
@@ -30,7 +29,7 @@ newTitle=document.createElement("h1"),
 recentInput=0,
 theme=localStorage.getItem("Theme"),
 ver="14.1"
-var isApp=isCordova||isElectron,
+var isApp=isCordova,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
 isMobile=isAndroid||isiOS,
@@ -590,9 +589,7 @@ function openDialog(){
 }
 function openWebPage(href){
 	href=encodeURI(href)
-	if(isElectron){
-		require("electron").shell.openExternal(href)
-	}else if(isiOSApp){
+	if(isiOSApp){
 		OpenUrlExt.open(href)
 	}else{
 		open(href)
@@ -612,7 +609,7 @@ function openWindow(name){
 	}
 }
 function restart(){
-	if(isAndroidApp||isElectron){
+	if(isAndroidApp){
 		mui.back()
 	}else{
 		openWindow("index")
@@ -1036,54 +1033,6 @@ if(appliedTheme=="Bing"){
 	}
 }else if(theme!="Bing"&&location.hostname!="www.rthsoftware.cn"){
 	localStorage.removeItem("bing-wallpaper")
-}
-if(isElectron){
-	var electron=require("electron")
-	var remote=electron.remote
-	document.addEventListener("keydown",function(e){
-		var win=remote.getCurrentWindow()
-		if(e.ctrlKey||e.metaKey){
-			switch(e.keyCode){
-				case 73:
-				win.toggleDevTools()
-				break
-				case 82:
-				win.reload()
-			}
-		}
-	})
-	electron.webFrame.setZoomLevelLimits(1,1)
-	if(process.platform!=="darwin"){
-		var newDiv=document.createElement("div"),
-		newMinimizeDiv=document.createElement("div")
-		newMaximizeDiv=document.createElement("div")
-		newCloseDiv=document.createElement("div")
-		newDiv.classList.add("win")
-		newMinimizeDiv.style.right="80px"
-		newMinimizeDiv.innerText="-"
-		newMinimizeDiv.onclick=function(){
-			remote.getCurrentWindow().minimize()
-		}
-		newDiv.appendChild(newMinimizeDiv)
-		newMaximizeDiv.style.right="40px"
-		newMaximizeDiv.innerText="+"
-		newMaximizeDiv.onclick=function(){
-			var win=remote.getCurrentWindow()
-			if(win.isMaximized()){
-				win.unmaximize()
-			}else{
-				win.maximize()
-			}
-		}
-		newDiv.appendChild(newMaximizeDiv)
-		newCloseDiv.style.right="0px"
-		newCloseDiv.innerText="×"
-		newCloseDiv.onclick=function(){
-			window.close()
-		}
-		newDiv.appendChild(newCloseDiv)
-		document.body.appendChild(newDiv)
-	}
 }
 if(login.username){
 	ajax({

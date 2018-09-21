@@ -186,12 +186,6 @@
 				timeChanged()
 			}
 			function task(){
-				if(isElectron){
-					var win=require("electron").remote.getCurrentWindow()
-					if(win.getSize()=="200,160"){
-						win.setSize(1000,700)
-					}
-				}
 				if(document.getElementById("RunCodeCheck").checked){
 					try{
 						eval(document.getElementById("RunCodeInput").value.replace(/coin|eval|localStorage|task/gi,""))
@@ -282,17 +276,6 @@
 					})
 				}
 			}
-			if(isElectron){
-				document.addEventListener("visibilitychange",function(){
-					if(document.hidden){
-						scrollTo(0,0)
-						var win=require("electron").remote.getCurrentWindow()
-						win.restore()
-						win.setSize(200,160)
-						win.setAlwaysOnTop(true)
-					}
-				})
-			}
 			switch(language){
 				case "SimplifiedChinese":
 				document.title="计时器"
@@ -345,15 +328,6 @@
 				document.getElementById("Clear").innerText="Clear"
 			}
 			newTitle.innerText=document.title
-			if(isElectron){
-				window.onbeforeunload=function(){
-					var win=require("electron").remote.getCurrentWindow()
-					if(win.getSize()=="200,160"){
-						win.setSize(1000,700)
-					}
-					win.setAlwaysOnTop(false)
-				}
-			}
 			if(location.hostname&&window.Notification){
 				Notification.requestPermission()
 			}
