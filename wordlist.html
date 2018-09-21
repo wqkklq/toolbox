@@ -1332,12 +1332,14 @@
 				],restartQuiz)
 			}
 			document.getElementById("Speak").onclick=speakQuestion
-			for(var i=0;i<quizSettings.length;i++){
-				var name=quizSettings[i].id.replace("Switch","")
-				if(savedQuizSettings[name]&&!isEnabled(name)){
-					document.getElementById(name+"Switch").classList.add("mui-active")
-				}else if(!savedQuizSettings[name]&&isEnabled(name)){
-					document.getElementById(name+"Switch").classList.remove("mui-active")
+			if(savedQuizSettings){
+				for(var i=0;i<quizSettings.length;i++){
+					var name=quizSettings[i].id.replace("Switch","")
+					if(savedQuizSettings[name]&&!isEnabled(name)){
+						document.getElementById(name+"Switch").classList.add("mui-active")
+					}else if(!savedQuizSettings[name]&&isEnabled(name)){
+						document.getElementById(name+"Switch").classList.remove("mui-active")
+					}
 				}
 			}
 			for(var i=0;i<handle.length;i++){
