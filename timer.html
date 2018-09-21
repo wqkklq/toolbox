@@ -354,7 +354,7 @@
 					win.setAlwaysOnTop(false)
 				}
 			}
-			if(isWeb&&window.Notification){
+			if(location.hostname&&window.Notification){
 				Notification.requestPermission()
 			}
 		</script>

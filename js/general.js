@@ -15,12 +15,11 @@ isMac=/Macintosh/i.test(navigator.userAgent),
 isNumber=/[0-9]+/,
 isQQ=/QQ\//i.test(navigator.userAgent),
 isUpperCase=/[A-Z]+/,
-isWeb=location.hostname=="www.rthsoftware.cn",
 isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/20").toLocaleDateString(),
+lastUpdated=new Date("2018/9/21").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -569,7 +568,7 @@ function loginRequired(callback,negativeCallback,offline,redirect){
 		if(negativeCallback){
 			negativeCallback()
 		}
-		if(redirect&&isWeb){
+		if(redirect&&location.hostname=="www.rthsoftware.cn"){
 			location.href="../login"
 		}else{
 			loginDialog()
@@ -600,9 +599,13 @@ function openWebPage(href){
 	}
 }
 function openWindow(name){
-	if(isWeb&&name=="index"){
-		location.href="https://www.rthsoftware.cn/toolbox/"
-	}else if(name.indexOf("?")!=-1||isWeb){
+	if(location.hostname&&name=="index"){
+		if(location.hostname=="www.rthsoftware.cn"){
+			location.href="https://www.rthsoftware.cn/toolbox/"
+		}else{
+			location.href="https://"+location.hostname+"/"
+		}
+	}else if(name.indexOf("?")!=-1||location.hostname){
 		location.href=name
 	}else{
 		location.href=name+".html"
@@ -1031,7 +1034,7 @@ if(appliedTheme=="Bing"){
 			}
 		})
 	}
-}else if(theme!="Bing"&&!isWeb){
+}else if(theme!="Bing"&&location.hostname!="www.rthsoftware.cn"){
 	localStorage.removeItem("bing-wallpaper")
 }
 if(isElectron){

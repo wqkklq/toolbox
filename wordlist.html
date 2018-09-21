@@ -157,8 +157,10 @@
 			mistakes,
 			outOfOrder=[],
 			progress=1,
+			quizSettings=document.getElementsByClassName("mui-switch"),
+			quizSettingsChanged=false,
+			savedQuizSettings=JSON.parse(localStorage.getItem("QuizSettings")),
 			savedWordList=JSON.parse(localStorage.getItem("SavedWordList")),
-			settingsChanged,
 			showAnswer=false,
 			wordIndex
 			function add(word){
@@ -505,6 +507,9 @@
 					}
 				}
 			}
+			function isEnabled(name){
+				return document.getElementById(name+"Switch").classList.contains("mui-active")
+			}
 			function load(){
 				if(!savedWordList){
 					savedWordList={
@@ -717,7 +722,7 @@
 				outOfOrder.push(wordIndex)
 				correctWord=currentList[wordIndex-1].word
 				correctDefinition=currentList[wordIndex-1].definition
-				if(document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){
+				if(isEnabled("MultipleChoice")){
 					document.getElementById("Option1").innerText=
 					document.getElementById("Option2").innerText=
 					document.getElementById("Option3").innerText=
@@ -725,9 +730,9 @@
 					var optionIndex=0,optionStr=""
 					correctInt=Math.round(Math.random()*3)
 					var options=[wordIndex]
-					if(document.getElementById("EnterWordsSwitch").classList.contains("mui-active")){
+					if(isEnabled("EnterWords")){
 						optionStr=correctWord
-					}else if(document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
+					}else if(isEnabled("EnterDefinitions")){
 						optionStr=correctDefinition
 					}
 					switch(correctInt){
@@ -748,9 +753,9 @@
 						if(arrayContains(optionIndex,options)||optionStr==null||optionIndex==0){
 							generateOption()
 						}else{
-							if(document.getElementById("EnterWordsSwitch").classList.contains("mui-active")){
+							if(isEnabled("EnterWords")){
 								optionStr=currentList[optionIndex-1].word
-							}else if(document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
+							}else if(isEnabled("EnterDefinitions")){
 								optionStr=currentList[optionIndex-1].definition
 							}
 							options.push(optionIndex)
@@ -769,9 +774,9 @@
 						}
 					}
 				}
-				if(document.getElementById("ShowWordsSwitch").classList.contains("mui-active")){
+				if(isEnabled("ShowWords")){
 					document.getElementById("Show").innerText=correctWord
-				}else if(document.getElementById("ShowDefinitionsSwitch").classList.contains("mui-active")){
+				}else if(isEnabled("ShowDefinitions")){
 					document.getElementById("Show").innerText=correctDefinition
 				}else{
 					switch(language){
@@ -848,7 +853,7 @@
 				}
 			}
 			function optionClicked(clickedNum){
-				if(document.getElementsByClassName("quiz")[0].style.display=="block"&&document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){
+				if(document.getElementsByClassName("quiz")[0].style.display=="block"&&isEnabled("MultipleChoice")){
 					if(clickedNum==correctInt){
 						showAnswer=true
 						next()
@@ -862,18 +867,18 @@
 				}
 			}
 			function next(){
-				if(settingsChanged){
+				if(quizSettingsChanged){
 					showAlert([
 						"Click Restart to apply the settings",
 						"单击重新开始使设置生效"
 					])
 				}else{
-					if(!showAnswer&&document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){
+					if(!showAnswer&&isEnabled("MultipleChoice")){
 						addMistake(correctWord,correctDefinition)
 					}
-					if(!showAnswer&&!document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){
+					if(!showAnswer&&!isEnabled("MultipleChoice")){
 						showAnswer=true
-						if(document.getElementById("EnterWordsSwitch").classList.contains("mui-active")){
+						if(isEnabled("EnterWords")){
 							if(document.getElementById("EnteredWord").value.replace(/(\s*$)/g,"").toLowerCase()==correctWord.toLowerCase()){
 								switch(language){
 									case "SimplifiedChinese":
@@ -893,7 +898,7 @@
 								}
 							}
 						}
-						if(document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
+						if(isEnabled("EnterDefinitions")){
 							var enteredDefWithoutSpace=document.getElementById("EnteredDefinition").value.replace(/\s+/g,""),
 							correctDefWithoutSpace=correctDefinition.replace(/\s+/g,""),
 							incorrect=function(){
@@ -953,24 +958,24 @@
 			}
 			function restartQuiz(){
 				newTitle.innerHTML=document.getElementById("Quiz").innerText+" (<span id=\"Progress\">1</span>/"+currentList.length+")"
-				settingsChanged=false
+				quizSettingsChanged=false
 				progress=1
 				outOfOrder=[]
 				mistakes.list=[]
 				loadQuestion()
-				if(document.getElementById("MultipleChoiceSwitch").classList.contains("mui-active")){
+				if(isEnabled("MultipleChoice")){
 					document.getElementById("AnswerUl").style.display="block"
 					document.getElementById("EnterWordDiv").style.display="none"
 					document.getElementById("EnterDefinitionDiv").style.display="none"
 				}else{
 					document.getElementById("AnswerUl").style.display=""
-					if(document.getElementById("EnterWordsSwitch").classList.contains("mui-active")&&document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
+					if(isEnabled("EnterWords")&&isEnabled("EnterDefinitions")){
 						document.getElementById("EnterWordDiv").style.display=""
 						document.getElementById("EnterDefinitionDiv").style.display=""
-					}else if(document.getElementById("EnterWordsSwitch").classList.contains("mui-active")&&!document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
+					}else if(isEnabled("EnterWords")&&!isEnabled("EnterDefinitions")){
 						document.getElementById("EnterWordDiv").style.display=""
 						document.getElementById("EnterDefinitionDiv").style.display="none"
-					}else if(!document.getElementById("EnterWordsSwitch").classList.contains("mui-active")&&document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
+					}else if(!isEnabled("EnterWords")&&isEnabled("EnterDefinitions")){
 						document.getElementById("EnterWordDiv").style.display="none"
 						document.getElementById("EnterDefinitionDiv").style.display=""
 					}else{
@@ -1016,8 +1021,8 @@
 				})
 			}
 			function speakQuestion(){
-				var speakDef=document.getElementById("SpeakDefinitionsSwitch").classList.contains("mui-active")
-				speakWord=document.getElementById("SpeakWordsSwitch").classList.contains("mui-active")
+				var speakDef=isEnabled("SpeakDefinitions")
+				speakWord=isEnabled("SpeakWords")
 				if(speakWord&&!speakDef&&isEnglish.test(correctWord)){
 					speak(correctWord,document.getElementsByTagName("select")[0].value)
 				}else{
@@ -1289,7 +1294,7 @@
 			document.getElementById("EnteredWord").onkeydown=function(e){
 				if(e.keyCode==13){
 					if(this.value||e.ctrlKey||e.metaKey){
-						if(document.getElementById("EnterDefinitionsSwitch").classList.contains("mui-active")){
+						if(isEnabled("EnterDefinitions")){
 							document.getElementById("EnteredDefinition").focus()
 						}else{
 							next()
@@ -1301,7 +1306,7 @@
 				if(e.keyCode==13){
 					if(this.value||e.ctrlKey||e.metaKey){
 						next()
-						if(!showAnswer&&document.getElementById("EnterWordsSwitch").classList.contains("mui-active")){
+						if(!showAnswer&&isEnabled("EnterWords")){
 							document.getElementById("EnteredWord").focus()
 						}
 					}
@@ -1327,9 +1332,25 @@
 				],restartQuiz)
 			}
 			document.getElementById("Speak").onclick=speakQuestion
+			for(var i=0;i<quizSettings.length;i++){
+				var name=quizSettings[i].id.replace("Switch","")
+				if(savedQuizSettings[name]&&!isEnabled(name)){
+					document.getElementById(name+"Switch").classList.add("mui-active")
+				}else if(!savedQuizSettings[name]&&isEnabled(name)){
+					document.getElementById(name+"Switch").classList.remove("mui-active")
+				}
+			}
 			for(var i=0;i<handle.length;i++){
 				handle[i].onclick=function(){
-					settingsChanged=true
+					quizSettingsChanged=true
+					if(!savedQuizSettings){
+						savedQuizSettings={}
+					}
+					for(var i=0;i<quizSettings.length;i++){
+						var name=quizSettings[i].id.replace("Switch","")
+						savedQuizSettings[name]=isEnabled(name)
+					}
+					localStorage.setItem("QuizSettings",JSON.stringify(savedQuizSettings))
 				}
 			}
 			document.getElementById("OpenFile").onchange=function(e){
