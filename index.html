@@ -266,14 +266,12 @@
 					}
 				}else if(isiOS){
 					url="https://itunes.apple.com/app/rth-toolbox/id1294479577"
-				}else if(isWindows){
-					url="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Windows_2.zip"
-				}else if(isMac){
-					url="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_macOS.zip"
-				}else if(isLinux){
-					url="https://github.com/rthsoftware/rth-toolbox/releases/download/2018022501/RTHToolbox_Linux.zip"
+				}else{
+					showQRCode("https://www.rthsoftware.cn/toolbox/?action=dl")
 				}
-				location.href=url
+				if(url){
+					location.href=url
+				}
 			}
 			function loadSentence(){
 				if(savedQuote){
