@@ -456,10 +456,7 @@
 				}else if(!login.username){
 					loginDialog()
 				}else{
-					showAlert([
-						"Unable to connect to the server",
-						"无法连接服务器"
-					])
+					error()
 				}
 			}
 			function generateOrder(){
@@ -478,14 +475,14 @@
 						}
 					})(),
 					short=document.getElementById("TitleInput").value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
-					var url="https://www.rthsoftware.cn/toolbox/wordlist?index="+index+"&username="+login.username
+					var url=toolboxOnline+"wordlist?index="+index+"&username="+login.username
 					if(!short){
 						short=MD5(login.username+index).substr(0,6)
 					}
 					return{
 						"domain":short,
 						"original":url,
-						"short":"http://rths.tk/"+short
+						"short":secondary+short
 					}
 				}
 			}

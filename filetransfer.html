@@ -95,7 +95,7 @@
 									name=this.innerText
 									showMenu(mouse,[{
 										"onclick":function(){
-											showQRCode("https://www.rthsoftware.cn/toolbox/filetransfer?code="+index)
+											showQRCode(toolboxOnline+"filetransfer?code="+index)
 											closeMenu()
 										},
 										"text":[
@@ -207,7 +207,7 @@
 								newButton.style.width="100%"
 								newButton.onclick=function(){
 									closeDialog()
-									showQRCode("https://www.rthsoftware.cn/toolbox/filetransfer?code="+e.code)
+									showQRCode(toolboxOnline+"filetransfer?code="+e.code)
 								}
 								newCloseDiv.classList.add("close")
 								newCloseDiv.innerText="×"

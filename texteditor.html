@@ -262,14 +262,14 @@
 						}
 					})(),
 					short=document.getElementsByTagName("input")[0].value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
-					var url="https://rths.tk/"+login.username+"/"+index+".html"
+					var url=secondary+login.username+"/"+index+".html"
 					if(!short){
 						short=MD5(login.username+index).substr(0,6)
 					}
 					return{
 						"domain":short,
 						"original":url,
-						"short":"http://rths.tk/"+short
+						"short":secondary+short
 					}
 				}
 			}

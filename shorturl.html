@@ -83,7 +83,7 @@
 					newLi.oncontextmenu=
 					newLi.onclick=function(mouse){
 						var index=this.getAttribute("number")*1-1
-						var url="http://rths.tk/"+myURL[index].name
+						var url=secondary+myURL[index].name
 						showMenu(mouse,[{
 							"onclick":function(){
 								showPrompt(null,function(){
@@ -215,9 +215,9 @@
 			function loadPreview(){
 				var value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
 				if(value){
-					document.getElementById("Preview").innerText="http://rths.tk/"+value
+					document.getElementById("Preview").innerText=secondary+value
 				}else{
-					document.getElementById("Preview").innerText="http://rths.tk/"+defaultShortURL
+					document.getElementById("Preview").innerText=secondary+defaultShortURL
 				}
 			}
 			document.getElementById("ShortURL").oninput=loadPreview
@@ -261,7 +261,7 @@
 										load()
 										showPrompt(null,function(){
 											openWebPage(originalURL)
-										},null,"http://rths.tk/"+value)
+										},null,secondary+value)
 										closeMenu()
 									}else{
 										var extraInfo=""

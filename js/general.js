@@ -1,6 +1,6 @@
 /*Code written by Shangzhen Yang*/
 var appliedTheme,
-backend="https://www.rthsoftware.cn/backend/",
+backend=localStorage.getItem("Backend"),
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
 isChinese=/[\u4E00-\u9FA5]+/,
@@ -18,7 +18,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/21").toLocaleDateString(),
+lastUpdated=new Date("2018/9/22").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -27,7 +27,9 @@ login={
 newLoading=document.createElement("div"),
 newTitle=document.createElement("h1"),
 recentInput=0,
+secondary="http://rths.tk/",
 theme=localStorage.getItem("Theme"),
+toolboxOnline="https://www.rthsoftware.cn/toolbox/",
 ver="14.1"
 var isApp=isCordova,
 isAndroidApp=isAndroid&&isCordova,
@@ -238,6 +240,7 @@ function calc(code){
 function clearLocalStorage(){
 	localStorage.clear()
 	if(login.username){
+		localStorage.setItem("Backend",backend)
 		localStorage.setItem("Email",login.email)
 		localStorage.setItem("Password",login.password)
 		localStorage.setItem("Username",login.username)
@@ -417,6 +420,9 @@ function loginDialog(){
 						newLoginButton.onclick=submitLogin
 						if(e.index){
 							if(e.pass){
+								if(e.backend){
+									localStorage.setItem("Backend",e.backend)
+								}
 								localStorage.setItem("Email",email)
 								localStorage.setItem("Password",password)
 								localStorage.setItem("Username",e.username)
@@ -532,7 +538,7 @@ function loginDialog(){
 			newConfirmPasswordInput.placeholder="确认密码"
 			newSignUpButton.innerText="注册"
 			newLoginButton.innerText="登录"
-			newDescriptionDiv.innerText="登录后，您可以在 www.rthsoftware.cn 查看您保存的单词表和文本文档"
+			newDescriptionDiv.innerText="有了 RTH 账号，您就可以在您的所有设备上获取保存的数据。"
 			break
 			default:
 			newH1.innerText="Login"
@@ -541,7 +547,7 @@ function loginDialog(){
 			newConfirmPasswordInput.placeholder="Confirm Password"
 			newSignUpButton.innerText="Sign Up"
 			newLoginButton.innerText="Login"
-			newDescriptionDiv.innerText="After logging in, you can view your saved word lists and text documents at www.rthsoftware.cn"
+			newDescriptionDiv.innerText="With RTH account, you can get the saved data on all of your devices."
 		}
 		newDiv.appendChild(newH1)
 		newDiv.appendChild(newEmailInput)
@@ -578,6 +584,7 @@ function logOut(){
 	login.email=
 	login.password=
 	login.username=null
+	localStorage.removeItem("Backend")
 	localStorage.removeItem("Email")
 	localStorage.removeItem("Password")
 	localStorage.removeItem("Username")
@@ -597,11 +604,7 @@ function openWebPage(href){
 }
 function openWindow(name){
 	if(location.hostname&&name=="index"){
-		if(location.hostname=="www.rthsoftware.cn"){
-			location.href="https://www.rthsoftware.cn/toolbox/"
-		}else{
-			location.href="https://"+location.hostname+"/"
-		}
+		location.href=toolboxOnline
 	}else if(name.indexOf("?")!=-1||location.hostname){
 		location.href=name
 	}else{
@@ -840,7 +843,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 	},25)
 }
 function showQRCode(text){
-	showImage(backend+"get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text="+text)+"&username=shangzhenyjg9k10x4")
+	showImage(backend+"get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text="+text)+"&username=admin")
 }
 function showToast(text){
 	switch(language){
@@ -866,7 +869,7 @@ function speak(text,lan){
 			"Loading audio",
 			"正在加载音频"
 		])
-		var audio=new Audio(backend+"get?url="+encodeURIComponent("https://fanyi.baidu.com/gettts?lan="+lan+"&spd=6&text="+text)+"&username=shangzhenyjg9k10x4")
+		var audio=new Audio("https://www.rthsoftware.cn/backend/get?url="+encodeURIComponent("https://fanyi.baidu.com/gettts?lan="+lan+"&spd=6&text="+text)+"&username=admin")
 		audio.onerror=function(){
 			if(window.speechSynthesis){
 				window.speechSynthesis.speak(new SpeechSynthesisUtterance(text))
@@ -916,6 +919,12 @@ function translate(query,from,to,callback,negativeCallback){
 			}
 		}
 	})
+}
+if(!backend){
+	backend="https://www.rthsoftware.cn/backend/"
+}else if(backend=="https://us.rths.tk/backend/"){
+	secondary="http://rths.tk/us/"
+	toolboxOnline="https://t.rths.tk/"
 }
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){
@@ -1119,4 +1128,14 @@ switch(language){
 		["Hungarian","hu"],
 		["Vietnamese","vie"]
 	]
+}
+if(!login.username){
+	ajax({
+		"url":"https://us.rths.tk/backend/geo",
+		"success":function(e){
+			if(e!="CN"){
+				backend="https://us.rths.tk/backend/";
+			}
+		}
+	})
 }

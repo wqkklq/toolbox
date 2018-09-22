@@ -12,6 +12,7 @@
 				width:100%;
 			}
 			p{
+				line-height:24px;
 				padding:0px 5px;
 			}
 			p:last-of-type{
@@ -289,7 +290,7 @@
 				document.getElementById("DeleteAccount").innerText="删除账号"
 				document.getElementById("LogOut").innerText="退出登录"
 				document.getElementById("ClearLocalStorage").innerText="清空本地存储"
-				document.getElementById("Introduction").innerText="登录后，您可以在 www.rthsoftware.cn 查看您保存的单词表和文本文档"
+				document.getElementById("Introduction").innerText="您可以在 "+backend.replace("backend/","")+" 查看您保存的单词表和文本文档。"
 				document.getElementById("About").innerText="关于 RTH 工具箱"
 				break
 				default:
@@ -307,7 +308,7 @@
 				document.getElementById("DeleteAccount").innerText="Delete Account"
 				document.getElementById("LogOut").innerText="Log Out"
 				document.getElementById("ClearLocalStorage").innerText="Clear Local Storage"
-				document.getElementById("Introduction").innerText="After logging in, you can view your saved word lists and text documents at www.rthsoftware.cn"
+				document.getElementById("Introduction").innerText="You can view your saved word lists and text documents at "+backend.replace("backend/","")+"."
 				document.getElementById("About").innerText="About RTH Toolbox"
 			}
 			newTitle.innerText=document.title
@@ -320,9 +321,6 @@
 				document.getElementById("MyEmail").innerText=login.email
 				document.getElementById("Login").style.display="none"
 				document.getElementById("MyAccount").style.display="block"
-				document.getElementById("Introduction").innerText=document.getElementById("Introduction").innerText.
-				replace("After logging in, y","Y").
-				replace("登录后，","")
 			}
 		</script>
 	</body>
