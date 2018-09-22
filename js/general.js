@@ -604,7 +604,11 @@ function openWebPage(href){
 }
 function openWindow(name){
 	if(location.hostname&&name=="index"){
-		location.href=toolboxOnline
+		if(location.hostname=="www.rthsoftware.cn"){
+			location.href="https://www.rthsoftware.cn/toolbox/"
+		}else{
+			location.href="https://"+location.hostname+"/"
+		}
 	}else if(name.indexOf("?")!=-1||location.hostname){
 		location.href=name
 	}else{
