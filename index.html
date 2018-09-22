@@ -256,7 +256,12 @@
 			}
 			function getToolbox(){
 				var url
-				if(isAndroid){
+				if(isTencent){
+					showAlert([
+						"Please open this page in the browser",
+						"请在浏览器中打开此页面"
+					])
+				}else if(isAndroid){
 					if(navigator.language=="zh-CN"){
 						url="https://www.coolapk.com/apk/163867"
 					}else{
