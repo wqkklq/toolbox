@@ -29,6 +29,27 @@
 				display:none;
 				margin-bottom:60px;
 			}
+			.full-screen{
+				background-color:black;
+				color:white;
+				height:100%;
+				left:0px;
+				opacity:0;
+				position:fixed;
+				top:0px;
+				transition:all .25s;
+				width:100%;
+				z-index:16;
+			}
+			.full-screen div{
+				font-size:120px;
+				height:200px;
+				left:100%;
+				line-height:200px;
+				position:fixed;
+				top:calc(50% - 100px);
+				white-space:nowrap;
+			}
 			.text-view{
 				background-color:white;
 				border:1px solid rgba(0,0,0,.2);
@@ -74,6 +95,7 @@
 				</ul>
 				<ul class="menu">
 					<li id="CreateMessageBox" class="menu"></li>
+					<li id="Scroll" class="menu"></li>
 					<li id="GenerateQRCode" class="menu"></li>
 					<li id="GenerateMD5Value" class="menu"></li>
 					<li id="GenerateWebPage" class="menu"></li>
@@ -834,6 +856,43 @@
 					alert(document.getElementsByTagName("textarea")[0].value)
 				}
 			}
+			document.getElementById("Scroll").onclick=function(){
+				if(!isEmpty()){
+					var intervalId,
+					newDiv=document.createElement("div"),
+					newTextDiv=document.createElement("div")
+					newDiv.classList.add("full-screen")
+					newDiv.onclick=function(){
+						clearInterval(intervalId)
+						newTextDiv.innerText=""
+						newDiv.style.opacity=""
+						setTimeout(function(){
+							try{
+								document.body.removeChild(newDiv)
+							}catch(e){}
+						},250)
+					}
+					newTextDiv.innerText=document.getElementsByTagName("textarea")[0].value.replace(/\n/g," ")
+					newDiv.appendChild(newTextDiv)
+					document.body.appendChild(newDiv)
+					setTimeout(function(){
+						newDiv.style.opacity="1"
+						intervalId=setInterval(function(){
+							var left
+							if(newTextDiv.style.left){
+								left=newTextDiv.style.left.replace("px","")
+							}else{
+								left=window.innerWidth
+							}
+							if(left<-newTextDiv.offsetWidth){
+								newTextDiv.style.left=""
+							}else{
+								newTextDiv.style.left=(left-5)+"px"
+							}
+						},25)
+					},25)
+				}
+			}
 			document.getElementById("GenerateQRCode").onclick=function(){
 				if(!isEmpty()){
 					showQRCode(document.getElementsByTagName("textarea")[0].value)
@@ -907,6 +966,7 @@
 				document.getElementById("FindReplace").innerText="查找和替换"
 				document.getElementById("Decode").innerText="解码"
 				document.getElementById("CreateMessageBox").innerText="创建消息框"
+				document.getElementById("Scroll").innerText="滚动"
 				document.getElementById("GenerateQRCode").innerText="生成二维码"
 				document.getElementById("GenerateMD5Value").innerText="生成 MD5 值"
 				document.getElementById("GenerateWebPage").innerText="生成网页"
@@ -933,6 +993,7 @@
 				document.getElementById("FindReplace").innerText="Find & Replace"
 				document.getElementById("Decode").innerText="Decode"
 				document.getElementById("CreateMessageBox").innerText="Create Message Box"
+				document.getElementById("Scroll").innerText="Scroll"
 				document.getElementById("GenerateQRCode").innerText="Generate QR Code"
 				document.getElementById("GenerateMD5Value").innerText="Generate MD5 Value"
 				document.getElementById("GenerateWebPage").innerText="Generate Web Page"
