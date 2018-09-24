@@ -24,9 +24,6 @@ footer div,
 .home{
 	background-color:black;
 }
-.home-menu{
-	margin-bottom:20px;
-}
 .home-menu li{
 	border-color:transparent;
 }
@@ -56,6 +53,9 @@ footer div,
 .mui-switch-blue.mui-active{
 	background-color:rgb(21,23,24);
 	border-color:rgb(109,109,114);
+}
+.placeholder{
+	height:20px;
 }
 .popup button{
 	color:rgb(21,23,24);
