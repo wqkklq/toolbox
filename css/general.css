@@ -135,12 +135,10 @@ textarea{
 	transition:all .25s;
 	width:50%;
 }
-.image-button div:hover,
-.win div:hover{
+.image-button div:hover{
 	background-color:rgb(0,122,244);
 }
-.image-button div:active,
-.win div:active{
+.image-button div:active{
 	background-color:white;
 	color:rgb(0,102,204);
 }
@@ -402,31 +400,10 @@ textarea{
 	height:100%;
 	padding:40px 10px 0px 10px;
 	width:100%;
-	-webkit-app-region:drag;
 }
 .width-limit{
 	margin:0px auto;
 	max-width:400px;
-}
-.win{
-	color:white;
-	cursor:default;
-	font-size:20px;
-	height:40px;
-	line-height:40px;
-	position:fixed;
-	right:0px;
-	text-align:center;
-	top:0px;
-	width:120px;
-	z-index:11;
-	-webkit-app-region:no-drag;
-}
-.win div{
-	height:40px;
-	position:fixed;
-	transition:all .25s;
-	width:40px;
 }
 ::-webkit-scrollbar{
 	display:none;

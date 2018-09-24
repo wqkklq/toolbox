@@ -60,7 +60,8 @@ textarea::placeholder,
 	background-image:linear-gradient(rgb(0,68,136),rgb(0,51,102));
 }
 .bottom,
-.home li{
+.home li,
+.home-title{
 	border-color:rgb(0,68,136);
 }
 .calc-table td,
@@ -69,6 +70,8 @@ textarea::placeholder,
 	background-color:rgb(21,23,24);
 	border-color:black;
 }
+.bottom,
+.get,
 .home,
 .icon{
 	background-color:rgb(0,51,102);

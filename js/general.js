@@ -18,7 +18,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/23").toLocaleDateString(),
+lastUpdated=new Date("2018/9/24").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -30,7 +30,7 @@ recentInput=0,
 secondary="http://rths.tk/",
 theme=localStorage.getItem("Theme"),
 toolboxOnline="https://www.rthsoftware.cn/toolbox/",
-ver="14.1"
+ver="15.0"
 var isApp=isCordova,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,

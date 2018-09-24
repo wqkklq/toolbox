@@ -8,19 +8,24 @@ footer div,
 	opacity:.5;
 }
 .bottom{
-	border-color:rgba(255,255,255,.25);
+	background-color:transparent;
+	border-color:transparent;
+	right:0px;
+	width:auto;
+}
+.bottom td{
+	width:auto;
 }
 .get,
 .icon{
 	background-color:transparent;
 	border-color:rgba(255,255,255,.25);
 }
-.get:enabled:active{
-	background-color:transparent;
-	border-color:white!important;
-}
 .home{
 	background-color:black;
+}
+.home-menu{
+	margin-bottom:20px;
 }
 .home-menu li{
 	border-color:transparent;
@@ -31,6 +36,9 @@ footer div,
 .home-menu li:active{
 	background-color:white;
 	color:black;
+}
+.home-title{
+	border-color:rgba(255,255,255,.25);
 }
 .mui-btn-blue{
 	background-color:rgba(0,0,0,.5);
@@ -64,4 +72,13 @@ footer div,
 }
 .title-bg{
 	background-color:rgba(0,0,0,.5);
+}
+#Quote{
+	display:none;
+	text-align:right;
+}
+@media screen and (min-width:450px){
+	#Quote{
+		display:block;
+	}
 }
