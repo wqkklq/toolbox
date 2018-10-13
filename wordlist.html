@@ -219,12 +219,10 @@
 										localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
 										localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
 									}else{
-										if(confirm(e.msg)){
-											if(e.msg.indexOf("未找到单词")!=-1){
-												enterDef()
-											}else{
-												add(newWord)
-											}
+										if(confirm(e.msg)&&e.msg.indexOf("未找到单词")!=-1){
+											enterDef()
+										}else{
+											add(newWord)
 										}
 									}
 								},
