@@ -18,7 +18,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/9/24").toLocaleDateString(),
+lastUpdated=new Date("2018/10/13").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -26,16 +26,17 @@ login={
 },
 newLoading=document.createElement("div"),
 newTitle=document.createElement("h1"),
+officialWebsite="https://www.rthsoftware.cn/",
 recentInput=0,
 secondary="http://rths.tk/",
 theme=localStorage.getItem("Theme"),
-toolboxOnline="https://www.rthsoftware.cn/toolbox/",
-ver="15.0"
+ver="15.1"
 var isApp=isCordova,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
 isMobile=isAndroid||isiOS,
-isTencent=isQQ||isWeChat
+isTencent=isQQ||isWeChat,
+toolboxOnline=officialWebsite+"toolbox/"
 function addZero(num,length){
 	return (Array(length).join("0")+num).slice(-length)
 }
@@ -163,6 +164,13 @@ function arrayContains(obj,array){
 		}
 	}
 	return false
+}
+function backendChanged(){
+	if(backend=="https://us.rths.tk/backend/"){
+		officialWebsite="https://www.rthsoftware.net/"
+		secondary="http://rths.tk/us/"
+		toolboxOnline=officialWebsite+"toolbox/"
+	}
 }
 function calc(code){
 	var abs=Math.abs,
@@ -926,9 +934,8 @@ function translate(query,from,to,callback,negativeCallback){
 }
 if(!backend){
 	backend="https://www.rthsoftware.cn/backend/"
-}else if(backend=="https://us.rths.tk/backend/"){
-	secondary="http://rths.tk/us/"
-	toolboxOnline="https://t.rths.tk/"
+}else{
+	backendChanged()
 }
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){
@@ -1138,7 +1145,8 @@ if(!login.username){
 		"url":"https://us.rths.tk/backend/geo",
 		"success":function(e){
 			if(e!="CN"){
-				backend="https://us.rths.tk/backend/";
+				backend="https://us.rths.tk/backend/"
+				backendChanged()
 			}
 		}
 	})
