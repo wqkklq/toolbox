@@ -25,6 +25,7 @@ login={
 	"username":localStorage.getItem("Username")
 },
 newLoading=document.createElement("div"),
+newMask=document.createElement("div"),
 newTitle=document.createElement("h1"),
 officialWebsite="https://www.rthsoftware.cn/",
 recentInput=0,
@@ -42,6 +43,7 @@ function addZero(num,length){
 }
 function ajax(settings){
 	if(settings.showLoading){
+		newMask.style.display="block"
 		newLoading.style.display="block"
 	}
 	var data
@@ -66,6 +68,7 @@ function ajax(settings){
 	var xhr=new XMLHttpRequest()
 	xhr.onreadystatechange=function(){
 		if(xhr.readyState==4){
+			newMask.style.display=
 			newLoading.innerText=
 			newLoading.style.display=""
 			if(xhr.status==200&&xhr.responseText||xhr.status==200&&settings.method=="POST"){
@@ -261,8 +264,8 @@ function closeMenu(){
 		setTimeout(function(){
 			try{
 				document.body.removeChild(document.getElementsByClassName("popup-menu")[0])
-				document.body.removeChild(document.getElementsByClassName("mask")[0])
 			}catch(e){}
+			newMask.style.display=""
 		},250)
 	}
 }
@@ -738,15 +741,12 @@ function showMenu(e,menu){
 	if(addedMenuDiv){
 		document.body.removeChild(addedMenuDiv)
 	}
-	var newDiv=document.createElement("div"),
-	newMask=document.createElement("div")
+	var newDiv=document.createElement("div")
 	newDiv.classList.add("popup-menu")
-	newMask.classList.add("mask")
-	newDiv.oncontextmenu=
-	newMask.oncontextmenu=function(){
+	newMask.style.display="block"
+	newDiv.oncontextmenu=function(){
 		return false
 	}
-	newMask.onclick=closeMenu
 	for(var i=0;i<menu.length;i++){
 		var newSpan=document.createElement("span")
 		switch(language){
@@ -759,7 +759,6 @@ function showMenu(e,menu){
 		newSpan.onclick=menu[i].onclick
 		newDiv.appendChild(newSpan)
 	}
-	document.body.appendChild(newMask)
 	document.body.appendChild(newDiv)
 	newDiv.style.left=(e.x-newDiv.offsetWidth/2)+"px"
 	newDiv.style.top=(e.y-newDiv.offsetHeight)+"px"
@@ -1019,6 +1018,12 @@ if(header){
 	}
 }
 newLoading.classList.add("loading")
+newMask.classList.add("mask")
+newMask.oncontextmenu=function(){
+	return false
+}
+newMask.onclick=closeMenu
+document.body.appendChild(newMask)
 document.body.appendChild(newLoading)
 if(appliedTheme=="Bing"){
 	var savedBingWallpaper

@@ -187,6 +187,7 @@ textarea{
 	z-index:14;
 }
 .mask{
+	display:none;
 	height:100%;
 	left:0px;
 	position:fixed;
