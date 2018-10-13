@@ -572,7 +572,7 @@ function loginDialog(){
 		},25)
 	}
 }
-function loginRequired(callback,negativeCallback,offline,redirect){
+function loginRequired(callback,negativeCallback,redirect){
 	if(login.username){
 		if(callback){
 			callback()
@@ -581,7 +581,7 @@ function loginRequired(callback,negativeCallback,offline,redirect){
 		if(negativeCallback){
 			negativeCallback()
 		}
-		if(redirect&&location.hostname=="www.rthsoftware.cn"){
+		if(redirect&&location.hostname){
 			location.href="../login"
 		}else{
 			loginDialog()
@@ -612,11 +612,7 @@ function openWebPage(href){
 }
 function openWindow(name){
 	if(location.hostname&&name=="index"){
-		if(location.hostname=="www.rthsoftware.cn"){
-			location.href="https://www.rthsoftware.cn/toolbox/"
-		}else{
-			location.href="https://"+location.hostname+"/"
-		}
+		location.href="https://"+location.hostname+"/toolbox/"
 	}else if(name.indexOf("?")!=-1||location.hostname){
 		location.href=name
 	}else{
