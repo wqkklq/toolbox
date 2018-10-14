@@ -18,7 +18,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/10/13").toLocaleDateString(),
+lastUpdated=new Date("2018/10/15").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -31,7 +31,7 @@ officialWebsite="https://www.rthsoftware.cn/",
 recentInput=0,
 secondary="http://rths.tk/",
 theme=localStorage.getItem("Theme"),
-ver="15.1"
+ver="15.2"
 var isApp=isCordova,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -1052,7 +1052,7 @@ if(appliedTheme=="Bing"){
 			}
 		})
 	}
-}else if(theme!="Bing"&&location.hostname!="www.rthsoftware.cn"){
+}else if(theme!="Bing"){
 	localStorage.removeItem("bing-wallpaper")
 }
 if(login.username){
