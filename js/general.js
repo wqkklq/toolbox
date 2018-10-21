@@ -18,7 +18,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/10/15").toLocaleDateString(),
+lastUpdated=new Date("2018/10/21").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -934,7 +934,7 @@ if(!backend){
 }
 if(!isIE){
 	window.onerror=function(msg,url,lineNo){
-		if(msg!="Script error."&&lineNo!=1){
+		if(msg&&url&&lineNo&&msg!="Script error."&&url.indexOf("mui.min.js")==-1&&lineNo!=1){
 			var text=msg+" at "+url+" : "+lineNo
 			if(isApp||login.username){
 				window.onerror=null
