@@ -1,5 +1,6 @@
 /*Code written by Shangzhen Yang*/
 var appliedTheme,
+appName="RTH Toolbox",
 backend=localStorage.getItem("Backend"),
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
@@ -18,7 +19,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/10/21").toLocaleDateString(),
+lastUpdated=new Date("2018/10/27").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -942,6 +943,7 @@ if(!isIE){
 				ajax({
 					"url":backend+"feedback",
 					"data":{
+						"appname":appName,
 						"email":login.email,
 						"lang":language,
 						"name":login.username,
@@ -1151,4 +1153,12 @@ if(!login.username){
 			}
 		}
 	})
+}
+if(location.hostname){
+	var newStatDiv=document.createElement("div"),
+	newScript=document.createElement("script")
+	newStatDiv.style.display="none"
+	newScript.src="https://s13.cnzz.com/z_stat.php?id=1275083108&web_id=1275083108"
+	newStatDiv.appendChild(newScript)
+	document.body.appendChild(newStatDiv)
 }
