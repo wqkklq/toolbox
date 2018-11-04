@@ -409,3 +409,10 @@ textarea{
 ::-webkit-scrollbar{
 	display:none;
 }
+@media screen and (max-width:350px){
+	.popup{
+		border-radius:0px;
+		left:0px;
+		width:100%;
+	}
+}
