@@ -1,5 +1,16 @@
 /*Code written by Shangzhen Yang*/
-var appliedTheme,
+var $_GET=(function(){
+	var json={}
+	if(location.search){
+		var parameters=location.search.replace("?","").split("&")
+		for(var i=0;i<parameters.length;i++){
+			var split=parameters[i].split("=")
+			json[split[0]]=split[1]
+		}
+	}
+	return json
+})(),
+appliedTheme,
 appName="RTH Toolbox",
 backend=localStorage.getItem("Backend"),
 header=document.getElementsByTagName("header")[0],
@@ -19,7 +30,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/11/4").toLocaleDateString(),
+lastUpdated=new Date("2018/11/16").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -1075,7 +1086,7 @@ if(login.username){
 			}
 		}
 	})
-}else if(!header&&!searchURL("action")){
+}else if(!header&&!$_GET["action"]){
 	loginDialog()
 }
 switch(language){

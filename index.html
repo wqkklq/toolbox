@@ -378,8 +378,8 @@
 				document.body.style.marginTop="62px"
 				document.getElementsByClassName("get")[0].style.display="block"
 			}
-			if(searchURL("action")){
-				switch(searchURL("action").toLowerCase()){
+			if($_GET["action"]){
+				switch($_GET["action"].toLowerCase()){
 					case "dl":
 					getToolbox()
 				}

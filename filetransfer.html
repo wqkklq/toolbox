@@ -256,8 +256,8 @@
 			}else{
 				loginDialog()
 			}
-			if(searchURL("code")){
-				downloadFile(searchURL("code"))
+			if($_GET["code"]){
+				downloadFile($_GET["code"])
 			}
 		</script>
 	</body>

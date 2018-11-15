@@ -1421,7 +1421,7 @@
 				document.getElementById("Export").style.display="none"
 			}
 			load()
-			if(searchURL("index")&&searchURL("username")){
+			if($_GET["index"]&&$_GET["username"]){
 				loginRequired(function(){
 					mui.back=function(){
 						openWindow("index")
@@ -1429,8 +1429,8 @@
 					ajax({
 						"url":backend+"userdata/getwordlist",
 						"data":{
-							"index":searchURL("index"),
-							"username":searchURL("username")
+							"index":$_GET["index"],
+							"username":$_GET["username"]
 						},
 						"dataType":"json",
 						"showLoading":true,
