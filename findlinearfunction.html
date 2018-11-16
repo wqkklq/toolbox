@@ -7,12 +7,7 @@
 		<meta name="theme-color" content="#0066cc">
 		<link rel="stylesheet" href="css/mui.min.css">
 		<link rel="stylesheet" href="css/general.css">
-		<style>
-			.result{
-				font-size:20px;
-				text-align:center;
-			}
-		</style>
+		<link rel="stylesheet" href="css/findfunction.css">
 	</head>
 	<body>
 		<header class="mui-bar mui-bar-nav title"></header>
@@ -46,21 +41,6 @@
 		<script src="cordova.js"></script>
 		<script src="js/mui.min.js"></script>
 		<script src="js/general.js"></script>
-		<script type="text/javascript">
-			function calculate(){
-				var a=document.getElementById("x1Input").value*1,
-				c=document.getElementById("y1Input").value*(-1),
-				d=document.getElementById("x2Input").value*1,
-				f=document.getElementById("y2Input").value*(-1)
-				if(a!=d){
-					document.getElementById("kLabel").innerText=(f-c)/(a-d)
-					document.getElementById("bLabel").innerText=(a*f-d*c)/(d-a)
-				}else{
-					document.getElementById("kLabel").innerText="k"
-					document.getElementById("bLabel").innerText="b"
-				}
-			}
-			initCalculator(3,calculate)
-		</script>
+		<script src="js/findlinearfunction.js"></script>
 	</body>
 </html>

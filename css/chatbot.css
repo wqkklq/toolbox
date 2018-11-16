@@ -1,0 +1,70 @@
+/*Code written by Shangzhen Yang*/
+footer div{
+	width:100%;
+}
+.msg{
+	border-radius:10px;
+	line-height:25px;
+	max-width:70%;
+	padding:10px 15px;
+	-webkit-user-select:text;
+	user-select:text;
+	width:fit-content;
+	word-break:break-word;
+}
+.msg-bot{
+	background-color:white;
+	border-left:10px solid rgba(0,0,0,.25);
+	color:black;
+}
+.msg-me{
+	background-color:rgb(0,102,204);
+	border-right:10px solid rgba(0,0,0,.25);
+	color:white;
+	margin:0px 0px 0px auto;
+}
+.msg-row{
+	padding:5px 0px;
+}
+.mui-content{
+	margin-bottom:60px;
+}
+.new-msg{
+	background-color:white;
+	border-radius:20px;
+	bottom:30px;
+	height:50px;
+	left:5%;
+	padding:5px 85px 5px 5px;
+	position:fixed;
+	width:90%;
+}
+.new-msg-background{
+	background-color:rgba(239,239,244,.9);
+	bottom:0px;
+	box-shadow:0px -5px 10px rgb(239,239,244);
+	height:80px;
+	left:0px;
+	position:fixed;
+	width:100%;
+}
+.send input{
+	background:white;
+	border:solid 1px rgb(239,239,244);
+	border-radius:15px;
+	font-size:16px;
+	height:40px;
+	line-height:18px;
+	padding:10px;
+	width:100%;
+}
+.send-btn{
+	border-radius:15px;
+	bottom:0px;
+	height:40px;
+	margin:5px;
+	position:absolute;
+	right:0px;
+	text-align:center;
+	width:75px;
+}

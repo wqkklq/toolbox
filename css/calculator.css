@@ -1,0 +1,46 @@
+/*Code written by Shangzhen Yang*/
+ul.menu{
+	margin-top:15px;
+}
+.calc-table{
+	background-color:white;
+	width:100%;
+}
+.calc-table td{
+	border:1px solid #ccc;
+	height:50px;
+	padding:0px;
+	width:25%;
+}
+.function{
+	border-radius:0px;
+	height:350px;
+	margin:12px 0px -2px 0px;
+	overflow:auto;
+	padding:0px;
+	width:100%;
+}
+.function li{
+	border-style:none;
+	height:40px;
+	padding:0px 10px;
+}
+.function ul.menu{
+	border-style:none;
+	margin-top:0px;
+}
+.mui-btn{
+	border-radius:0px;
+	border-style:none;
+	height:100%;
+	width:100%;
+}
+#FuncTd{
+	border-style:none;
+	width:25%;
+}
+#KeyTd{
+	border-style:none;
+	padding-right:5px;
+	width:75%;
+}

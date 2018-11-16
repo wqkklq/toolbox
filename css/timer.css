@@ -1,0 +1,17 @@
+/*Code written by Shangzhen Yang*/
+fieldset{
+	margin-top:20px;
+}
+select{
+	margin-top:15px;
+}
+.time{
+	text-align:center;
+	transition:font-size .75s,height .75s;
+}
+@media screen and (min-width:450px){
+	input[type=text].time{
+		font-size:45px;
+		height:90px;
+	}
+}

@@ -1,0 +1,23 @@
+/*Code written by Shangzhen Yang*/
+footer,
+.quiz,
+#AnswerUl{
+	display:none;
+}
+footer div{
+	width:50%;
+}
+ul.menu,
+.answer,
+#NextButton,
+#QuizOptionUl{
+	margin-top:15px;
+}
+.edit{
+	display:none;
+	margin-bottom:60px;
+}
+.quiz ul.menu,
+#OptionUl{
+	margin-top:0px;
+}

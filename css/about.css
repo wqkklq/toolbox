@@ -1,0 +1,21 @@
+/*Code written by Shangzhen Yang*/
+footer div{
+	width:50%;
+}
+ul.menu{
+	margin-top:15px;
+}
+.app-name{
+	cursor:default;
+	font-size:25px;
+	line-height:50px;
+	text-align:center;
+}
+.bottom-list{
+	bottom:60px;
+	display:none;
+	margin-top:0px;
+	opacity:0;
+	position:fixed;
+	width:calc(100% - 30px);
+}
