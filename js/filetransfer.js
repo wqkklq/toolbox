@@ -1,5 +1,5 @@
 /*Code written by Shangzhen Yang*/
-function downloadFile(code){
+function downloadFile(code,index){
 	if(isTencent){
 		showAlert([
 			"Please open this page in the browser",
@@ -14,13 +14,19 @@ function downloadFile(code){
 			"dataType":"json",
 			"showLoading":true,
 			"success":function(e){
-				if(document.getElementById("File"+code)){
-					document.getElementById("File"+code).classList.add("unavailable")
+				var url
+				if(e.multifile.length>1&&!index){
+					url="https://www.rthsoftware.net/airportal/?code="+code
+				}else{
+					if(!index||index<0){
+						index=0
+					}
+					url=e.multifile[index].download
 				}
 				if(isApp){
-					openWebPage(e.download)
+					openWebPage(url)
 				}else{
-					location.href=e.download
+					location.href=url
 				}
 			},
 			"error":function(e){
@@ -48,82 +54,98 @@ function load(){
 			"showLoading":true,
 			"success":function(e){
 				for(var i=e.length-1;i>=0;i--){
-					var newLi=document.createElement("li")
-					newLi.classList.add("menu")
-					if(e[i].download){
-						newLi.classList.add("unavailable")
-					}
-					newLi.id="File"+e[i].code
-					newLi.innerText=e[i].name
-					newLi.oncontextmenu=
-					newLi.onclick=function(mouse){
-						var index=this.id.replace("File","")*1,
-						name=this.innerText
-						showMenu(mouse,[{
-							"onclick":function(){
-								showQRCode(toolboxOnline+"filetransfer?code="+index)
-								closeMenu()
-							},
-							"text":[
-								"QR Code",
-								"二维码"
-							]
-						},{
-							"onclick":function(){
-								showConfirm([
-									"Do you want to delete "+name+"?",
-									"您想删除 "+name+" 吗？"
-								],function(){
-									ajax({
-										"url":backend+"userdata/file/del",
-										"data":{
-											"code":index,
-											"username":login.username
-										},
-										"method":"POST",
-										"showLoading":true,
-										"success":load,
-										"error":error
+					for(var file=0;file<e[i].multifile.length;file++){
+						var newLi=document.createElement("li")
+						newLi.classList.add("menu")
+						newLi.innerText=e[i].multifile[file].name
+						newLi.setAttribute("code",e[i].code)
+						if(e[i].multifile.length>1){
+							newLi.setAttribute("index",file+1)
+						}
+						newLi.oncontextmenu=
+						newLi.onclick=function(mouse){
+							var code=this.getAttribute("code")
+							index=this.getAttribute("index")-1,
+							name=this.innerText
+							showMenu(mouse,[{
+								"onclick":function(){
+									showQRCode("https://www.rthsoftware.net/airportal/?code="+code)
+									closeMenu()
+								},
+								"text":[
+									"QR Code",
+									"二维码"
+								]
+							},{
+								"onclick":function(){
+									if(index>-1){
+										name=code
+									}
+									showConfirm([
+										"Do you want to delete "+name+"?",
+										"您想删除 "+name+" 吗？"
+									],function(){
+										ajax({
+											"url":backend+"userdata/file/del",
+											"data":{
+												"code":code,
+												"username":login.username
+											},
+											"method":"POST",
+											"showLoading":true,
+											"success":load,
+											"error":error
+										})
 									})
-								})
-								closeMenu()
-							},
-							"text":[
-								"Delete",
-								"删除"
-							]
-						},{
-							"onclick":function(){
-								showConfirm([
-									"Do you want to download "+name+"?",
-									"您想下载 "+name+" 吗？"
-								],function(){
-									downloadFile(index)
-								})
-								closeMenu()
-							},
-							"text":[
-								"Download",
-								"下载"
-							]
-						}])
-						return false
+									closeMenu()
+								},
+								"text":[
+									"Delete",
+									"删除"
+								]
+							},{
+								"onclick":function(){
+									showConfirm([
+										"Do you want to download "+name+"?",
+										"您想下载 "+name+" 吗？"
+									],function(){
+										downloadFile(code,index)
+									})
+									closeMenu()
+								},
+								"text":[
+									"Download",
+									"下载"
+								]
+							}])
+							return false
+						}
+						document.getElementById("MyFile").appendChild(newLi)
 					}
-					document.getElementById("MyFile").appendChild(newLi)
 				}
 			}
 		})
 	}
 }
 document.getElementById("SendFile").onclick=function(){
-	document.getElementById("OpenFile").value=""
-	document.getElementById("OpenFile").click()
+	showConfirm([
+		"It is recommended to send file via AirPortal",
+		"推荐使用 AirPortal 发送文件"
+	],function(){
+		openWebPage("https://www.rthsoftware.net/airportal/?action=send")
+	},function(){
+		document.getElementById("OpenFile").value=""
+		document.getElementById("OpenFile").click()
+	})
 }
 document.getElementById("ReceiveFile").onclick=function(){
 	showPrompt([
 		"Enter the code",
 		"输入密码"
 	],downloadFile,"tel")
+}
+document.getElementById("UseAirPortal").onclick=function(){
+	openWebPage("https://www.rthsoftware.net/airportal/")
 }
 document.getElementById("OpenFile").onchange=function(e){
 	var file=e.target.files[0]
@@ -173,7 +195,7 @@ document.getElementById("OpenFile").onchange=function(e){
 					newButton.style.width="100%"
 					newButton.onclick=function(){
 						closeDialog()
-						showQRCode(toolboxOnline+"filetransfer?code="+e.code)
+						showQRCode("https://www.rthsoftware.net/airportal/?code="+e.code)
 					}
 					newCloseDiv.classList.add("close")
 					newCloseDiv.innerText="×"
@@ -208,12 +230,14 @@ switch(language){
 	document.title="文件传输"
 	document.getElementById("SendFile").innerText="发送文件"
 	document.getElementById("ReceiveFile").innerText="接收文件"
+	document.getElementById("UseAirPortal").innerText="使用 AirPortal"
 	document.getElementsByTagName("p")[0].innerText="您发送的文件将在一小时后失效。"
 	break
 	default:
 	document.title="File Transfer"
 	document.getElementById("SendFile").innerText="Send File"
 	document.getElementById("ReceiveFile").innerText="Receive File"
+	document.getElementById("UseAirPortal").innerText="Use AirPortal"
 	document.getElementsByTagName("p")[0].innerText="Files you sent will expire in an hour."
 }
 newTitle.innerText=document.title
@@ -221,7 +245,4 @@ if(login.username){
 	load()
 }else{
 	loginDialog()
-}
-if($_GET["code"]){
-	downloadFile($_GET["code"])
 }
