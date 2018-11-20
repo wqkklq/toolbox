@@ -136,7 +136,7 @@ document.getElementById("UseAirPortal").onclick=function(){
 }
 document.getElementById("OpenFile").onchange=function(e){
 	var file=e.target.files[0]
-	if(file.type=="text/php"){
+	if(file.type=="text/php"||file.name.indexOf(".php")!=-1){
 		showAlert([
 			"This type of file is not allowed to be transferred",
 			"不允许传输的文件类型"
