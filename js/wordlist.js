@@ -275,12 +275,7 @@ function expWL(){
 			"您想导出此单词表吗？"
 		],function(){
 			save(function(){
-				var url=backend+"userdata/getwordlist?dl=rth&index="+currentItem+"&username="+login.username
-				if(isApp){
-					openWebPage(url)
-				}else{
-					location.href=url
-				}
+				openWebPage(backend+"userdata/getwordlist?dl=rth&index="+currentItem+"&username="+login.username,true)
 			})
 		})
 	}else if(!isEdge&&!isLinux&&!isMobile){

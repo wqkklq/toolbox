@@ -14,19 +14,13 @@ function downloadFile(code,index){
 			"dataType":"json",
 			"showLoading":true,
 			"success":function(e){
-				var url
 				if(e.multifile.length>1&&!index){
-					url="https://www.rthsoftware.net/airportal/?code="+code
+					openWebPage("https://www.rthsoftware.net/airportal/?code="+code,true)
 				}else{
 					if(!index||index<0){
 						index=0
 					}
-					url=e.multifile[index].download
-				}
-				if(isApp){
-					openWebPage(url)
-				}else{
-					location.href=url
+					openWebPage(e.multifile[index].download,true)
 				}
 			},
 			"error":function(e){
@@ -128,15 +122,8 @@ function load(){
 	}
 }
 document.getElementById("SendFile").onclick=function(){
-	showConfirm([
-		"It is recommended to send file via AirPortal",
-		"推荐使用 AirPortal 发送文件"
-	],function(){
-		openWebPage("https://www.rthsoftware.net/airportal/?action=send")
-	},function(){
-		document.getElementById("OpenFile").value=""
-		document.getElementById("OpenFile").click()
-	})
+	document.getElementById("OpenFile").value=""
+	document.getElementById("OpenFile").click()
 }
 document.getElementById("ReceiveFile").onclick=function(){
 	showPrompt([
@@ -154,11 +141,13 @@ document.getElementById("OpenFile").onchange=function(e){
 			"This type of file is not allowed to be transferred",
 			"不允许传输的文件类型"
 		])
-	}else if(file.size>104857600){
-		showAlert([
-			"File exceeds 100MB and cannot be transferred",
-			"文件超过 100MB，无法传输"
-		])
+	}else if(file.size>10485760){
+		showConfirm([
+			"This file needs to be sent by AirPortal",
+			"此文件需要由 AirPortal 发送"
+		],function(){
+			openWebPage("https://www.rthsoftware.net/airportal/?action=send",true)
+		})
 	}else{
 		ajax({
 			"url":backend+"userdata/file/upload",

@@ -457,12 +457,7 @@ function loginDialog(){
 									"Incorrect password. Do you want to reset the password?",
 									"密码错误。您想重置密码吗？"
 								],function(){
-									var url="https://www.rthsoftware.cn/login?email="+encodeURIComponent(email)+"&page=resetpassword"
-									if(isApp){
-										openWebPage(url)
-									}else{
-										location.href=url
-									}
+									openWebPage("https://www.rthsoftware.cn/login?email="+encodeURIComponent(email)+"&page=resetpassword",true)
 								})
 							}
 						}else{
@@ -617,9 +612,11 @@ function openDialog(){
 	document.getElementById("OpenFile").value=""
 	document.getElementById("OpenFile").click()
 }
-function openWebPage(href){
+function openWebPage(href,avoidPopup){
 	href=encodeURI(href)
-	if(isiOSApp){
+	if(avoidPopup&&!isApp){
+		location.href=href
+	}else if(isiOSApp){
 		OpenUrlExt.open(href)
 	}else{
 		open(href)
