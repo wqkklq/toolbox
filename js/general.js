@@ -30,7 +30,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/11/27").toLocaleDateString(),
+lastUpdated=new Date("2018/11/28").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -183,7 +183,7 @@ function arrayContains(obj,array){
 function backendChanged(){
 	if(backend=="https://cdn.rthsoftware.net/backend/"){
 		officialWebsite="https://www.rthsoftware.net/"
-		secondary="http://rthe.cn/"
+		secondary="https://rthe.cn/"
 		toolboxOnline=officialWebsite+"toolbox/"
 	}
 }
