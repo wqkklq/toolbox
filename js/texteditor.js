@@ -164,7 +164,7 @@ function getURL(){
 			}
 		})(),
 		short=document.getElementsByTagName("input")[0].value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
-		var url=secondary+login.username+"/"+index+".html"
+		var url="text/"+login.username+"/"+index
 		if(!short){
 			short=MD5(login.username+index).substr(0,6)
 		}

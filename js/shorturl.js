@@ -38,7 +38,7 @@ function loadMyURL(){
 				"onclick":function(){
 					showPrompt(null,function(){
 						openWebPage(url)
-					},null,url)
+					},null,"http://rthe.cn/"+myURL[index].name)
 					closeMenu()
 				},
 				"text":[
@@ -53,34 +53,6 @@ function loadMyURL(){
 				"text":[
 					"QR Code",
 					"二维码"
-				]
-			},{
-				"onclick":function(){
-					ajax({
-						"url":url,
-						"data":{
-							"get":"open"
-						},
-						"dataType":"json",
-						"crossOrigin":true,
-						"showLoading":true,
-						"success":function(e){
-							var time=" time"
-							if(Math.abs(e.open)>1){
-								time+="s"
-							}
-							showAlert([
-								"This link has been opened "+e.open+time,
-								"此链接已被打开 "+e.open+" 次"
-							])
-						},
-						"error":error
-					})
-					closeMenu()
-				},
-				"text":[
-					"Analytics",
-					"分析"
 				]
 			},{
 				"onclick":function(){
@@ -165,9 +137,9 @@ function loadMyURL(){
 function loadPreview(){
 	var value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
 	if(value){
-		document.getElementById("Preview").innerText=secondary+value
+		document.getElementById("Preview").innerText="http://rthe.cn/"+value
 	}else{
-		document.getElementById("Preview").innerText=secondary+defaultShortURL
+		document.getElementById("Preview").innerText="http://rthe.cn/"+defaultShortURL
 	}
 }
 document.getElementById("ShortURL").oninput=loadPreview
@@ -179,7 +151,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 		if(document.getElementById("OriginalURL").value){
 			var originalURL=document.getElementById("OriginalURL").value,
 			value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
-			if(originalURL.indexOf("rths.tk")!=-1&&originalURL.indexOf(".html")==-1){
+			if(originalURL.indexOf("rthe.cn")!=-1&&originalURL.indexOf(".html")==-1){
 				showAlert([
 					"Short URLs cannot be the original URL",
 					"短网址不能作为原网址"
@@ -211,7 +183,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 							load()
 							showPrompt(null,function(){
 								openWebPage(secondary+value)
-							},null,secondary+value)
+							},null,"http://rthe.cn/"+value)
 							closeMenu()
 						}else{
 							var extraInfo=""

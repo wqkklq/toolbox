@@ -30,7 +30,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/11/21").toLocaleDateString(),
+lastUpdated=new Date("2018/11/27").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -41,9 +41,9 @@ newMask=document.createElement("div"),
 newTitle=document.createElement("h1"),
 officialWebsite="https://www.rthsoftware.cn/",
 recentInput=0,
-secondary="http://rths.tk/",
+secondary="http://www.rthe.cn/",
 theme=localStorage.getItem("Theme"),
-ver="15.2"
+ver="15.3"
 var isApp=isCordova,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -181,9 +181,9 @@ function arrayContains(obj,array){
 	return false
 }
 function backendChanged(){
-	if(backend=="https://us.rths.tk/backend/"){
+	if(backend=="https://cdn.rthsoftware.net/backend/"){
 		officialWebsite="https://www.rthsoftware.net/"
-		secondary="http://rths.tk/us/"
+		secondary="http://rthe.cn/"
 		toolboxOnline=officialWebsite+"toolbox/"
 	}
 }
@@ -443,9 +443,7 @@ function loginDialog(){
 						newLoginButton.onclick=submitLogin
 						if(e.index){
 							if(e.pass){
-								if(e.backend){
-									localStorage.setItem("Backend",e.backend)
-								}
+								localStorage.setItem("Backend",e.backend)
 								localStorage.setItem("Email",email)
 								localStorage.setItem("Password",password)
 								localStorage.setItem("Username",e.username)
@@ -1074,7 +1072,11 @@ if(login.username){
 		},
 		"dataType":"json",
 		"success":function(e){
-			if(!e.pass){
+			if(e.pass){
+				backend=e.backend
+				localStorage.setItem("Backend",backend)
+				backendChanged()
+			}else{
 				showAlert([
 					"Incorrect password",
 					"密码错误"
@@ -1153,10 +1155,10 @@ switch(language){
 }
 if(!login.username){
 	ajax({
-		"url":"https://us.rths.tk/backend/geo",
+		"url":"https://cdn.rthsoftware.net/backend/geo",
 		"success":function(e){
 			if(e!="CN"){
-				backend="https://us.rths.tk/backend/"
+				backend="https://cdn.rthsoftware.net/backend/"
 				backendChanged()
 			}
 		}

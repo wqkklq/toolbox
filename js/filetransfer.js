@@ -146,7 +146,7 @@ document.getElementById("OpenFile").onchange=function(e){
 			"This file needs to be sent by AirPortal",
 			"此文件需要由 AirPortal 发送"
 		],function(){
-			openWebPage("https://www.rthsoftware.net/airportal/?action=send",true)
+			openWebPage("https://www.rthsoftware.net/airportal/",true)
 		})
 	}else{
 		ajax({
