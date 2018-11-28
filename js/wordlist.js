@@ -319,7 +319,7 @@ function getURL(){
 				return currentItem
 			}
 		})(),
-		short=encodeURIComponent(document.getElementById("TitleInput").value)
+		short=encodeURIComponent(document.getElementById("TitleInput").value.replace(/:|\//g,""))
 		if(!short){
 			short=MD5(login.username+index).substr(0,6)
 		}

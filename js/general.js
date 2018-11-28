@@ -30,7 +30,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/11/28").toLocaleDateString(),
+lastUpdated=new Date("2018/11/29").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -692,11 +692,35 @@ function showImage(src){
 	newTitleDiv.classList.add("image-title")
 	newContentDiv.classList.add("image-content")
 	newLoadDiv.classList.add("image-load")
+	newTitleDiv.ontouchstart=function(startTouch){
+		newDiv.style.transition="0s all"
+		var left=newDiv.style.left.replace("px","")*1,
+		startPoint={
+			"x":startTouch.touches[0].clientX,
+			"y":startTouch.touches[0].clientY
+		},
+		top=newDiv.style.top.replace("px","")*1
+		if(!left){
+			left=(window.innerWidth-newDiv.offsetWidth)/2
+		}
+		if(!top){
+			top=(window.innerHeight-newDiv.offsetHeight)/2
+		}
+		this.ontouchmove=function(moveTouch){
+			moveTouch.preventDefault()
+			newDiv.style.left=(left+moveTouch.touches[0].clientX-startPoint.x)+"px"
+			newDiv.style.top=(top+moveTouch.touches[0].clientY-startPoint.y)+"px"
+		}
+		this.ontouchend=function(){
+			this.ontouchmove=
+			newDiv.style.transition=null
+		}
+	}
 	newImg.onload=function(){
 		newContentDiv.removeChild(newLoadDiv)
 		var frameHeight=this.height+80
 		newDiv.style.height=frameHeight+"px"
-		newDiv.style.top="calc(50% - "+frameHeight/2+"px)"
+		newDiv.style.top=((window.innerHeight-frameHeight)/2)+"px"
 		setTimeout(function(){
 			newImg.style.opacity="1"
 		},250)

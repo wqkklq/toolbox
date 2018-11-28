@@ -164,7 +164,7 @@ function getURL(){
 				return currentItem
 			}
 		})(),
-		short=encodeURIComponent(document.getElementsByTagName("input")[0].value)
+		short=encodeURIComponent(document.getElementsByTagName("input")[0].value.replace(/:|\//g,""))
 		if(!short){
 			short=MD5(login.username+index).substr(0,6)
 		}

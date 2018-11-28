@@ -142,14 +142,16 @@ function loadMyURL(){
 	}
 }
 function loadPreview(){
-	var value=document.getElementById("ShortURL").value
+	var value=document.getElementById("ShortURL").value.replace(/:|\//g,"")
+	document.getElementById("ShortURL").value=value
 	if(value){
 		document.getElementById("Preview").innerText="http://rthe.cn/"+value
 	}else{
 		document.getElementById("Preview").innerText="http://rthe.cn/"+defaultShortURL
 	}
 }
-document.getElementById("ShortURL").oninput=loadPreview
+document.getElementById("ShortURL").oninput=
+document.getElementById("ShortURL").onkeyup=loadPreview
 document.getElementsByTagName("button")[0].onclick=function(){
 	loginRequired(function(){
 		if(document.getElementById("OriginalURL").value.indexOf(".")==-1||/\s|\.\./.test(document.getElementById("OriginalURL").value)){
