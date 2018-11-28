@@ -127,7 +127,7 @@ function generateWebPage(edit){
 						"data":{
 							"domain":getURL().domain,
 							"redirect":302,
-							"to":getURL().original,
+							"to":"text/"+login.username+"/"+getURL().index,
 							"username":login.username
 						},
 						"method":"POST",
@@ -143,6 +143,7 @@ function generateWebPage(edit){
 							if(edit){
 								url+="?edit=true"
 							}
+							url=decodeURI(url)
 							showPrompt(null,function(){
 								openWebPage(url)
 							},null,url)
@@ -162,12 +163,15 @@ function getURL(){
 			}else{
 				return currentItem
 			}
-		})()
-		var short=MD5(login.username+index).substr(0,6),
-		url="text/"+login.username+"/"+index
+		})(),
+		short=encodeURIComponent(document.getElementsByTagName("input")[0].value)
+		if(!short){
+			short=MD5(login.username+index).substr(0,6)
+		}
 		return{
 			"domain":short,
-			"original":url,
+			"index":index,
+			"original":secondary+login.username+"/"+index,
 			"short":secondary+short
 		}
 	}

@@ -28,7 +28,7 @@ function loadMyURL(){
 	for(var i=myURL.length-1;i>=0;i--){
 		var newLi=document.createElement("li")
 		newLi.classList.add("menu")
-		newLi.innerText=myURL[i].name
+		newLi.innerText=decodeURIComponent(myURL[i].name)
 		newLi.setAttribute("number",i+1)
 		newLi.oncontextmenu=
 		newLi.onclick=function(mouse){
@@ -37,8 +37,8 @@ function loadMyURL(){
 			showMenu(mouse,[{
 				"onclick":function(){
 					showPrompt(null,function(){
-						openWebPage(url)
-					},null,"http://rthe.cn/"+myURL[index].name)
+						openWebPage(decodeURI(url))
+					},null,"http://rthe.cn/"+decodeURIComponent(myURL[index].name))
 					closeMenu()
 				},
 				"text":[
@@ -60,33 +60,40 @@ function loadMyURL(){
 						"Change "+myURL[index].to+" to",
 						"把 "+myURL[index].to+" 更改为"
 					],function(e){
-						if(e.indexOf("/")==-1){
-							e=e+"/"
+						if(e.indexOf("rthe.cn")!=-1){
+							showAlert([
+								"Short URLs cannot be the original URL",
+								"短网址不能作为原网址"
+							])
+						}else{
+							if(e.indexOf("/")==-1){
+								e=e+"/"
+							}
+							if(e.indexOf("http")==-1){
+								e="http://"+e
+							}
+							ajax({
+								"url":backend+"userdata/upload",
+								"data":{
+									"dir":"domain/",
+									"filename":"list",
+									"key1":myURL[index].name,
+									"key2":"to",
+									"text":e,
+									"url":url
+								},
+								"method":"POST",
+								"showLoading":true,
+								"success":function(){
+									showToast([
+										"Changes are saved",
+										"更改已保存"
+									])
+									load()
+								},
+								"error":error
+							})
 						}
-						if(e.indexOf("http")==-1){
-							e="http://"+e
-						}
-						ajax({
-							"url":backend+"userdata/upload",
-							"data":{
-								"dir":"domain/",
-								"filename":"list",
-								"key1":myURL[index].name,
-								"key2":"to",
-								"text":e,
-								"url":url
-							},
-							"method":"POST",
-							"showLoading":true,
-							"success":function(){
-								showToast([
-									"Changes are saved",
-									"更改已保存"
-								])
-								load()
-							},
-							"error":error
-						})
 					},null,myURL[index].to)
 					closeMenu()
 				},
@@ -97,8 +104,8 @@ function loadMyURL(){
 			},{
 				"onclick":function(){
 					showConfirm([
-						"Do you want to delete "+myURL[index].name+"?",
-						"您想删除 "+myURL[index].name+" 吗？"
+						"Do you want to delete "+decodeURIComponent(myURL[index].name)+"?",
+						"您想删除 "+decodeURIComponent(myURL[index].name)+" 吗？"
 					],function(){
 						ajax({
 							"url":backend+"userdata/domain/del",
@@ -135,7 +142,7 @@ function loadMyURL(){
 	}
 }
 function loadPreview(){
-	var value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
+	var value=document.getElementById("ShortURL").value
 	if(value){
 		document.getElementById("Preview").innerText="http://rthe.cn/"+value
 	}else{
@@ -150,8 +157,8 @@ document.getElementsByTagName("button")[0].onclick=function(){
 		}
 		if(document.getElementById("OriginalURL").value){
 			var originalURL=document.getElementById("OriginalURL").value,
-			value=document.getElementById("ShortURL").value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
-			if(originalURL.indexOf("rthe.cn")!=-1&&originalURL.indexOf(".html")==-1){
+			value=encodeURIComponent(document.getElementById("ShortURL").value)
+			if(originalURL.indexOf("rthe.cn")!=-1){
 				showAlert([
 					"Short URLs cannot be the original URL",
 					"短网址不能作为原网址"
@@ -181,6 +188,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 					"success":function(e){
 						if(e.success){
 							load()
+							value=decodeURIComponent(value)
 							showPrompt(null,function(){
 								openWebPage(secondary+value)
 							},null,"http://rthe.cn/"+value)

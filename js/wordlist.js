@@ -319,14 +319,13 @@ function getURL(){
 				return currentItem
 			}
 		})(),
-		short=document.getElementById("TitleInput").value.toLowerCase().replace(/[^a-z0-9|\-|_]/g,"")
-		var url=toolboxOnline+"wordlist?index="+index+"&username="+login.username
+		short=encodeURIComponent(document.getElementById("TitleInput").value)
 		if(!short){
 			short=MD5(login.username+index).substr(0,6)
 		}
 		return{
 			"domain":short,
-			"original":url,
+			"original":toolboxOnline+"wordlist?index="+index+"&username="+login.username,
 			"short":secondary+short
 		}
 	}
@@ -1071,6 +1070,7 @@ document.getElementById("Share").onclick=function(){
 				}else{
 					url=getURL().original
 				}
+				url=decodeURI(url)
 				showPrompt(null,function(){
 					openWebPage(url)
 				},null,url)
