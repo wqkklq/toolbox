@@ -692,27 +692,41 @@ function showImage(src){
 	newTitleDiv.classList.add("image-title")
 	newContentDiv.classList.add("image-content")
 	newLoadDiv.classList.add("image-load")
-	newTitleDiv.ontouchstart=function(startTouch){
+	newTitleDiv.onmousedown=
+	newTitleDiv.ontouchstart=function(start){
 		newDiv.style.transition="0s all"
-		var left=newDiv.style.left.replace("px","")*1,
-		startPoint={
-			"x":startTouch.touches[0].clientX,
-			"y":startTouch.touches[0].clientY
-		},
-		top=newDiv.style.top.replace("px","")*1
-		if(!left){
-			left=(window.innerWidth-newDiv.offsetWidth)/2
+		var left=newDiv.offsetLeft,
+		startPoint,
+		top=newDiv.offsetTop
+		if(start.touches){
+			startPoint={
+				"x":start.touches[0].clientX,
+				"y":start.touches[0].clientY
+			}
+		}else{
+			startPoint={
+				"x":start.clientX,
+				"y":start.clientY
+			}
 		}
-		if(!top){
-			top=(window.innerHeight-newDiv.offsetHeight)/2
+		window.onmousemove=
+		this.ontouchmove=function(move){
+			move.preventDefault()
+			var x,y
+			if(move.touches){
+				x=move.touches[0].clientX
+				y=move.touches[0].clientY
+			}else{
+				x=move.clientX
+				y=move.clientY
+			}
+			newDiv.style.left=(left+x-startPoint.x)+"px"
+			newDiv.style.top=(top+y-startPoint.y)+"px"
 		}
-		this.ontouchmove=function(moveTouch){
-			moveTouch.preventDefault()
-			newDiv.style.left=(left+moveTouch.touches[0].clientX-startPoint.x)+"px"
-			newDiv.style.top=(top+moveTouch.touches[0].clientY-startPoint.y)+"px"
-		}
+		window.onmouseup=
 		this.ontouchend=function(){
-			this.ontouchmove=
+			window.onmousemove=
+			newTitleDiv.ontouchmove=
 			newDiv.style.transition=null
 		}
 	}
@@ -720,7 +734,7 @@ function showImage(src){
 		newContentDiv.removeChild(newLoadDiv)
 		var frameHeight=this.height+80
 		newDiv.style.height=frameHeight+"px"
-		newDiv.style.top=((window.innerHeight-frameHeight)/2)+"px"
+		newDiv.style.top="calc(50% - "+frameHeight/2+"px)"
 		setTimeout(function(){
 			newImg.style.opacity="1"
 		},250)

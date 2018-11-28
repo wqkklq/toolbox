@@ -437,7 +437,11 @@ function save(callback){
 }
 function setText(text,noScrolling){
 	document.getElementsByTagName("textarea")[0].value=text
-	document.getElementsByClassName("text-view")[0].innerText=text.replace(/\u0009/g,"\u00a0\u00a0\u00a0\u00a0")
+	if(text.indexOf("</")!=-1&&text.indexOf("<script")==-1){
+		document.getElementsByClassName("text-view")[0].innerHTML=text.replace(/\u0009/g,"&nbsp;&nbsp;&nbsp;&nbsp;").replace(/\n/g,"<br>")
+	}else{
+		document.getElementsByClassName("text-view")[0].innerText=text.replace(/\u0009/g,"\u00a0\u00a0\u00a0\u00a0")
+	}
 	document.getElementsByTagName("textarea")[0].style.display=
 	document.getElementsByClassName("text-view")[0].style.display=""
 	if(!noScrolling){
@@ -763,7 +767,7 @@ document.getElementById("Scroll").onclick=function(){
 				if(newTextDiv.style.left){
 					left=newTextDiv.style.left.replace("px","")
 				}else{
-					left=window.innerWidth
+					left=innerWidth
 				}
 				if(left<-newTextDiv.offsetWidth){
 					newTextDiv.style.left=""
