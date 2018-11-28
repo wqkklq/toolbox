@@ -143,7 +143,9 @@ function loadMyURL(){
 }
 function loadPreview(){
 	var value=document.getElementById("ShortURL").value.replace(/:|\//g,"")
-	document.getElementById("ShortURL").value=value
+	if(document.getElementById("ShortURL").value!=value){
+		document.getElementById("ShortURL").value=value
+	}
 	if(value){
 		document.getElementById("Preview").innerText="http://rthe.cn/"+value
 	}else{
