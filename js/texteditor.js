@@ -437,7 +437,7 @@ function save(callback){
 }
 function setText(text,noScrolling){
 	document.getElementsByTagName("textarea")[0].value=text
-	if(text.indexOf("</")!=-1&&text.indexOf("<script")==-1){
+	if(text.indexOf("</")!=-1&&!/<(link|script|style)/.test(text)){
 		document.getElementsByClassName("text-view")[0].innerHTML=text.replace(/\u0009/g,"&nbsp;&nbsp;&nbsp;&nbsp;").replace(/\n/g,"<br>")
 	}else{
 		document.getElementsByClassName("text-view")[0].innerText=text.replace(/\u0009/g,"\u00a0\u00a0\u00a0\u00a0")
