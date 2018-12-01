@@ -11,7 +11,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 		document.getElementsByTagName("textarea")[0].style.background="rgb(255,192,203)"
 	}else{
 		ajax({
-			"url":backend+"feedback",
+			"url":"https://rthsoftware.cn/backend/feedback",
 			"data":{
 				"appname":appName,
 				"email":document.getElementById("Email").value,

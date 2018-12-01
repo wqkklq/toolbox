@@ -30,7 +30,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/11/29").toLocaleDateString(),
+lastUpdated=new Date("2018/12/1").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -431,7 +431,7 @@ function loginDialog(){
 				newSignUpButton.onclick=
 				newLoginButton.onclick=null
 				ajax({
-					"url":backend+"userdata/verify",
+					"url":"https://rthsoftware.cn/backend/userdata/verify",
 					"data":{
 						"email":email,
 						"password":password
@@ -455,7 +455,7 @@ function loginDialog(){
 									"Incorrect password. Do you want to reset the password?",
 									"密码错误。您想重置密码吗？"
 								],function(){
-									openWebPage("https://www.rthsoftware.cn/login?email="+encodeURIComponent(email)+"&page=resetpassword",true)
+									openWebPage("https://rthsoftware.cn/login?email="+encodeURIComponent(email)+"&page=resetpassword",true)
 								})
 							}
 						}else{
@@ -466,7 +466,7 @@ function loginDialog(){
 								}else{
 									var username=email.split("@")[0]+new Date().getTime().toString(36)
 									ajax({
-										"url":backend+"userdata/signup",
+										"url":e.backend+"userdata/signup",
 										"data":{
 											"email":email,
 											"password":password,
@@ -749,7 +749,7 @@ function showImage(src){
 		},250)
 	}
 	newSaveDiv.onclick=function(){
-		if(src.indexOf(backend+"get")!=-1){
+		if(src.indexOf("https://rthsoftware.cn/backend/get")!=-1){
 			openWebPage(searchURL("url",src))
 		}else{
 			openWebPage(src)
@@ -895,7 +895,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 	},25)
 }
 function showQRCode(text){
-	showImage(backend+"get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text="+text)+"&username=admin")
+	showImage("https://rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text="+text)+"&username=admin")
 }
 function showToast(text){
 	switch(language){
@@ -959,7 +959,7 @@ function translate(query,from,to,callback,negativeCallback){
 		"crossOrigin":true,
 		"showLoading":true,
 		"success":function(data){
-			if(data.trans_result&&callback){
+			if(data&&data.trans_result&&callback){
 				callback(data.trans_result[0].dst,data)
 			}
 		},
@@ -973,7 +973,7 @@ function translate(query,from,to,callback,negativeCallback){
 	})
 }
 if(!backend){
-	backend="https://www.rthsoftware.cn/backend/"
+	backend="https://rthsoftware.cn/backend/"
 }else{
 	backendChanged()
 }
@@ -985,7 +985,7 @@ if(!isIE){
 				window.onerror=null
 				mui.toast(msg)
 				ajax({
-					"url":backend+"feedback",
+					"url":"https://rthsoftware.cn/backend/feedback",
 					"data":{
 						"appname":appName,
 						"email":login.email,
@@ -1090,7 +1090,7 @@ if(appliedTheme=="Bing"){
 	}
 	if(!savedBingWallpaper||!header){
 		ajax({
-			"url":backend+"bing/base64",
+			"url":"https://rthsoftware.cn/backend/bing/base64",
 			"success":function(e){
 				savedBingWallpaper="url("+e+")"
 				localStorage.setItem("bing-wallpaper",savedBingWallpaper)
@@ -1193,9 +1193,11 @@ switch(language){
 }
 if(!login.username){
 	ajax({
-		"url":"https://cdn.rthsoftware.net/backend/geo",
+		"url":"https://rthsoftware.cn/backend/geo",
 		"success":function(e){
-			if(e!="CN"){
+			if(e=="CN"){
+				backend="https://www.rthsoftware.cn/backend/"
+			}else{
 				backend="https://cdn.rthsoftware.net/backend/"
 				backendChanged()
 			}

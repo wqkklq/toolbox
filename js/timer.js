@@ -125,7 +125,7 @@ function task(){
 				}catch(e){}
 			}else if(isCordova){
 				if(isAndroid){
-					openWebPage(backend+"alert?text="+encodeURIComponent(document.getElementById("CreateMessageBoxInput").value)+"&title="+encodeURIComponent(document.title))
+					openWebPage("https://rthsoftware.cn/backend/alert?text="+encodeURIComponent(document.getElementById("CreateMessageBoxInput").value)+"&title="+encodeURIComponent(document.title))
 				}else if(isiOS){
 					cordova.plugins.notification.local.schedule({
 						title:document.title,

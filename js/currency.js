@@ -24,12 +24,12 @@ function calculate2(){
 }
 function updateRate(){
 	ajax({
-		"url":"http://www.apilayer.net/api/live",
+		"url":"https://rthsoftware.cn/backend/get",
 		"data":{
-			"access_key":"305f5a80f4da12a238c9ebfe5479c648"
+			"url":"http://www.apilayer.net/api/live?access_key=305f5a80f4da12a238c9ebfe5479c648",
+			"username":"admin"
 		},
 		"dataType":"json",
-		"crossOrigin":true,
 		"showLoading":true,
 		"success":function(e){
 			if(e.success){

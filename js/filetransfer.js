@@ -72,6 +72,17 @@ function load(){
 								]
 							},{
 								"onclick":function(){
+									showPrompt(null,function(){
+										openWebPage(secondary+code)
+									},null,"http://rthe.cn/"+code)
+									closeMenu()
+								},
+								"text":[
+									"Link",
+									"链接"
+								]
+							},{
+								"onclick":function(){
 									if(index>-1){
 										name=code
 									}
@@ -176,15 +187,19 @@ document.getElementById("OpenFile").onchange=function(e){
 					newDiv=document.createElement("div"),
 					newH1=document.createElement("h1"),
 					newNumDiv=document.createElement("div"),
-					newButton=document.createElement("button"),
+					newQRCodeButton=document.createElement("button"),
+					newLinkButton=document.createElement("button"),
 					newCloseDiv=document.createElement("div")
 					newDiv.classList.add("popup")
 					newNumDiv.classList.add("number")
 					newNumDiv.innerText=e.code
-					newButton.style.width="100%"
-					newButton.onclick=function(){
-						closeDialog()
+					newQRCodeButton.onclick=function(){
 						showQRCode("https://www.rthsoftware.net/airportal/?code="+e.code)
+					}
+					newLinkButton.onclick=function(){
+						showPrompt(null,function(){
+							openWebPage(secondary+e.code)
+						},null,"http://rthe.cn/"+e.code)
 					}
 					newCloseDiv.classList.add("close")
 					newCloseDiv.innerText="×"
@@ -192,15 +207,18 @@ document.getElementById("OpenFile").onchange=function(e){
 					switch(language){
 						case "SimplifiedChinese":
 						newH1.innerText="密码"
-						newButton.innerText="查看二维码"
+						newQRCodeButton.innerText="二维码"
+						newLinkButton.innerText="链接"
 						break
 						default:
 						newH1.innerText="Code"
-						newButton.innerText="View QR Code"
+						newQRCodeButton.innerText="QR Code"
+						newLinkButton.innerText="Link"
 					}
 					newDiv.appendChild(newH1)
 					newDiv.appendChild(newNumDiv)
-					newDiv.appendChild(newButton)
+					newDiv.appendChild(newQRCodeButton)
+					newDiv.appendChild(newLinkButton)
 					newDiv.appendChild(newCloseDiv)
 					document.body.appendChild(newDiv)
 					newDiv.style.top="calc(50% - "+(newDiv.offsetHeight/2)+"px)"
