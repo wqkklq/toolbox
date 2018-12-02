@@ -95,7 +95,7 @@ function sendMsg(text){
 	}
 }
 document.getElementById("SendBox").onclick=function(){
-	if(isMobile){
+	if(isAndroidApp){
 		showPrompt([
 			"Enter the message",
 			"输入消息"
