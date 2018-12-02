@@ -43,7 +43,7 @@ officialWebsite="https://www.rthsoftware.cn/",
 recentInput=0,
 secondary="http://www.rthe.cn/",
 theme=localStorage.getItem("Theme"),
-ver="15.3"
+ver="16.0"
 var isApp=isCordova,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -268,7 +268,6 @@ function clearLocalStorage(){
 		localStorage.setItem("Password",login.password)
 		localStorage.setItem("Username",login.username)
 	}
-	location.reload()
 }
 function closeMenu(){
 	if(document.getElementsByClassName("popup-menu")[0]){
@@ -306,6 +305,18 @@ function decrypt(text,password){
 		}else{
 			return text
 		}
+	}
+}
+function encryptText(text,password,base64){
+	var encrypted=""
+	text=text.replace(/丨/g,"｜")+"丨"+MD5(password)
+	for(var i=0;i<text.length;i++){
+		encrypted+=(text.charCodeAt(i)*8).toString(8)+"9"
+	}
+	if(base64){
+		return btoa(encrypted)
+	}else{
+		return encrypted
 	}
 }
 function error(){
@@ -605,6 +616,21 @@ function logOut(){
 	localStorage.removeItem("Password")
 	localStorage.removeItem("Username")
 	clearLocalStorage()
+	location.reload()
+}
+function only(regExp,text){
+	var array=text.split(""),
+	passed=""
+	for(var i=0;i<array.length;i++){
+		if(regExp.test(array[i])){
+			passed+=array[i]
+		}
+	}
+	if(passed==text){
+		return true
+	}else{
+		return false
+	}
 }
 function openDialog(){
 	document.getElementById("OpenFile").value=""
@@ -629,11 +655,11 @@ function openWindow(name){
 		location.href=name+".html"
 	}
 }
-function restart(){
-	if(isAndroidApp){
-		mui.back()
-	}else{
+function reload(){
+	if(isiOS){
 		openWindow("index")
+	}else{
+		location.reload()
 	}
 }
 function searchURL(key,url){
@@ -998,6 +1024,7 @@ if(!isIE){
 					"success":function(){
 						if(header){
 							clearLocalStorage()
+							location.reload()
 						}
 					}
 				})

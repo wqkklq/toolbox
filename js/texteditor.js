@@ -20,19 +20,6 @@ function count(){
 		document.getElementById("WordCount").getElementsByTagName("span")[0].innerText=all
 	}
 }
-function decodeUnicode(code){
-	if(code.indexOf("\\u")!=-1){
-		var escaped=code.replace(/\\u/g,"%u")
-		var text=unescape(escaped)
-		if(text==escaped){
-			return code
-		}else{
-			return text
-		}
-	}else{
-		return code
-	}
-}
 function edit(edit){
 	if(edit){
 		document.getElementsByClassName("start")[0].style.display="none"
@@ -44,29 +31,6 @@ function edit(edit){
 		document.getElementsByClassName("edit")[0].style.display=
 		document.getElementsByTagName("footer")[0].style.display=""
 		document.getElementsByClassName("back")[0].onclick=mui.back
-	}
-}
-function encodeUnicode(text){
-	var unicode=""
-	for(var i=0;i<text.length;i++){
-		var charCode=text.charCodeAt(i).toString(16)
-		if(charCode.length<4){
-			charCode=addZero(charCode,4)
-		}
-		unicode+="\\u"+charCode
-	}
-	return unicode
-}
-function encryptText(text,password,base64){
-	var encrypted=""
-	text=text.replace(/丨/g,"｜")+"丨"+MD5(password)
-	for(var i=0;i<text.length;i++){
-		encrypted+=(text.charCodeAt(i)*8).toString(8)+"9"
-	}
-	if(base64){
-		return btoa(encrypted)
-	}else{
-		return encrypted
 	}
 }
 function find(){
@@ -279,20 +243,6 @@ function newDoc(){
 		})
 	}else{
 		reload()
-	}
-}
-function only(regExp,text){
-	var array=text.split(""),
-	passed=""
-	for(var i=0;i<array.length;i++){
-		if(regExp.test(array[i])){
-			passed+=array[i]
-		}
-	}
-	if(passed==text){
-		return true
-	}else{
-		return false
 	}
 }
 function openLText(file){
@@ -685,150 +635,25 @@ document.getElementById("Delete").onclick=function(){
 document.getElementById("FindReplace").onclick=function(){
 	find()
 }
-document.getElementById("Decode").onclick=function(){
-	if(!isEmpty()){
-		var encoded=document.getElementsByTagName("textarea")[0].value,
-		showDecoded=true
-		var decoded=encoded
-		try{
-			if(decoded.indexOf(" ")==-1){
-				if(only(/0|1/,decoded)){
-					decoded=String.fromCharCode(parseInt(decoded,2))
-				}else if(decoded.indexOf("%u")!=-1){
-					decoded=unescape(decoded)
-				}else if(decoded.indexOf("%")!=-1){
-					decoded=decodeURIComponent(decoded)
-				}else if(decoded.indexOf("\\u")!=-1){
-					decoded=decodeUnicode(decoded)
-				}else{
-					decoded=decodeUnicode(atob(decoded))
-					if(only(isNumber,decoded)&&decrypt(decoded)){
-						showDecoded=false
-						showPrompt([
-							"Enter the password",
-							"输入密码"
-						],function(e){
-							var decrypted=decrypt(decoded,e)
-							if(decrypted==decoded){
-								showAlert([
-									"Incorrect password",
-									"密码错误"
-								])
-							}else{
-								setText(decrypted)
-							}
-						},"password")
-					}
-				}
-			}else if(only(/0|1|\s/,decoded)){
-				var binaries=decoded.split(" "),
-				str=""
-				for(var i=0;i<binaries.length;i++){
-					str+=String.fromCharCode(parseInt(binaries[i],2))
-				}
-				decoded=str
-			}
-		}catch(e){
-			alert(e.message)
-		}
-		if(showDecoded){
-			setText(decoded)
-		}
-	}
-}
 document.getElementById("CreateMessageBox").onclick=function(){
 	if(!isEmpty()){
 		alert(document.getElementsByTagName("textarea")[0].value)
 	}
 }
-document.getElementById("Scroll").onclick=function(){
-	if(!isEmpty()){
-		var intervalId,
-		newDiv=document.createElement("div"),
-		newTextDiv=document.createElement("div")
-		newDiv.classList.add("full-screen")
-		newDiv.onclick=function(){
-			clearInterval(intervalId)
-			newTextDiv.innerText=""
-			newDiv.style.opacity=""
-			setTimeout(function(){
-				try{
-					document.body.removeChild(newDiv)
-				}catch(e){}
-			},250)
-		}
-		newTextDiv.innerText=document.getElementsByTagName("textarea")[0].value.replace(/\n/g," ")
-		newDiv.appendChild(newTextDiv)
-		document.body.appendChild(newDiv)
-		setTimeout(function(){
-			newDiv.style.opacity="1"
-			intervalId=setInterval(function(){
-				var left
-				if(newTextDiv.style.left){
-					left=newTextDiv.style.left.replace("px","")
-				}else{
-					left=innerWidth
-				}
-				if(left<-newTextDiv.offsetWidth){
-					newTextDiv.style.left=""
-				}else{
-					newTextDiv.style.left=(left-5)+"px"
-				}
-			},25)
-		},25)
-	}
-}
 document.getElementById("GenerateQRCode").onclick=function(){
 	if(!isEmpty()){
-		showQRCode(document.getElementsByTagName("textarea")[0].value)
-	}
-}
-document.getElementById("GenerateMD5Value").onclick=function(){
-	if(!isEmpty()){
-		showPrompt(null,null,null,MD5(document.getElementsByTagName("textarea")[0].value))
+		if(document.getElementsByTagName("textarea")[0].value.indexOf("\n")!=-1){
+			encrypt=false
+			save(function(){
+				showQRCode(getURL().original)
+			})
+		}else{
+			showQRCode(document.getElementsByTagName("textarea")[0].value)
+		}
 	}
 }
 document.getElementById("GenerateWebPage").onclick=function(){
 	generateWebPage()
-}
-document.getElementById("Base64Encode").onclick=function(){
-	if(!isEmpty()){
-		try{
-			setText(btoa(document.getElementsByTagName("textarea")[0].value))
-		}catch(e){
-			setText(btoa(encodeUnicode(document.getElementsByTagName("textarea")[0].value)))
-		}
-	}
-}
-document.getElementById("BinaryEncode").onclick=function(){
-	if(!isEmpty()){
-		var binary="",
-		text=document.getElementsByTagName("textarea")[0].value
-		for(var i=0;i<text.length;i++){
-			binary+=text.charCodeAt(i).toString(2)+" "
-		}
-		setText(binary.trim())
-	}
-}
-document.getElementById("Encrypt").onclick=function(){
-	if(!isEmpty()){
-		showPrompt([
-			"Set the password",
-			"设置密码"
-		],function(e){
-			setText(encryptText(document.getElementsByTagName("textarea")[0].value,e,true))
-		},"password")
-	}
-}
-document.getElementById("UnicodeEncode").onclick=function(){
-	if(!isEmpty()){
-		setText(encodeUnicode(document.getElementsByTagName("textarea")[0].value))
-	}
-}
-document.getElementById("URIComponentEncode").onclick=function(){
-	if(!isEmpty()){
-		setText(encodeURIComponent(document.getElementsByTagName("textarea")[0].value))
-	}
 }
 document.getElementById("OpenFile").onchange=function(e){
 	openLText(e.target.files[0])
@@ -845,21 +670,13 @@ switch(language){
 	document.getElementById("WordCount").innerHTML="字数统计：<span>0</span>"
 	document.getElementById("Created").innerHTML="创建时间：<span></span>"
 	document.getElementById("Modified").innerHTML="修改时间：<span></span>"
+	document.getElementById("FindReplace").innerText="查找和替换"
 	document.getElementById("Share").innerText="共享"
 	document.getElementById("SaveAs").innerText="另存为"
 	document.getElementById("Delete").innerText="删除"
-	document.getElementById("FindReplace").innerText="查找和替换"
-	document.getElementById("Decode").innerText="解码"
 	document.getElementById("CreateMessageBox").innerText="创建消息框"
-	document.getElementById("Scroll").innerText="滚动"
 	document.getElementById("GenerateQRCode").innerText="生成二维码"
-	document.getElementById("GenerateMD5Value").innerText="生成 MD5 值"
 	document.getElementById("GenerateWebPage").innerText="生成网页"
-	document.getElementById("Base64Encode").innerText="Base64 编码"
-	document.getElementById("BinaryEncode").innerText="二进制编码"
-	document.getElementById("Encrypt").innerText="加密"
-	document.getElementById("UnicodeEncode").innerText="Unicode 编码"
-	document.getElementById("URIComponentEncode").innerText="URI Component 编码"
 	break
 	default:
 	document.title="Text Editor"
@@ -872,21 +689,13 @@ switch(language){
 	document.getElementById("WordCount").innerHTML="Word Count: <span>0</span>"
 	document.getElementById("Created").innerHTML="Created: <span></span>"
 	document.getElementById("Modified").innerHTML="Modified: <span></span>"
+	document.getElementById("FindReplace").innerText="Find & Replace"
 	document.getElementById("Share").innerText="Share"
 	document.getElementById("SaveAs").innerText="Save As"
 	document.getElementById("Delete").innerText="Delete"
-	document.getElementById("FindReplace").innerText="Find & Replace"
-	document.getElementById("Decode").innerText="Decode"
 	document.getElementById("CreateMessageBox").innerText="Create Message Box"
-	document.getElementById("Scroll").innerText="Scroll"
 	document.getElementById("GenerateQRCode").innerText="Generate QR Code"
-	document.getElementById("GenerateMD5Value").innerText="Generate MD5 Value"
 	document.getElementById("GenerateWebPage").innerText="Generate Web Page"
-	document.getElementById("Base64Encode").innerText="Base64 Encode"
-	document.getElementById("BinaryEncode").innerText="Binary Encode"
-	document.getElementById("Encrypt").innerText="Encrypt"
-	document.getElementById("UnicodeEncode").innerText="Unicode Encode"
-	document.getElementById("URIComponentEncode").innerText="URI Component Encode"
 }
 newTitle.innerText=document.title
 if(isEdge||isLinux||isMobile){

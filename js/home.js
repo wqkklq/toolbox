@@ -175,9 +175,11 @@ switch(language){
 	document.getElementById("Timer").innerText="计时器"
 	document.getElementById("Calculator").innerText="计算器"
 	document.getElementById("Chatbot").innerText="聊天机器人"
+	document.getElementById("Marquee").innerText="跑马灯"
 	document.getElementById("RandomNumber").innerText="随机抽号"
 	document.getElementById("Search").innerText="搜索"
 	document.getElementById("TextEditor").innerText="文本编辑器"
+	document.getElementById("TextEncoder").innerText="文本编码器"
 	document.getElementById("FileTransfer").innerText="文件传输"
 	if(currentHour>=6&&currentHour<=11){
 		document.getElementById("Quote").innerText="早上好！"
@@ -198,9 +200,11 @@ switch(language){
 	document.getElementById("Timer").innerText="Timer"
 	document.getElementById("Calculator").innerText="Calculator"
 	document.getElementById("Chatbot").innerText="Chatbot"
+	document.getElementById("Marquee").innerText="Marquee"
 	document.getElementById("RandomNumber").innerText="Random Number"
 	document.getElementById("Search").innerText="Search"
 	document.getElementById("TextEditor").innerText="Text Editor"
+	document.getElementById("TextEncoder").innerText="Text Encoder"
 	document.getElementById("FileTransfer").innerText="File Transfer"
 	if(currentHour>=6&&currentHour<=11){
 		document.getElementById("Quote").innerText="Good morning!"

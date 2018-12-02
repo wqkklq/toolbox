@@ -3,13 +3,13 @@ document.getElementById("LanguageSelect").onchange=function(){
 	if(this.value!=language){
 		localStorage.setItem("Language",this.value)
 		localStorage.removeItem("Quote")
-		restart()
+		reload()
 	}
 }
 document.getElementById("ThemeSelect").onchange=function(){
 	if(this.value!=theme){
 		localStorage.setItem("Theme",this.value)
-		restart()
+		reload()
 	}
 }
 document.getElementById("Login").onclick=loginDialog
@@ -198,7 +198,14 @@ document.getElementById("ClearLocalStorage").onclick=function(){
 	showConfirm([
 		"Do you want to clear the local storage?",
 		"您想清空本地存储吗？"
-	],clearLocalStorage)
+	],function(){
+		clearLocalStorage()
+		showAlert([
+			"The local storage is cleared",
+			"本地存储已清空"
+		])
+		reload()
+	})
 }
 document.getElementById("About").onclick=function(){
 	openWindow("about")

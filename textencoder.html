@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!--Code written by Shangzhen Yang-->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,viewport-fit=cover">
+		<meta name="theme-color" content="#0066cc">
+		<link rel="stylesheet" href="css/mui.min.css">
+		<link rel="stylesheet" href="css/general.css">
+		<link rel="stylesheet" href="css/textencoder.css">
+	</head>
+	<body>
+		<header class="mui-bar mui-bar-nav title"></header>
+		<div class="mui-content">
+			<select>
+				<option value="rthencrypt">RTH Encrypt V1.0</option>
+				<option value="base64">Base64</option>
+				<option value="binary">Binary</option>
+				<option value="md5">MD5</option>
+				<option value="unicode">Unicode</option>
+				<option value="uricomponent">URI Component</option>
+			</select>
+			<textarea></textarea>
+			<div class="btn-bg-img">
+				<button id="EncodeButton" type="button" class="mui-btn mui-btn-blue mui-btn-block"></button>
+			</div>
+			<button id="DecodeButton" type="button" class="mui-btn mui-btn-block"></button>
+			
+			<ul class="menu">
+				<span id="SavedText"></span>
+			</ul>
+			
+		</div>
+		<script src="cordova.js"></script>
+		<script src="js/mui.min.js"></script>
+		<script src="js/md5.min.js"></script>
+		<script src="js/general.js"></script>
+		<script src="js/textencoder.js"></script>
+	</body>
+</html>
