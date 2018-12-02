@@ -30,7 +30,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/12/1").toLocaleDateString(),
+lastUpdated=new Date("2018/12/2").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -268,7 +268,7 @@ function clearLocalStorage(){
 		localStorage.setItem("Password",login.password)
 		localStorage.setItem("Username",login.username)
 	}
-	restart()
+	location.reload()
 }
 function closeMenu(){
 	if(document.getElementsByClassName("popup-menu")[0]){
