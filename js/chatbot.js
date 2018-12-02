@@ -1,5 +1,5 @@
 /*Code written by Shangzhen Yang*/
-var lastBotInfo
+var lastBotInfo=""
 function chatbotReply(botInfo){
 	ajax({
 		"url":"http://www.tuling123.com/openapi/api",
@@ -61,15 +61,16 @@ function noConnection(){
 	document.getElementsByClassName("mui-content")[0].appendChild(newDiv)
 	scrollTo(0,document.body.scrollHeight)
 }
-document.getElementById("SendMessage").onclick=function(){
-	var sendMsg=function(e){
-		lastBotInfo=e
+function sendMsg(text){
+	if(text){
+		lastBotInfo=text
+		document.getElementById("SendBox").value=""
 		var newMyDiv=document.createElement("div"),
 		newMyChildDiv=document.createElement("div")
 		newMyDiv.classList.add("msg-row")
 		newMyChildDiv.classList.add("msg")
 		newMyChildDiv.classList.add("msg-me")
-		newMyChildDiv.innerText=document.getElementsByTagName("input")[0].value
+		newMyChildDiv.innerText=text
 		newMyDiv.appendChild(newMyChildDiv)
 		document.getElementsByClassName("mui-content")[0].appendChild(newMyDiv)
 		scrollTo(0,document.body.scrollHeight)
@@ -80,40 +81,54 @@ document.getElementById("SendMessage").onclick=function(){
 			default:
 			newTitle.innerText="Typing"
 		}
-		if(isEnglish.test(document.getElementsByTagName("input")[0].value)){
-			translate(document.getElementsByTagName("input")[0].value,"auto","zh",function(e){
+		if(isEnglish.test(text)){
+			translate(text,"auto","zh",function(e){
 				newMyChildDiv.innerText+="\n"+e
 				scrollTo(0,document.body.scrollHeight)
 				chatbotReply(e)
 			},noConnection)
 		}else{
-			chatbotReply(document.getElementsByTagName("input")[0].value)
+			chatbotReply(text)
 		}
+	}else{
+		document.getElementById("SendBox").value=lastBotInfo
 	}
-	showPrompt([
-		"Enter the message",
-		"输入消息"
-	],function(e){
-		sendMsg(e)
-	},null,null,function(){
+}
+document.getElementById("SendBox").onclick=function(){
+	if(isMobile){
 		showPrompt([
 			"Enter the message",
 			"输入消息"
 		],function(e){
 			sendMsg(e)
-		},null,lastBotInfo)
-	})
+		},null,null,function(){
+			showPrompt([
+				"Enter the message",
+				"输入消息"
+			],function(e){
+				sendMsg(e)
+			},null,lastBotInfo)
+		})
+	}
+}
+document.getElementById("SendBox").onkeydown=function(e){
+	if(e.keyCode==13){
+		sendMsg(this.value)
+	}
+}
+document.getElementById("SendButton").onclick=function(){
+	sendMsg(document.getElementById("SendBox").value)
 }
 switch(language){
 	case "SimplifiedChinese":
 	document.title="聊天机器人"
 	newTitle.innerText="康康"
 	document.getElementById("Welcome").innerText="我们一起来聊天吧！"
-	document.getElementById("SendMessage").innerText="发送消息"
+	document.getElementById("SendButton").innerText="发送"
 	break
 	default:
 	document.title="Chatbot"
 	newTitle.innerText="Kangkang"
 	document.getElementById("Welcome").innerText="Let's chat!"
-	document.getElementById("SendMessage").innerText="Send Message"
+	document.getElementById("SendButton").innerText="Send"
 }

@@ -130,7 +130,7 @@ document.getElementById("DecodeButton").onclick=function(){
 				decoded=MD5Hist[decoded]
 				showToast([
 					"MD5 usually cannot be decoded",
-					"MD5 通常是不能被解码的"
+					"MD5 通常不能被解码"
 				])
 			}else if(decoded.indexOf(" ")==-1){
 				if(only(/0|1/,decoded)){
