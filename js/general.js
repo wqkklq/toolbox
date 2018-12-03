@@ -43,7 +43,7 @@ officialWebsite="https://www.rthsoftware.cn/",
 recentInput=0,
 secondary="http://www.rthe.cn/",
 theme=localStorage.getItem("Theme"),
-ver="16.0"
+ver="16.1"
 var isApp=isCordova,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -307,17 +307,13 @@ function decrypt(text,password){
 		}
 	}
 }
-function encryptText(text,password,base64){
+function encryptText(text,password){
 	var encrypted=""
 	text=text.replace(/丨/g,"｜")+"丨"+MD5(password)
 	for(var i=0;i<text.length;i++){
 		encrypted+=(text.charCodeAt(i)*8).toString(8)+"9"
 	}
-	if(base64){
-		return btoa(encrypted)
-	}else{
-		return encrypted
-	}
+	return encrypted
 }
 function error(){
 	showAlert([

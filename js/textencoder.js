@@ -79,12 +79,27 @@ function loadSavedText(e){
 document.getElementById("EncodeButton").onclick=function(){
 	if(document.getElementsByTagName("textarea")[0].value){
 		switch(document.getElementsByTagName("select")[0].value){
-			case "rthencrypt":
+			case "binary":
+			var binary="",
+			text=document.getElementsByTagName("textarea")[0].value
+			if(only(isNumber,text)){
+				binary=(text*1).toString(2)
+			}else{
+				for(var i=0;i<text.length;i++){
+					binary+=text.charCodeAt(i).toString(2)+" "
+				}
+			}
+			document.getElementsByTagName("textarea")[0].value=binary
+			break
+			case "qrcode":
+			showQRCode(document.getElementsByTagName("textarea")[0].value)
+			break
+			case "password":
 			showPrompt([
 				"Set the password",
 				"设置密码"
 			],function(e){
-				document.getElementsByTagName("textarea")[0].value=encryptText(document.getElementsByTagName("textarea")[0].value,e,true)
+				document.getElementsByTagName("textarea")[0].value=encryptText(document.getElementsByTagName("textarea")[0].value,e)
 			},"password")
 			break
 			case "base64":
@@ -93,14 +108,6 @@ document.getElementById("EncodeButton").onclick=function(){
 			}catch(e){
 				document.getElementsByTagName("textarea")[0].value=btoa(encodeUnicode(document.getElementsByTagName("textarea")[0].value))
 			}
-			break
-			case "binary":
-			var binary="",
-			text=document.getElementsByTagName("textarea")[0].value
-			for(var i=0;i<text.length;i++){
-				binary+=text.charCodeAt(i).toString(2)+" "
-			}
-			document.getElementsByTagName("textarea")[0].value=binary.trim()
 			break
 			case "md5":
 			var MD5Value=MD5(document.getElementsByTagName("textarea")[0].value)
@@ -112,6 +119,12 @@ document.getElementById("EncodeButton").onclick=function(){
 			break
 			case "uricomponent":
 			document.getElementsByTagName("textarea")[0].value=encodeURIComponent(document.getElementsByTagName("textarea")[0].value)
+			break
+			default:
+			showAlert([
+				"Please select an encoding scheme",
+				"请选择一个编码方案"
+			])
 		}
 	}else{
 		showAlert([
@@ -126,15 +139,31 @@ document.getElementById("DecodeButton").onclick=function(){
 		showDecoded=true
 		var decoded=encoded
 		try{
-			if(MD5Hist[decoded]){
-				decoded=MD5Hist[decoded]
-				showToast([
-					"MD5 usually cannot be decoded",
-					"MD5 通常不能被解码"
-				])
-			}else if(decoded.indexOf(" ")==-1){
-				if(only(/0|1/,decoded)){
-					decoded=String.fromCharCode(parseInt(decoded,2))
+			if(decoded.indexOf(" ")==-1){
+				if(MD5Hist[decoded]){
+					decoded=MD5Hist[decoded]
+					showToast([
+						"MD5 usually cannot be decoded",
+						"MD5 通常不能被解码"
+					])
+				}else if(only(/0|1/,decoded)){
+					decoded=parseInt(decoded,2)
+				}else if(only(isNumber,decoded)&&decrypt(decoded)){
+					showDecoded=false
+					showPrompt([
+						"Enter the password",
+						"输入密码"
+					],function(e){
+						var decrypted=decrypt(decoded,e)
+						if(decrypted==decoded){
+							showAlert([
+								"Incorrect password",
+								"密码错误"
+							])
+						}else{
+							document.getElementsByTagName("textarea")[0].value=decrypted
+						}
+					},"password")
 				}else if(decoded.indexOf("%u")!=-1){
 					decoded=unescape(decoded)
 				}else if(decoded.indexOf("%")!=-1){
@@ -143,26 +172,9 @@ document.getElementById("DecodeButton").onclick=function(){
 					decoded=decodeUnicode(decoded)
 				}else{
 					decoded=decodeUnicode(atob(decoded))
-					if(only(isNumber,decoded)&&decrypt(decoded)){
-						showDecoded=false
-						showPrompt([
-							"Enter the password",
-							"输入密码"
-						],function(e){
-							var decrypted=decrypt(decoded,e)
-							if(decrypted==decoded){
-								showAlert([
-									"Incorrect password",
-									"密码错误"
-								])
-							}else{
-								document.getElementsByTagName("textarea")[0].value=decrypted
-							}
-						},"password")
-					}
 				}
 			}else if(only(/0|1|\s/,decoded)){
-				var binaries=decoded.split(" "),
+				var binaries=decoded.trim().split(" "),
 				str=""
 				for(var i=0;i<binaries.length;i++){
 					str+=String.fromCharCode(parseInt(binaries[i],2))
@@ -185,13 +197,25 @@ document.getElementById("DecodeButton").onclick=function(){
 switch(language){
 	case "SimplifiedChinese":
 	document.title="文本编码器"
+	document.getElementsByTagName("select")[0].options.add(new Option("选择...",""))
+	document.getElementsByTagName("select")[0].options.add(new Option("二进制","binary"))
+	document.getElementsByTagName("select")[0].options.add(new Option("二维码","qrcode"))
+	document.getElementsByTagName("select")[0].options.add(new Option("密码","password"))
 	document.getElementById("EncodeButton").innerText="编码"
 	document.getElementById("DecodeButton").innerText="解码"
 	break
 	default:
 	document.title="Text Encoder"
+	document.getElementsByTagName("select")[0].options.add(new Option("Select...",""))
+	document.getElementsByTagName("select")[0].options.add(new Option("Binary","binary"))
+	document.getElementsByTagName("select")[0].options.add(new Option("QR Code","qrcode"))
+	document.getElementsByTagName("select")[0].options.add(new Option("Password","password"))
 	document.getElementById("EncodeButton").innerText="Encode"
 	document.getElementById("DecodeButton").innerText="Decode"
 }
 newTitle.innerText=document.title
+document.getElementsByTagName("select")[0].options.add(new Option("Base64","base64"))
+document.getElementsByTagName("select")[0].options.add(new Option("MD5","md5"))
+document.getElementsByTagName("select")[0].options.add(new Option("Unicode","unicode"))
+document.getElementsByTagName("select")[0].options.add(new Option("URI Component","uricomponent"))
 load()
