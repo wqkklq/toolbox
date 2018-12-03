@@ -250,6 +250,4 @@ switch(language){
 newTitle.innerText=document.title
 if(login.username){
 	load()
-}else{
-	loginDialog()
 }
