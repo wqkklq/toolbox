@@ -30,7 +30,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/12/3").toLocaleDateString(),
+lastUpdated=new Date("2018/12/7").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -43,7 +43,7 @@ officialWebsite="https://www.rthsoftware.cn/",
 recentInput=0,
 secondary="http://www.rthe.cn/",
 theme=localStorage.getItem("Theme"),
-ver="16.1"
+ver="16.2"
 var isApp=isCordova,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
@@ -587,7 +587,7 @@ function loginDialog(){
 		},25)
 	}
 }
-function loginRequired(callback,negativeCallback,redirect){
+function loginRequired(callback,negativeCallback){
 	if(login.username){
 		if(callback){
 			callback()
@@ -596,11 +596,7 @@ function loginRequired(callback,negativeCallback,redirect){
 		if(negativeCallback){
 			negativeCallback()
 		}
-		if(redirect&&location.hostname){
-			location.href="../login"
-		}else{
-			loginDialog()
-		}
+		loginDialog()
 	}
 }
 function logOut(){
@@ -612,7 +608,14 @@ function logOut(){
 	localStorage.removeItem("Password")
 	localStorage.removeItem("Username")
 	clearLocalStorage()
-	location.reload()
+	if(isApp||location.hostname=="rthsoftware.cn"){
+		location.reload()
+	}else{
+		var ssoIFrame=document.createElement("iframe")
+		ssoIFrame.style.display="none"
+		ssoIFrame.src="https://rthsoftware.cn/sso?action=logout"
+		document.body.appendChild(ssoIFrame)
+	}
 }
 function only(regExp,text){
 	var array=text.split(""),
@@ -1030,6 +1033,27 @@ if(!isIE){
 		}
 	}
 }
+addEventListener("message",function(e){
+	try{
+		login=JSON.parse(atob(e.data))
+		if(login.username===null){
+			location.reload()
+		}else{
+			localStorage.setItem("Backend",backend)
+			localStorage.setItem("Email",login.email)
+			localStorage.setItem("Username",login.username)
+			if(login.password){
+				localStorage.setItem("Password",login.password)
+			}
+			document.getElementsByClassName("popup")[0].style.opacity=""
+			setTimeout(function(){
+				try{
+					document.body.removeChild(document.getElementsByClassName("popup")[0])
+				}catch(e){}
+			},250)
+		}
+	}catch(e){}
+})
 if(!language){
 	if(navigator.language.indexOf("zh")!=-1){
 		language="SimplifiedChinese"
@@ -1146,8 +1170,18 @@ if(login.username){
 			}
 		}
 	})
-}else if(!header&&!$_GET["action"]){
-	loginDialog()
+}else{
+	ajax({
+		"url":"https://rthsoftware.cn/backend/geo",
+		"success":function(e){
+			if(e=="CN"){
+				backend="https://www.rthsoftware.cn/backend/"
+			}else{
+				backend="https://cdn.rthsoftware.net/backend/"
+				backendChanged()
+			}
+		}
+	})
 }
 switch(language){
 	case "SimplifiedChinese":
@@ -1213,19 +1247,6 @@ switch(language){
 		["Hungarian","hu"],
 		["Vietnamese","vie"]
 	]
-}
-if(!login.username){
-	ajax({
-		"url":"https://rthsoftware.cn/backend/geo",
-		"success":function(e){
-			if(e=="CN"){
-				backend="https://www.rthsoftware.cn/backend/"
-			}else{
-				backend="https://cdn.rthsoftware.net/backend/"
-				backendChanged()
-			}
-		}
-	})
 }
 if(location.hostname){
 	var newStatDiv=document.createElement("div"),

@@ -226,6 +226,14 @@ if($_GET["action"]){
 		case "dl":
 		getToolbox()
 	}
+}else if(!login.username){
+	loginDialog()
+}
+if(!login.username&&!isApp&&location.hostname!="rthsoftware.cn"){
+	var ssoIFrame=document.createElement("iframe")
+	ssoIFrame.style.display="none"
+	ssoIFrame.src="https://rthsoftware.cn/sso"
+	document.body.appendChild(ssoIFrame)
 }
 getSentence()
 if(dateCountdown){

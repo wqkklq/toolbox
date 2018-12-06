@@ -703,41 +703,39 @@ if(isEdge||isLinux||isMobile){
 }
 load()
 if($_GET["index"]&&$_GET["username"]){
-	loginRequired(function(){
-		mui.back=function(){
-			openWindow("index")
-		}
-		ajax({
-			"url":backend+"getpage",
-			"data":{
-				"index":$_GET["index"],
-				"username":$_GET["username"]
-			},
-			"dataType":"json",
-			"showLoading":true,
-			"success":function(e){
-				if(e.text){
-					document.getElementsByTagName("input")[0].value=e.title
-					setText(e.text)
-					document.getElementById("Created").getElementsByTagName("span")[0].innerText=
-					document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
-					applyItem(0)
-				}else if(e.error){
-					switch(e.error){
-						case 403:
-						showAlert([
-							"This text document has been encrypted",
-							"此文本文档已被加密"
-						])
-						break
-						case 404:
-						showAlert([
-							"This text document has been deleted",
-							"此文本文档已被删除"
-						])
-					}
+	mui.back=function(){
+		openWindow("index")
+	}
+	ajax({
+		"url":backend+"getpage",
+		"data":{
+			"index":$_GET["index"],
+			"username":$_GET["username"]
+		},
+		"dataType":"json",
+		"showLoading":true,
+		"success":function(e){
+			if(e.text){
+				document.getElementsByTagName("input")[0].value=e.title
+				setText(e.text)
+				document.getElementById("Created").getElementsByTagName("span")[0].innerText=
+				document.getElementById("Modified").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()
+				applyItem(0)
+			}else if(e.error){
+				switch(e.error){
+					case 403:
+					showAlert([
+						"This text document has been encrypted",
+						"此文本文档已被加密"
+					])
+					break
+					case 404:
+					showAlert([
+						"This text document has been deleted",
+						"此文本文档已被删除"
+					])
 				}
 			}
-		})
-	},null,true)
+		}
+	})
 }

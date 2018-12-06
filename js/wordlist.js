@@ -1268,27 +1268,25 @@ if(isiOS){
 }
 load()
 if($_GET["index"]&&$_GET["username"]){
-	loginRequired(function(){
-		mui.back=function(){
-			openWindow("index")
+	mui.back=function(){
+		openWindow("index")
+	}
+	ajax({
+		"url":backend+"userdata/getwordlist",
+		"data":{
+			"index":$_GET["index"],
+			"username":$_GET["username"]
+		},
+		"dataType":"json",
+		"showLoading":true,
+		"success":function(e){
+			applyItem(0,e)
+		},
+		"error":function(){
+			showAlert([
+				"This word list has been deleted",
+				"此单词表已被删除"
+			])
 		}
-		ajax({
-			"url":backend+"userdata/getwordlist",
-			"data":{
-				"index":$_GET["index"],
-				"username":$_GET["username"]
-			},
-			"dataType":"json",
-			"showLoading":true,
-			"success":function(e){
-				applyItem(0,e)
-			},
-			"error":function(){
-				showAlert([
-					"This word list has been deleted",
-					"此单词表已被删除"
-				])
-			}
-		})
-	},null,true)
+	})
 }
