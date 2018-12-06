@@ -1170,18 +1170,6 @@ if(login.username){
 			}
 		}
 	})
-}else{
-	ajax({
-		"url":"https://rthsoftware.cn/backend/geo",
-		"success":function(e){
-			if(e=="CN"){
-				backend="https://www.rthsoftware.cn/backend/"
-			}else{
-				backend="https://cdn.rthsoftware.net/backend/"
-				backendChanged()
-			}
-		}
-	})
 }
 switch(language){
 	case "SimplifiedChinese":
