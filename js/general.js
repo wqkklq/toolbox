@@ -17,9 +17,7 @@ header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
 isChinese=/[\u4E00-\u9FA5]+/,
 isCordova=!!window.cordova,
-isEdge=/Edge/i.test(navigator.userAgent),
 isEnglish=/[A-Za-z]+/,
-isIE=/MSIE|Trident/i.test(navigator.userAgent),
 isiOS=/iPhone|iPad/i.test(navigator.userAgent),
 isLinux=/Linux/i.test(navigator.userAgent),
 isMac=/Macintosh/i.test(navigator.userAgent),
@@ -1002,34 +1000,30 @@ if(!backend){
 }else{
 	backendChanged()
 }
-if(!isIE){
-	window.onerror=function(msg,url,lineNo){
-		if(msg&&url&&lineNo&&msg!="Script error."&&url.indexOf("mui.min.js")==-1&&lineNo!=1){
-			var text=msg+" at "+url+" : "+lineNo
-			if(isApp||login.username){
-				window.onerror=null
-				mui.toast(msg)
-				ajax({
-					"url":"https://rthsoftware.cn/backend/feedback",
-					"data":{
-						"appname":appName,
-						"email":login.email,
-						"lang":language,
-						"name":login.username,
-						"text":text,
-						"ver":ver
-					},
-					"method":"POST",
-					"success":function(){
-						if(header){
-							clearLocalStorage()
-							location.reload()
-						}
+window.onerror=function(msg,url,lineNo){
+	if(msg&&url&&lineNo&&msg!="Script error."&&url.indexOf("mui.min.js")==-1&&lineNo!=1){
+		var text=msg+" at "+url+" : "+lineNo
+		mui.toast(msg)
+		if(isApp||login.username){
+			window.onerror=null
+			ajax({
+				"url":"https://rthsoftware.cn/backend/feedback",
+				"data":{
+					"appname":appName,
+					"email":login.email,
+					"lang":language,
+					"name":login.username,
+					"text":text,
+					"ver":ver
+				},
+				"method":"POST",
+				"success":function(){
+					if(header){
+						clearLocalStorage()
+						location.reload()
 					}
-				})
-			}else{
-				mui.toast(text)
-			}
+				}
+			})
 		}
 	}
 }
@@ -1092,10 +1086,6 @@ if(header){
 	if(window.history.length<=1){
 		newA.onclick=function(){
 			openWindow("index")
-		}
-	}else if(isIE){
-		newA.onclick=function(){
-			history.go(-1)
 		}
 	}else{
 		newA.onclick=mui.back

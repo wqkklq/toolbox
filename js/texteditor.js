@@ -698,7 +698,7 @@ switch(language){
 	document.getElementById("GenerateWebPage").innerText="Generate Web Page"
 }
 newTitle.innerText=document.title
-if(isEdge||isLinux||isMobile){
+if(isLinux||isMobile){
 	document.getElementById("SaveAs").style.display="none"
 }
 load()

@@ -278,7 +278,7 @@ function expWL(){
 				openWebPage(backend+"userdata/getwordlist?dl=rth&index="+currentItem+"&username="+login.username,true)
 			})
 		})
-	}else if(!isEdge&&!isLinux&&!isMobile){
+	}else if(!isLinux&&!isMobile){
 		showConfirm([
 			"Do you want to export this word list?",
 			"您想导出此单词表吗？"
