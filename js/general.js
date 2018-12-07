@@ -28,7 +28,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/12/7").toLocaleDateString(),
+lastUpdated=new Date("2018/12/8").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -37,7 +37,6 @@ login={
 newLoading=document.createElement("div"),
 newMask=document.createElement("div"),
 newTitle=document.createElement("h1"),
-officialWebsite="https://www.rthsoftware.cn/",
 recentInput=0,
 secondary="http://www.rthe.cn/",
 theme=localStorage.getItem("Theme"),
@@ -46,8 +45,7 @@ var isApp=isCordova,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
 isMobile=isAndroid||isiOS,
-isTencent=isQQ||isWeChat,
-toolboxOnline=officialWebsite+"toolbox/"
+isTencent=isQQ||isWeChat
 function addZero(num,length){
 	return (Array(length).join("0")+num).slice(-length)
 }
@@ -179,10 +177,8 @@ function arrayContains(obj,array){
 	return false
 }
 function backendChanged(){
-	if(backend=="https://cdn.rthsoftware.net/backend/"){
-		officialWebsite="https://www.rthsoftware.net/"
+	if(backend=="https://rthsoftware.net/backend/"){
 		secondary="https://rthe.cn/"
-		toolboxOnline=officialWebsite+"toolbox/"
 	}
 }
 function calc(code){
@@ -471,7 +467,7 @@ function loginDialog(){
 								}else{
 									var username=email.split("@")[0]+new Date().getTime().toString(36)
 									ajax({
-										"url":e.backend+"userdata/signup",
+										"url":"https://rthsoftware.cn/backend/userdata/signup",
 										"data":{
 											"email":email,
 											"password":password,
@@ -1021,7 +1017,6 @@ window.onerror=function(msg,url,lineNo){
 				"success":function(){
 					if(header){
 						clearLocalStorage()
-						location.reload()
 					}
 				}
 			})
@@ -1141,7 +1136,7 @@ if(appliedTheme=="Bing"){
 }
 if(login.username){
 	ajax({
-		"url":backend+"userdata/verify",
+		"url":"https://rthsoftware.cn/backend/userdata/verify",
 		"data":{
 			"email":login.email,
 			"password":login.password

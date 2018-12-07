@@ -22,13 +22,13 @@ document.getElementById("Alipay").onclick=function(){
 	if(isMobile){
 		openWebPage("HTTPS://QR.ALIPAY.COM/FKX04965KXP0C8G3MUVK28")
 	}
-	showImage(officialWebsite+"img/alipay.jpg")
+	showImage("https://rthsoftware.cn/img/alipay.jpg")
 }
 document.getElementById("WeChatPay").onclick=function(){
-	showImage(officialWebsite+"img/wechatpay.jpg")
+	showImage("https://rthsoftware.cn/img/wechatpay.jpg")
 }
 document.getElementById("QQWallet").onclick=function(){
-	showImage(officialWebsite+"img/qqwallet.jpg")
+	showImage("https://rthsoftware.cn/img/qqwallet.jpg")
 }
 document.getElementById("PayPal").onclick=function(){
 	openWebPage("https://www.paypal.me/ShangzhenY/")

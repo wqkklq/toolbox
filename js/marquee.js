@@ -4,7 +4,7 @@ intervalId
 function add(text,saved,title){
 	if((function(){
 		for(var i=0;i<hist.length;i++){
-			if(hist[i].replace(/\n/g,"")==text){
+			if(hist[i]&&hist[i].replace(/\n/g,"")==text){
 				return false
 			}
 		}

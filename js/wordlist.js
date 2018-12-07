@@ -325,7 +325,7 @@ function getURL(){
 		}
 		return{
 			"domain":short,
-			"original":toolboxOnline+"wordlist?index="+index+"&username="+login.username,
+			"original":"https://rthsoftware.cn/toolbox/wordlist?index="+index+"&username="+login.username,
 			"short":secondary+short
 		}
 	}

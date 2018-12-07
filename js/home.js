@@ -91,7 +91,7 @@ function getToolbox(){
 	}else if(isiOS){
 		url="https://itunes.apple.com/app/rth-toolbox/id1294479577"
 	}else{
-		showQRCode(toolboxOnline+"?action=dl")
+		showQRCode("https://rthsoftware.cn/toolbox/?action=dl")
 	}
 	if(url){
 		location.href=url

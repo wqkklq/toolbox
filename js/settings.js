@@ -226,7 +226,7 @@ switch(language){
 	document.getElementById("DeleteAccount").innerText="删除账号"
 	document.getElementById("LogOut").innerText="退出登录"
 	document.getElementById("ClearLocalStorage").innerText="清空本地存储"
-	document.getElementById("Introduction").innerText="您可以在 "+officialWebsite+" 查看您保存的单词表和文本文档。"
+	document.getElementById("Introduction").innerText="您可以在 https://rthsoftware.cn/ 查看您保存的单词表和文本文档。"
 	document.getElementById("About").innerText="关于 RTH 工具箱"
 	break
 	default:
@@ -244,7 +244,7 @@ switch(language){
 	document.getElementById("DeleteAccount").innerText="Delete Account"
 	document.getElementById("LogOut").innerText="Log Out"
 	document.getElementById("ClearLocalStorage").innerText="Clear Local Storage"
-	document.getElementById("Introduction").innerText="You can view your saved word lists and text documents at "+officialWebsite+"."
+	document.getElementById("Introduction").innerText="You can view your saved word lists and text documents at https://rthsoftware.cn/."
 	document.getElementById("About").innerText="About RTH Toolbox"
 }
 newTitle.innerText=document.title
