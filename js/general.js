@@ -479,6 +479,7 @@ function loginDialog(){
 										},
 										"method":"POST",
 										"success":function(){
+											localStorage.setItem("Backend",e.backend)
 											localStorage.setItem("Email",email)
 											localStorage.setItem("Password",password)
 											localStorage.setItem("Username",username)
