@@ -164,11 +164,9 @@ for(var i=0;i<menu.length;i++){
 document.getElementsByClassName("mui-icon-settings")[0].onclick=function(){
 	openWindow("settings")
 }
-document.getElementsByClassName("get")[0].onclick=getToolbox
 switch(language){
 	case "SimplifiedChinese":
 	document.title="RTH 工具箱"
-	document.getElementsByClassName("get")[0].innerText="下载 RTH 工具箱"
 	document.getElementById("WordList").innerText="单词表"
 	document.getElementById("ShortURL").innerText="短网址"
 	document.getElementById("Translate").innerText="翻译"
@@ -193,7 +191,6 @@ switch(language){
 	break
 	default:
 	document.title="RTH Toolbox"
-	document.getElementsByClassName("get")[0].innerText="Download RTH Toolbox"
 	document.getElementById("WordList").innerText="Word List"
 	document.getElementById("ShortURL").innerText="Short URL"
 	document.getElementById("Translate").innerText="Translate"
@@ -218,8 +215,7 @@ switch(language){
 }
 document.getElementsByClassName("home-title")[0].innerText=document.title
 if(!isApp){
-	document.body.style.marginTop="62px"
-	document.getElementsByClassName("get")[0].style.display="block"
+	document.body.style.marginTop="32px"
 }
 if($_GET["action"]){
 	switch($_GET["action"].toLowerCase()){

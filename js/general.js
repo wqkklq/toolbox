@@ -1090,7 +1090,7 @@ if(header){
 	newDiv.appendChild(newA)
 	newDiv.appendChild(newTitle)
 	header.appendChild(newDiv)
-	if(!isApp||isMac){
+	if(!isApp){
 		document.getElementsByClassName("mui-content")[0].style.marginTop="40px"
 		header.style.height="65px"
 		newDiv.style.paddingTop="20px"
@@ -1222,7 +1222,7 @@ switch(language){
 		["Vietnamese","vie"]
 	]
 }
-if(!isApp&&"serviceWorker" in navigator){
+if(!isApp&&location.hostname&&"serviceWorker" in navigator){
 	navigator.serviceWorker.register("sw.js")
 }
 if(location.hostname){
