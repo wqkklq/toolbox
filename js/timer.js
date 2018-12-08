@@ -118,10 +118,19 @@ function task(){
 				}
 			})()){
 				try{
-					new Notification(document.title,{
-						body:document.getElementById("CreateMessageBoxInput").value,
-						icon:"../img/icon.png"
-					})
+					if("serviceWorker" in navigator){
+						navigator.serviceWorker.ready.then(function(registration){
+							registration.showNotification(document.title,{
+								body:document.getElementById("CreateMessageBoxInput").value,
+								icon:"../img/icon.png"
+							})
+						})
+					}else{
+						new Notification(document.title,{
+							body:document.getElementById("CreateMessageBoxInput").value,
+							icon:"../img/icon.png"
+						})
+					}
 				}catch(e){}
 			}else if(isCordova){
 				if(isAndroid){

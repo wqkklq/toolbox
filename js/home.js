@@ -265,3 +265,6 @@ if(login.username&&login.username!="app"||!isiOS){
 		}
 	})
 }
+if(!isApp&&"serviceWorker" in navigator){
+	navigator.serviceWorker.register("sw.js")
+}
