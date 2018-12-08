@@ -9,7 +9,7 @@
 		"type":"image/png",
 		"sizes":"512x512"
 	}],
-	"start_url":"index.html",
+	"start_url":"index",
 	"display":"standalone",
 	"theme_color":"#0066cc"
 }
