@@ -1,4 +1,4 @@
-const currentCache="toolbox-16.2-12072301",
+const currentCache="toolbox-16.2-12072316",
 toolbox="/toolbox/"
 const toolboxCSS=toolbox+"css/",
 toolboxJS=toolbox+"js/"
@@ -10,6 +10,7 @@ self.addEventListener("install",e=>{
 				toolbox+"about",
 				toolbox+"calculator",
 				toolbox+"chatbot",
+				toolbox+"cordova.js",
 				toolbox+"currency",
 				toolbox+"date",
 				toolbox+"equation12",
