@@ -1222,6 +1222,9 @@ switch(language){
 		["Vietnamese","vie"]
 	]
 }
+if(!isApp&&"serviceWorker" in navigator){
+	navigator.serviceWorker.register("sw.js")
+}
 if(location.hostname){
 	var newStatDiv=document.createElement("div"),
 	newScript=document.createElement("script")
