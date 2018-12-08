@@ -19,9 +19,6 @@ document.getElementById("Donate").onclick=function(){
 	}
 }
 document.getElementById("Alipay").onclick=function(){
-	if(isMobile){
-		openWebPage("HTTPS://QR.ALIPAY.COM/FKX04965KXP0C8G3MUVK28")
-	}
 	showImage("https://rthsoftware.cn/img/alipay.jpg")
 }
 document.getElementById("WeChatPay").onclick=function(){
