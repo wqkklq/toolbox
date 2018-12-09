@@ -1,5 +1,6 @@
 {
 	"name":"RTH Toolbox",
+	"short_name":"Toolbox",
 	"icons":[{
 		"src":"../img/icon_192.png",
 		"type":"image/png",
@@ -9,7 +10,15 @@
 		"type":"image/png",
 		"sizes":"512x512"
 	}],
-	"start_url":"index",
+	"start_url":"/",
 	"display":"standalone",
-	"theme_color":"#0066cc"
+	"theme_color":"#0066cc",
+	"related_applications":[{
+		"platform":"play",
+		"url":"https://play.google.com/store/apps/details?id=shangzhenyang.rthtoolbox",
+		"id":"shangzhenyang.rthtoolbox"
+	},{
+		"platform":"itunes",
+		"url":"https://itunes.apple.com/app/rth-toolbox/id1294479577"
+	}]
 }
