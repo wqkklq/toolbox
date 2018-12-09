@@ -10,7 +10,7 @@
 		"type":"image/png",
 		"sizes":"512x512"
 	}],
-	"start_url":"/",
+	"start_url":"/toolbox/",
 	"display":"standalone",
 	"theme_color":"#0066cc",
 	"related_applications":[{
