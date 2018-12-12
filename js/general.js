@@ -28,7 +28,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/12/8").toLocaleDateString(),
+lastUpdated=new Date("2018/12/12").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -40,7 +40,7 @@ newTitle=document.createElement("h1"),
 recentInput=0,
 secondary="http://www.rthe.cn/",
 theme=localStorage.getItem("Theme"),
-ver="16.2"
+ver="16.3"
 var isApp=isCordova,
 isAndroidApp=isAndroid&&isCordova,
 isiOSApp=isCordova&&isiOS,
