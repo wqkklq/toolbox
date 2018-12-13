@@ -21,20 +21,11 @@ footer div:active,
 	background-color:white;
 	color:rgb(21,23,24);
 }
-input[type=color],
 input[type=date],
-input[type=datetime-local],
-input[type=datetime],
 input[type=email],
-input[type=month],
 input[type=number],
-input[type=password],
-input[type=search],
-input[type=tel],
 input[type=text],
-input[type=time],
 input[type=url],
-input[type=week],
 textarea,
 .menu.text-like,
 .mui-input-row input,
@@ -131,6 +122,13 @@ textarea::placeholder,
 .popup button.active{
 	background-color:rgb(0,68,136);
 	color:white;
+}
+.popup input[type=email],
+.popup input[type=number],
+.popup input[type=text],
+.popup input[type=url]{
+	background-color:white;
+	color:black;
 }
 .send input{
 	border-color:rgb(41,43,44);

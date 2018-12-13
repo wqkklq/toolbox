@@ -110,7 +110,7 @@ function generateWebPage(edit){
 							url=decodeURI(url)
 							showPrompt(null,function(){
 								openWebPage(url)
-							},null,url)
+							},"url",url)
 						},
 						"error":error
 					})
@@ -536,7 +536,7 @@ document.getElementById("GetSource").onclick=function(){
 					}
 				}
 			})
-		})
+		},"url")
 	})
 }
 document.getElementsByTagName("textarea")[0].ondrop=function(e){

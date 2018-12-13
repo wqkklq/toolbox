@@ -38,7 +38,7 @@ function loadMyURL(){
 				"onclick":function(){
 					showPrompt(null,function(){
 						openWebPage(decodeURI(url))
-					},null,shortURL+decodeURIComponent(myURL[index].name))
+					},"url",shortURL+decodeURIComponent(myURL[index].name))
 					closeMenu()
 				},
 				"text":[
@@ -94,7 +94,7 @@ function loadMyURL(){
 								"error":error
 							})
 						}
-					},null,myURL[index].to)
+					},"url",myURL[index].to)
 					closeMenu()
 				},
 				"text":[
@@ -183,7 +183,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 								value=decodeURIComponent(value)
 								showPrompt(null,function(){
 									openWebPage(secondary+value)
-								},null,shortURL+value)
+								},"url",shortURL+value)
 								closeMenu()
 							}else{
 								var extraInfo=""

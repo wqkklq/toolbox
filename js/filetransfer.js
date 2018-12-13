@@ -238,14 +238,14 @@ switch(language){
 	document.getElementById("SendFile").innerText="发送文件"
 	document.getElementById("ReceiveFile").innerText="接收文件"
 	document.getElementById("UseAirPortal").innerText="使用 AirPortal"
-	document.getElementsByTagName("p")[0].innerText="您发送的文件将在一小时后失效。"
+	document.getElementsByTagName("p")[0].innerText="您发送的文件将在 24 小时后失效。"
 	break
 	default:
 	document.title="File Transfer"
 	document.getElementById("SendFile").innerText="Send File"
 	document.getElementById("ReceiveFile").innerText="Receive File"
 	document.getElementById("UseAirPortal").innerText="Use AirPortal"
-	document.getElementsByTagName("p")[0].innerText="Files you sent will expire in an hour."
+	document.getElementsByTagName("p")[0].innerText="Files you sent will expire in 24 hours."
 }
 newTitle.innerText=document.title
 if(login.username){

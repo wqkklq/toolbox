@@ -1073,7 +1073,7 @@ document.getElementById("Share").onclick=function(){
 				url=decodeURI(url)
 				showPrompt(null,function(){
 					openWebPage(url)
-				},null,url)
+				},"url",url)
 			},
 			"error":error
 		})

@@ -15,8 +15,8 @@ appName="RTH Toolbox",
 backend=localStorage.getItem("Backend"),
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
+isApp=!!window.cordova,
 isChinese=/[\u4E00-\u9FA5]+/,
-isCordova=!!window.cordova,
 isEnglish=/[A-Za-z]+/,
 isiOS=/iPhone|iPad/i.test(navigator.userAgent),
 isLinux=/Linux/i.test(navigator.userAgent),
@@ -28,7 +28,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/12/12").toLocaleDateString(),
+lastUpdated=new Date("2018/12/13").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -41,9 +41,8 @@ recentInput=0,
 secondary="http://www.rthe.cn/",
 theme=localStorage.getItem("Theme"),
 ver="16.3"
-var isApp=isCordova,
-isAndroidApp=isAndroid&&isCordova,
-isiOSApp=isCordova&&isiOS,
+var isAndroidApp=isAndroid&&isApp,
+isiOSApp=isApp&&isiOS,
 isMobile=isAndroid||isiOS,
 isTencent=isQQ||isWeChat
 function addZero(num,length){
@@ -419,14 +418,14 @@ function loginDialog(){
 		var submitLogin=function(){
 			var email=newEmailInput.value.toLowerCase(),
 			password=MD5(newPasswordInput.value)
-			newEmailInput.style.borderColor=
-			newPasswordInput.style.borderColor=
-			newConfirmPasswordInput.style.borderColor=""
+			newEmailInput.classList.remove("warning")
+			newPasswordInput.classList.remove("warning")
+			newConfirmPasswordInput.classList.remove("warning")
 			if(!/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(email)){
-				newEmailInput.style.borderColor="rgb(255,192,203)"
+				newEmailInput.classList.add("warning")
 				newEmailInput.focus()
 			}else if(newPasswordInput.value==""){
-				newPasswordInput.style.borderColor="rgb(255,192,203)"
+				newPasswordInput.classList.add("warning")
 				newPasswordInput.focus()
 			}else{
 				newSignUpButton.onclick=
@@ -462,7 +461,7 @@ function loginDialog(){
 						}else{
 							if(newH1.innerText==newSignUpButton.innerText){
 								if(newConfirmPasswordInput.value!=newPasswordInput.value){
-									newConfirmPasswordInput.style.borderColor="rgb(255,192,203)"
+									newConfirmPasswordInput.classList.add("warning")
 									newConfirmPasswordInput.focus()
 								}else{
 									var username=email.split("@")[0]+new Date().getTime().toString(36)
@@ -1222,7 +1221,7 @@ switch(language){
 		["Vietnamese","vie"]
 	]
 }
-if(!isApp&&location.hostname&&"serviceWorker" in navigator){
+if(!isApp&&location.hostname=="rthsoftware.cn"&&"serviceWorker" in navigator){
 	navigator.serviceWorker.register("sw.js")
 }
 if(location.hostname){

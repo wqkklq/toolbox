@@ -1,14 +1,14 @@
 /*Code written by Shangzhen Yang*/
 document.getElementsByTagName("button")[0].onclick=function(){
-	document.getElementById("Name").style.background=""
-	document.getElementById("Email").style.background=""
-	document.getElementsByTagName("textarea")[0].style.background=""
+	document.getElementById("Name").classList.remove("warning")
+	document.getElementById("Email").classList.remove("warning")
+	document.getElementsByTagName("textarea")[0].classList.remove("warning")
 	if(document.getElementById("Name").value==""){
-		document.getElementById("Name").style.background="rgb(255,192,203)"
+		document.getElementById("Name").classList.add("warning")
 	}else if(!/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(document.getElementById("Email").value)){
-		document.getElementById("Email").style.background="rgb(255,192,203)"
+		document.getElementById("Email").classList.add("warning")
 	}else if(document.getElementsByTagName("textarea")[0].value==""){
-		document.getElementsByTagName("textarea")[0].style.background="rgb(255,192,203)"
+		document.getElementsByTagName("textarea")[0].classList.add("warning")
 	}else{
 		ajax({
 			"url":"https://rthsoftware.cn/backend/feedback",

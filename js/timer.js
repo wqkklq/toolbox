@@ -132,7 +132,7 @@ function task(){
 						})
 					}
 				}catch(e){}
-			}else if(isCordova){
+			}else if(isApp){
 				if(isAndroid){
 					openWebPage("https://rthsoftware.cn/backend/alert?text="+encodeURIComponent(document.getElementById("CreateMessageBoxInput").value)+"&title="+encodeURIComponent(document.title))
 				}else if(isiOS){
