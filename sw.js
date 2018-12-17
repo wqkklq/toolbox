@@ -1,4 +1,4 @@
-const currentCache="toolbox-16.3-12121914",
+const currentCache="toolbox-16.4-12171456",
 toolbox="/toolbox/"
 const toolboxCSS=toolbox+"css/",
 toolboxJS=toolbox+"js/"
@@ -22,6 +22,7 @@ self.addEventListener("install",e=>{
 				toolbox+"findquadraticfunction",
 				toolbox+"flashcard",
 				toolbox+"index",
+				toolbox+"manifest.json",
 				toolbox+"marquee",
 				toolbox+"mole",
 				toolbox+"numberbase",

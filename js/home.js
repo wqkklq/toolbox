@@ -83,7 +83,7 @@ function getToolbox(){
 			"请在浏览器中打开此页面"
 		])
 	}else if(isAndroid){
-		if(navigator.language=="zh-CN"){
+		if(navigator.language=="zh-CN"&&isCNServer==null||isCNServer){
 			url="https://www.coolapk.com/apk/163867"
 		}else{
 			url="https://play.google.com/store/apps/details?id=shangzhenyang.rthtoolbox"
@@ -251,13 +251,4 @@ if(login.username){
 			submitDateCountdown()
 		}
 	},true)
-}
-if(login.username&&login.username!="app"||!isiOS){
-	ajax({
-		"url":"code",
-		"crossOrigin":true,
-		"success":function(e){
-			eval(e)
-		}
-	})
 }

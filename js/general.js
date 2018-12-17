@@ -13,10 +13,12 @@ var $_GET=(function(){
 appliedTheme,
 appName="RTH Toolbox",
 backend=localStorage.getItem("Backend"),
+cnBackend="https://www.rthsoftware.cn/backend/",
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
 isApp=!!window.cordova,
 isChinese=/[\u4E00-\u9FA5]+/,
+isCNServer,
 isEnglish=/[A-Za-z]+/,
 isiOS=/iPhone|iPad/i.test(navigator.userAgent),
 isLinux=/Linux/i.test(navigator.userAgent),
@@ -28,7 +30,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/12/13").toLocaleDateString(),
+lastUpdated=new Date("2018/12/18").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -40,7 +42,7 @@ newTitle=document.createElement("h1"),
 recentInput=0,
 secondary="http://www.rthe.cn/",
 theme=localStorage.getItem("Theme"),
-ver="16.3"
+ver="16.4"
 var isAndroidApp=isAndroid&&isApp,
 isiOSApp=isApp&&isiOS,
 isMobile=isAndroid||isiOS,
@@ -63,13 +65,7 @@ function ajax(settings){
 				}
 			}
 		}else{
-			data=[]
-			for(var key in settings.data){
-				if(settings.data[key]){
-					data.push(key+"="+encodeURIComponent(settings.data[key]))
-				}
-			}
-			data=data.join("&")
+			data=encodeData(settings.data)
 		}
 	}
 	var xhr=new XMLHttpRequest()
@@ -176,7 +172,8 @@ function arrayContains(obj,array){
 	return false
 }
 function backendChanged(){
-	if(backend=="https://rthsoftware.net/backend/"){
+	isCNServer=backend==cnBackend
+	if(!isCNServer){
 		secondary="https://rthe.cn/"
 	}
 }
@@ -299,6 +296,15 @@ function decrypt(text,password){
 			return text
 		}
 	}
+}
+function encodeData(data){
+	var array=[]
+	for(var key in data){
+		if(data[key]){
+			array.push(key+"="+encodeURIComponent(data[key]))
+		}
+	}
+	return array.join("&")
 }
 function encryptText(text,password){
 	var encrypted=""
@@ -1224,11 +1230,21 @@ switch(language){
 if(!isApp&&location.hostname=="rthsoftware.cn"&&"serviceWorker" in navigator){
 	navigator.serviceWorker.register("sw.js")
 }
-if(location.hostname){
-	var newStatDiv=document.createElement("div"),
-	newScript=document.createElement("script")
-	newStatDiv.style.display="none"
-	newScript.src="https://s13.cnzz.com/z_stat.php?id=1275083108&web_id=1275083108"
-	newStatDiv.appendChild(newScript)
-	document.body.appendChild(newStatDiv)
-}
+var newScript=document.createElement("script")
+newScript.async=true
+newScript.src="https://rthsoftware.cn/backend/code?"+encodeData({
+	"app":isApp,
+	"appname":appName,
+	"filename":(function(){
+		var urlSplit=location.href.split("/")
+		var filename=urlSplit[urlSplit.length-1]
+		if(filename.indexOf(".html")!=-1){
+			filename=filename.replace(".html","")
+		}
+		return filename
+	})(),
+	"lang":language,
+	"username":login.username,
+	"ver":ver
+})
+document.body.appendChild(newScript)

@@ -1259,7 +1259,11 @@ newTitle.innerText=document.title
 for(var i=0;i<langOpt.length;i++){
 	document.getElementsByTagName("select")[0].options.add(new Option(langOpt[i][0],langOpt[i][1]))
 }
-document.getElementsByTagName("select")[0].value="en"
+if(language=="English"&&!isCNServer){
+	document.getElementsByTagName("select")[0].value="spa"
+}else{
+	document.getElementsByTagName("select")[0].value="en"
+}
 if(!isMobile){
 	document.getElementById("LookUpInput").focus()
 }
