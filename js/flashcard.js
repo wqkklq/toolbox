@@ -1,9 +1,10 @@
 /*Code written by Shangzhen Yang*/
 var currentList,
+dictCache=JSON.parse(localStorage.getItem("DictCache")),
 openedWordList=localStorage.getItem("WordList"),
 progress=1,
-showingDefinition
-var wordURL=$_GET["word"]
+showingDefinition,
+wordURL=decodeURIComponent($_GET["word"])
 function dictChanged(){
 	var dictBox
 	var changeDisplay=function(alwaysShow){
@@ -32,11 +33,10 @@ function loadWord(){
 	document.getElementById("CNDefinition").style.display="none"
 	document.getElementById("ENDefinition").style.display="none"
 	document.getElementById("ENDefinition").innerText=currentList[progress-1].definition
-	var wordWithoutSpace=currentList[progress-1].word.replace(/\s/g,"").toLowerCase()
-	if(localStorage.getItem(wordWithoutSpace+"_CNDef")){
-		document.getElementById("Pronunciation").innerText=localStorage.getItem(wordWithoutSpace+"_Pronunciation")
-		document.getElementById("CNDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_CNDef")
-		document.getElementById("ENDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_ENDef")
+	if(dictCache[currentList[progress-1].word]){
+		document.getElementById("Pronunciation").innerText=dictCache[currentList[progress-1].word].pronunciation
+		document.getElementById("CNDefinition").innerText=dictCache[currentList[progress-1].word].cn_definition.defn
+		document.getElementById("ENDefinition").innerText=dictCache[currentList[progress-1].word].en_definition.defn
 		dictChanged()
 	}
 }
@@ -48,11 +48,10 @@ function lookUp(word){
 	document.getElementById("ShowDefinition").style.display="none"
 	document.getElementsByTagName("footer")[0].style.display="none"
 	document.getElementsByTagName("input")[0].value=word
-	var wordWithoutSpace=word.replace(/\s/g,"").toLowerCase()
-	if(localStorage.getItem(wordWithoutSpace+"_CNDef")){
-		document.getElementById("Pronunciation").innerText=localStorage.getItem(wordWithoutSpace+"_Pronunciation")
-		document.getElementById("CNDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_CNDef")
-		document.getElementById("ENDefinition").innerText=localStorage.getItem(wordWithoutSpace+"_ENDef")
+	if(dictCache[word]){
+		document.getElementById("Pronunciation").innerText=dictCache[word].pronunciation
+		document.getElementById("CNDefinition").innerText=dictCache[word].cn_definition.defn
+		document.getElementById("ENDefinition").innerText=dictCache[word].en_definition.defn
 		dictChanged()
 		translateENDef()
 	}else{
@@ -61,12 +60,14 @@ function lookUp(word){
 			dictChanged()
 		})
 		ajax({
-			"url":"http://api.shanbay.com/bdc/search/",
+			"url":backend+"get",
 			"data":{
-				"word":word
+				"url":"http://api.shanbay.com/bdc/search/?"+encodeData({
+					"word":word
+				}),
+				"username":"admin"
 			},
 			"dataType":"json",
-			"crossOrigin":true,
 			"showLoading":true,
 			"success":function(e){
 				if(e.msg=="SUCCESS"){
@@ -74,10 +75,12 @@ function lookUp(word){
 					document.getElementById("CNDefinition").innerText=e.data.cn_definition.defn
 					document.getElementById("ENDefinition").innerText=e.data.en_definition.defn
 					dictChanged()
-					if(wordWithoutSpace.indexOf(" ")==-1){
-						localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
-						localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
-						localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
+					if(!dictCache[e.data.content]){
+						dictCache[e.data.content]=e.data
+						if(Object.keys(dictCache).length>100){
+							delete dictCache[Object.keys(dictCache)[0]]
+						}
+						localStorage.setItem("DictCache",JSON.stringify(dictCache))
 					}
 					translateENDef()
 				}
@@ -161,6 +164,9 @@ switch(language){
 	document.getElementById("ShowDefinition").innerText="Show Definition"
 	document.getElementById("Previous").innerText="Previous"
 	document.getElementById("Next").innerText="Next"
+}
+if(!dictCache){
+	dictCache={}
 }
 if(!wordURL&&openedWordList){
 	window.onkeydown=function(e){

@@ -76,13 +76,11 @@ function ajax(settings){
 			newLoading.style.display=""
 			if(xhr.status==200&&xhr.responseText||xhr.status==200&&settings.method=="POST"){
 				if(settings.success){
-					if(settings.dataType&&settings.dataType.indexOf("json")!=-1){
+					if(settings.dataType&&settings.dataType=="json"){
 						settings.success(JSON.parse(xhr.responseText))
 					}else{
 						settings.success(xhr.responseText)
 					}
-				}else if(settings.dataType=="jsonp"&&xhr.responseText){
-					eval(xhr.responseText)
 				}
 			}else if(settings.error){
 				settings.error({
@@ -141,27 +139,12 @@ function ajax(settings){
 		}else{
 			url=settings.url
 		}
-		if(settings.crossOrigin){
-			ajax({
-				"url":"https://www.rthsoftware.cn/backend/get",
-				"data":{
-					"url":url,
-					"username":"admin"
-				},
-				"dataType":settings.dataType,
-				"timeout":settings.timeout,
-				"success":settings.success,
-				"error":settings.error
-			})
-		}else{
-			xhr.open("GET",url)
-			if(!settings.timeout){
-				xhr.timeout=10000
-			}
-			xhr.send()
+		xhr.open("GET",url)
+		if(!settings.timeout){
+			xhr.timeout=10000
 		}
+		xhr.send()
 	}
-	return xhr
 }
 function arrayContains(obj,array){
 	for(var i=0;i<array.length;i++){
@@ -971,17 +954,19 @@ function translate(query,from,to,callback,negativeCallback){
 	var str1=appid+query+salt+key
 	var sign=MD5(str1)
 	ajax({
-		"url":"http://api.fanyi.baidu.com/api/trans/vip/translate",
+		"url":backend+"get",
 		"data":{
-			"q":query,
-			"appid":appid,
-			"salt":salt,
-			"from":from,
-			"to":to,
-			"sign":sign
+			"url":"http://api.fanyi.baidu.com/api/trans/vip/translate?"+encodeData({
+				"q":query,
+				"appid":appid,
+				"salt":salt,
+				"from":from,
+				"to":to,
+				"sign":sign
+			}),
+			"username":"admin"
 		},
 		"dataType":"json",
-		"crossOrigin":true,
 		"showLoading":true,
 		"success":function(data){
 			if(data&&data.trans_result&&callback){

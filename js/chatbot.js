@@ -2,13 +2,15 @@
 var lastBotInfo=""
 function chatbotReply(botInfo){
 	ajax({
-		"url":"http://www.tuling123.com/openapi/api",
+		"url":backend+"get",
 		"data":{
-			"info":botInfo,
-			"key":"42cff502574d42e996841e655fecd78a"
+			"url":"http://www.tuling123.com/openapi/api?"+encodeData({
+				"info":botInfo,
+				"key":"42cff502574d42e996841e655fecd78a"
+			}),
+			"username":"admin"
 		},
 		"dataType":"json",
-		"crossOrigin":true,
 		"showLoading":true,
 		"success":function(e){
 			var botText=e.text,

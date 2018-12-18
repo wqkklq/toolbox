@@ -4,6 +4,7 @@ correctInt=0,
 currentItem,
 currentList=[],
 correctWord,
+dictCache=JSON.parse(localStorage.getItem("DictCache")),
 handle=document.getElementsByClassName("mui-switch-handle"),
 mistakes,
 outOfOrder=[],
@@ -41,23 +42,22 @@ function add(word){
 			})
 		}
 		if(document.getElementsByTagName("select")[0].value=="en"){
-			var wordWithoutSpace=newWord.replace(/\s/g,"").toLowerCase()
-			if(localStorage.getItem(wordWithoutSpace+"_CNDef")){
-				var CNDef=localStorage.getItem(wordWithoutSpace+"_CNDef"),
-				ENDef=localStorage.getItem(wordWithoutSpace+"_ENDef")
+			if(dictCache[newWord]){
 				if(language=="SimplifiedChinese"&&CNDef){
-					addWord(newWord,CNDef)
+					addWord(newWord,newWord.cn_definition.defn)
 				}else if(ENDef){
-					addWord(newWord,ENDef)
+					addWord(newWord,newWord.en_definition.defn)
 				}
 			}else{
 				ajax({
-					"url":"http://api.shanbay.com/bdc/search/",
+					"url":backend+"get",
 					"data":{
-						"word":newWord
+						"url":"http://api.shanbay.com/bdc/search/?"+encodeData({
+							"word":newWord
+						}),
+						"username":"admin"
 					},
 					"dataType":"json",
-					"crossOrigin":true,
 					"showLoading":true,
 					"success":function(e){
 						if(e.msg=="SUCCESS"){
@@ -66,11 +66,15 @@ function add(word){
 							}else if(e.data.en_definition.defn){
 								addWord(newWord,e.data.en_definition.defn)
 							}
-							localStorage.setItem(wordWithoutSpace+"_Pronunciation",e.data.pronunciation)
-							localStorage.setItem(wordWithoutSpace+"_CNDef",e.data.cn_definition.defn)
-							localStorage.setItem(wordWithoutSpace+"_ENDef",e.data.en_definition.defn)
+							if(!dictCahce[e.data.content]){
+								dictCahce[e.data.content]=e.data
+								if(Object.keys(dictCache).length>100){
+									delete dictCache[Object.keys(dictCache)[0]]
+								}
+								localStorage.setItem("DictCache",JSON.stringify(dictCache))
+							}
 						}else{
-							if(confirm(e.msg)&&e.msg.indexOf("未找到单词")!=-1){
+							if(language!="SimplifiedChinese"||confirm(e.msg)&&e.msg.indexOf("未找到单词")!=-1){
 								enterDef()
 							}else{
 								add(newWord)
@@ -1256,6 +1260,9 @@ switch(language){
 	}
 }
 newTitle.innerText=document.title
+if(!dictCache){
+	dictCache={}
+}
 for(var i=0;i<langOpt.length;i++){
 	document.getElementsByTagName("select")[0].options.add(new Option(langOpt[i][0],langOpt[i][1]))
 }
