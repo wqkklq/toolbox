@@ -3,11 +3,11 @@ document.getElementsByTagName("button")[0].onclick=function(){
 	document.getElementById("Name").classList.remove("warning")
 	document.getElementById("Email").classList.remove("warning")
 	document.getElementsByTagName("textarea")[0].classList.remove("warning")
-	if(document.getElementById("Name").value==""){
+	if(!document.getElementById("Name").value){
 		document.getElementById("Name").classList.add("warning")
 	}else if(!/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(document.getElementById("Email").value)){
 		document.getElementById("Email").classList.add("warning")
-	}else if(document.getElementsByTagName("textarea")[0].value==""){
+	}else if(!document.getElementsByTagName("textarea")[0].value){
 		document.getElementsByTagName("textarea")[0].classList.add("warning")
 	}else{
 		ajax({

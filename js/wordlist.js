@@ -618,7 +618,7 @@ function loadQuestion(){
 }
 function lookUp(word){
 	if(!word){
-		if(document.getElementById("LookUpInput").value==""){
+		if(!document.getElementById("LookUpInput").value){
 			showAlert([
 				"Please enter the word you want to look up",
 				"请输入要查询的单词"
@@ -706,7 +706,7 @@ function next(){
 		if(!showAnswer&&!isEnabled("MultipleChoice")){
 			showAnswer=true
 			if(isEnabled("EnterWords")){
-				if(document.getElementById("EnteredWord").value.replace(/(\s*$)/g,"").toLowerCase()==correctWord.toLowerCase()){
+				if(document.getElementById("EnteredWord").value.toLowerCase().trim()==correctWord.toLowerCase()){
 					switch(language){
 						case "SimplifiedChinese":
 						document.getElementById("EnteredWord").value+="（正确）"
@@ -726,9 +726,23 @@ function next(){
 				}
 			}
 			if(isEnabled("EnterDefinitions")){
-				var enteredDefWithoutSpace=document.getElementById("EnteredDefinition").value.replace(/\s+/g,""),
-				correctDefWithoutSpace=correctDefinition.replace(/\s+/g,""),
-				incorrect=function(){
+				if(document.getElementById("EnteredDefinition").value.toLowerCase().trim()==correctDefinition.toLowerCase()){
+					switch(language){
+						case "SimplifiedChinese":
+						document.getElementById("EnteredDefinition").value+="（正确）"
+						break
+						default:
+						document.getElementById("EnteredDefinition").value+=" (Correct)"
+					}
+				}else if(document.getElementById("EnteredDefinition").value&&correctDefinition.toLowerCase().indexOf(document.getElementById("EnteredDefinition").value.toLowerCase().trim())!=-1||document.getElementById("EnteredDefinition").value.toLowerCase().trim().indexOf(correctDefinition.toLowerCase())!=-1){
+					switch(language){
+						case "SimplifiedChinese":
+						document.getElementById("EnteredDefinition").value+=" ≈ "+correctDefinition+"（正确）"
+						break
+						default:
+						document.getElementById("EnteredDefinition").value+=" ≈ "+correctDefinition+" (Correct)"
+					}
+				}else{
 					addMistake(correctWord,correctDefinition)
 					switch(language){
 						case "SimplifiedChinese":
@@ -737,29 +751,6 @@ function next(){
 						default:
 						document.getElementById("EnteredDefinition").value+=" ≠ "+correctDefinition+" (Incorrect)"
 					}
-				}
-				if(enteredDefWithoutSpace==correctDefWithoutSpace){
-					switch(language){
-						case "SimplifiedChinese":
-						document.getElementById("EnteredDefinition").value+="（正确）"
-						break
-						default:
-						document.getElementById("EnteredDefinition").value+=" (Correct)"
-					}
-				}else if(correctDefWithoutSpace.indexOf(enteredDefWithoutSpace)!=-1||enteredDefWithoutSpace.indexOf(correctDefWithoutSpace)!=-1){
-					if(enteredDefWithoutSpace==""){
-						incorrect()
-					}else{
-						switch(language){
-							case "SimplifiedChinese":
-							document.getElementById("EnteredDefinition").value+=" ≈ "+correctDefinition+"（正确）"
-							break
-							default:
-							document.getElementById("EnteredDefinition").value+=" ≈ "+correctDefinition+" (Correct)"
-						}
-					}
-				}else{
-					incorrect()
 				}
 			}
 		}else{

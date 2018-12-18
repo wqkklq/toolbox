@@ -141,9 +141,9 @@ function getURL(){
 	}
 }
 function isEmpty(){
-	if(document.getElementsByTagName("textarea")[0].value==""){
+	if(!document.getElementsByTagName("textarea")[0].value){
 		setText(document.getElementsByTagName("textarea")[0].value.replace(/\/\*\s|\s\*\//g,"").trim())
-		if(document.getElementsByTagName("textarea")[0].value==""){
+		if(!document.getElementsByTagName("textarea")[0].value){
 			showAlert([
 				"The text cannot be empty",
 				"文本不能为空"

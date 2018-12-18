@@ -350,7 +350,7 @@ function initCalculator(max,calculate){
 			var num=name.replace(/[A-Za-z]+/g,"")
 			var display=name.replace(num,"")+"<sub>"+num+"</sub>",
 			label=document.getElementById(name+"Label")
-			if(this.value==""){
+			if(!this.value){
 				label.innerHTML=display
 			}else{
 				label.innerHTML=this.value
@@ -413,7 +413,7 @@ function loginDialog(){
 			if(!/\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}/.test(email)){
 				newEmailInput.classList.add("warning")
 				newEmailInput.focus()
-			}else if(newPasswordInput.value==""){
+			}else if(!newPasswordInput.value){
 				newPasswordInput.classList.add("warning")
 				newPasswordInput.focus()
 			}else{
