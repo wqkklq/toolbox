@@ -4,7 +4,7 @@ dictCache=JSON.parse(localStorage.getItem("DictCache")),
 openedWordList=localStorage.getItem("WordList"),
 progress=1,
 showingDefinition,
-wordURL=decodeURIComponent($_GET["word"])
+wordURL=$_GET["word"]&&decodeURIComponent($_GET["word"])
 function dictChanged(){
 	var dictBox
 	var changeDisplay=function(alwaysShow){
