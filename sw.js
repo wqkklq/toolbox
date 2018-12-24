@@ -1,10 +1,11 @@
-const currentCache="toolbox-16.7-12241524",
+const currentCache="toolbox-16.7-12241538",
 toolbox="/toolbox/"
 const toolboxCSS=toolbox+"css/",
 toolboxJS=toolbox+"js/"
 self.addEventListener("install",e=>{
 	e.waitUntil(
 		caches.open(currentCache).then(cache=>{
+			console.log(currentCache)
 			return cache.addAll([
 				toolbox,
 				toolbox+"about",
@@ -102,9 +103,10 @@ self.addEventListener("fetch",e=>{
 		caches.match(e.request).then(response=>{
 			if(response){
 				return response
-			}else{
-				return fetch(e.request)
 			}
+			return fetch(e.request).catch(()=>{
+				console.error(e.request)
+			})
 		})
 	)
 })
@@ -121,4 +123,3 @@ self.addEventListener("activate",e=>{
 		})
 	)
 })
-console.log(currentCache)
