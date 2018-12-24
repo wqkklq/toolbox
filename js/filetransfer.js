@@ -244,7 +244,6 @@ document.getElementById("OpenFile").onchange=function(input){
 						var fileSlice=[],
 						sliceSize=10240000,
 						thisFile=input.target.files[fileIndex],
-						time=0,
 						uploadProgress=0,
 						uploadSlice=function(){
 							ajax({
