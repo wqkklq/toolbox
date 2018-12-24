@@ -63,6 +63,9 @@ li:active{
 	font-size:15px;
 	margin:52px 0px 0px 0px;
 }
+.home.browser{
+	margin-top:32px;
+}
 .home-menu{
 	margin-top:20px;
 	position:relative;

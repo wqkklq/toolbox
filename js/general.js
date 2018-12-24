@@ -30,19 +30,19 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/12/18").toLocaleDateString(),
+lastUpdated=new Date("2018/12/24").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
 	"username":localStorage.getItem("Username")
 },
-newLoading=document.createElement("div"),
+newBack=document.createElement("a"),
 newMask=document.createElement("div"),
 newTitle=document.createElement("h1"),
 recentInput=0,
 secondary="http://www.rthe.cn/",
 theme=localStorage.getItem("Theme"),
-ver="16.4"
+ver="16.5"
 var isAndroidApp=isAndroid&&isApp,
 isiOSApp=isApp&&isiOS,
 isMobile=isAndroid||isiOS,
@@ -51,9 +51,9 @@ function addZero(num,length){
 	return (Array(length).join("0")+num).slice(-length)
 }
 function ajax(settings){
+	var newToast
 	if(settings.showLoading){
-		newMask.style.display="block"
-		newLoading.style.display="block"
+		newToast=showToast()
 	}
 	var data
 	if(settings.data){
@@ -71,9 +71,9 @@ function ajax(settings){
 	var xhr=new XMLHttpRequest()
 	xhr.onreadystatechange=function(){
 		if(xhr.readyState==4){
-			newMask.style.display=
-			newLoading.innerText=
-			newLoading.style.display=""
+			if(newToast){
+				newToast.close()
+			}
 			if(xhr.status==200&&xhr.responseText||xhr.status==200&&settings.method=="POST"){
 				if(settings.success){
 					if(settings.dataType&&settings.dataType=="json"){
@@ -93,37 +93,21 @@ function ajax(settings){
 		xhr.timeout=settings.timeout
 	}
 	xhr.onloadstart=function(){
-		if(settings.method=="POST"){
-			if(settings.processData==false){
-				switch(language){
-					case "SimplifiedChinese":
-					newLoading.innerText="正在上传"
-					break;
-					default:
-					newLoading.innerText="Uploading"
+		if(newToast){
+			if(settings.method=="POST"){
+				if(settings.processData==false){
+					newToast.show(["Uploading","正在上传"])
+				}else{
+					newToast.show(["Syncing","正在同步"])
 				}
 			}else{
-				switch(language){
-					case "SimplifiedChinese":
-					newLoading.innerText="正在同步"
-					break;
-					default:
-					newLoading.innerText="Syncing"
-				}
-			}
-		}else{
-			switch(language){
-				case "SimplifiedChinese":
-				newLoading.innerText="等待响应"
-				break;
-				default:
-				newLoading.innerText="Pending"
+				newToast.show(["Pending","等待响应"])
 			}
 		}
 	}
 	xhr.onprogress=function(e){
-		if(e.lengthComputable){
-			newLoading.innerText=Math.round(e.loaded/e.total*100)+"%"
+		if(newToast&&e.lengthComputable){
+			newToast.show(Math.round(e.loaded/e.total*100)+"%")
 		}
 	}
 	if(settings.method&&settings.method=="POST"){
@@ -244,13 +228,8 @@ function clearLocalStorage(){
 }
 function closeMenu(){
 	if(document.getElementsByClassName("popup-menu")[0]){
-		document.getElementsByClassName("popup-menu")[0].style.opacity="0"
-		setTimeout(function(){
-			try{
-				document.body.removeChild(document.getElementsByClassName("popup-menu")[0])
-			}catch(e){}
-			newMask.style.display=""
-		},250)
+		newMask.style.display=""
+		removeElement(document.getElementsByClassName("popup-menu")[0])
 	}
 }
 function dateDiff(startDate,endDate){
@@ -522,12 +501,7 @@ function loginDialog(){
 		newCloseDiv.innerText="×"
 		newCloseDiv.onclick=function(){
 			if(newH1.innerText==newLoginButton.innerText){
-				newDiv.style.opacity=""
-				setTimeout(function(){
-					try{
-						document.body.removeChild(newDiv)
-					}catch(e){}
-				},250)
+				removeElement(newDiv)
 			}else{
 				newH1.innerText=newLoginButton.innerText
 				newConfirmPasswordInput.style.display="none"
@@ -644,6 +618,20 @@ function reload(){
 		location.reload()
 	}
 }
+function removeElement(element){
+	if(element.style.opacity){
+		element.style.opacity=""
+		setTimeout(function(){
+			try{
+				element.parentElement.removeChild(element)
+			}catch(e){}
+		},250)
+	}else{
+		try{
+			element.parentElement.removeChild(element)
+		}catch(e){}
+	}
+}
 function searchURL(key,url){
 	if(!url){
 		url=location.search
@@ -749,12 +737,7 @@ function showImage(src){
 	}
 	newButtonDiv.classList.add("image-button")
 	newCloseDiv.onclick=function(){
-		newDiv.style.opacity="0"
-		setTimeout(function(){
-			try{
-				document.body.removeChild(newDiv)
-			}catch(e){}
-		},250)
+		removeElement(newDiv)
 	}
 	newSaveDiv.onclick=function(){
 		if(src.indexOf("https://rthsoftware.cn/backend/get")!=-1){
@@ -852,12 +835,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 		if(closeFunc){
 			closeFunc()
 		}
-		newDiv.style.opacity=""
-		setTimeout(function(){
-			try{
-				document.body.removeChild(newDiv)
-			}catch(e){}
-		},250)
+		removeElement(newDiv)
 	}
 	newOKButton.onclick=function(){
 		if(newInput.value){
@@ -870,12 +848,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 			}
 		}
 		setTimeout(function(){
-			newDiv.style.opacity=""
-			setTimeout(function(){
-				try{
-					document.body.removeChild(newDiv)
-				}catch(e){}
-			},250)
+			removeElement(newDiv)
 		},25)
 	}
 	switch(language){
@@ -906,12 +879,59 @@ function showQRCode(text){
 	showImage("https://rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text="+text)+"&username=admin")
 }
 function showToast(text){
-	switch(language){
-		case "SimplifiedChinese":
-		mui.toast(text[1])
-		break
-		default:
-		mui.toast(text[0])
+	if(document.getElementsByClassName("mui-toast-container")[0]){
+		removeElement(document.getElementsByClassName("mui-toast-container")[0])
+	}
+	var newContainerDiv=document.createElement("div"),
+	newMessageDiv=document.createElement("div")
+	newContainerDiv.classList.add("mui-toast-container")
+	newMessageDiv.classList.add("mui-toast-message")
+	if(text){
+		if(typeof text=="string"){
+			newMessageDiv.innerText=text
+		}else{
+			switch(language){
+				case "SimplifiedChinese":
+				newMessageDiv.innerText=text[1]
+				break
+				default:
+				newMessageDiv.innerText=text[0]
+			}
+		}
+	}
+	newContainerDiv.appendChild(newMessageDiv)
+	document.body.appendChild(newContainerDiv)
+	if(text){
+		setTimeout(function(){
+			newContainerDiv.style.opacity=".7"
+			setTimeout(function(){
+				removeElement(newContainerDiv)
+			},2000)
+		},25)
+	}else{
+		return{
+			"close":function(){
+				newMask.style.display=""
+				removeElement(newContainerDiv)
+			},
+			"show":function(value){
+				if(value){
+					newMask.style.display="block"
+					if(typeof value=="string"){
+						newMessageDiv.innerText=value
+					}else{
+						switch(language){
+							case "SimplifiedChinese":
+							newMessageDiv.innerText=value[1]
+							break
+							default:
+							newMessageDiv.innerText=value[0]
+						}
+					}
+					newContainerDiv.style.opacity=".7"
+				}
+			}
+		}
 	}
 }
 function speak(text,lan){
@@ -988,9 +1008,9 @@ if(!backend){
 	backendChanged()
 }
 window.onerror=function(msg,url,lineNo){
-	if(msg&&url&&lineNo&&msg!="Script error."&&url.indexOf("mui.min.js")==-1&&lineNo!=1){
+	if(msg&&url&&lineNo&&msg!="Script error."&&lineNo!=1){
 		var text=msg+" at "+url+" : "+lineNo
-		mui.toast(msg)
+		showToast(msg)
 		if(isApp||login.username){
 			window.onerror=null
 			ajax({
@@ -1025,12 +1045,7 @@ addEventListener("message",function(e){
 			if(login.password){
 				localStorage.setItem("Password",login.password)
 			}
-			document.getElementsByClassName("popup")[0].style.opacity=""
-			setTimeout(function(){
-				try{
-					document.body.removeChild(document.getElementsByClassName("popup")[0])
-				}catch(e){}
-			},250)
+			removeElement(document.getElementsByClassName("popup")[0])
 		}
 	}catch(e){}
 })
@@ -1062,38 +1077,35 @@ if(appliedTheme!="Light"){
 	loadCSS("css/"+appliedTheme.toLowerCase()+".css")
 }
 if(header){
-	var newDiv=document.createElement("div"),
-	newA=document.createElement("a")
+	var newDiv=document.createElement("div")
 	newDiv.classList.add("title-bg")
-	newA.classList.add("mui-icon")
-	newA.classList.add("mui-icon-left-nav")
-	newA.classList.add("mui-pull-left")
-	newA.classList.add("back")
+	newBack.classList.add("mui-icon")
+	newBack.classList.add("mui-icon-left-nav")
+	newBack.classList.add("mui-pull-left")
+	newBack.classList.add("back")
 	if(window.history.length<=1){
-		newA.onclick=function(){
+		newBack.onclick=function(){
 			openWindow("index")
 		}
 	}else{
-		newA.onclick=mui.back
+		newBack.onclick=function(){
+			history.go(-1)
+		}
 	}
 	newTitle.classList.add("mui-title")
-	newDiv.appendChild(newA)
+	newDiv.appendChild(newBack)
 	newDiv.appendChild(newTitle)
 	header.appendChild(newDiv)
-	if(!isApp){
-		document.getElementsByClassName("mui-content")[0].style.marginTop="40px"
-		header.style.height="65px"
-		newDiv.style.paddingTop="20px"
-	}
 }
-newLoading.classList.add("loading")
+if(!isApp){
+	document.body.classList.add("browser")
+}
 newMask.classList.add("mask")
 newMask.oncontextmenu=function(){
 	return false
 }
 newMask.onclick=closeMenu
 document.body.appendChild(newMask)
-document.body.appendChild(newLoading)
 if(appliedTheme=="Bing"){
 	var savedBingWallpaper
 	var loadWallpaper=function(){

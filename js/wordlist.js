@@ -640,7 +640,7 @@ function openDiv(className){
 			document.getElementsByClassName("edit")[0].style.display="block"
 			document.getElementsByClassName("quiz")[0].style.display=""
 			document.getElementsByTagName("footer")[0].style.display="block"
-			document.getElementsByClassName("back")[0].onclick=closeDoc
+			newBack.onclick=closeDoc
 		}
 		break
 		case "quiz":
@@ -650,7 +650,7 @@ function openDiv(className){
 			document.getElementsByClassName("edit")[0].style.display=""
 			document.getElementsByClassName("quiz")[0].style.display="block"
 			document.getElementsByTagName("footer")[0].style.display=""
-			document.getElementsByClassName("back")[0].onclick=end
+			newBack.onclick=end
 			restartQuiz()
 		}
 		break
@@ -661,7 +661,9 @@ function openDiv(className){
 			document.getElementsByClassName("edit")[0].style.display=
 			document.getElementsByClassName("quiz")[0].style.display=
 			document.getElementsByTagName("footer")[0].style.display=""
-			document.getElementsByClassName("back")[0].onclick=mui.back
+			newBack.onclick=function(){
+				history.go(-1)
+			}
 		}
 	}
 }
@@ -1270,7 +1272,7 @@ if(isiOS){
 }
 load()
 if($_GET["index"]&&$_GET["username"]){
-	mui.back=function(){
+	newBack.onclick=function(){
 		openWindow("index")
 	}
 	ajax({

@@ -99,7 +99,7 @@ function task(){
 		try{
 			eval(document.getElementById("RunCodeInput").value.replace(/coin|eval|localStorage|task/gi,""))
 		}catch(e){
-			mui.toast(e.message)
+			showToast(e.message)
 		}
 	}
 	if(document.getElementById("SpeakCheck").checked){

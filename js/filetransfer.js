@@ -15,7 +15,7 @@ function downloadFile(code,index){
 			"showLoading":true,
 			"success":function(e){
 				if(e.multifile.length>1&&!index){
-					openWebPage("https://www.rthsoftware.net/airportal/?code="+code,true)
+					openWebPage("https://rthsoftware.cn/airportal/?code="+code,true)
 				}else{
 					if(!index||index<0){
 						index=0
@@ -63,7 +63,7 @@ function load(){
 							name=this.innerText
 							showMenu(mouse,[{
 								"onclick":function(){
-									showQRCode("https://www.rthsoftware.net/airportal/?code="+code)
+									showQRCode("https://rthsoftware.cn/airportal/?code="+code)
 									closeMenu()
 								},
 								"text":[
@@ -143,7 +143,7 @@ document.getElementById("ReceiveFile").onclick=function(){
 	],downloadFile,"tel")
 }
 document.getElementById("UseAirPortal").onclick=function(){
-	openWebPage("https://www.rthsoftware.net/airportal/")
+	openWebPage("https://rthsoftware.cn/airportal/")
 }
 document.getElementById("OpenFile").onchange=function(e){
 	var file=e.target.files[0]
@@ -157,7 +157,7 @@ document.getElementById("OpenFile").onchange=function(e){
 			"This file needs to be sent by AirPortal",
 			"此文件需要由 AirPortal 发送"
 		],function(){
-			openWebPage("https://www.rthsoftware.net/airportal/",true)
+			openWebPage("https://rthsoftware.cn/airportal/",true)
 		})
 	}else{
 		ajax({
@@ -176,12 +176,7 @@ document.getElementById("OpenFile").onchange=function(e){
 				}else{
 					var closeDialog=function(){
 						if(document.getElementsByClassName("popup")[0]){
-							document.getElementsByClassName("popup")[0].style.opacity=""
-							setTimeout(function(){
-								try{
-									document.body.removeChild(document.getElementsByClassName("popup")[0])
-								}catch(e){}
-							},250)
+							removeElement(document.getElementsByClassName("popup")[0])
 						}
 					},
 					newDiv=document.createElement("div"),
@@ -194,7 +189,7 @@ document.getElementById("OpenFile").onchange=function(e){
 					newNumDiv.classList.add("number")
 					newNumDiv.innerText=e.code
 					newQRCodeButton.onclick=function(){
-						showQRCode("https://www.rthsoftware.net/airportal/?code="+e.code)
+						showQRCode("https://rthsoftware.cn/airportal/?code="+e.code)
 					}
 					newLinkButton.onclick=function(){
 						showPrompt(null,function(){

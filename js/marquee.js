@@ -93,9 +93,7 @@ function start(){
 }
 function stop(){
 	clearInterval(intervalId)
-	try{
-		document.body.removeChild(document.getElementsByClassName("full-screen")[0])
-	}catch(e){}
+	removeElement(document.getElementsByClassName("full-screen")[0])
 }
 document.onwebkitfullscreenchange=function(){
 	if(!document.webkitIsFullScreen){

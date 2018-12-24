@@ -1,4 +1,4 @@
-const currentCache="toolbox-16.4-12180939",
+const currentCache="toolbox-16.5-12240017",
 toolbox="/toolbox/"
 const toolboxCSS=toolbox+"css/",
 toolboxJS=toolbox+"js/"
@@ -80,7 +80,6 @@ self.addEventListener("install",e=>{
 				toolboxJS+"marquee.js",
 				toolboxJS+"md5.min.js",
 				toolboxJS+"mole.js",
-				toolboxJS+"mui.min.js",
 				toolboxJS+"numberbase.js",
 				toolboxJS+"quadraticfunction.js",
 				toolboxJS+"randomnumber.js",

@@ -25,7 +25,7 @@ function calculate(){
 					document.getElementsByTagName("input")[0].value+=")"
 					calculate()
 				}else{
-					mui.toast(e.message)
+					showToast(e.message)
 				}
 			}
 		}

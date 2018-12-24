@@ -210,9 +210,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 		if(document.getElementsByClassName("popup")[0]){
 			document.getElementsByClassName("popup")[0].style.transform="scale(0)"
 			setTimeout(function(){
-				try{
-					document.body.removeChild(document.getElementsByClassName("popup")[0])
-				}catch(e){}
+				removeElement(document.getElementsByClassName("popup")[0])
 			},250)
 		}
 	}

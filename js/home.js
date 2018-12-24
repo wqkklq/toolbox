@@ -214,9 +214,6 @@ switch(language){
 	}
 }
 document.getElementsByClassName("home-title")[0].innerText=document.title
-if(!isApp){
-	document.body.style.marginTop="32px"
-}
 if($_GET["action"]){
 	switch($_GET["action"].toLowerCase()){
 		case "dl":

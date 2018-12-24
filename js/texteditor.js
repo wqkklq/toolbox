@@ -25,12 +25,14 @@ function edit(edit){
 		document.getElementsByClassName("start")[0].style.display="none"
 		document.getElementsByClassName("edit")[0].style.display="block"
 		document.getElementsByTagName("footer")[0].style.display="block"
-		document.getElementsByClassName("back")[0].onclick=newDoc
+		newBack.onclick=newDoc
 	}else{
 		document.getElementsByClassName("start")[0].style.display=
 		document.getElementsByClassName("edit")[0].style.display=
 		document.getElementsByTagName("footer")[0].style.display=""
-		document.getElementsByClassName("back")[0].onclick=mui.back
+		newBack.onclick=function(){
+			history.go(-1)
+		}
 	}
 }
 function find(){
@@ -46,13 +48,13 @@ function find(){
 			try{
 				setText(document.getElementsByTagName("textarea")[0].value.replace(new RegExp(e,"g"),replaceWith))
 			}catch(e){
-				mui.toast(e.message)
+				showToast(e.message)
 			}
 		},null,null,function(){
 			try{
 				setText(document.getElementsByTagName("textarea")[0].value.replace(new RegExp(e,"g"),""))
 			}catch(e){
-				mui.toast(e.message)
+				showToast(e.message)
 			}
 		})
 	},"text",null,null,function(){
@@ -74,48 +76,37 @@ function find(){
 	})
 }
 function generateWebPage(edit){
-	if(!edit&&/http|\./.test(document.getElementsByTagName("input")[0].value)&&!/\s|\.\./.test(document.getElementsByTagName("input")[0].value)&&document.getElementsByTagName("textarea")[0].value.indexOf("<body")!=-1){
-		showConfirm([
-			"Only the web pages that were made by yourself can be generated",
-			"只能生成由您自己制作的网页"
-		],function(){
-			openWebPage(document.getElementsByTagName("input")[0].value)
-		})
-	}else{
-		loginRequired(function(){
-			if(!isEmpty()){
-				encrypt=false
-				save(function(){
-					ajax({
-						"url":backend+"userdata/domain/add",
-						"data":{
-							"domain":getURL().domain,
-							"redirect":302,
-							"to":"text/"+login.username+"/"+getURL().index,
-							"username":login.username
-						},
-						"method":"POST",
-						"dataType":"json",
-						"showLoading":true,
-						"success":function(e){
-							var url
-							if(e.available){
-								url=getURL().short
-							}else{
-								url=getURL().original
-							}
-							if(edit){
-								url+="?edit=true"
-							}
-							url=decodeURI(url)
-							showPrompt(null,function(){
-								openWebPage(url)
-							},"url",url)
-						},
-						"error":error
-					})
-				})
-			}
+	if(!isEmpty()){
+		encrypt=false
+		save(function(){
+			ajax({
+				"url":backend+"userdata/domain/add",
+				"data":{
+					"domain":getURL().domain,
+					"redirect":302,
+					"to":"text/"+login.username+"/"+getURL().index,
+					"username":login.username
+				},
+				"method":"POST",
+				"dataType":"json",
+				"showLoading":true,
+				"success":function(e){
+					var url
+					if(e.available){
+						url=getURL().short
+					}else{
+						url=getURL().original
+					}
+					if(edit){
+						url+="?edit=true"
+					}
+					url=decodeURI(url)
+					showPrompt(null,function(){
+						openWebPage(url)
+					},"url",url)
+				},
+				"error":error
+			})
 		})
 	}
 }
@@ -298,7 +289,7 @@ function reload(){
 }
 function runJSCode(fromShortcut){
 	if(!isEmpty()){
-		var code=document.getElementsByTagName("textarea")[0].value.replace(/coin|localStorage|runJSCode|runTrue/gi,"").replace(/console.log/g,"mui.toast")
+		var code=document.getElementsByTagName("textarea")[0].value.replace(/coin|localStorage|runJSCode|runTrue/gi,"").replace(/console.log/g,"showToast")
 		var runTrue=function(){
 			try{
 				var result=calc(code)
@@ -312,7 +303,7 @@ function runJSCode(fromShortcut){
 				if(fromShortcut){
 					speak(document.getElementsByTagName("textarea")[0].value)
 				}else{
-					mui.toast(e.message)
+					showToast(e.message)
 				}
 			}
 		}
@@ -387,7 +378,7 @@ function save(callback){
 }
 function setText(text,noScrolling){
 	document.getElementsByTagName("textarea")[0].value=text
-	if(text.indexOf("</")!=-1&&!/<(a|link|script|style)|\son/.test(text)){
+	if(text.indexOf("</")!=-1&&!/<(a|body|link|script|style)|\son/.test(text)){
 		document.getElementsByClassName("text-view")[0].innerHTML=text.replace(/\u0009/g,"&nbsp;&nbsp;&nbsp;&nbsp;").replace(/\n/g,"<br>")
 	}else{
 		document.getElementsByClassName("text-view")[0].innerText=text.replace(/\u0009/g,"\u00a0\u00a0\u00a0\u00a0")
@@ -653,7 +644,16 @@ document.getElementById("GenerateQRCode").onclick=function(){
 	}
 }
 document.getElementById("GenerateWebPage").onclick=function(){
-	generateWebPage()
+	if(document.getElementsByTagName("textarea")[0].value.indexOf("<body")!=-1){
+		showConfirm([
+			"It is recommended to use RTH Virtual Host Manager",
+			"建议使用 RTH 虚拟主机管理器"
+		],function(){
+			openWebPage("https://rthsoftware.cn/vhost/")
+		})
+	}else{
+		generateWebPage()
+	}
 }
 document.getElementById("OpenFile").onchange=function(e){
 	openLText(e.target.files[0])
@@ -703,7 +703,7 @@ if(isLinux||isMobile){
 }
 load()
 if($_GET["index"]&&$_GET["username"]){
-	mui.back=function(){
+	newBack.onclick=function(){
 		openWindow("index")
 	}
 	ajax({

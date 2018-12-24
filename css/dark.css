@@ -67,9 +67,6 @@ textarea::placeholder,
 .icon{
 	background-color:rgb(0,51,102);
 }
-.loading{
-	background-color:rgb(50,50,50);
-}
 .msg-me{
 	background-color:rgb(0,68,136);
 }
