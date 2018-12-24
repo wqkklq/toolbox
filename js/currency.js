@@ -26,7 +26,9 @@ function updateRate(){
 	ajax({
 		"url":"https://rthsoftware.cn/backend/get",
 		"data":{
-			"url":"http://www.apilayer.net/api/live?access_key=305f5a80f4da12a238c9ebfe5479c648",
+			"url":"http://www.apilayer.net/api/live?"+encodeData({
+				"access_key":"305f5a80f4da12a238c9ebfe5479c648"
+			}),
 			"username":"admin"
 		},
 		"dataType":"json",

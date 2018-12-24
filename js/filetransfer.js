@@ -15,7 +15,7 @@ function downloadFile(code,index){
 			"showLoading":true,
 			"success":function(e){
 				if(e.multifile.length>1&&!index){
-					openWebPage("https://rthsoftware.cn/airportal/?code="+code,true)
+					openWebPage(secondary+code,true)
 				}else{
 					if(!index||index<0){
 						index=0
@@ -63,7 +63,7 @@ function load(){
 							name=this.innerText
 							showMenu(mouse,[{
 								"onclick":function(){
-									showQRCode("https://rthsoftware.cn/airportal/?code="+code)
+									showQRCode(secondary+code)
 									closeMenu()
 								},
 								"text":[

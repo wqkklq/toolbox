@@ -86,12 +86,16 @@ function getToolbox(){
 		if(navigator.language=="zh-CN"&&isCNServer==null||isCNServer){
 			url="https://www.coolapk.com/apk/163867"
 		}else{
-			url="https://play.google.com/store/apps/details?id=shangzhenyang.rthtoolbox"
+			url="https://play.google.com/store/apps/details?"+encodeData({
+				"id":"shangzhenyang.rthtoolbox"
+			})
 		}
 	}else if(isiOS){
 		url="https://itunes.apple.com/app/rth-toolbox/id1294479577"
 	}else{
-		showQRCode("https://rthsoftware.cn/toolbox/?action=dl")
+		showQRCode("https://rthsoftware.cn/toolbox/?"+encodeData({
+			"action":"dl"
+		}))
 	}
 	if(url){
 		location.href=url
@@ -106,10 +110,12 @@ function loadSentence(){
 				"onclick":function(){
 					switch(language){
 						case "SimplifiedChinese":
-						openWebPage("https://so.gushiwen.org/search.aspx?value="+document.getElementById("Quote").innerText)
+						openWebPage("https://so.gushiwen.org/search.aspx?"+encodeData({
+							"value":document.getElementById("Quote").innerText
+						}))
 						break
 						default:
-						openWebPage("https://bing.com/search?q="+document.getElementById("Quote").innerText)
+						openWebPage("https://www.dictionary.com/browse/"+document.getElementById("Quote").innerText.toLowerCase().replace(/[^a-z|\s]/g,""))
 					}
 					closeMenu()
 				},

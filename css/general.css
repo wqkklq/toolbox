@@ -12,7 +12,7 @@ fieldset{
 footer{
 	background-color:white;
 	bottom:0px;
-	box-shadow:0px -5px 5px rgb(239,239,244);
+	box-shadow:0px 0px 10px rgba(0,0,0,.2);
 	color:rgb(0,122,255);
 	cursor:default;
 	height:45px;
@@ -117,6 +117,7 @@ textarea{
 }
 .image{
 	border:1px solid rgb(0,102,204);
+	box-shadow:0px 0px 10px rgba(0,0,0,.2);
 	cursor:default;
 	font-size:16px;
 	height:160px;
@@ -215,6 +216,9 @@ textarea{
 	position:absolute;
 	right:30px;
 	transform:translateY(-85%);
+}
+.mui-bar-nav{
+	box-shadow:0px 0px 10px rgba(0,0,0,.2);
 }
 .mui-btn{
 	border-style:none;

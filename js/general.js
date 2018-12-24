@@ -408,7 +408,11 @@ function loginDialog(){
 								localStorage.setItem("Email",email)
 								localStorage.setItem("Password",password)
 								localStorage.setItem("Username",e.username)
-								location.reload()
+								if(header){
+									location.reload()
+								}else{
+									removeElement(document.getElementsByClassName("popup")[0])
+								}
 							}else if(email!="admin"){
 								newPasswordInput.value=""
 								newConfirmPasswordInput.value=""
@@ -416,7 +420,10 @@ function loginDialog(){
 									"Incorrect password. Do you want to reset the password?",
 									"密码错误。您想重置密码吗？"
 								],function(){
-									openWebPage("https://rthsoftware.cn/login?email="+encodeURIComponent(email)+"&page=resetpassword",true)
+									openWebPage("https://rthsoftware.cn/login?"+encodeData({
+										"email":email,
+										"page":"resetpassword"
+									}),true)
 								})
 							}
 						}else{
@@ -439,7 +446,11 @@ function loginDialog(){
 											localStorage.setItem("Email",email)
 											localStorage.setItem("Password",password)
 											localStorage.setItem("Username",username)
-											location.reload()
+											if(header){
+												location.reload()
+											}else{
+												removeElement(document.getElementsByClassName("popup")[0])
+											}
 										},
 										"error":error
 									})
@@ -563,7 +574,9 @@ function logOut(){
 	}else{
 		var ssoIFrame=document.createElement("iframe")
 		ssoIFrame.style.display="none"
-		ssoIFrame.src="https://rthsoftware.cn/sso?action=logout"
+		ssoIFrame.src="https://rthsoftware.cn/sso?"+encodeData({
+			"action":"logout"
+		})
 		document.body.appendChild(ssoIFrame)
 	}
 }
@@ -592,8 +605,6 @@ function openWebPage(url,avoidPopup,sso){
 			"email":login.email,
 			"password":login.password
 		})
-	}else{
-		url=encodeURI(url)
 	}
 	if(avoidPopup&&!isApp){
 		location.href=url
@@ -743,7 +754,12 @@ function showImage(src){
 		removeElement(newDiv)
 	}
 	newSaveDiv.onclick=function(){
-		if(src.indexOf("https://rthsoftware.cn/backend/get")!=-1){
+		if(src.indexOf("data:")!=-1){
+			showAlert([
+				"Unable to save this image",
+				"无法保存此图片"
+			])
+		}else if(src.indexOf("https://rthsoftware.cn/backend/get")!=-1){
 			openWebPage(searchURL("url",src))
 		}else{
 			openWebPage(src)
@@ -879,7 +895,12 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 	},25)
 }
 function showQRCode(text){
-	showImage("https://rthsoftware.cn/backend/get?url="+encodeURIComponent("http://qr.topscan.com/api.php?text="+text)+"&username=admin")
+	showImage("https://rthsoftware.cn/backend/get?"+encodeData({
+		"url":"http://qr.topscan.com/api.php?"+encodeData({
+			"text":text
+		}),
+		"username":"admin"
+	}))
 }
 function showToast(text){
 	if(document.getElementsByClassName("mui-toast-container")[0]){

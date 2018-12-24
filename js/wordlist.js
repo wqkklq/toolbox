@@ -329,7 +329,10 @@ function getURL(){
 		}
 		return{
 			"domain":short,
-			"original":"https://rthsoftware.cn/toolbox/wordlist?index="+index+"&username="+login.username,
+			"original":"https://rthsoftware.cn/toolbox/wordlist?"+encodeData({
+				"index":index,
+				"username":login.username
+			}),
 			"short":secondary+short
 		}
 	}
@@ -628,7 +631,9 @@ function lookUp(word){
 			word=document.getElementById("LookUpInput").value
 		}
 	}
-	openWindow(encodeURI("flashcard.html?word="+word))
+	openWindow("flashcard.html?"+encodeData({
+		"word":word
+	}))
 }
 function openDiv(className){
 	newTitle.innerText=document.title
@@ -670,7 +675,7 @@ function openDiv(className){
 function openLWL(file){
 	if(file.name.split(".")[1]=="rth"){
 		var reader=new FileReader()
-		reader.onload=function(e){
+		reader.onload=function(){
 			applyItem(0,convertFormat(this.result))
 		}
 		reader.readAsText(file)

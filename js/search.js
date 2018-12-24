@@ -10,7 +10,7 @@ var engines={
 	"BaiduEncyclopedia":"https://baike.baidu.com/search?word=",
 	"HudongEncyclopedia":"http://www.baike.com/wiki/",
 	"Wikipedia":"https://en.wikipedia.org/wiki/",
-	"DictionaryCom":"http://www.dictionary.com/browse/",
+	"DictionaryCom":"https://www.dictionary.com/browse/",
 	"CambridgeDictionary":"https://dictionary.cambridge.org/us/dictionary/english/",
 	"KingsoftPowerword":"http://www.iciba.com/",
 	"OxfordDictionaries":"https://en.oxforddictionaries.com/definition/",
@@ -28,7 +28,7 @@ var engines={
 	"YinYueTai":"http://so.yinyuetai.com/?keyword=",
 	"Q360Image":"https://image.so.com/i?q=",
 	"QQMusic":"https://y.qq.com/portal/search.html#w=",
-	"NetEaseCloudMusic":"http://music.163.com/#/search/m/?s="
+	"NetEaseCloudMusic":"https://music.163.com/#/search/m/?s="
 }
 function categoryChanged(){
 	document.getElementsByTagName("select")[1].options.length=0
@@ -167,7 +167,7 @@ function search(){
 			"请输入要搜索的文本"
 		])
 	}else{
-		openWebPage(engine+searchTerm)
+		openWebPage(engine+encodeURIComponent(searchTerm))
 	}
 }
 document.getElementsByTagName("select")[0].onchange=categoryChanged

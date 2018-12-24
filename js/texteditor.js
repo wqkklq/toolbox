@@ -98,7 +98,9 @@ function generateWebPage(edit){
 						url=getURL().original
 					}
 					if(edit){
-						url+="?edit=true"
+						url+="?"+encodeData({
+							"edit":true
+						})
 					}
 					url=decodeURI(url)
 					showPrompt(null,function(){
@@ -239,7 +241,7 @@ function newDoc(){
 function openLText(file){
 	if(file.type.indexOf("text")!=-1){
 		var reader=new FileReader()
-		reader.onload=function(e){
+		reader.onload=function(){
 			document.getElementsByTagName("input")[0].value=file.name
 			setText(this.result)
 			document.getElementById("Created").getElementsByTagName("span")[0].innerText=new Date().toLocaleString()

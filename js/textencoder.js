@@ -76,6 +76,12 @@ function loadSavedText(e){
 		}
 	}
 }
+document.getElementsByTagName("textarea")[0].onclick=function(){
+	if(document.getElementsByTagName("select")[0].value=="dataurl"){
+		openDialog()
+		return false
+	}
+}
 document.getElementById("EncodeButton").onclick=function(){
 	if(document.getElementsByTagName("textarea")[0].value){
 		switch(document.getElementsByTagName("select")[0].value){
@@ -109,6 +115,8 @@ document.getElementById("EncodeButton").onclick=function(){
 				document.getElementsByTagName("textarea")[0].value=btoa(encodeUnicode(document.getElementsByTagName("textarea")[0].value))
 			}
 			break
+			case "dataurl":
+			break
 			case "md5":
 			var MD5Value=MD5(document.getElementsByTagName("textarea")[0].value)
 			MD5Hist[MD5Value]=document.getElementsByTagName("textarea")[0].value
@@ -139,7 +147,16 @@ document.getElementById("DecodeButton").onclick=function(){
 		showDecoded=true
 		var decoded=encoded
 		try{
-			if(decoded.indexOf(" ")==-1){
+			if(decoded.indexOf("data:")!=-1){
+				if(decoded.indexOf("image/")!=-1){
+					showImage(decoded)
+				}else{
+					showAlert([
+						"Unable to decode this data URL",
+						"无法解码此 data URL"
+					])
+				}
+			}else if(decoded.indexOf(" ")==-1){
 				if(MD5Hist[decoded]){
 					decoded=MD5Hist[decoded]
 					showToast([
@@ -194,6 +211,13 @@ document.getElementById("DecodeButton").onclick=function(){
 		])
 	}
 }
+document.getElementById("OpenFile").onchange=function(e){
+	var reader=new FileReader()
+	reader.onload=function(){
+		document.getElementsByTagName("textarea")[0].value=this.result
+	}
+	reader.readAsDataURL(e.target.files[0])
+}
 switch(language){
 	case "SimplifiedChinese":
 	document.title="文本编码器"
@@ -215,6 +239,7 @@ switch(language){
 }
 newTitle.innerText=document.title
 document.getElementsByTagName("select")[0].options.add(new Option("Base64","base64"))
+document.getElementsByTagName("select")[0].options.add(new Option("Data URL","dataurl"))
 document.getElementsByTagName("select")[0].options.add(new Option("MD5","md5"))
 document.getElementsByTagName("select")[0].options.add(new Option("Unicode","unicode"))
 document.getElementsByTagName("select")[0].options.add(new Option("URI Component","uricomponent"))
