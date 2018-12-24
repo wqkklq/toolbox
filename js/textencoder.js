@@ -76,12 +76,6 @@ function loadSavedText(e){
 		}
 	}
 }
-document.getElementsByTagName("textarea")[0].onclick=function(){
-	if(document.getElementsByTagName("select")[0].value=="dataurl"){
-		openDialog()
-		return false
-	}
-}
 document.getElementById("EncodeButton").onclick=function(){
 	if(document.getElementsByTagName("textarea")[0].value){
 		switch(document.getElementsByTagName("select")[0].value){
@@ -116,6 +110,7 @@ document.getElementById("EncodeButton").onclick=function(){
 			}
 			break
 			case "dataurl":
+			openDialog()
 			break
 			case "md5":
 			var MD5Value=MD5(document.getElementsByTagName("textarea")[0].value)
