@@ -1,4 +1,4 @@
-const currentCache="toolbox-16.7-12241807",
+const currentCache="toolbox-16.7-12241854",
 toolbox="/toolbox/"
 const toolboxCSS=toolbox+"css/",
 toolboxJS=toolbox+"js/"
@@ -110,7 +110,8 @@ self.addEventListener("fetch",e=>{
 			return data
 		}else{
 			return new Response(null,{
-				"status":503
+				"status":502,
+				"statusText":"Bad Gateway"
 			})
 		}
 	}))
