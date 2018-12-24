@@ -1248,7 +1248,7 @@ switch(language){
 		["Vietnamese","vie"]
 	]
 }
-if(!isApp&&location.hostname=="rthsoftware.cn"&&"serviceWorker" in navigator){
+if(!isApp&&(location.hostname=="rthsoftware.cn"||location.hostname=="localhost")&&"serviceWorker" in navigator){
 	navigator.serviceWorker.register("sw.js")
 }
 var newScript=document.createElement("script")
