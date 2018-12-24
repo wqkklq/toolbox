@@ -1,4 +1,4 @@
-const currentCache="toolbox-16.7-12241758",
+const currentCache="toolbox-16.7-12241807",
 toolbox="/toolbox/"
 const toolboxCSS=toolbox+"css/",
 toolboxJS=toolbox+"js/"
@@ -109,12 +109,13 @@ self.addEventListener("fetch",e=>{
 		if(data){
 			return data
 		}else{
-			return new Response()
+			return new Response(null,{
+				"status":503
+			})
 		}
 	}))
 })
 self.addEventListener("activate",e=>{
-	console.log("服务工作线程版本: %s",currentCache)
 	e.waitUntil(caches.keys().then(cacheNames=>{
 		return Promise.all(cacheNames.map(cacheName=>{
 			if(cacheName!=currentCache){
