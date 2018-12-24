@@ -1,4 +1,4 @@
-const currentCache="toolbox-16.7-12241457",
+const currentCache="toolbox-16.7-12241524",
 toolbox="/toolbox/"
 const toolboxCSS=toolbox+"css/",
 toolboxJS=toolbox+"js/"
@@ -102,8 +102,9 @@ self.addEventListener("fetch",e=>{
 		caches.match(e.request).then(response=>{
 			if(response){
 				return response
+			}else{
+				return fetch(e.request)
 			}
-			return fetch(e.request)
 		})
 	)
 })
@@ -120,3 +121,4 @@ self.addEventListener("activate",e=>{
 		})
 	)
 })
+console.log(currentCache)
