@@ -207,11 +207,19 @@ document.getElementById("DecodeButton").onclick=function(){
 	}
 }
 document.getElementById("OpenFile").onchange=function(e){
-	var reader=new FileReader()
-	reader.onload=function(){
-		document.getElementsByTagName("textarea")[0].value=this.result
+	var file=e.target.files[0]
+	if(file.size<10485760){
+		reader=new FileReader()
+		reader.onload=function(){
+			document.getElementsByTagName("textarea")[0].value=this.result
+		}
+		reader.readAsDataURL(file)
+	}else{
+		showAlert([
+			"The file is larger than 1024 MB",
+			"文件大于 10 MB"
+		])
 	}
-	reader.readAsDataURL(e.target.files[0])
 }
 switch(language){
 	case "SimplifiedChinese":
