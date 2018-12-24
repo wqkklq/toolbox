@@ -211,6 +211,7 @@ document.getElementById("OpenFile").onchange=function(input){
 			load()
 		}
 		if(files.length<=1&&files[0].size<=10240000){
+			newToast.show(["Uploading","正在上传"])
 			ajax({
 				"url":backend+"userdata/file/upload",
 				"data":{
@@ -219,7 +220,6 @@ document.getElementById("OpenFile").onchange=function(input){
 				},
 				"dataType":"json",
 				"method":"POST",
-				"showLoading":true,
 				"success":function(e){
 					if(e.error){
 						alert(e.error)
