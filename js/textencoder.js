@@ -77,7 +77,7 @@ function loadSavedText(e){
 	}
 }
 document.getElementById("EncodeButton").onclick=function(){
-	if(document.getElementsByTagName("textarea")[0].value){
+	if(document.getElementsByTagName("textarea")[0].value||document.getElementsByTagName("select")[0].value=="dataurl"){
 		switch(document.getElementsByTagName("select")[0].value){
 			case "binary":
 			var binary="",
