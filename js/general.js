@@ -42,7 +42,7 @@ newTitle=document.createElement("h1"),
 recentInput=0,
 secondary="http://www.rthe.cn/",
 theme=localStorage.getItem("Theme"),
-ver="16.6"
+ver="16.7"
 var isAndroidApp=isAndroid&&isApp,
 isiOSApp=isApp&&isiOS,
 isMobile=isAndroid||isiOS,
@@ -620,17 +620,19 @@ function reload(){
 	}
 }
 function removeElement(element){
-	if(element.style.opacity){
-		element.style.opacity=""
-		setTimeout(function(){
+	if(element){
+		if(element.style.opacity){
+			element.style.opacity=""
+			setTimeout(function(){
+				try{
+					element.parentElement.removeChild(element)
+				}catch(e){}
+			},250)
+		}else{
 			try{
 				element.parentElement.removeChild(element)
 			}catch(e){}
-		},250)
-	}else{
-		try{
-			element.parentElement.removeChild(element)
-		}catch(e){}
+		}
 	}
 }
 function searchURL(key,url){

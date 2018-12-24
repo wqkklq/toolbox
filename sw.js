@@ -1,4 +1,4 @@
-const currentCache="toolbox-16.6-12240936",
+const currentCache="toolbox-16.7-12241007",
 toolbox="/toolbox/"
 const toolboxCSS=toolbox+"css/",
 toolboxJS=toolbox+"js/"
