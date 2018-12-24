@@ -208,10 +208,7 @@ function submit(callback){
 document.getElementsByTagName("button")[0].onclick=function(){
 	var closeDialog=function(){
 		if(document.getElementsByClassName("popup")[0]){
-			document.getElementsByClassName("popup")[0].style.transform="scale(0)"
-			setTimeout(function(){
-				removeElement(document.getElementsByClassName("popup")[0])
-			},250)
+			removeElement(document.getElementsByClassName("popup")[0])
 		}
 	}
 	closeDialog()
@@ -234,8 +231,6 @@ document.getElementsByTagName("button")[0].onclick=function(){
 			document.getElementById("Quantity").value=quantity=40
 		}
 		newDiv.classList.add("popup")
-		newDiv.style.opacity="1"
-		newDiv.style.transform="scale(0)"
 		newNumDiv.classList.add("number")
 		newButton.style.width="100%"
 		for(var i=0;i<quantity;i++){
@@ -282,7 +277,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 		document.body.appendChild(newDiv)
 		newDiv.style.top="calc(50% - "+(newDiv.offsetHeight/2)+"px)"
 		setTimeout(function(){
-			newDiv.style.transform=""
+			newDiv.style.opacity="1"
 		},25)
 	}
 }
