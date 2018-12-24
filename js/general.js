@@ -5,7 +5,7 @@ var $_GET=(function(){
 		var parameters=location.search.replace("?","").split("&")
 		for(var i=0;i<parameters.length;i++){
 			var split=parameters[i].split("=")
-			json[split[0]]=split[1]
+			json[split[0]]=decodeURIComponent(split[1])
 		}
 	}
 	return json
@@ -57,7 +57,7 @@ function ajax(settings){
 	}
 	var data
 	if(settings.data){
-		if(settings.processData==false){
+		if(settings.method=="POST"){
 			data=new FormData()
 			for(var key in settings.data){
 				if(settings.data[key]){
@@ -95,11 +95,7 @@ function ajax(settings){
 	xhr.onloadstart=function(){
 		if(newToast){
 			if(settings.method=="POST"){
-				if(settings.processData==false){
-					newToast.show(["Uploading","正在上传"])
-				}else{
-					newToast.show(["Syncing","正在同步"])
-				}
+				newToast.show(["Syncing","正在同步"])
 			}else{
 				newToast.show(["Pending","等待响应"])
 			}
@@ -112,9 +108,6 @@ function ajax(settings){
 	}
 	if(settings.method&&settings.method=="POST"){
 		xhr.open("POST",settings.url)
-		if(settings.processData!=false){
-			xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded")
-		}
 		xhr.send(data)
 	}else{
 		var url
@@ -592,14 +585,22 @@ function openDialog(){
 	document.getElementById("OpenFile").value=""
 	document.getElementById("OpenFile").click()
 }
-function openWebPage(href,avoidPopup){
-	href=encodeURI(href)
-	if(avoidPopup&&!isApp){
-		location.href=href
-	}else if(isiOSApp){
-		OpenUrlExt.open(href)
+function openWebPage(url,avoidPopup,sso){
+	if(sso&&location.hostname!="rthsoftware.cn"){
+		url="https://rthsoftware.cn/sso?"+encodeData({
+			"continue":url,
+			"email":login.email,
+			"password":login.password
+		})
 	}else{
-		open(href)
+		url=encodeURI(url)
+	}
+	if(avoidPopup&&!isApp){
+		location.href=url
+	}else if(isiOSApp){
+		OpenUrlExt.open(url)
+	}else{
+		open(url)
 	}
 }
 function openWindow(name){

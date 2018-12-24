@@ -3,8 +3,7 @@ var currentList,
 dictCache=JSON.parse(localStorage.getItem("DictCache")),
 openedWordList=localStorage.getItem("WordList"),
 progress=1,
-showingDefinition,
-wordURL=$_GET["word"]&&decodeURIComponent($_GET["word"])
+showingDefinition
 function dictChanged(){
 	var dictBox
 	var changeDisplay=function(alwaysShow){
@@ -168,7 +167,7 @@ switch(language){
 if(!dictCache){
 	dictCache={}
 }
-if(!wordURL&&openedWordList){
+if(!$_GET["word"]&&openedWordList){
 	window.onkeydown=function(e){
 		switch(e.keyCode){
 			case 32:
@@ -189,8 +188,8 @@ if(!wordURL&&openedWordList){
 	loadWord()
 }else{
 	newTitle.innerText=document.title
-	if(wordURL){
-		lookUp(wordURL)
+	if($_GET["word"]){
+		lookUp($_GET["word"])
 	}else{
 		lookUp("morning")
 	}

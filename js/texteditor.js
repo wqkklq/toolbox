@@ -649,7 +649,7 @@ document.getElementById("GenerateWebPage").onclick=function(){
 			"It is recommended to use RTH Virtual Host Manager",
 			"建议使用 RTH 虚拟主机管理器"
 		],function(){
-			openWebPage("https://rthsoftware.cn/vhost/")
+			openWebPage("https://rthsoftware.cn/vhost/",false,true)
 		})
 	}else{
 		generateWebPage()

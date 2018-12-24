@@ -28,7 +28,16 @@ document.getElementsByTagName("button")[0].onclick=function(){
 					"感谢您的反馈"
 				])
 			},
-			"error":error
+			"error":function(e){
+				if(e.status==504){
+					showAlert([
+						"Please try again",
+						"请再试一次"
+					])
+				}else{
+					error()
+				}
+			}
 		})
 	}
 }
