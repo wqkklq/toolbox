@@ -66,8 +66,8 @@ function add(word){
 							}else if(e.data.en_definition.defn){
 								addWord(newWord,e.data.en_definition.defn)
 							}
-							if(!dictCahce[e.data.content]){
-								dictCahce[e.data.content]=e.data
+							if(!dictCache[e.data.content]){
+								dictCache[e.data.content]=e.data
 								if(Object.keys(dictCache).length>100){
 									delete dictCache[Object.keys(dictCache)[0]]
 								}
