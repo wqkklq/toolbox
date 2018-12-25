@@ -1,4 +1,4 @@
-const currentCache="toolbox-16.7-12242233",
+const currentCache="toolbox-16.7-12251238",
 toolbox="/toolbox/"
 const toolboxCSS=toolbox+"css/",
 toolboxJS=toolbox+"js/"
@@ -119,7 +119,7 @@ self.addEventListener("fetch",e=>{
 self.addEventListener("activate",e=>{
 	e.waitUntil(caches.keys().then(cacheNames=>{
 		return Promise.all(cacheNames.map(cacheName=>{
-			if(cacheName!=currentCache){
+			if(cacheName.indexOf("toolbox")!=-1&&cacheName!=currentCache){
 				return caches.delete(cacheName)
 			}
 		}))
