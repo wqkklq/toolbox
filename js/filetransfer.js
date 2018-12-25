@@ -233,7 +233,10 @@ document.getElementById("OpenFile").onchange=function(input){
 						uploadSuccess(e.code)
 					}
 				},
-				"error":error
+				"error":function(){
+					newToast.close()
+					error()
+				}
 			})
 		}else{
 			newToast.show(["Pending","等待响应"])
@@ -250,8 +253,7 @@ document.getElementById("OpenFile").onchange=function(input){
 						var fileSlice=[],
 						sliceSize=10240000,
 						thisFile=input.target.files[fileIndex],
-						uploadProgress=0,
-						uploadSlice=function(){
+						uploadSlice=function(uploadProgress){
 							ajax({
 								"url":backend+"userdata/file/uploadslice",
 								"data":{
@@ -277,11 +279,26 @@ document.getElementById("OpenFile").onchange=function(input){
 										}else{
 											uploadProgress++
 											newToast.show(Math.round(uploadProgress/fileSlice.length*100)+"%")
-											uploadSlice()
+											uploadSlice(uploadProgress)
 										}
 									}
 								},
-								"error":error
+								"error":function(e){
+									if(e.status==0){
+										if(thisFile.size<104857600){
+											fileSlice=[thisFile]
+											uploadSlice(0)
+										}else{
+											newToast.close()
+											showAlert([
+												"Unable to send files larger than 100 MB on this device",
+												"无法在此设备上发送大于 100 MB 的文件"
+											])
+										}
+									}else{
+										error()
+									}
+								}
 							})
 						}
 						if(thisFile.size>10240000){
@@ -291,12 +308,13 @@ document.getElementById("OpenFile").onchange=function(input){
 						}else{
 							fileSlice.push(thisFile)
 						}
-						uploadSlice()
+						uploadSlice(0)
 					}
 					newToast.show(["Uploading","正在上传"])
 					upload(0)
 				},
 				"error":function(e){
+					newToast.close()
 					if(e.status==402){
 						showConfirm([
 							"This file needs to be sent by AirPortal",

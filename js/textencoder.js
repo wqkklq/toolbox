@@ -209,8 +209,11 @@ document.getElementById("DecodeButton").onclick=function(){
 document.getElementById("OpenFile").onchange=function(e){
 	var file=e.target.files[0]
 	if(file.size<10485760){
+		var newToast=showToast(),
 		reader=new FileReader()
+		newToast.show(["Loading","正在加载"])
 		reader.onload=function(){
+			newToast.close()
 			document.getElementsByTagName("textarea")[0].value=this.result
 		}
 		reader.readAsDataURL(file)
