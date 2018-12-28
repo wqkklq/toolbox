@@ -31,7 +31,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2018/12/27").toLocaleDateString(),
+lastUpdated=new Date("2018/12/28").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -974,7 +974,10 @@ function speak(text,lan){
 			"Loading audio",
 			"正在加载音频"
 		])
-		var audio=new Audio("https://www.rthsoftware.cn/backend/get?url="+encodeURIComponent("https://fanyi.baidu.com/gettts?lan="+lan+"&spd=6&text="+text)+"&username=admin")
+		var audio=new Audio("https://www.rthsoftware.cn/backend/get?"+encodeData({
+			"url":"https://fanyi.baidu.com/gettts?lan="+lan+"&spd=6&text="+text,
+			"username":"admin"
+		}))
 		audio.onerror=function(){
 			if(window.speechSynthesis){
 				window.speechSynthesis.speak(new SpeechSynthesisUtterance(text))
