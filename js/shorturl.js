@@ -147,9 +147,10 @@ document.getElementsByTagName("button")[0].onclick=function(){
 			if(document.getElementById("ShortURLInput").value.indexOf("https:")!=-1){
 				document.getElementById("ShortURLInput").value=document.getElementById("ShortURLInput").value.replace("https:","http:")
 			}
-			if(document.getElementById("ShortURLInput").value.substr(0,shortURL.length)==shortURL){
-				var originalURL=document.getElementById("OriginalURLInput").value,
-				value=encodeURIComponent(document.getElementById("ShortURLInput").value.replace(shortURL,""))
+			var value=document.getElementById("ShortURLInput").value
+			if(value.substr(0,shortURL.length)==shortURL){
+				var originalURL=document.getElementById("OriginalURLInput").value
+				value=encodeURIComponent(value.replace(shortURL,""))
 				if(originalURL.indexOf("rthe.cn")!=-1){
 					showAlert([
 						"Short URLs cannot be the original URL",
@@ -216,7 +217,18 @@ document.getElementsByTagName("button")[0].onclick=function(){
 					"The short URL must begin with "+shortURL,
 					"短网址必须以 "+shortURL+" 开头"
 				])
-				document.getElementById("ShortURLInput").value=shortURL+document.getElementById("ShortURLInput").value.replace(/[^A-Za-z0-9]/g,"")
+				if(value.indexOf("://")!=-1){
+					value=value.split("://")[1]
+				}
+				var valueSplit=value.split(".")
+				if(valueSplit.length>1){
+					if(valueSplit[0]=="www"){
+						value=valueSplit[1]
+					}else{
+						value=valueSplit[0]
+					}
+				}
+				document.getElementById("ShortURLInput").value=shortURL+value
 			}
 		}else{
 			showAlert([
