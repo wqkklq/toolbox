@@ -4,9 +4,11 @@ if(!lastRun){
 	lastRun={}
 }
 if(lastRun[appName]!=ver){
-	clearLocalStorage()
-	localStorage.setItem("Language",language)
-	localStorage.setItem("Theme",theme)
+	if(isApp){
+		clearLocalStorage()
+		localStorage.setItem("Language",language)
+		localStorage.setItem("Theme",theme)
+	}
 	lastRun[appName]=ver
 	localStorage.setItem("LastRun",JSON.stringify(lastRun))
 }
