@@ -239,7 +239,7 @@ function newDoc(){
 	}
 }
 function openLText(file){
-	if(file.type.indexOf("text")!=-1){
+	if(file.type.indexOf("text/")!=-1||file.name.toLowerCase().split(".")[1]=="txt"){
 		var reader=new FileReader()
 		reader.onload=function(){
 			document.getElementsByTagName("input")[0].value=file.name

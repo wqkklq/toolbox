@@ -1,6 +1,17 @@
 /*Code written by Shangzhen Yang*/
+var lastRun=JSON.parse(localStorage.getItem("LastRun"))
+if(!lastRun){
+	lastRun={}
+}
+if(lastRun[appName]!=ver){
+	clearLocalStorage()
+	localStorage.setItem("Language",language)
+	localStorage.setItem("Theme",theme)
+	lastRun[appName]=ver
+	localStorage.setItem("LastRun",JSON.stringify(lastRun))
+}
 var currentHour=new Date().getHours(),
-dateCountdown=localStorage.getItem("DateCountdown"),
+dateCountdown=JSON.parse(localStorage.getItem("DateCountdown")),
 dateCountdownLoaded,
 menu=document.getElementsByClassName("home-menu")[0].getElementsByTagName("li"),
 savedQuote=localStorage.getItem("Quote")
@@ -228,16 +239,7 @@ if($_GET["action"]){
 }else if(!login.username){
 	loginDialog()
 }
-if(!login.username&&!isApp&&location.hostname!="rthsoftware.cn"){
-	var ssoIFrame=document.createElement("iframe")
-	ssoIFrame.style.display="none"
-	ssoIFrame.src="https://rthsoftware.cn/sso"
-	document.body.appendChild(ssoIFrame)
-}
 getSentence()
-if(dateCountdown){
-	dateCountdown=JSON.parse(dateCountdown)
-}
 if(login.username){
 	getUserData("datecountdown",function(e){
 		if(!dateCountdown||e.time>dateCountdown.time){
@@ -254,4 +256,9 @@ if(login.username){
 			submitDateCountdown()
 		}
 	},true)
+}else if(!isApp&&location.hostname!="rthsoftware.cn"){
+	var ssoIFrame=document.createElement("iframe")
+	ssoIFrame.style.display="none"
+	ssoIFrame.src="https://rthsoftware.cn/sso"
+	document.body.appendChild(ssoIFrame)
 }

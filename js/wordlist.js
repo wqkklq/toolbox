@@ -43,10 +43,10 @@ function add(word){
 		}
 		if(document.getElementsByTagName("select")[0].value=="en"){
 			if(dictCache[newWord]){
-				if(language=="SimplifiedChinese"&&CNDef){
-					addWord(newWord,newWord.cn_definition.defn)
-				}else if(ENDef){
-					addWord(newWord,newWord.en_definition.defn)
+				if(language=="SimplifiedChinese"){
+					addWord(newWord,dictCache[newWord].cn_definition.defn)
+				}else{
+					addWord(newWord,dictCache[newWord].en_definition.defn)
 				}
 			}else{
 				ajax({
@@ -279,7 +279,11 @@ function expWL(){
 			"您想导出此单词表吗？"
 		],function(){
 			save(function(){
-				openWebPage(backend+"userdata/getwordlist?dl=rth&index="+currentItem+"&username="+login.username,true)
+				openWebPage(backend+"userdata/getwordlist?"+encodeData({
+					"dl":"json",
+					"index":currentItem,
+					"username":login.username
+				}),true)
 			})
 		})
 	}else if(!isLinux&&!isMobile){
@@ -673,7 +677,8 @@ function openDiv(className){
 	}
 }
 function openLWL(file){
-	if(file.name.split(".")[1]=="rth"){
+	var type=file.name.toLowerCase().split(".")[1]
+	if(type=="json"||type=="rth"){
 		var reader=new FileReader()
 		reader.onload=function(){
 			applyItem(0,convertFormat(this.result))

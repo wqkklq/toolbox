@@ -1,5 +1,5 @@
 /*Code written by Shangzhen Yang*/
-function downloadFile(code,index){
+function downloadFile(code){
 	if(isTencent){
 		showAlert([
 			"Please open this page in the browser",
@@ -14,14 +14,7 @@ function downloadFile(code,index){
 			"dataType":"json",
 			"showLoading":true,
 			"success":function(e){
-				if(e.multifile.length>1&&!index){
-					openWebPage(secondary+code,true)
-				}else{
-					if(!index||index<0){
-						index=0
-					}
-					openWebPage(e.multifile[index].download,true)
-				}
+				openWebPage(e.download,true)
 			},
 			"error":function(e){
 				if(e.status==200){
@@ -48,85 +41,76 @@ function load(){
 			"showLoading":true,
 			"success":function(e){
 				for(var i=e.length-1;i>=0;i--){
-					for(var file=0;file<e[i].multifile.length;file++){
-						var newLi=document.createElement("li")
-						newLi.classList.add("menu")
-						newLi.innerText=e[i].multifile[file].name
-						newLi.setAttribute("code",e[i].code)
-						if(e[i].multifile.length>1){
-							newLi.setAttribute("index",file+1)
-						}
-						newLi.oncontextmenu=
-						newLi.onclick=function(mouse){
-							var code=this.getAttribute("code")
-							index=this.getAttribute("index")-1,
-							name=this.innerText
-							showMenu(mouse,[{
-								"onclick":function(){
-									showQRCode(secondary+code)
-									closeMenu()
-								},
-								"text":[
-									"QR Code",
-									"二维码"
-								]
-							},{
-								"onclick":function(){
-									showPrompt(null,function(){
-										openWebPage(secondary+code)
-									},null,"http://rthe.cn/"+code)
-									closeMenu()
-								},
-								"text":[
-									"Link",
-									"链接"
-								]
-							},{
-								"onclick":function(){
-									if(index>-1){
-										name=code
-									}
-									showConfirm([
-										"Do you want to delete "+name+"?",
-										"您想删除 "+name+" 吗？"
-									],function(){
-										ajax({
-											"url":backend+"userdata/file/del",
-											"data":{
-												"code":code,
-												"username":login.username
-											},
-											"method":"POST",
-											"showLoading":true,
-											"success":load,
-											"error":error
-										})
+					var newLi=document.createElement("li")
+					newLi.classList.add("menu")
+					newLi.innerText=decodeURIComponent(e[i].name)
+					newLi.setAttribute("code",e[i].code)
+					newLi.oncontextmenu=
+					newLi.onclick=function(mouse){
+						var code=this.getAttribute("code")
+						name=this.innerText
+						showMenu(mouse,[{
+							"onclick":function(){
+								showQRCode(secondary+code)
+								closeMenu()
+							},
+							"text":[
+								"QR Code",
+								"二维码"
+							]
+						},{
+							"onclick":function(){
+								showPrompt(null,function(){
+									openWebPage(secondary+code)
+								},null,"http://rthe.cn/"+code)
+								closeMenu()
+							},
+							"text":[
+								"Link",
+								"链接"
+							]
+						},{
+							"onclick":function(){
+								showConfirm([
+									"Do you want to delete "+name+"?",
+									"您想删除 "+name+" 吗？"
+								],function(){
+									ajax({
+										"url":backend+"userdata/file/del",
+										"data":{
+											"code":code,
+											"username":login.username
+										},
+										"method":"POST",
+										"showLoading":true,
+										"success":load,
+										"error":error
 									})
-									closeMenu()
-								},
-								"text":[
-									"Delete",
-									"删除"
-								]
-							},{
-								"onclick":function(){
-									showConfirm([
-										"Do you want to download "+name+"?",
-										"您想下载 "+name+" 吗？"
-									],function(){
-										downloadFile(code,index)
-									})
-									closeMenu()
-								},
-								"text":[
-									"Download",
-									"下载"
-								]
-							}])
-							return false
-						}
-						document.getElementById("MyFile").appendChild(newLi)
+								})
+								closeMenu()
+							},
+							"text":[
+								"Delete",
+								"删除"
+							]
+						},{
+							"onclick":function(){
+								showConfirm([
+									"Do you want to download "+name+"?",
+									"您想下载 "+name+" 吗？"
+								],function(){
+									downloadFile(code)
+								})
+								closeMenu()
+							},
+							"text":[
+								"Download",
+								"下载"
+							]
+						}])
+						return false
 					}
+					document.getElementById("MyFile").appendChild(newLi)
 				}
 			}
 		})
