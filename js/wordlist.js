@@ -5,7 +5,6 @@ currentItem,
 currentList=[],
 correctWord,
 dictCache=JSON.parse(localStorage.getItem("DictCache")),
-handle=document.getElementsByClassName("mui-switch-handle"),
 mistakes,
 outOfOrder=[],
 progress=1,
@@ -14,6 +13,7 @@ quizSettingsChanged=false,
 savedQuizSettings=JSON.parse(localStorage.getItem("QuizSettings")),
 savedWordList=JSON.parse(localStorage.getItem("SavedWordList")),
 showAnswer=false,
+switchDiv=document.getElementsByClassName("mui-switch"),
 wordIndex
 function add(word){
 	showPrompt([
@@ -1173,8 +1173,13 @@ if(savedQuizSettings){
 		}
 	}
 }
-for(var i=0;i<handle.length;i++){
-	handle[i].onclick=function(){
+for(var i=0;i<switchDiv.length;i++){
+	switchDiv[i].onclick=function(){
+		if(this.classList.contains("mui-active")){
+			this.classList.remove("mui-active")
+		}else{
+			this.classList.add("mui-active")
+		}
 		quizSettingsChanged=true
 		if(!savedQuizSettings){
 			savedQuizSettings={}
