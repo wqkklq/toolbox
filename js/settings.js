@@ -1,4 +1,11 @@
 /*Code written by Shangzhen Yang*/
+function reload(){
+	if(isiOS){
+		openWindow("index")
+	}else{
+		location.reload()
+	}
+}
 document.getElementById("LanguageSelect").onchange=function(){
 	if(this.value!=language){
 		localStorage.setItem("Language",this.value)

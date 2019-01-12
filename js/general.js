@@ -626,13 +626,6 @@ function openWindow(name){
 		location.href=name+".html"
 	}
 }
-function reload(){
-	if(isiOS){
-		openWindow("index")
-	}else{
-		location.reload()
-	}
-}
 function removeElement(element){
 	if(element){
 		if(element.style.opacity){
