@@ -635,7 +635,7 @@ function lookUp(word){
 			word=document.getElementById("LookUpInput").value
 		}
 	}
-	openWindow("flashcard.html?"+encodeData({
+	openWindow("flashcard?"+encodeData({
 		"word":word
 	}))
 }

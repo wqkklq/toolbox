@@ -31,7 +31,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2019/1/10").toLocaleDateString(),
+lastUpdated=new Date("2019/1/13").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"password":localStorage.getItem("Password"),
@@ -617,9 +617,11 @@ function openWebPage(url,avoidPopup,sso){
 }
 function openWindow(name){
 	if(location.hostname&&name=="index"){
-		location.href="https://"+location.hostname+"/toolbox/"
-	}else if(name.indexOf("?")!=-1||location.hostname){
+		location.href="./"
+	}else if(location.hostname){
 		location.href=name
+	}else if(name.indexOf("?")!=-1){
+		location.href=name.replace("?",".html?")
 	}else{
 		location.href=name+".html"
 	}
