@@ -24,12 +24,13 @@ document.getElementById("ChangePassword").onclick=function(){
 	showPrompt([
 		"Enter your current password",
 		"输入您的当前密码"
-	],function(e){
+	],function(currentPassword){
+		currentPassword=MD5(currentPassword)
 		ajax({
 			"url":backend+"userdata/verify",
 			"data":{
 				"email":login.email,
-				"password":MD5(e)
+				"password":currentPassword
 			},
 			"dataType":"json",
 			"showLoading":true,
@@ -48,6 +49,7 @@ document.getElementById("ChangePassword").onclick=function(){
 									"url":backend+"reset",
 									"data":{
 										"index":verifyResult.index,
+										"password":currentPassword,
 										"passwordmd5":MD5(newPassword)
 									},
 									"method":"POST",
@@ -82,12 +84,13 @@ document.getElementById("ChangeEmail").onclick=function(){
 	showPrompt([
 		"Enter your current password",
 		"输入您的当前密码"
-	],function(e){
+	],function(currentPassword){
+		currentPassword=MD5(currentPassword)
 		ajax({
 			"url":backend+"userdata/verify",
 			"data":{
 				"email":login.email,
-				"password":MD5(e)
+				"password":currentPassword
 			},
 			"dataType":"json",
 			"showLoading":true,
@@ -122,7 +125,8 @@ document.getElementById("ChangeEmail").onclick=function(){
 												"url":backend+"reset",
 												"data":{
 													"index":verifyResult.index,
-													"newemail":newEmail
+													"newemail":newEmail,
+													"password":currentPassword
 												},
 												"method":"POST",
 												"showLoading":true,
