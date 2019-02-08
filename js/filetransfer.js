@@ -23,7 +23,7 @@ function downloadFile(code){
 						"文件不存在"
 					])
 				}else{
-					error()
+					error(e)
 				}
 			}
 		})
@@ -217,9 +217,9 @@ document.getElementById("OpenFile").onchange=function(input){
 						uploadSuccess(e.code)
 					}
 				},
-				"error":function(){
+				"error":function(e){
 					newToast.close()
-					error()
+					error(e)
 				}
 			})
 		}else{
@@ -280,7 +280,7 @@ document.getElementById("OpenFile").onchange=function(input){
 											])
 										}
 									}else{
-										error()
+										error(e)
 									}
 								}
 							})
@@ -307,7 +307,7 @@ document.getElementById("OpenFile").onchange=function(input){
 							openWebPage("https://rthsoftware.cn/airportal/",true,true)
 						})
 					}else{
-						error()
+						error(e)
 					}
 				}
 			})

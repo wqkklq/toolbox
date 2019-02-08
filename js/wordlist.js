@@ -308,8 +308,6 @@ function expWL(){
 		})
 	}else if(!login.username){
 		loginDialog()
-	}else{
-		error()
 	}
 }
 function generateOrder(){

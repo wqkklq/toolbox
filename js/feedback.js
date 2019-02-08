@@ -35,7 +35,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 						"请再试一次"
 					])
 				}else{
-					error()
+					error(e)
 				}
 			}
 		})

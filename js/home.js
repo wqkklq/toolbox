@@ -81,9 +81,9 @@ function getSentence(manual){
 				}
 			}
 		},
-		"error":function(){
+		"error":function(e){
 			if(manual){
-				error()
+				error(e)
 			}
 		}
 	})

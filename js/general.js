@@ -268,10 +268,10 @@ function encryptText(text,password){
 	}
 	return encrypted
 }
-function error(){
+function error(e){
 	showAlert([
-		"Unable to connect to the server",
-		"无法连接服务器"
+		"Unable to connect to the server ("+e.status+")",
+		"无法连接服务器 ("+e.status+")"
 	])
 }
 function getUserData(dir,callback,errorCallback,hideLoading){
@@ -467,10 +467,10 @@ function loginDialog(){
 							}
 						}
 					},
-					"error":function(){
+					"error":function(e){
 						newSignUpButton.onclick=signUp
 						newLoginButton.onclick=submitLogin
-						error()
+						error(e)
 					}
 				})
 			}
@@ -589,8 +589,8 @@ function openWebPage(url,avoidPopup,sso){
 	if(sso&&location.hostname!="rthsoftware.cn"){
 		url="https://rthsoftware.cn/sso?"+encodeData({
 			"continue":url,
-			"email":login.email,
-			"password":login.password
+			"token":login.token,
+			"username":login.username
 		})
 	}
 	if(avoidPopup&&!isApp){
@@ -960,10 +960,13 @@ function speak(text,lan){
 			"username":"admin"
 		}))
 		audio.onerror=function(){
-			if(window.speechSynthesis){
-				window.speechSynthesis.speak(new SpeechSynthesisUtterance(text))
+			if("speechSynthesis" in window){
+				speechSynthesis.speak(new SpeechSynthesisUtterance(text))
 			}else{
-				error()
+				showAlert([
+					"Unable to load audio",
+					"无法加载音频"
+				])
 			}
 		}
 		audio.play()
@@ -1002,11 +1005,11 @@ function translate(query,from,to,callback,negativeCallback){
 				callback(data.trans_result[0].dst,data)
 			}
 		},
-		"error":function(){
+		"error":function(e){
 			if(negativeCallback){
 				negativeCallback()
 			}else{
-				error()
+				error(e)
 			}
 		}
 	})

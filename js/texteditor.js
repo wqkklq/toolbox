@@ -525,7 +525,7 @@ document.getElementById("GetSource").onclick=function(){
 							"404 未找到"
 						])
 					}else{
-						error()
+						error(e)
 					}
 				}
 			})
@@ -651,7 +651,7 @@ document.getElementById("GenerateWebPage").onclick=function(){
 			"It is recommended to use RTH Virtual Host Manager",
 			"建议使用 RTH 虚拟主机管理器"
 		],function(){
-			openWebPage("https://rthsoftware.cn/vhost/",false,true)
+			openWebPage("https://rthsoftware.cn/vhost/",true,true)
 		})
 	}else{
 		generateWebPage()
