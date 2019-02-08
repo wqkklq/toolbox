@@ -35,6 +35,7 @@ function load(){
 		ajax({
 			"url":backend+"userdata/file/get",
 			"data":{
+				"token":login.token,
 				"username":login.username
 			},
 			"dataType":"json",

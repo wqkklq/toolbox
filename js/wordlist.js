@@ -860,9 +860,9 @@ function submit(callback,text,key1,key2,hideLoading){
 	localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
 	var postData={
 		"dir":"wordlist/",
-		"filename":login.username,
 		"text":JSON.stringify(savedWordList),
-		"ver":ver.split(".")[0]
+		"token":login.token,
+		"username":login.username
 	}
 	if(key1){
 		postData["key1"]=key1

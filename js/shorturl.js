@@ -75,11 +75,11 @@ function loadMyURL(){
 								"url":usBackend+"userdata/upload",
 								"data":{
 									"dir":"domain/",
-									"filename":"list",
 									"key1":myURL[index].name,
 									"key2":"to",
 									"text":e,
-									"url":url
+									"token":login.token,
+									"username":login.username
 								},
 								"method":"POST",
 								"showLoading":true,

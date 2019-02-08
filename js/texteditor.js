@@ -397,9 +397,9 @@ function submit(callback,text,key1,key2){
 	localStorage.setItem("SavedText",JSON.stringify(savedText))
 	var postData={
 		"dir":"text/",
-		"filename":login.username,
 		"text":JSON.stringify(savedText),
-		"ver":ver.split(".")[0]
+		"token":login.token,
+		"username":login.username
 	}
 	if(key1){
 		postData["key1"]=key1

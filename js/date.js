@@ -6,8 +6,9 @@ function submit(){
 		"url":backend+"userdata/upload",
 		"data":{
 			"dir":"datecountdown/",
-			"filename":login.username,
-			"text":JSON.stringify(dateCountdown)
+			"text":JSON.stringify(dateCountdown),
+			"token":login.token,
+			"username":login.username
 		},
 		"method":"POST",
 		"showLoading":true,

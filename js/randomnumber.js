@@ -178,8 +178,9 @@ function submit(callback){
 		"url":backend+"userdata/upload",
 		"data":{
 			"dir":"names/",
-			"filename":login.username,
-			"text":JSON.stringify(savedNames)
+			"text":JSON.stringify(savedNames),
+			"token":login.token,
+			"username":login.username
 		},
 		"method":"POST",
 		"showLoading":true,
