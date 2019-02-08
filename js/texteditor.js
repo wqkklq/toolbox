@@ -709,10 +709,9 @@ if($_GET["index"]&&$_GET["username"]){
 		openWindow("index")
 	}
 	ajax({
-		"url":usBackend+"getpage",
+		"url":"https://rthe.cn/"+$_GET["username"]+"/"+$_GET["index"],
 		"data":{
-			"index":$_GET["index"],
-			"username":$_GET["username"]
+			"get":"json"
 		},
 		"dataType":"json",
 		"showLoading":true,
