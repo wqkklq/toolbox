@@ -278,8 +278,9 @@ function getUserData(dir,callback,errorCallback,hideLoading){
 	ajax({
 		"url":backend+"get",
 		"data":{
-			"url":"userdata/"+dir+"/"+login.username,
-			"username":"admin"
+			"token":login.token,
+			"url":dir,
+			"username":login.username
 		},
 		"dataType":"json",
 		"showLoading":!hideLoading,
