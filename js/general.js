@@ -31,19 +31,20 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2019/1/13").toLocaleDateString(),
+lastUpdated=new Date("2019/2/8").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
-	"password":localStorage.getItem("Password"),
+	"token":localStorage.getItem("Token"),
 	"username":localStorage.getItem("Username")
 },
 newBack=document.createElement("a"),
 newMask=document.createElement("div"),
 newTitle=document.createElement("h1"),
 recentInput=0,
-secondary="http://www.rthe.cn/",
+secondary="http://rthe.cn/",
 theme=localStorage.getItem("Theme"),
-ver="16.9"
+usBackend="https://server.rthsoftware.net/backend/",
+ver="16.10"
 var isAndroidApp=isAndroid&&isApp,
 isiOSApp=isApp&&isiOS,
 isMobile=isAndroid||isiOS,
@@ -134,9 +135,6 @@ function arrayContains(obj,array){
 }
 function backendChanged(){
 	isCNServer=backend==cnBackend
-	if(!isCNServer){
-		secondary="https://rthe.cn/"
-	}
 }
 function calc(code){
 	var abs=Math.abs,
@@ -216,7 +214,7 @@ function clearLocalStorage(){
 	if(login.username){
 		localStorage.setItem("Backend",backend)
 		localStorage.setItem("Email",login.email)
-		localStorage.setItem("Password",login.password)
+		localStorage.setItem("Token",login.token)
 		localStorage.setItem("Username",login.username)
 	}
 }
@@ -366,7 +364,14 @@ function loginDialog(){
 		newLoginButton=document.createElement("button"),
 		newDescriptionDiv=document.createElement("div"),
 		newCloseDiv=document.createElement("div")
-		var signUp=function(){
+		var closeSignUp=function(){
+			newH1.innerText=newLoginButton.innerText
+			newConfirmPasswordInput.style.display="none"
+			newSignUpButton.style.width=
+			newLoginButton.style.display=
+			newDescriptionDiv.style.display=""
+		},
+		signUp=function(){
 			if(newH1.innerText==newSignUpButton.innerText){
 				submitLogin()
 			}else{
@@ -396,7 +401,8 @@ function loginDialog(){
 					"url":"https://rthsoftware.cn/backend/userdata/verify",
 					"data":{
 						"email":email,
-						"password":password
+						"password":password,
+						"token":true
 					},
 					"dataType":"json",
 					"showLoading":true,
@@ -404,10 +410,10 @@ function loginDialog(){
 						newSignUpButton.onclick=signUp
 						newLoginButton.onclick=submitLogin
 						if(e.index){
-							if(e.pass){
+							if(e.token){
 								localStorage.setItem("Backend",e.backend)
-								localStorage.setItem("Email",email)
-								localStorage.setItem("Password",password)
+								localStorage.setItem("Email",e.email)
+								localStorage.setItem("Token",e.token)
 								localStorage.setItem("Username",e.username)
 								if(header){
 									location.reload()
@@ -443,15 +449,11 @@ function loginDialog(){
 										},
 										"method":"POST",
 										"success":function(){
-											localStorage.setItem("Backend",e.backend)
-											localStorage.setItem("Email",email)
-											localStorage.setItem("Password",password)
-											localStorage.setItem("Username",username)
-											if(header){
-												location.reload()
-											}else{
-												removeElement(document.getElementsByClassName("popup")[0])
-											}
+											showAlert([
+												"Signed up successfully",
+												"注册成功"
+											])
+											closeSignUp()
 										},
 										"error":error
 									})
@@ -508,11 +510,7 @@ function loginDialog(){
 			if(newH1.innerText==newLoginButton.innerText){
 				removeElement(newDiv)
 			}else{
-				newH1.innerText=newLoginButton.innerText
-				newConfirmPasswordInput.style.display="none"
-				newSignUpButton.style.width=
-				newLoginButton.style.display=
-				newDescriptionDiv.style.display=""
+				closeSignUp()
 			}
 		}
 		switch(language){
@@ -562,24 +560,12 @@ function loginRequired(callback,negativeCallback){
 	}
 }
 function logOut(){
-	login.email=
-	login.password=
-	login.username=null
-	localStorage.removeItem("Backend")
-	localStorage.removeItem("Email")
-	localStorage.removeItem("Password")
-	localStorage.removeItem("Username")
-	clearLocalStorage()
-	if(isApp||location.hostname=="rthsoftware.cn"){
-		location.reload()
-	}else{
-		var ssoIFrame=document.createElement("iframe")
-		ssoIFrame.style.display="none"
-		ssoIFrame.src="https://rthsoftware.cn/sso?"+encodeData({
-			"action":"logout"
-		})
-		document.body.appendChild(ssoIFrame)
-	}
+	var ssoIFrame=document.createElement("iframe")
+	ssoIFrame.style.display="none"
+	ssoIFrame.src="https://rthsoftware.cn/sso?"+encodeData({
+		"action":"logout"
+	})
+	document.body.appendChild(ssoIFrame)
 }
 function only(regExp,text){
 	var array=text.split(""),
@@ -1030,44 +1016,23 @@ if(!backend){
 }else{
 	backendChanged()
 }
-window.onerror=function(msg,url,lineNo){
-	if(msg&&url&&lineNo&&msg!="Script error."&&lineNo!=1){
-		var text=msg+" at "+url+" : "+lineNo
-		showToast(msg)
-		if(isApp||login.username){
-			window.onerror=null
-			ajax({
-				"url":"https://rthsoftware.cn/backend/feedback",
-				"data":{
-					"appname":appName,
-					"email":login.email,
-					"lang":language,
-					"name":login.username,
-					"text":text,
-					"ver":ver
-				},
-				"method":"POST",
-				"success":function(){
-					if(header){
-						clearLocalStorage()
-					}
-				}
-			})
-		}
-	}
-}
 addEventListener("message",function(e){
 	try{
 		login=JSON.parse(atob(e.data))
 		if(login.username===null){
+			login.email=
+			login.password=null
+			localStorage.removeItem("Backend")
+			localStorage.removeItem("Email")
+			localStorage.removeItem("Token")
+			localStorage.removeItem("Username")
+			clearLocalStorage()
 			location.reload()
 		}else{
 			localStorage.setItem("Backend",backend)
 			localStorage.setItem("Email",login.email)
+			localStorage.setItem("Token",login.token)
 			localStorage.setItem("Username",login.username)
-			if(login.password){
-				localStorage.setItem("Password",login.password)
-			}
 			removeElement(document.getElementsByClassName("popup")[0])
 		}
 	}catch(e){}
@@ -1163,19 +1128,19 @@ if(login.username){
 	ajax({
 		"url":"https://rthsoftware.cn/backend/userdata/verify",
 		"data":{
-			"email":login.email,
-			"password":login.password
+			"token":login.token,
+			"username":login.username
 		},
 		"dataType":"json",
 		"success":function(e){
-			if(e.pass){
+			if(e.token){
 				backend=e.backend
 				localStorage.setItem("Backend",backend)
 				backendChanged()
 			}else{
 				showAlert([
-					"Incorrect password",
-					"密码错误"
+					"Login session is expired",
+					"登录会话已过期"
 				])
 				logOut()
 			}

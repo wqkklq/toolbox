@@ -342,7 +342,9 @@ function getURL(){
 	}
 }
 function isEnabled(name){
-	return document.getElementById(name+"Switch").classList.contains("mui-active")
+	if(document.getElementById(name+"Switch")){
+		return document.getElementById(name+"Switch").classList.contains("mui-active")
+	}
 }
 function load(){
 	if(!savedWordList){
@@ -564,9 +566,9 @@ function loadQuestion(){
 		var optionIndex=0,optionStr=""
 		correctInt=Math.round(Math.random()*3)
 		var options=[wordIndex]
-		if(isEnabled("EnterWords")){
+		if(isEnabled("AnswerWords")){
 			optionStr=correctWord
-		}else if(isEnabled("EnterDefinitions")){
+		}else if(isEnabled("AnswerDefinitions")){
 			optionStr=correctDefinition
 		}
 		switch(correctInt){
@@ -587,9 +589,9 @@ function loadQuestion(){
 			if(arrayContains(optionIndex,options)||optionStr==null||optionIndex==0){
 				generateOption()
 			}else{
-				if(isEnabled("EnterWords")){
+				if(isEnabled("AnswerWords")){
 					optionStr=currentList[optionIndex-1].word
-				}else if(isEnabled("EnterDefinitions")){
+				}else if(isEnabled("AnswerDefinitions")){
 					optionStr=currentList[optionIndex-1].definition
 				}
 				options.push(optionIndex)
@@ -608,11 +610,7 @@ function loadQuestion(){
 			}
 		}
 	}
-	if(isEnabled("ShowWords")){
-		document.getElementById("Show").innerText=correctWord
-	}else if(isEnabled("ShowDefinitions")){
-		document.getElementById("Show").innerText=correctDefinition
-	}else{
+	if(isEnabled("SpeakWords")){
 		switch(language){
 			case "SimplifiedChinese":
 			document.getElementById("Show").innerText="没有可显示的内容"
@@ -620,8 +618,14 @@ function loadQuestion(){
 			default:
 			document.getElementById("Show").innerText="There is nothing to show"
 		}
+	}else if(isEnabled("AnswerDefinitions")){
+		document.getElementById("Show").innerText=correctWord
+	}else if(isEnabled("AnswerWords")){
+		document.getElementById("Show").innerText=correctDefinition
 	}
-	speakQuestion()
+	if(isEnabled("SpeakWords")){
+		speakQuestion()
+	}
 }
 function lookUp(word){
 	if(!word){
@@ -717,7 +721,7 @@ function next(){
 		}
 		if(!showAnswer&&!isEnabled("MultipleChoice")){
 			showAnswer=true
-			if(isEnabled("EnterWords")){
+			if(isEnabled("AnswerWords")){
 				if(document.getElementById("EnteredWord").value.toLowerCase().trim()==correctWord.toLowerCase()){
 					switch(language){
 						case "SimplifiedChinese":
@@ -737,7 +741,7 @@ function next(){
 					}
 				}
 			}
-			if(isEnabled("EnterDefinitions")){
+			if(isEnabled("AnswerDefinitions")){
 				if(document.getElementById("EnteredDefinition").value.toLowerCase().trim()==correctDefinition.toLowerCase()){
 					switch(language){
 						case "SimplifiedChinese":
@@ -795,22 +799,22 @@ function restartQuiz(){
 	loadQuestion()
 	if(isEnabled("MultipleChoice")){
 		document.getElementById("AnswerUl").style.display="block"
-		document.getElementById("EnterWordDiv").style.display="none"
-		document.getElementById("EnterDefinitionDiv").style.display="none"
+		document.getElementById("AnswerWordDiv").style.display="none"
+		document.getElementById("AnswerDefinitionDiv").style.display="none"
 	}else{
 		document.getElementById("AnswerUl").style.display=""
-		if(isEnabled("EnterWords")&&isEnabled("EnterDefinitions")){
-			document.getElementById("EnterWordDiv").style.display=""
-			document.getElementById("EnterDefinitionDiv").style.display=""
-		}else if(isEnabled("EnterWords")&&!isEnabled("EnterDefinitions")){
-			document.getElementById("EnterWordDiv").style.display=""
-			document.getElementById("EnterDefinitionDiv").style.display="none"
-		}else if(!isEnabled("EnterWords")&&isEnabled("EnterDefinitions")){
-			document.getElementById("EnterWordDiv").style.display="none"
-			document.getElementById("EnterDefinitionDiv").style.display=""
+		if(isEnabled("AnswerWords")&&isEnabled("AnswerDefinitions")){
+			document.getElementById("AnswerWordDiv").style.display=""
+			document.getElementById("AnswerDefinitionDiv").style.display=""
+		}else if(isEnabled("AnswerWords")&&!isEnabled("AnswerDefinitions")){
+			document.getElementById("AnswerWordDiv").style.display=""
+			document.getElementById("AnswerDefinitionDiv").style.display="none"
+		}else if(!isEnabled("AnswerWords")&&isEnabled("AnswerDefinitions")){
+			document.getElementById("AnswerWordDiv").style.display="none"
+			document.getElementById("AnswerDefinitionDiv").style.display=""
 		}else{
-			document.getElementById("EnterWordDiv").style.display="none"
-			document.getElementById("EnterDefinitionDiv").style.display="none"
+			document.getElementById("AnswerWordDiv").style.display="none"
+			document.getElementById("AnswerDefinitionDiv").style.display="none"
 		}
 	}
 	document.getElementById("NextButton").style.display=""
@@ -851,20 +855,7 @@ function save(callback,willReload,hideLoading){
 	})
 }
 function speakQuestion(){
-	var speakDef=isEnabled("SpeakDefinitions")
-	speakWord=isEnabled("SpeakWords")
-	if(speakWord&&!speakDef&&isEnglish.test(correctWord)){
-		speak(correctWord,document.getElementsByTagName("select")[0].value)
-	}else{
-		var speakText=""
-		if(speakWord){
-			speakText+=correctWord+"。"
-		}
-		if(speakDef){
-			speakText+=correctDefinition+"。"
-		}
-		speak(speakText.replace(/\n/g,"。"))
-	}
+	speak(correctWord,document.getElementsByTagName("select")[0].value)
 }
 function submit(callback,text,key1,key2,hideLoading){
 	savedWordList.time=new Date().getTime()
@@ -1060,7 +1051,7 @@ document.getElementById("CloseDocument").onclick=closeDoc
 document.getElementById("Share").onclick=function(){
 	save(function(){
 		ajax({
-			"url":backend+"userdata/domain/add",
+			"url":usBackend+"userdata/domain/add",
 			"data":{
 				"domain":getURL().domain,
 				"redirect":302,
@@ -1094,7 +1085,7 @@ document.getElementById("Delete").onclick=function(){
 		if(currentItem){
 			if(login.username){
 				ajax({
-					"url":backend+"userdata/domain/del",
+					"url":usBackend+"userdata/domain/del",
 					"data":{
 						"domain":getURL().domain,
 						"username":login.username
@@ -1125,7 +1116,7 @@ document.getElementById("FlashCard").onclick=function(){
 document.getElementById("EnteredWord").onkeydown=function(e){
 	if(e.keyCode==13){
 		if(this.value||e.ctrlKey||e.metaKey){
-			if(isEnabled("EnterDefinitions")){
+			if(isEnabled("AnswerDefinitions")){
 				document.getElementById("EnteredDefinition").focus()
 			}else{
 				next()
@@ -1137,7 +1128,7 @@ document.getElementById("EnteredDefinition").onkeydown=function(e){
 	if(e.keyCode==13){
 		if(this.value||e.ctrlKey||e.metaKey){
 			next()
-			if(!showAnswer&&isEnabled("EnterWords")){
+			if(!showAnswer&&isEnabled("AnswerWords")){
 				document.getElementById("EnteredWord").focus()
 			}
 		}
@@ -1166,10 +1157,12 @@ document.getElementById("Speak").onclick=speakQuestion
 if(savedQuizSettings){
 	for(var i=0;i<quizSettings.length;i++){
 		var name=quizSettings[i].id.replace("Switch","")
-		if(savedQuizSettings[name]&&!isEnabled(name)){
-			document.getElementById(name+"Switch").classList.add("mui-active")
-		}else if(!savedQuizSettings[name]&&isEnabled(name)){
-			document.getElementById(name+"Switch").classList.remove("mui-active")
+		if(document.getElementById(name+"Switch")){
+			if(savedQuizSettings[name]&&!isEnabled(name)){
+				document.getElementById(name+"Switch").classList.add("mui-active")
+			}else if(!savedQuizSettings[name]&&isEnabled(name)){
+				document.getElementById(name+"Switch").classList.remove("mui-active")
+			}
 		}
 	}
 }
@@ -1221,11 +1214,8 @@ switch(language){
 	document.getElementById("Speak").innerText="朗读"
 	document.getElementById("MultipleChoice").innerText="选择题"
 	document.getElementById("SpeakWords").innerText="朗读单词"
-	document.getElementById("SpeakDefinitions").innerText="朗读释义"
-	document.getElementById("EnterWords").innerText="输入单词"
-	document.getElementById("EnterDefinitions").innerText="输入释义"
-	document.getElementById("ShowWords").innerText="显示单词"
-	document.getElementById("ShowDefinitions").innerText="显示释义"
+	document.getElementById("AnswerWords").innerText="问单词"
+	document.getElementById("AnswerDefinitions").innerText="问释义"
 	mistakes={
 		"list":[],
 		"title":"错题"
@@ -1257,11 +1247,8 @@ switch(language){
 	document.getElementById("Speak").innerText="Speak"
 	document.getElementById("MultipleChoice").innerText="Multiple Choice"
 	document.getElementById("SpeakWords").innerText="Speak Words"
-	document.getElementById("SpeakDefinitions").innerText="Speak Definitions"
-	document.getElementById("EnterWords").innerText="Enter Words"
-	document.getElementById("EnterDefinitions").innerText="Enter Definitions"
-	document.getElementById("ShowWords").innerText="Show Words"
-	document.getElementById("ShowDefinitions").innerText="Show Definitions"
+	document.getElementById("AnswerWords").innerText="Answer Words"
+	document.getElementById("AnswerDefinitions").innerText="Answer Definitions"
 	mistakes={
 		"list":[],
 		"title":"Mistakes"

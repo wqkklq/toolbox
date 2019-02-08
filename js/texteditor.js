@@ -80,7 +80,7 @@ function generateWebPage(edit){
 		encrypt=false
 		save(function(){
 			ajax({
-				"url":backend+"userdata/domain/add",
+				"url":usBackend+"userdata/domain/add",
 				"data":{
 					"domain":getURL().domain,
 					"redirect":302,
@@ -413,7 +413,7 @@ function submit(callback,text,key1,key2){
 		postData["url"]=getURL().short
 	}
 	ajax({
-		"url":backend+"userdata/upload",
+		"url":usBackend+"userdata/upload",
 		"data":postData,
 		"method":"POST",
 		"showLoading":true,
@@ -500,7 +500,7 @@ document.getElementById("GetSource").onclick=function(){
 				url="http://"+url
 			}
 			ajax({
-				"url":backend+"get",
+				"url":usBackend+"get",
 				"data":{
 					"url":url,
 					"username":login.username
@@ -606,7 +606,7 @@ document.getElementById("Delete").onclick=function(){
 				submit(reload)
 			}else{
 				ajax({
-					"url":backend+"userdata/domain/del",
+					"url":usBackend+"userdata/domain/del",
 					"data":{
 						"domain":getURL().domain,
 						"username":login.username
@@ -709,7 +709,7 @@ if($_GET["index"]&&$_GET["username"]){
 		openWindow("index")
 	}
 	ajax({
-		"url":backend+"getpage",
+		"url":usBackend+"getpage",
 		"data":{
 			"index":$_GET["index"],
 			"username":$_GET["username"]

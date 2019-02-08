@@ -44,7 +44,6 @@ document.getElementById("ChangePassword").onclick=function(){
 							"再次输入新密码"
 						],function(confirmPassword){
 							if(confirmPassword==newPassword){
-								localStorage.setItem("Password",MD5(newPassword))
 								ajax({
 									"url":backend+"reset",
 									"data":{
@@ -159,47 +158,6 @@ document.getElementById("ChangeEmail").onclick=function(){
 		})
 	},"password")
 }
-document.getElementById("DeleteAccount").onclick=function(){
-	showConfirm([
-		"This will delete all your data on the server",
-		"此操作将在服务器上删除您的所有数据"
-	],function(){
-		showPrompt([
-			"Enter your current password",
-			"输入您的当前密码"
-		],function(e){
-			ajax({
-				"url":backend+"userdata/verify",
-				"data":{
-					"email":login.email,
-					"password":MD5(e)
-				},
-				"dataType":"json",
-				"showLoading":true,
-				"success":function(verifyResult){
-					if(verifyResult.pass){
-						ajax({
-							"url":backend+"userdata/remove",
-							"data":{
-								"index":verifyResult.index,
-								"username":login.username
-							},
-							"method":"POST",
-							"success":logOut,
-							"error":error
-						})
-					}else{
-						showAlert([
-							"Incorrect password",
-							"密码错误"
-						])
-					}
-				},
-				"error":error
-			})
-		},"password")
-	})
-}
 document.getElementById("LogOut").onclick=logOut
 document.getElementById("ClearLocalStorage").onclick=function(){
 	showConfirm([
@@ -230,7 +188,6 @@ switch(language){
 	document.getElementById("Login").innerText="登录"
 	document.getElementById("ChangePassword").innerText="更改密码"
 	document.getElementById("ChangeEmail").innerText="更改电子邮箱"
-	document.getElementById("DeleteAccount").innerText="删除账号"
 	document.getElementById("LogOut").innerText="退出登录"
 	document.getElementById("ClearLocalStorage").innerText="清空本地存储"
 	document.getElementById("Introduction").innerText="您可以在 https://rthsoftware.cn/ 查看您保存的单词表和文本文档。"
@@ -248,7 +205,6 @@ switch(language){
 	document.getElementById("Login").innerText="Login"
 	document.getElementById("ChangePassword").innerText="Change Password"
 	document.getElementById("ChangeEmail").innerText="Change Email"
-	document.getElementById("DeleteAccount").innerText="Delete Account"
 	document.getElementById("LogOut").innerText="Log Out"
 	document.getElementById("ClearLocalStorage").innerText="Clear Local Storage"
 	document.getElementById("Introduction").innerText="You can view your saved word lists and text documents at https://rthsoftware.cn/."
