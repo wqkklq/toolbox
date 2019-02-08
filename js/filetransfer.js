@@ -62,7 +62,7 @@ function load(){
 							"onclick":function(){
 								showPrompt(null,function(){
 									openWebPage(secondary+code)
-								},null,"http://rthe.cn/"+code)
+								},null,secondary+code)
 								closeMenu()
 							},
 							"text":[
@@ -167,12 +167,12 @@ document.getElementById("OpenFile").onchange=function(input){
 			newNumDiv.classList.add("number")
 			newNumDiv.innerText=code
 			newQRCodeButton.onclick=function(){
-				showQRCode("http://rthe.cn/"+code)
+				showQRCode(secondary+code)
 			}
 			newLinkButton.onclick=function(){
 				showPrompt(null,function(){
 					openWebPage(secondary+code)
-				},null,"http://rthe.cn/"+code)
+				},null,secondary+code)
 			}
 			newCloseDiv.classList.add("close")
 			newCloseDiv.innerText="×"

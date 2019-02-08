@@ -1,10 +1,9 @@
 /*Code written by Shangzhen Yang*/
 var defaultShortURL,
-myURL=localStorage.getItem("MyURL"),
-shortURL="http://rthe.cn/"
+myURL=localStorage.getItem("MyURL")
 function load(){
 	defaultShortURL=Math.round(new Date().getTime()/1000*Math.random()).toString(36)
-	document.getElementById("ShortURLInput").value=shortURL+defaultShortURL
+	document.getElementById("ShortURLInput").value=secondary+defaultShortURL
 	document.getElementById("OriginalURLInput").value=""
 	if(login.username){
 		ajax({
@@ -38,7 +37,7 @@ function loadMyURL(){
 				"onclick":function(){
 					showPrompt(null,function(){
 						openWebPage(decodeURI(url))
-					},"url",shortURL+decodeURIComponent(myURL[index].name))
+					},"url",secondary+decodeURIComponent(myURL[index].name))
 					closeMenu()
 				},
 				"text":[
@@ -148,9 +147,9 @@ document.getElementsByTagName("button")[0].onclick=function(){
 				document.getElementById("ShortURLInput").value=document.getElementById("ShortURLInput").value.replace("https:","http:")
 			}
 			var value=document.getElementById("ShortURLInput").value
-			if(value.substr(0,shortURL.length)==shortURL){
+			if(value.substr(0,secondary.length)==secondary){
 				var originalURL=document.getElementById("OriginalURLInput").value
-				value=encodeURIComponent(value.replace(shortURL,""))
+				value=encodeURIComponent(value.replace(secondary,""))
 				if(originalURL.indexOf("rthe.cn")!=-1){
 					showAlert([
 						"Short URLs cannot be the original URL",
@@ -184,7 +183,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 								value=decodeURIComponent(value)
 								showPrompt(null,function(){
 									openWebPage(secondary+value)
-								},"url",shortURL+value)
+								},"url",secondary+value)
 								closeMenu()
 							}else{
 								var extraInfo=""
@@ -214,8 +213,8 @@ document.getElementsByTagName("button")[0].onclick=function(){
 				}
 			}else{
 				showAlert([
-					"The short URL must begin with "+shortURL,
-					"短网址必须以 "+shortURL+" 开头"
+					"The short URL must begin with "+secondary,
+					"短网址必须以 "+secondary+" 开头"
 				])
 				if(value.indexOf("://")!=-1){
 					value=value.split("://")[1]
@@ -228,7 +227,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 						value=valueSplit[0]
 					}
 				}
-				document.getElementById("ShortURLInput").value=shortURL+value
+				document.getElementById("ShortURLInput").value=secondary+value
 			}
 		}else{
 			showAlert([

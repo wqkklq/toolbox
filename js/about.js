@@ -1,6 +1,6 @@
 /*Code written by Shangzhen Yang*/
 document.getElementById("PrivacyPolicy").onclick=function(){
-	openWebPage("https://www.rthe.cn/privacy")
+	openWebPage("https://rthe.cn/privacy")
 }
 document.getElementById("Feedback").onclick=function(){
 	openWindow("feedback")
