@@ -84,7 +84,8 @@ function generateWebPage(edit){
 				"data":{
 					"domain":getURL().domain,
 					"redirect":302,
-					"to":"text/"+login.username+"/"+getURL().index,
+					"to":"text/"+login.username+"/"+getIndex(),
+					"token":login.token,
 					"username":login.username
 				},
 				"method":"POST",
@@ -112,22 +113,22 @@ function generateWebPage(edit){
 		})
 	}
 }
+function getIndex(){
+	if(savedText.text[currentItem-1].created){
+		return savedText.text[currentItem-1].created
+	}else{
+		return currentItem
+	}
+}
 function getURL(){
 	if(currentItem&&savedText.text[currentItem-1]&&!savedText.text[currentItem-1].encrypt){
-		var index=(function(){
-			if(savedText.text[currentItem-1].created){
-				return savedText.text[currentItem-1].created
-			}else{
-				return currentItem
-			}
-		})(),
+		var index=getIndex(),
 		short=encodeURIComponent(document.getElementsByTagName("input")[0].value.replace(/:|\//g,""))
 		if(!short){
 			short=MD5(login.username+index).substr(0,6)
 		}
 		return{
 			"domain":short,
-			"index":index,
 			"original":secondary+login.username+"/"+index,
 			"short":secondary+short
 		}
@@ -343,7 +344,7 @@ function save(callback){
 					callback()
 				}
 				applyItem(currentItem)
-			},JSON.stringify(savedText.text[currentItem-1]),"text",currentItem)
+			},JSON.stringify(savedText.text[currentItem-1]),getIndex())
 		}else{
 			try{
 				if(savedText.text[0]){
@@ -392,7 +393,7 @@ function setText(text,noScrolling){
 	}
 	count()
 }
-function submit(callback,text,key1,key2){
+function submit(callback,text,key){
 	savedText.time=new Date().getTime()
 	localStorage.setItem("SavedText",JSON.stringify(savedText))
 	var postData={
@@ -401,12 +402,9 @@ function submit(callback,text,key1,key2){
 		"token":login.token,
 		"username":login.username
 	}
-	if(key1){
-		postData["key1"]=key1
-		if(key2){
-			postData["key2"]=key2
-		}
-		postData.text=text
+	if(key){
+		postData["key"]=key
+		postData["text"]=text
 		postData["time"]=savedText.time
 	}
 	if(getURL()){
@@ -609,6 +607,7 @@ document.getElementById("Delete").onclick=function(){
 					"url":usBackend+"userdata/domain/del",
 					"data":{
 						"domain":getURL().domain,
+						"token":login.token,
 						"username":login.username
 					},
 					"method":"POST",

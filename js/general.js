@@ -31,7 +31,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2019/2/8").toLocaleDateString(),
+lastUpdated=new Date("2019/2/10").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"token":localStorage.getItem("Token"),

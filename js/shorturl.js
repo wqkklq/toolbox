@@ -10,6 +10,7 @@ function load(){
 			"url":usBackend+"userdata/domain/get",
 			"data":{
 				"shorturl":true,
+				"token":login.token,
 				"username":login.username
 			},
 			"dataType":"json",
@@ -75,8 +76,7 @@ function loadMyURL(){
 								"url":usBackend+"userdata/upload",
 								"data":{
 									"dir":"domain/",
-									"key1":myURL[index].name,
-									"key2":"to",
+									"key":myURL[index].name,
 									"text":e,
 									"token":login.token,
 									"username":login.username
@@ -110,6 +110,7 @@ function loadMyURL(){
 							"url":usBackend+"userdata/domain/del",
 							"data":{
 								"domain":myURL[index].name,
+								"token":login.token,
 								"username":login.username
 							},
 							"method":"POST",
@@ -172,6 +173,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 							"domain":value,
 							"redirect":302,
 							"to":originalURL,
+							"token":login.token,
 							"username":login.username
 						},
 						"method":"POST",

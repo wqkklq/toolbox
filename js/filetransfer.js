@@ -9,12 +9,26 @@ function downloadFile(code){
 		ajax({
 			"url":backend+"userdata/file/getinfo",
 			"data":{
-				"code":code
+				"code":code,
+				"username":function(){
+					if(login.username){
+						return login.username
+					}else{
+						return "null"
+					}
+				}()
 			},
 			"dataType":"json",
 			"showLoading":true,
 			"success":function(e){
-				openWebPage(e.download,true)
+				if(e.download===false){
+					showAlert([
+						"You do not have permission to download this file",
+						"您没有下载此文件的权限"
+					])
+				}else{
+					openWebPage(e.download,true)
+				}
 			},
 			"error":function(e){
 				if(e.status==200){
@@ -331,4 +345,6 @@ switch(language){
 newTitle.innerText=document.title
 if(login.username){
 	load()
+}else{
+	loginDialog()
 }

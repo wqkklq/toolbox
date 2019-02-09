@@ -316,15 +316,16 @@ function generateOrder(){
 		generateOrder()
 	}
 }
+function getIndex(){
+	if(savedWordList.list[currentItem-1].created){
+		return savedWordList.list[currentItem-1].created
+	}else{
+		return currentItem
+	}
+}
 function getURL(){
 	if(currentItem&&savedWordList.list[currentItem-1]&&!savedWordList.list[currentItem-1].encrypt){
-		var index=(function(){
-			if(savedWordList.list[currentItem-1].created){
-				return savedWordList.list[currentItem-1].created
-			}else{
-				return currentItem
-			}
-		})(),
+		var index=getIndex(),
 		short=encodeURIComponent(document.getElementById("TitleInput").value.replace(/:|\//g,""))
 		if(!short){
 			short=MD5(login.username+index).substr(0,6)
@@ -827,7 +828,7 @@ function save(callback,willReload,hideLoading){
 					callback()
 				}
 				applyItem(currentItem,null,willReload)
-			},JSON.stringify(savedWordList.list[currentItem-1]),"list",currentItem,hideLoading)
+			},JSON.stringify(savedWordList.list[currentItem-1]),getIndex(),hideLoading)
 		}else{
 			if(savedWordList.list[0]){
 				savedWordList.list.push({
@@ -848,14 +849,14 @@ function save(callback,willReload,hideLoading){
 					callback()
 				}
 				applyItem(currentItem,null,willReload)
-			},null,null,null,hideLoading)
+			},null,null,hideLoading)
 		}
 	})
 }
 function speakQuestion(){
 	speak(correctWord,document.getElementsByTagName("select")[0].value)
 }
-function submit(callback,text,key1,key2,hideLoading){
+function submit(callback,text,key,hideLoading){
 	savedWordList.time=new Date().getTime()
 	localStorage.setItem("SavedWordList",JSON.stringify(savedWordList))
 	var postData={
@@ -864,12 +865,9 @@ function submit(callback,text,key1,key2,hideLoading){
 		"token":login.token,
 		"username":login.username
 	}
-	if(key1){
-		postData["key1"]=key1
-		if(key2){
-			postData["key2"]=key2
-		}
-		postData.text=text
+	if(key){
+		postData["key"]=key
+		postData["text"]=text
 		postData["time"]=savedWordList.time
 	}
 	ajax({
@@ -979,7 +977,19 @@ document.getElementById("SharingSettings").onclick=function(){
 			}else{
 				savedWordList.sharing=false
 			}
-			submit(reload,savedWordList.sharing,"sharing")
+			ajax({
+				"url":backend+"userdata/set",
+				"data":{
+					"appname":"wordlist",
+					"key":"share",
+					"token":login.token,
+					"username":login.username,
+					"value":savedWordList.sharing.toString()
+				},
+				"method":"POST",
+				"success":reload,
+				"error":error
+			})
 			newDiv.style.opacity=""
 			setTimeout(function(){
 				document.body.removeChild(newDiv)
@@ -1054,6 +1064,7 @@ document.getElementById("Share").onclick=function(){
 				"domain":getURL().domain,
 				"redirect":302,
 				"to":getURL().original,
+				"token":login.token,
 				"username":login.username
 			},
 			"method":"POST",
@@ -1086,6 +1097,7 @@ document.getElementById("Delete").onclick=function(){
 					"url":usBackend+"userdata/domain/del",
 					"data":{
 						"domain":getURL().domain,
+						"token":login.token,
 						"username":login.username
 					},
 					"method":"POST",
