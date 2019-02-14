@@ -56,7 +56,7 @@ function displayDateCountdown(){
 function getSentence(manual){
 	loadSentence()
 	ajax({
-		"url":"https://rthsoftware.cn/backend/rs/",
+		"url":"https://cdn.rthsoftware.cn/backend/rs/",
 		"data":{
 			"encode":"text",
 			"language":(function(){

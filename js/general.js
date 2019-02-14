@@ -14,7 +14,7 @@ var $_GET=(function(){
 appliedTheme,
 appName="RTH Toolbox",
 backend=localStorage.getItem("Backend"),
-cnBackend="https://www.rthsoftware.cn/backend/",
+cnBackend="https://server.rthsoftware.cn/backend/",
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
 isApp=!!window.cordova,
@@ -31,7 +31,7 @@ isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
 language=localStorage.getItem("Language"),
-lastUpdated=new Date("2019/2/10").toLocaleDateString(),
+lastUpdated=new Date("2019/2/14").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"token":localStorage.getItem("Token"),
@@ -44,7 +44,7 @@ recentInput=0,
 secondary="http://rthe.cn/",
 theme=localStorage.getItem("Theme"),
 usBackend="https://server.rthsoftware.net/backend/",
-ver="16.10"
+ver="16.11"
 var isAndroidApp=isAndroid&&isApp,
 isiOSApp=isApp&&isiOS,
 isMobile=isAndroid||isiOS,
@@ -271,7 +271,7 @@ function encryptText(text,password){
 function error(e){
 	showAlert([
 		"Unable to connect to the server ("+e.status+")",
-		"无法连接服务器 ("+e.status+")"
+		"无法连接到服务器 ("+e.status+")"
 	])
 }
 function getUserData(dir,callback,errorCallback,hideLoading){
@@ -399,7 +399,7 @@ function loginDialog(){
 				newSignUpButton.onclick=
 				newLoginButton.onclick=null
 				ajax({
-					"url":"https://rthsoftware.cn/backend/userdata/verify",
+					"url":"https://cdn.rthsoftware.cn/backend/userdata/verify",
 					"data":{
 						"email":email,
 						"password":password,
@@ -442,7 +442,7 @@ function loginDialog(){
 								}else{
 									var username=email.split("@")[0]+new Date().getTime().toString(36)
 									ajax({
-										"url":"https://rthsoftware.cn/backend/userdata/signup",
+										"url":"https://cdn.rthsoftware.cn/backend/userdata/signup",
 										"data":{
 											"email":email,
 											"password":password,
@@ -742,7 +742,7 @@ function showImage(src){
 				"Unable to save this image",
 				"无法保存此图片"
 			])
-		}else if(src.indexOf("https://rthsoftware.cn/backend/get")!=-1){
+		}else if(src.indexOf("https://cdn.rthsoftware.cn/backend/get")!=-1){
 			openWebPage(searchURL("url",src))
 		}else{
 			openWebPage(src)
@@ -878,7 +878,7 @@ function showPrompt(text,callback,type,defaultText,emptyCallback,closeFunc,onInp
 	},25)
 }
 function showQRCode(text){
-	showImage("https://rthsoftware.cn/backend/get?"+encodeData({
+	showImage("https://cdn.rthsoftware.cn/backend/get?"+encodeData({
 		"url":"http://qr.topscan.com/api.php?"+encodeData({
 			"text":text
 		}),
@@ -956,7 +956,7 @@ function speak(text,lan){
 			"Loading audio",
 			"正在加载音频"
 		])
-		var audio=new Audio("https://www.rthsoftware.cn/backend/get?"+encodeData({
+		var audio=new Audio("https://cdn.rthsoftware.cn/backend/get?"+encodeData({
 			"url":"https://fanyi.baidu.com/gettts?lan="+lan+"&spd=6&text="+text,
 			"username":"admin"
 		}))
@@ -1016,7 +1016,7 @@ function translate(query,from,to,callback,negativeCallback){
 	})
 }
 if(!backend){
-	backend="https://rthsoftware.cn/backend/"
+	backend="https://cdn.rthsoftware.cn/backend/"
 }else{
 	backendChanged()
 }
@@ -1117,7 +1117,7 @@ if(appliedTheme=="Bing"){
 	}
 	if(!savedBingWallpaper||!header){
 		ajax({
-			"url":"https://rthsoftware.cn/backend/bing/base64",
+			"url":"https://cdn.rthsoftware.cn/backend/bing/base64",
 			"success":function(e){
 				savedBingWallpaper="url("+e+")"
 				localStorage.setItem("bing-wallpaper",savedBingWallpaper)
@@ -1130,7 +1130,7 @@ if(appliedTheme=="Bing"){
 }
 if(login.username){
 	ajax({
-		"url":"https://rthsoftware.cn/backend/userdata/verify",
+		"url":"https://cdn.rthsoftware.cn/backend/userdata/verify",
 		"data":{
 			"token":login.token,
 			"username":login.username
@@ -1221,7 +1221,7 @@ if(!isApp&&(location.hostname=="rthsoftware.cn"||location.hostname=="localhost")
 }
 var newScript=document.createElement("script")
 newScript.async=true
-newScript.src="https://rthsoftware.cn/backend/code?"+encodeData({
+newScript.src="https://cdn.rthsoftware.cn/backend/code?"+encodeData({
 	"app":isApp,
 	"appname":appName,
 	"filename":(function(){
@@ -1236,4 +1236,11 @@ newScript.src="https://rthsoftware.cn/backend/code?"+encodeData({
 	"username":login.username,
 	"ver":ver
 })
+newScript.onerror=function(){
+	document.body.innerHTML="";
+	showAlert([
+		"Unable to connect to the server",
+		"无法连接到服务器"
+	])
+}
 document.body.appendChild(newScript)

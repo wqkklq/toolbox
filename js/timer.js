@@ -134,7 +134,7 @@ function task(){
 				}catch(e){}
 			}else if(isApp){
 				if(isAndroid){
-					openWebPage("https://rthsoftware.cn/backend/alert?"+encodeData({
+					openWebPage("https://cdn.rthsoftware.cn/backend/alert?"+encodeData({
 						"text":document.getElementById("CreateMessageBoxInput").value,
 						"title":document.title
 					}))

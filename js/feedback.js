@@ -11,7 +11,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 		document.getElementsByTagName("textarea")[0].classList.add("warning")
 	}else{
 		ajax({
-			"url":"https://rthsoftware.cn/backend/feedback",
+			"url":"https://cdn.rthsoftware.cn/backend/feedback",
 			"data":{
 				"appname":appName,
 				"email":document.getElementById("Email").value,
