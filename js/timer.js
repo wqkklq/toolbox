@@ -122,13 +122,13 @@ function task(){
 						navigator.serviceWorker.ready.then(function(registration){
 							registration.showNotification(document.title,{
 								body:document.getElementById("CreateMessageBoxInput").value,
-								icon:"../img/icon.png"
+								icon:"https://cdn.rthsoftware.cn/img/icon.png"
 							})
 						})
 					}else{
 						new Notification(document.title,{
 							body:document.getElementById("CreateMessageBoxInput").value,
-							icon:"../img/icon.png"
+							icon:"https://cdn.rthsoftware.cn/img/icon.png"
 						})
 					}
 				}catch(e){}

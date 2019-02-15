@@ -19,13 +19,13 @@ document.getElementById("Donate").onclick=function(){
 	}
 }
 document.getElementById("Alipay").onclick=function(){
-	showImage("https://rthsoftware.cn/img/alipay.jpg")
+	showImage("https://cdn.rthsoftware.cn/img/alipay.jpg")
 }
 document.getElementById("WeChatPay").onclick=function(){
-	showImage("https://rthsoftware.cn/img/wechatpay.jpg")
+	showImage("https://cdn.rthsoftware.cn/img/wechatpay.jpg")
 }
 document.getElementById("QQWallet").onclick=function(){
-	showImage("https://rthsoftware.cn/img/qqwallet.jpg")
+	showImage("https://cdn.rthsoftware.cn/img/qqwallet.jpg")
 }
 document.getElementById("PayPal").onclick=function(){
 	openWebPage("https://www.paypal.me/ShangzhenY/")

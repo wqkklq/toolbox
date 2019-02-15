@@ -2,11 +2,11 @@
 	"name":"RTH Toolbox",
 	"short_name":"Toolbox",
 	"icons":[{
-		"src":"../img/icon_192.png",
+		"src":"https://cdn.rthsoftware.cn/img/icon_192.png",
 		"type":"image/png",
 		"sizes":"192x192"
 	},{
-		"src":"../img/icon.png",
+		"src":"https://cdn.rthsoftware.cn/img/icon.png",
 		"type":"image/png",
 		"sizes":"512x512"
 	}],
