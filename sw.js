@@ -1,4 +1,4 @@
-const currentCache="toolbox-16.11-02141913",
+const currentCache="toolbox-16.11-02141919",
 toolbox="/toolbox/"
 const toolboxCSS=toolbox+"css/",
 toolboxJS=toolbox+"js/"
@@ -99,17 +99,21 @@ self.addEventListener("install",e=>{
 	}))
 })
 self.addEventListener("fetch",e=>{
-	e.respondWith(fetch(e.request).catch(()=>{
-		caches.match(e.request).then(response=>{
-			if(response){
-				return response
-			}else{
-				return new Response(null,{
-					"status":502,
-					"statusText":"Bad Gateway"
-				})
-			}
-		})
+	e.respondWith(caches.match(e.request).then(response=>{
+		if(response){
+			return response
+		}else{
+			return fetch(e.request).catch(()=>{})
+		}
+	}).then(data=>{
+		if(data){
+			return data
+		}else{
+			return new Response(null,{
+				"status":502,
+				"statusText":"Bad Gateway"
+			})
+		}
 	}))
 })
 self.addEventListener("activate",e=>{

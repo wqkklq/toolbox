@@ -1236,11 +1236,4 @@ newScript.src="https://cdn.rthsoftware.cn/backend/code?"+encodeData({
 	"username":login.username,
 	"ver":ver
 })
-newScript.onerror=function(){
-	document.body.innerHTML="";
-	showAlert([
-		"Unable to connect to the server",
-		"无法连接到服务器"
-	])
-}
 document.body.appendChild(newScript)
