@@ -96,7 +96,7 @@ function getToolbox(){
 			"请在浏览器中打开此页面"
 		])
 	}else if(isAndroid){
-		if(navigator.language=="zh-CN"&&isCNServer==null||isCNServer){
+		if(navigator.language=="zh-CN"){
 			url="https://www.coolapk.com/apk/163867"
 		}else{
 			url="https://play.google.com/store/apps/details?"+encodeData({
@@ -104,7 +104,11 @@ function getToolbox(){
 			})
 		}
 	}else if(isiOS){
-		url="https://itunes.apple.com/app/rth-toolbox/id1294479577"
+		showAlert([
+			"You can add this web page to the home screen",
+			"您可以将此网页添加到主屏幕"
+		])
+		location.href="https://rthsoftware.cn/toolbox/"
 	}else{
 		showQRCode("https://rthsoftware.cn/toolbox/?"+encodeData({
 			"action":"dl"

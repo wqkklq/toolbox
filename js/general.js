@@ -14,12 +14,10 @@ var $_GET=(function(){
 appliedTheme,
 appName="RTH Toolbox",
 backend=localStorage.getItem("Backend"),
-cnBackend="https://server.rthsoftware.cn/backend/",
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
 isApp=!!window.cordova,
 isChinese=/[\u4E00-\u9FA5]+/,
-isCNServer,
 isEnglish=/[A-Za-z]+/,
 isiOS=/iPhone|iPad/i.test(navigator.userAgent),
 isLinux=/Linux/i.test(navigator.userAgent),
@@ -132,9 +130,6 @@ function arrayContains(obj,array){
 		}
 	}
 	return false
-}
-function backendChanged(){
-	isCNServer=backend==cnBackend
 }
 function calc(code){
 	var abs=Math.abs,

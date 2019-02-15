@@ -1271,7 +1271,7 @@ if(!dictCache){
 for(var i=0;i<langOpt.length;i++){
 	document.getElementsByTagName("select")[0].options.add(new Option(langOpt[i][0],langOpt[i][1]))
 }
-if(language=="English"&&!isCNServer){
+if(language=="English"){
 	document.getElementsByTagName("select")[0].value="spa"
 }else{
 	document.getElementsByTagName("select")[0].value="en"
