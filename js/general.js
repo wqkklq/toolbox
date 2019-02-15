@@ -1012,8 +1012,6 @@ function translate(query,from,to,callback,negativeCallback){
 }
 if(!backend){
 	backend="https://cdn.rthsoftware.cn/backend/"
-}else{
-	backendChanged()
 }
 addEventListener("message",function(e){
 	try{
@@ -1135,7 +1133,6 @@ if(login.username){
 			if(e.token){
 				backend=e.backend
 				localStorage.setItem("Backend",backend)
-				backendChanged()
 			}else{
 				showAlert([
 					"Login session is expired",
