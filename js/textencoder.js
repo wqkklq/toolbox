@@ -2,14 +2,14 @@
 var hist=[],
 MD5Hist={}
 function add(text,saved,title){
-	if((function(){
+	if(function(){
 		for(var i=0;i<hist.length;i++){
 			if(hist[i]==text){
 				return false
 			}
 		}
 		return true
-	})()){
+	}()){
 		hist.push(text)
 		if(!document.getElementsByTagName("ul")[0].style.display){
 			document.getElementsByTagName("ul")[0].style.display="block"

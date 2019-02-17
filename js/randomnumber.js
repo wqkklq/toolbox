@@ -115,7 +115,7 @@ function random(){
 	if(savedNames.names.length>0){
 		nameValue=savedNames.names[randomNumValue-1]
 	}
-	if((function(){
+	if(function(){
 		if(document.getElementById("OddNumberOnlyCheck").checked&randomNumValue%2==0||document.getElementById("EvenNumberOnlyCheck").checked&&randomNumValue%2!=0){
 			return true
 		}else if(historyArray.length>0&&!document.getElementById("DuplicatesCheck").checked){
@@ -145,7 +145,7 @@ function random(){
 		}else{
 			return false
 		}
-	})()){
+	}()){
 		try{
 			random()
 		}catch(e){}

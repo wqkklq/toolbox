@@ -1,6 +1,6 @@
 /*Code written by Shangzhen Yang*/
 var currentList,
-dictCache=JSON.parse(localStorage.getItem("DictCache")),
+dictCache=JSON.parse(localStorage.getItem("DictCache"))||{},
 openedWordList=localStorage.getItem("WordList"),
 progress=1,
 showingDefinition
@@ -163,9 +163,6 @@ switch(language){
 	document.getElementById("ShowDefinition").innerText="Show Definition"
 	document.getElementById("Previous").innerText="Previous"
 	document.getElementById("Next").innerText="Next"
-}
-if(!dictCache){
-	dictCache={}
 }
 if(!$_GET["word"]&&openedWordList){
 	window.onkeydown=function(e){

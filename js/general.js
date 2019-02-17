@@ -11,12 +11,11 @@ var $_GET=(function(){
 	}
 	return json
 })(),
-appliedTheme,
 appName="RTH Toolbox",
-backend=localStorage.getItem("Backend"),
+backend=localStorage.getItem("Backend")||"https://cdn.rthsoftware.cn/backend/",
 header=document.getElementsByTagName("header")[0],
 isAndroid=/Android/i.test(navigator.userAgent),
-isApp=!!window.cordova,
+isApp=!!window.cordova||document.body.classList.add("browser"),
 isChinese=/[\u4E00-\u9FA5]+/,
 isEnglish=/[A-Za-z]+/,
 isiOS=/iPhone|iPad/i.test(navigator.userAgent),
@@ -28,8 +27,14 @@ isUpperCase=/[A-Z]+/,
 isWeChat=/MicroMessenger\//i.test(navigator.userAgent),
 isWindows=/Windows/i.test(navigator.userAgent),
 langOpt,
-language=localStorage.getItem("Language"),
-lastUpdated=new Date("2019/2/15").toLocaleDateString(),
+language=localStorage.getItem("Language")||function(){
+	if(navigator.language.indexOf("zh")!=-1){
+		return "SimplifiedChinese"
+	}else{
+		return "English"
+	}
+}(),
+lastUpdated=new Date("2019/2/17").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"token":localStorage.getItem("Token"),
@@ -40,11 +45,22 @@ newMask=document.createElement("div"),
 newTitle=document.createElement("h1"),
 recentInput=0,
 secondary="http://rthe.cn/",
-theme=localStorage.getItem("Theme"),
+theme=localStorage.getItem("Theme")||"Light",
 usBackend="https://server.rthsoftware.net/backend/",
 ver="16.11"
-var isAndroidApp=isAndroid&&isApp,
-isiOSApp=isApp&&isiOS,
+var appliedTheme=function(){
+	if(theme=="Automatic"){
+		var currentHour=new Date().getHours()
+		if(currentHour>=21||currentHour<=6){
+			return "Dark"
+		}else{
+			return "Light"
+		}
+	}else{
+		return theme
+	}
+}(),
+isAndroidApp=isAndroid&&isApp,
 isMobile=isAndroid||isiOS,
 isTencent=isQQ||isWeChat
 function addZero(num,length){
@@ -591,8 +607,6 @@ function openWebPage(url,avoidPopup,sso){
 	}
 	if(avoidPopup&&!isApp){
 		location.href=url
-	}else if(isiOSApp){
-		OpenUrlExt.open(url)
 	}else{
 		open(url)
 	}
@@ -1010,9 +1024,6 @@ function translate(query,from,to,callback,negativeCallback){
 		}
 	})
 }
-if(!backend){
-	backend="https://cdn.rthsoftware.cn/backend/"
-}
 addEventListener("message",function(e){
 	try{
 		login=JSON.parse(atob(e.data))
@@ -1034,32 +1045,40 @@ addEventListener("message",function(e){
 		}
 	}catch(e){}
 })
-if(!language){
-	if(navigator.language.indexOf("zh")!=-1){
-		language="SimplifiedChinese"
-	}else{
-		language="English"
-	}
-	localStorage.setItem("Language",language)
-}
-if(!theme){
-	theme="Light"
-}
-if(theme=="Automatic"){
-	var currentHour=new Date().getHours()
-	if(currentHour>=21||currentHour<=6){
-		appliedTheme="Dark"
-	}else{
-		appliedTheme="Light"
-	}
-}else{
-	appliedTheme=theme
-}
-if(appliedTheme=="Bing"){
-	loadCSS("css/dark.css")
-}
 if(appliedTheme!="Light"){
+	if(appliedTheme=="Bing"){
+		loadCSS("css/dark.css")
+		var savedBingWallpaper
+		var loadWallpaper=function(){
+			if(header){
+				header.style.backgroundImage=savedBingWallpaper
+			}else if(document.getElementsByClassName("bg-img")[0]){
+				document.getElementsByClassName("bg-img")[0].style.backgroundImage=savedBingWallpaper
+			}
+			var blueButtons=document.getElementsByClassName("btn-bg-img")
+			for(var i=0;i<blueButtons.length;i++){
+				blueButtons[i].style.backgroundImage=savedBingWallpaper
+			}
+		}
+		savedBingWallpaper=localStorage.getItem("bing-wallpaper")
+		if(savedBingWallpaper){
+			loadWallpaper()
+		}
+		if(!savedBingWallpaper||!header){
+			ajax({
+				"url":"https://cdn.rthsoftware.cn/backend/bing/base64",
+				"success":function(e){
+					savedBingWallpaper="url("+e+")"
+					localStorage.setItem("bing-wallpaper",savedBingWallpaper)
+					loadWallpaper()
+				}
+			})
+		}
+	}
 	loadCSS("css/"+appliedTheme.toLowerCase()+".css")
+}
+if(theme!="Bing"&&!location.hostname){
+	localStorage.removeItem("bing-wallpaper")
 }
 if(header){
 	var newDiv=document.createElement("div")
@@ -1082,45 +1101,12 @@ if(header){
 	newDiv.appendChild(newTitle)
 	header.appendChild(newDiv)
 }
-if(!isApp){
-	document.body.classList.add("browser")
-}
 newMask.classList.add("mask")
 newMask.oncontextmenu=function(){
 	return false
 }
 newMask.onclick=closeMenu
 document.body.appendChild(newMask)
-if(appliedTheme=="Bing"){
-	var savedBingWallpaper
-	var loadWallpaper=function(){
-		if(header){
-			header.style.backgroundImage=savedBingWallpaper
-		}else if(document.getElementsByClassName("bg-img")[0]){
-			document.getElementsByClassName("bg-img")[0].style.backgroundImage=savedBingWallpaper
-		}
-		var blueButtons=document.getElementsByClassName("btn-bg-img")
-		for(var i=0;i<blueButtons.length;i++){
-			blueButtons[i].style.backgroundImage=savedBingWallpaper
-		}
-	}
-	savedBingWallpaper=localStorage.getItem("bing-wallpaper")
-	if(savedBingWallpaper){
-		loadWallpaper()
-	}
-	if(!savedBingWallpaper||!header){
-		ajax({
-			"url":"https://cdn.rthsoftware.cn/backend/bing/base64",
-			"success":function(e){
-				savedBingWallpaper="url("+e+")"
-				localStorage.setItem("bing-wallpaper",savedBingWallpaper)
-				loadWallpaper()
-			}
-		})
-	}
-}else if(theme!="Bing"){
-	localStorage.removeItem("bing-wallpaper")
-}
 if(login.username){
 	ajax({
 		"url":"https://cdn.rthsoftware.cn/backend/userdata/verify",

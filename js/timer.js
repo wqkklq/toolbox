@@ -110,13 +110,13 @@ function task(){
 	}
 	if(document.getElementById("CreateMessageBoxCheck").checked){
 		if(document.hidden){
-			if((function(){
+			if(function(){
 				if(window.Notification){
 					return Notification.permission=="granted"
 				}else{
 					return false
 				}
-			})()){
+			}()){
 				try{
 					if("serviceWorker" in navigator){
 						navigator.serviceWorker.ready.then(function(registration){

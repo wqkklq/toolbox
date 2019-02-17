@@ -4,7 +4,7 @@ correctInt=0,
 currentItem,
 currentList=[],
 correctWord,
-dictCache=JSON.parse(localStorage.getItem("DictCache")),
+dictCache=JSON.parse(localStorage.getItem("DictCache"))||{},
 mistakes,
 outOfOrder=[],
 progress=1,
@@ -1265,9 +1265,6 @@ switch(language){
 	}
 }
 newTitle.innerText=document.title
-if(!dictCache){
-	dictCache={}
-}
 for(var i=0;i<langOpt.length;i++){
 	document.getElementsByTagName("select")[0].options.add(new Option(langOpt[i][0],langOpt[i][1]))
 }
