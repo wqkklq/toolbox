@@ -7,7 +7,7 @@ function load(){
 	document.getElementById("OriginalURLInput").value=""
 	if(login.username){
 		ajax({
-			"url":usBackend+"userdata/domain/get",
+			"url":backend+"userdata/domain/get",
 			"data":{
 				"shorturl":true,
 				"token":login.token,
@@ -73,7 +73,7 @@ function loadMyURL(){
 								e="http://"+e
 							}
 							ajax({
-								"url":usBackend+"userdata/upload",
+								"url":backend+"userdata/upload",
 								"data":{
 									"dir":"domain/",
 									"key":myURL[index].name,
@@ -107,7 +107,7 @@ function loadMyURL(){
 						"您想删除 "+decodeURIComponent(myURL[index].name)+" 吗？"
 					],function(){
 						ajax({
-							"url":usBackend+"userdata/domain/del",
+							"url":backend+"userdata/domain/del",
 							"data":{
 								"domain":myURL[index].name,
 								"token":login.token,
@@ -168,7 +168,7 @@ document.getElementsByTagName("button")[0].onclick=function(){
 					}
 					document.getElementById("OriginalURLInput").value=originalURL
 					ajax({
-						"url":usBackend+"userdata/domain/add",
+						"url":backend+"userdata/domain/add",
 						"data":{
 							"domain":value,
 							"redirect":302,

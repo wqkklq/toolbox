@@ -1059,7 +1059,7 @@ document.getElementById("CloseDocument").onclick=closeDoc
 document.getElementById("Share").onclick=function(){
 	save(function(){
 		ajax({
-			"url":usBackend+"userdata/domain/add",
+			"url":backend+"userdata/domain/add",
 			"data":{
 				"domain":getURL().domain,
 				"redirect":302,
@@ -1094,7 +1094,7 @@ document.getElementById("Delete").onclick=function(){
 		if(currentItem){
 			if(login.username){
 				ajax({
-					"url":usBackend+"userdata/domain/del",
+					"url":backend+"userdata/domain/del",
 					"data":{
 						"domain":getURL().domain,
 						"token":login.token,
