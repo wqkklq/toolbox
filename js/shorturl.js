@@ -5,23 +5,21 @@ function load(){
 	defaultShortURL=Math.round(new Date().getTime()/1000*Math.random()).toString(36)
 	document.getElementById("ShortURLInput").value=secondary+defaultShortURL
 	document.getElementById("OriginalURLInput").value=""
-	if(login.username){
-		ajax({
-			"url":backend+"userdata/domain/get",
-			"data":{
-				"shorturl":true,
-				"token":login.token,
-				"username":login.username
-			},
-			"dataType":"json",
-			"showLoading":true,
-			"success":function(e){
-				myURL=e
-				localStorage.setItem("MyURL",JSON.stringify(myURL))
-				loadMyURL()
-			}
-		})
-	}
+	ajax({
+		"url":backend+"userdata/domain/get",
+		"data":{
+			"shorturl":true,
+			"token":login.token,
+			"username":login.username
+		},
+		"dataType":"json",
+		"showLoading":true,
+		"success":function(e){
+			myURL=e
+			localStorage.setItem("MyURL",JSON.stringify(myURL))
+			loadMyURL()
+		}
+	})
 }
 function loadMyURL(){
 	document.getElementById("MyURL").innerHTML=""
@@ -142,102 +140,100 @@ function loadMyURL(){
 	}
 }
 document.getElementsByTagName("button")[0].onclick=function(){
-	loginRequired(function(){
-		if(document.getElementById("OriginalURLInput").value){
-			if(document.getElementById("ShortURLInput").value.indexOf("https:")!=-1){
-				document.getElementById("ShortURLInput").value=document.getElementById("ShortURLInput").value.replace("https:","http:")
-			}
-			var value=document.getElementById("ShortURLInput").value
-			if(value.substr(0,secondary.length)==secondary){
-				var originalURL=document.getElementById("OriginalURLInput").value
-				value=encodeURIComponent(value.replace(secondary,""))
-				if(originalURL.indexOf("rthe.cn")!=-1){
-					showAlert([
-						"Short URLs cannot be the original URL",
-						"短网址不能作为原网址"
-					])
-				}else{
-					if(!value){
-						value=defaultShortURL
-					}
-					if(originalURL.indexOf("/")==-1){
-						originalURL=originalURL+"/"
-					}
-					if(originalURL.indexOf("http")==-1){
-						originalURL="http://"+originalURL
-					}
-					document.getElementById("OriginalURLInput").value=originalURL
-					ajax({
-						"url":backend+"userdata/domain/add",
-						"data":{
-							"domain":value,
-							"redirect":302,
-							"to":originalURL,
-							"token":login.token,
-							"username":login.username
-						},
-						"method":"POST",
-						"dataType":"json",
-						"showLoading":true,
-						"success":function(e){
-							if(e.success){
-								load()
-								value=decodeURIComponent(value)
-								showPrompt(null,function(){
-									openWebPage(secondary+value)
-								},"url",secondary+value)
-								closeMenu()
-							}else{
-								var extraInfo=""
-								switch(language){
-									case "SimplifiedChinese":
-									if(e.username=="admin"){
-										extraInfo="管理员"
-									}else if(e.username==login.username){
-										extraInfo="您"
-									}
-									break
-									default:
-									if(e.username=="admin"){
-										extraInfo=" by the administrator"
-									}else if(e.username==login.username){
-										extraInfo=" by you"
-									}
-								}
-								showAlert([
-									"This short URL has been taken"+extraInfo,
-									"此短网址已被"+extraInfo+"占用"
-								])
-							}
-						},
-						"error":error
-					})
-				}
-			}else{
+	if(document.getElementById("OriginalURLInput").value){
+		if(document.getElementById("ShortURLInput").value.indexOf("https:")!=-1){
+			document.getElementById("ShortURLInput").value=document.getElementById("ShortURLInput").value.replace("https:","http:")
+		}
+		var value=document.getElementById("ShortURLInput").value
+		if(value.substr(0,secondary.length)==secondary){
+			var originalURL=document.getElementById("OriginalURLInput").value
+			value=encodeURIComponent(value.replace(secondary,""))
+			if(originalURL.indexOf("rthe.cn")!=-1){
 				showAlert([
-					"The short URL must begin with "+secondary,
-					"短网址必须以 "+secondary+" 开头"
+					"Short URLs cannot be the original URL",
+					"短网址不能作为原网址"
 				])
-				if(value.indexOf("://")!=-1){
-					value=value.split("://")[1]
+			}else{
+				if(!value){
+					value=defaultShortURL
 				}
-				var valueSplit=value.split(".")
-				if(valueSplit.length>1){
-					if(valueSplit[0]=="www"){
-						value=valueSplit[1]
-					}else{
-						value=valueSplit[0]
-					}
+				if(originalURL.indexOf("/")==-1){
+					originalURL=originalURL+"/"
 				}
-				document.getElementById("ShortURLInput").value=secondary+value
+				if(originalURL.indexOf("http")==-1){
+					originalURL="http://"+originalURL
+				}
+				document.getElementById("OriginalURLInput").value=originalURL
+				ajax({
+					"url":backend+"userdata/domain/add",
+					"data":{
+						"domain":value,
+						"redirect":302,
+						"to":originalURL,
+						"token":login.token,
+						"username":login.username
+					},
+					"method":"POST",
+					"dataType":"json",
+					"showLoading":true,
+					"success":function(e){
+						if(e.success){
+							load()
+							value=decodeURIComponent(value)
+							showPrompt(null,function(){
+								openWebPage(secondary+value)
+							},"url",secondary+value)
+							closeMenu()
+						}else{
+							var extraInfo=""
+							switch(language){
+								case "SimplifiedChinese":
+								if(e.username=="admin"){
+									extraInfo="管理员"
+								}else if(e.username==login.username){
+									extraInfo="您"
+								}
+								break
+								default:
+								if(e.username=="admin"){
+									extraInfo=" by the administrator"
+								}else if(e.username==login.username){
+									extraInfo=" by you"
+								}
+							}
+							showAlert([
+								"This short URL has been taken"+extraInfo,
+								"此短网址已被"+extraInfo+"占用"
+							])
+						}
+					},
+					"error":error
+				})
 			}
 		}else{
 			showAlert([
-				"Please enter the original URL",
-				"请输入原网址"
+				"The short URL must begin with "+secondary,
+				"短网址必须以 "+secondary+" 开头"
 			])
+			if(value.indexOf("://")!=-1){
+				value=value.split("://")[1]
+			}
+			var valueSplit=value.split(".")
+			if(valueSplit.length>1){
+				if(valueSplit[0]=="www"){
+					value=valueSplit[1]
+				}else{
+					value=valueSplit[0]
+				}
+			}
+			document.getElementById("ShortURLInput").value=secondary+value
 		}
-	})
+	}else{
+		showAlert([
+			"Please enter the original URL",
+			"请输入原网址"
+		])
+	}
 }
 switch(language){
 	case "SimplifiedChinese":
