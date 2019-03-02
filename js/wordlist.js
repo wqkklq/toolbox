@@ -1302,4 +1302,6 @@ if($_GET["index"]&&$_GET["username"]){
 			])
 		}
 	})
+}else if(!login.username){
+	loginDialog()
 }

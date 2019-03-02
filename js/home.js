@@ -243,8 +243,6 @@ if($_GET["action"]){
 		case "dl":
 		getToolbox()
 	}
-}else if(!login.username){
-	loginDialog()
 }
 getSentence()
 if(login.username){
