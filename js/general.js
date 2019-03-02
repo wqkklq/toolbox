@@ -426,6 +426,10 @@ function loginDialog(){
 								localStorage.setItem("Email",e.email)
 								localStorage.setItem("Token",e.token)
 								localStorage.setItem("Username",e.username)
+								backend=e.backend
+								login.email=e.email
+								login.token=e.token
+								login.username=e.username
 								removeElement(document.getElementsByClassName("popup")[0])
 								if("load" in window){
 									load()

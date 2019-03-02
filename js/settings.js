@@ -1,4 +1,11 @@
 /*Code written by Shangzhen Yang*/
+function load(){
+	if(login.username){
+		document.getElementById("MyEmail").innerText=login.email
+		document.getElementById("Login").style.display="none"
+		document.getElementById("MyAccount").style.display="block"
+	}
+}
 function reload(){
 	if(isiOS){
 		openWindow("index")
@@ -217,8 +224,4 @@ switch(language){
 newTitle.innerText=document.title
 document.getElementById("LanguageSelect").value=language
 document.getElementById("ThemeSelect").value=theme
-if(login.username){
-	document.getElementById("MyEmail").innerText=login.email
-	document.getElementById("Login").style.display="none"
-	document.getElementById("MyAccount").style.display="block"
-}
+load()
