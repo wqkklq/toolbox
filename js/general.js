@@ -34,7 +34,7 @@ language=localStorage.getItem("Language")||function(){
 		return "English"
 	}
 }(),
-lastUpdated=new Date("2019/3/2").toLocaleDateString(),
+lastUpdated=new Date("2019/3/3").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"token":localStorage.getItem("Token"),
@@ -1041,6 +1041,9 @@ addEventListener("message",function(e){
 			localStorage.setItem("Token",login.token)
 			localStorage.setItem("Username",login.username)
 			removeElement(document.getElementsByClassName("popup")[0])
+			if("load" in window){
+				load()
+			}
 		}
 	}catch(e){}
 })
@@ -1127,6 +1130,11 @@ if(login.username){
 			}
 		}
 	})
+}else if(!isApp&&location.hostname!="rthsoftware.cn"){
+	var ssoIFrame=document.createElement("iframe")
+	ssoIFrame.style.display="none"
+	ssoIFrame.src="https://rthsoftware.cn/sso"
+	document.body.appendChild(ssoIFrame)
 }
 switch(language){
 	case "SimplifiedChinese":

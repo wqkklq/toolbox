@@ -381,11 +381,7 @@ function save(callback){
 }
 function setText(text,noScrolling){
 	document.getElementsByTagName("textarea")[0].value=text
-	if(text.indexOf("</")!=-1&&!/<(a|body|link|script|style)|\son/.test(text)){
-		document.getElementsByClassName("text-view")[0].innerHTML=text.replace(/\u0009/g,"&nbsp;&nbsp;&nbsp;&nbsp;").replace(/\n/g,"<br>")
-	}else{
-		document.getElementsByClassName("text-view")[0].innerText=text.replace(/\u0009/g,"\u00a0\u00a0\u00a0\u00a0")
-	}
+	document.getElementsByClassName("text-view")[0].innerText=text.replace(/\u0009/g,"\u00a0\u00a0\u00a0\u00a0")
 	document.getElementsByTagName("textarea")[0].style.display=
 	document.getElementsByClassName("text-view")[0].style.display=""
 	if(!noScrolling){

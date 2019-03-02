@@ -261,9 +261,4 @@ if(login.username){
 			submitDateCountdown()
 		}
 	},true)
-}else if(!isApp&&location.hostname!="rthsoftware.cn"){
-	var ssoIFrame=document.createElement("iframe")
-	ssoIFrame.style.display="none"
-	ssoIFrame.src="https://rthsoftware.cn/sso"
-	document.body.appendChild(ssoIFrame)
 }
