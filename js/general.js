@@ -426,10 +426,9 @@ function loginDialog(){
 								localStorage.setItem("Email",e.email)
 								localStorage.setItem("Token",e.token)
 								localStorage.setItem("Username",e.username)
-								if(header){
-									location.reload()
-								}else{
-									removeElement(document.getElementsByClassName("popup")[0])
+								removeElement(document.getElementsByClassName("popup")[0])
+								if("load" in window){
+									load()
 								}
 							}else if(email!="admin"){
 								newPasswordInput.value=""
