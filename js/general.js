@@ -34,7 +34,7 @@ language=localStorage.getItem("Language")||function(){
 		return "English"
 	}
 }(),
-lastUpdated=new Date("2019/2/22").toLocaleDateString(),
+lastUpdated=new Date("2019/3/2").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"token":localStorage.getItem("Token"),
@@ -46,7 +46,7 @@ newTitle=document.createElement("h1"),
 recentInput=0,
 secondary="http://rthe.cn/",
 theme=localStorage.getItem("Theme")||"Light",
-ver="16.12"
+ver="16.13"
 var appliedTheme=function(){
 	if(theme=="Automatic"){
 		var currentHour=new Date().getHours()

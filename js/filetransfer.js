@@ -44,92 +44,90 @@ function downloadFile(code){
 	}
 }
 function load(){
-	if(login.username){
-		document.getElementById("MyFile").innerHTML=""
-		ajax({
-			"url":backend+"userdata/file/get",
-			"data":{
-				"token":login.token,
-				"username":login.username
-			},
-			"dataType":"json",
-			"showLoading":true,
-			"success":function(e){
-				for(var i=e.length-1;i>=0;i--){
-					var newLi=document.createElement("li")
-					newLi.classList.add("menu")
-					newLi.innerText=decodeURIComponent(e[i].name)
-					newLi.setAttribute("code",e[i].code)
-					newLi.oncontextmenu=
-					newLi.onclick=function(mouse){
-						var code=this.getAttribute("code")
-						name=this.innerText
-						showMenu(mouse,[{
-							"onclick":function(){
-								showQRCode(secondary+code)
-								closeMenu()
-							},
-							"text":[
-								"QR Code",
-								"二维码"
-							]
-						},{
-							"onclick":function(){
-								showPrompt(null,function(){
-									openWebPage(secondary+code)
-								},null,secondary+code)
-								closeMenu()
-							},
-							"text":[
-								"Link",
-								"链接"
-							]
-						},{
-							"onclick":function(){
-								showConfirm([
-									"Do you want to delete "+name+"?",
-									"您想删除 "+name+" 吗？"
-								],function(){
-									ajax({
-										"url":backend+"userdata/file/del",
-										"data":{
-											"code":code,
-											"username":login.username
-										},
-										"method":"POST",
-										"showLoading":true,
-										"success":load,
-										"error":error
-									})
+	document.getElementById("MyFile").innerHTML=""
+	ajax({
+		"url":backend+"userdata/file/get",
+		"data":{
+			"token":login.token,
+			"username":login.username
+		},
+		"dataType":"json",
+		"showLoading":true,
+		"success":function(e){
+			for(var i=e.length-1;i>=0;i--){
+				var newLi=document.createElement("li")
+				newLi.classList.add("menu")
+				newLi.innerText=decodeURIComponent(e[i].name)
+				newLi.setAttribute("code",e[i].code)
+				newLi.oncontextmenu=
+				newLi.onclick=function(mouse){
+					var code=this.getAttribute("code")
+					name=this.innerText
+					showMenu(mouse,[{
+						"onclick":function(){
+							showQRCode(secondary+code)
+							closeMenu()
+						},
+						"text":[
+							"QR Code",
+							"二维码"
+						]
+					},{
+						"onclick":function(){
+							showPrompt(null,function(){
+								openWebPage(secondary+code)
+							},null,secondary+code)
+							closeMenu()
+						},
+						"text":[
+							"Link",
+							"链接"
+						]
+					},{
+						"onclick":function(){
+							showConfirm([
+								"Do you want to delete "+name+"?",
+								"您想删除 "+name+" 吗？"
+							],function(){
+								ajax({
+									"url":backend+"userdata/file/del",
+									"data":{
+										"code":code,
+										"username":login.username
+									},
+									"method":"POST",
+									"showLoading":true,
+									"success":load,
+									"error":error
 								})
-								closeMenu()
-							},
-							"text":[
-								"Delete",
-								"删除"
-							]
-						},{
-							"onclick":function(){
-								showConfirm([
-									"Do you want to download "+name+"?",
-									"您想下载 "+name+" 吗？"
-								],function(){
-									downloadFile(code)
-								})
-								closeMenu()
-							},
-							"text":[
-								"Download",
-								"下载"
-							]
-						}])
-						return false
-					}
-					document.getElementById("MyFile").appendChild(newLi)
+							})
+							closeMenu()
+						},
+						"text":[
+							"Delete",
+							"删除"
+						]
+					},{
+						"onclick":function(){
+							showConfirm([
+								"Do you want to download "+name+"?",
+								"您想下载 "+name+" 吗？"
+							],function(){
+								downloadFile(code)
+							})
+							closeMenu()
+						},
+						"text":[
+							"Download",
+							"下载"
+						]
+					}])
+					return false
 				}
+				document.getElementById("MyFile").appendChild(newLi)
 			}
-		})
-	}
+		}
+	})
 }
 document.getElementById("SendFile").onclick=function(){
 	document.getElementById("OpenFile").value=""
@@ -227,6 +225,7 @@ document.getElementById("OpenFile").onchange=function(input){
 				"method":"POST",
 				"success":function(e){
 					if(e.error){
+						newToast.close()
 						alert(e.error)
 					}else{
 						uploadSuccess(e.code)
@@ -265,6 +264,7 @@ document.getElementById("OpenFile").onchange=function(input){
 								"method":"POST",
 								"success":function(e){
 									if(e.error){
+										newToast.close()
 										alert(e.error)
 									}else if(e.success==uploadProgress+1){
 										if(uploadProgress==fileSlice.length-1){
@@ -343,8 +343,4 @@ switch(language){
 	document.getElementsByTagName("p")[0].innerText="Files you sent will expire in 24 hours."
 }
 newTitle.innerText=document.title
-if(login.username){
-	load()
-}else{
-	loginDialog()
-}
+load()
