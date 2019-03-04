@@ -1,4 +1,7 @@
 /*Code written by Shangzhen Yang*/
+document.getElementById("OfficialWebsite").onclick=function(){
+	openWebPage("https://rthsoftware.cn/")
+}
 document.getElementById("PrivacyPolicy").onclick=function(){
 	openWebPage("https://rthe.cn/privacy")
 }
@@ -32,7 +35,8 @@ switch(language){
 	document.title="关于"
 	document.getElementById("Version").innerText="版本："+ver
 	document.getElementById("LastUpdated").innerText="更新日期："+lastUpdated
-	document.getElementById("Developer").innerText="开发者：尚臻"
+	document.getElementById("Developer").innerText="开发者：Shangzhen Yang"
+	document.getElementById("OfficialWebsite").innerText="官方网站"
 	document.getElementById("PrivacyPolicy").innerText="隐私政策"
 	document.getElementById("Feedback").innerText="反馈"
 	document.getElementById("Donate").innerText="捐赠"
@@ -43,7 +47,8 @@ switch(language){
 	document.title="About"
 	document.getElementById("Version").innerText="Version: "+ver
 	document.getElementById("LastUpdated").innerText="Last Updated: "+lastUpdated
-	document.getElementById("Developer").innerText="Developer: Shangzhen"
+	document.getElementById("Developer").innerText="Developer: Shangzhen Yang"
+	document.getElementById("OfficialWebsite").innerText="Official Website"
 	document.getElementById("PrivacyPolicy").innerText="Privacy Policy"
 	document.getElementById("Feedback").innerText="Feedback"
 	document.getElementById("Donate").innerText="Donate"

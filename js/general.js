@@ -46,7 +46,7 @@ newTitle=document.createElement("h1"),
 recentInput=0,
 secondary="http://rthe.cn/",
 theme=localStorage.getItem("Theme")||"Light",
-ver="16.13"
+ver="16.14"
 var appliedTheme=function(){
 	if(theme=="Automatic"){
 		var currentHour=new Date().getHours()
