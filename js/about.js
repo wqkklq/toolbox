@@ -24,9 +24,6 @@ document.getElementById("Alipay").onclick=function(){
 document.getElementById("WeChatPay").onclick=function(){
 	showImage("https://cdn.rthsoftware.cn/img/wechatpay.jpg")
 }
-document.getElementById("QQWallet").onclick=function(){
-	showImage("https://cdn.rthsoftware.cn/img/qqwallet.jpg")
-}
 document.getElementById("PayPal").onclick=function(){
 	openWebPage("https://www.paypal.me/ShangzhenY/")
 }
@@ -41,7 +38,6 @@ switch(language){
 	document.getElementById("Donate").innerText="捐赠"
 	document.getElementById("Alipay").innerText="支付宝"
 	document.getElementById("WeChatPay").innerText="微信支付"
-	document.getElementById("QQWallet").innerText="QQ 钱包"
 	break
 	default:
 	document.title="About"
@@ -53,6 +49,5 @@ switch(language){
 	document.getElementById("Donate").innerText="Donate"
 	document.getElementById("Alipay").innerText="Alipay"
 	document.getElementById("WeChatPay").innerText="WeChat Pay"
-	document.getElementById("QQWallet").innerText="QQ Wallet"
 }
 newTitle.innerText=document.title

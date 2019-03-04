@@ -34,7 +34,7 @@ language=localStorage.getItem("Language")||function(){
 		return "English"
 	}
 }(),
-lastUpdated=new Date("2019/3/3").toLocaleDateString(),
+lastUpdated=new Date("2019/3/5").toLocaleDateString(),
 login={
 	"email":localStorage.getItem("Email"),
 	"token":localStorage.getItem("Token"),
