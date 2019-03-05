@@ -163,8 +163,8 @@ function search(){
 	}
 	if(!searchTerm){
 		showAlert([
-			"Please enter the text you want to search for",
-			"请输入要搜索的文本"
+			"Please enter the text you want to search for.",
+			"请输入要搜索的文本。"
 		])
 	}else{
 		openWebPage(engine+encodeURIComponent(searchTerm))

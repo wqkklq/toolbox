@@ -5,8 +5,8 @@ function calculate(){
 	var formula=document.getElementsByTagName("input")[0].value.replace(/coin|cordova|eval|require/gi,"").replace(/×/g,"*").replace(/÷/g,"/").replace(/π/g,"pi").toLowerCase()
 	if(formula==""){
 		showAlert([
-			"Please enter the formula",
-			"请输入算式"
+			"Please enter the formula.",
+			"请输入算式。"
 		])
 	}else{
 		if(/x|y|z/.test(formula)&&formula.indexOf("=")==-1&&formula.indexOf("exp")==-1){

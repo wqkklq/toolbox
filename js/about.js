@@ -35,7 +35,7 @@ switch(language){
 	document.title="关于"
 	document.getElementById("Version").innerText="版本："+ver
 	document.getElementById("LastUpdated").innerText="更新日期："+lastUpdated
-	document.getElementById("Developer").innerText="开发者：Shangzhen Yang"
+	document.getElementById("Developer").innerText="开发者：杨尚臻"
 	document.getElementById("OfficialWebsite").innerText="官方网站"
 	document.getElementById("PrivacyPolicy").innerText="隐私政策"
 	document.getElementById("Feedback").innerText="反馈"

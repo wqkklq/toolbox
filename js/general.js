@@ -46,7 +46,7 @@ newTitle=document.createElement("h1"),
 recentInput=0,
 secondary="http://rthe.cn/",
 theme=localStorage.getItem("Theme")||"Light",
-ver="16.14"
+ver="16.15"
 var appliedTheme=function(){
 	if(theme=="Automatic"){
 		var currentHour=new Date().getHours()
@@ -280,8 +280,8 @@ function encryptText(text,password){
 }
 function error(e){
 	showAlert([
-		"Unable to connect to the server ("+e.status+")",
-		"无法连接到服务器 ("+e.status+")"
+		"Unable to connect to the server: "+e.status,
+		"无法连接到服务器："+e.status
 	])
 }
 function getUserData(dir,callback,errorCallback,hideLoading){
@@ -464,8 +464,8 @@ function loginDialog(){
 										"method":"POST",
 										"success":function(){
 											showAlert([
-												"Signed up successfully",
-												"注册成功"
+												"Signed up successfully.",
+												"注册成功。"
 											])
 											closeSignUp()
 										},
@@ -474,8 +474,8 @@ function loginDialog(){
 								}
 							}else{
 								showAlert([
-									"This user does not exist",
-									"此用户不存在"
+									"This user does not exist.",
+									"此用户不存在。"
 								])
 								signUp()
 							}
@@ -750,8 +750,8 @@ function showImage(src){
 	newSaveDiv.onclick=function(){
 		if(src.indexOf("data:")!=-1){
 			showAlert([
-				"Unable to save this image",
-				"无法保存此图片"
+				"Unable to save this image.",
+				"无法保存此图片。"
 			])
 		}else if(src.indexOf("https://cdn.rthsoftware.cn/backend/get")!=-1){
 			openWebPage(searchURL("url",src))
@@ -976,8 +976,8 @@ function speak(text,lan){
 				speechSynthesis.speak(new SpeechSynthesisUtterance(text))
 			}else{
 				showAlert([
-					"Unable to load audio",
-					"无法加载音频"
+					"Unable to load audio.",
+					"无法加载音频。"
 				])
 			}
 		}
@@ -1126,8 +1126,8 @@ if(login.username){
 				localStorage.setItem("Backend",backend)
 			}else{
 				showAlert([
-					"Login session is expired",
-					"登录会话已过期"
+					"Login session is expired.",
+					"登录会话已过期。"
 				])
 				logOut()
 			}

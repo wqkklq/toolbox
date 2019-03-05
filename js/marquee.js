@@ -86,8 +86,8 @@ function start(){
 		add(document.getElementsByTagName("input")[0].value)
 	}else{
 		showAlert([
-			"Please enter the text",
-			"请输入文本"
+			"Please enter the text.",
+			"请输入文本。"
 		])
 	}
 }

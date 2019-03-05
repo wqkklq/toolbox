@@ -24,15 +24,15 @@ document.getElementsByTagName("button")[0].onclick=function(){
 			"showLoading":true,
 			"success":function(){
 				showAlert([
-					"Thank you for your feedback",
-					"感谢您的反馈"
+					"Thank you for your feedback!",
+					"感谢您的反馈！"
 				])
 			},
 			"error":function(e){
 				if(e.status==504){
 					showAlert([
-						"Please try again",
-						"请再试一次"
+						"Please try again.",
+						"请再试一次。"
 					])
 				}else{
 					error(e)

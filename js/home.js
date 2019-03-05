@@ -92,8 +92,8 @@ function getToolbox(){
 	var url
 	if(isTencent){
 		showAlert([
-			"Please open this page in the browser",
-			"请在浏览器中打开此页面"
+			"Please open this page in the browser.",
+			"请在浏览器中打开此页面。"
 		])
 	}else if(isAndroid){
 		if(navigator.language=="zh-CN"){
@@ -105,8 +105,8 @@ function getToolbox(){
 		}
 	}else if(isiOS){
 		showAlert([
-			"You can add this web page to the home screen",
-			"您可以将此网页添加到主屏幕"
+			"You can add this web page to the home screen.",
+			"您可以将此网页添加到主屏幕。"
 		])
 		location.href="https://rthsoftware.cn/toolbox/"
 	}else{

@@ -125,14 +125,14 @@ document.getElementById("EncodeButton").onclick=function(){
 			break
 			default:
 			showAlert([
-				"Please select an encoding scheme",
-				"请选择一个编码方案"
+				"Please select an encoding scheme.",
+				"请选择一个编码方案。"
 			])
 		}
 	}else{
 		showAlert([
-			"Please enter the text you want to encode",
-			"请输入要编码的文本"
+			"Please enter the text you want to encode.",
+			"请输入要编码的文本。"
 		])
 	}
 }
@@ -147,16 +147,16 @@ document.getElementById("DecodeButton").onclick=function(){
 					showImage(decoded)
 				}else{
 					showAlert([
-						"Unable to decode this data URL",
-						"无法解码此 data URL"
+						"Unable to decode this data URL.",
+						"无法解码此 data URL。"
 					])
 				}
 			}else if(decoded.indexOf(" ")==-1){
 				if(MD5Hist[decoded]){
 					decoded=MD5Hist[decoded]
 					showToast([
-						"MD5 usually cannot be decoded",
-						"MD5 通常不能被解码"
+						"MD5 usually cannot be decoded.",
+						"MD5 通常不能被解码。"
 					])
 				}else if(only(/0|1/,decoded)){
 					decoded=parseInt(decoded,2)
@@ -169,8 +169,8 @@ document.getElementById("DecodeButton").onclick=function(){
 						var decrypted=decrypt(decoded,e)
 						if(decrypted==decoded){
 							showAlert([
-								"Incorrect password",
-								"密码错误"
+								"Incorrect password.",
+								"密码错误。"
 							])
 						}else{
 							document.getElementsByTagName("textarea")[0].value=decrypted
@@ -201,8 +201,8 @@ document.getElementById("DecodeButton").onclick=function(){
 		}
 	}else{
 		showAlert([
-			"Please enter the text you want to decode",
-			"请输入要解码的文本"
+			"Please enter the text you want to decode.",
+			"请输入要解码的文本。"
 		])
 	}
 }
@@ -219,8 +219,8 @@ document.getElementById("OpenFile").onchange=function(e){
 		reader.readAsDataURL(file)
 	}else{
 		showAlert([
-			"The file is larger than 1024 MB",
-			"文件大于 10 MB"
+			"The file is larger than 10 MB.",
+			"文件大于 10 MB。"
 		])
 	}
 }

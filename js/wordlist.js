@@ -222,8 +222,8 @@ function arrange(name){
 		}
 	}else{
 		showAlert([
-			"Too few words ("+wordCount+"/"+wordMin+")",
-			"单词太少 ("+wordCount+"/"+wordMin+")"
+			"Too few words. ("+wordCount+"/"+wordMin+")",
+			"单词太少。("+wordCount+"/"+wordMin+")"
 		])
 	}
 }
@@ -270,8 +270,8 @@ function end(){
 function expWL(){
 	if(isTencent){
 		showAlert([
-			"Please open this page in the browser",
-			"请在浏览器中打开此页面"
+			"Please open this page in the browser.",
+			"请在浏览器中打开此页面。"
 		])
 	}else if(login.username){
 		showConfirm([
@@ -630,8 +630,8 @@ function lookUp(word){
 	if(!word){
 		if(!document.getElementById("LookUpInput").value){
 			showAlert([
-				"Please enter the word you want to look up",
-				"请输入要查询的单词"
+				"Please enter the word you want to look up.",
+				"请输入要查询的单词。"
 			])
 			return false
 		}else{
@@ -689,8 +689,8 @@ function openLWL(file){
 		reader.readAsText(file)
 	}else{
 		showAlert([
-			"Unable to open this type of file",
-			"无法打开此类文件"
+			"Unable to open this type of file.",
+			"无法打开此类文件。"
 		])
 	}
 }
@@ -702,8 +702,8 @@ function optionClicked(clickedNum){
 		}else{
 			addMistake(correctWord,correctDefinition)
 			showAlert([
-				"Not this one",
-				"不是这个"
+				"Not this one.",
+				"不是这个。"
 			])
 		}
 	}
@@ -711,8 +711,8 @@ function optionClicked(clickedNum){
 function next(){
 	if(quizSettingsChanged){
 		showAlert([
-			"Click Restart to apply the settings",
-			"单击重新开始使设置生效"
+			"Click Restart to apply the settings.",
+			"单击重新开始使设置生效。"
 		])
 	}else{
 		if(!showAnswer&&isEnabled("MultipleChoice")){
@@ -1297,8 +1297,8 @@ if($_GET["index"]&&$_GET["username"]){
 		},
 		"error":function(){
 			showAlert([
-				"This word list has been deleted",
-				"此单词表已被删除"
+				"This word list has been deleted.",
+				"此单词表已被删除。"
 			])
 		}
 	})

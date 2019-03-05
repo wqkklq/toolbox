@@ -2,8 +2,8 @@
 function downloadFile(code){
 	if(isTencent){
 		showAlert([
-			"Please open this page in the browser",
-			"请在浏览器中打开此页面"
+			"Please open this page in the browser.",
+			"请在浏览器中打开此页面。"
 		])
 	}else if(code){
 		ajax({
@@ -23,8 +23,8 @@ function downloadFile(code){
 			"success":function(e){
 				if(e.download===false){
 					showAlert([
-						"You do not have permission to download this file",
-						"您没有下载此文件的权限"
+						"You do not have permission to download this file.",
+						"您没有下载此文件的权限。"
 					])
 				}else{
 					openWebPage(e.download,true)
@@ -33,8 +33,8 @@ function downloadFile(code){
 			"error":function(e){
 				if(e.status==200){
 					showAlert([
-						"File does not exist",
-						"文件不存在"
+						"File does not exist.",
+						"文件不存在。"
 					])
 				}else{
 					error(e)
@@ -144,13 +144,13 @@ document.getElementById("OpenFile").onchange=function(input){
 	for(var i=0;i<input.target.files.length;i++){
 		if(input.target.files[i].name.indexOf(".php")!=-1||input.target.files[i].type=="text/php"){
 			showAlert([
-				"Transferring PHP files is not allowed",
-				"不允许传输 PHP 文件"
+				"Transferring PHP files is not allowed.",
+				"不允许传输 PHP 文件。"
 			])
 		}else if(input.target.files[i].size>1073741824){
 			showAlert([
-				"Transferring files larger than 1024 MB is not allowed",
-				"不允许传输大于 1024 MB 的文件"
+				"Transferring files larger than 1024 MB is not allowed.",
+				"不允许传输大于 1024 MB 的文件。"
 			])
 		}else{
 			files.push({
@@ -290,8 +290,8 @@ document.getElementById("OpenFile").onchange=function(input){
 										}else{
 											newToast.close()
 											showAlert([
-												"Unable to send files larger than 100 MB on this device",
-												"无法在此设备上发送大于 100 MB 的文件"
+												"Unable to send files larger than 100 MB on this device.",
+												"无法在此设备上发送大于 100 MB 的文件。"
 											])
 										}
 									}else{
@@ -316,8 +316,8 @@ document.getElementById("OpenFile").onchange=function(input){
 					newToast.close()
 					if(e.status==402){
 						showConfirm([
-							"This file needs to be sent by AirPortal",
-							"此文件需要由 AirPortal 发送"
+							"This file needs to be sent by AirPortal.",
+							"此文件需要由「空投」发送。"
 						],function(){
 							openWebPage("https://rthsoftware.cn/airportal/",true,true)
 						})

@@ -63,24 +63,24 @@ document.getElementById("ChangePassword").onclick=function(){
 									"showLoading":true,
 									"success":function(){
 										showAlert([
-											"The password is changed",
-											"密码已更改"
+											"The password is changed.",
+											"密码已更改。"
 										])
 									},
 									"error":error
 								})
 							}else{
 								showAlert([
-									"The two passwords you entered are inconsistent",
-									"两次输入的密码不一致"
+									"The two passwords you entered are inconsistent.",
+									"两次输入的密码不一致。"
 								])
 							}
 						},"password")
 					},"password")
 				}else{
 					showAlert([
-						"Incorrect password",
-						"密码错误"
+						"Incorrect password.",
+						"密码错误。"
 					])
 				}
 			}
@@ -118,13 +118,13 @@ document.getElementById("ChangeEmail").onclick=function(){
 							"success":function(newVerify){
 								if(newVerify.index>0){
 									showAlert([
-										"This email address has already been occupied",
-										"此电子邮箱地址已被占用"
+										"This email address has already been occupied.",
+										"此电子邮箱地址已被占用。"
 									])
 								}else{
 									showPrompt([
-										"Enter the new email address again",
-										"再次输入新电子邮箱地址"
+										"Enter the new email address again.",
+										"再次输入新电子邮箱地址。"
 									],function(confirmEmail){
 										if(confirmEmail==newEmail){
 											localStorage.setItem("Email",newEmail)
@@ -139,8 +139,8 @@ document.getElementById("ChangeEmail").onclick=function(){
 												"showLoading":true,
 												"success":function(){
 													showAlert([
-														"The email address is changed",
-														"电子邮箱地址已更改"
+														"The email address is changed.",
+														"电子邮箱地址已更改。"
 													])
 													location.reload()
 												},
@@ -148,8 +148,8 @@ document.getElementById("ChangeEmail").onclick=function(){
 											})
 										}else{
 											showAlert([
-												"The two email addresses you entered are inconsistent",
-												"两次输入的电子邮箱地址不一致"
+												"The two email addresses you entered are inconsistent.",
+												"两次输入的电子邮箱地址不一致。"
 											])
 										}
 									},"email")
@@ -160,8 +160,8 @@ document.getElementById("ChangeEmail").onclick=function(){
 					},"email")
 				}else{
 					showAlert([
-						"Incorrect password",
-						"密码错误"
+						"Incorrect password.",
+						"密码错误。"
 					])
 				}
 			},
@@ -177,8 +177,8 @@ document.getElementById("ClearLocalStorage").onclick=function(){
 	],function(){
 		clearLocalStorage()
 		showAlert([
-			"The local storage is cleared",
-			"本地存储已清空"
+			"The local storage is cleared.",
+			"本地存储已清空。"
 		])
 		reload()
 	})
@@ -201,7 +201,6 @@ switch(language){
 	document.getElementById("ChangeEmail").innerText="更改电子邮箱"
 	document.getElementById("LogOut").innerText="退出登录"
 	document.getElementById("ClearLocalStorage").innerText="清空本地存储"
-	document.getElementById("Introduction").innerText="您可以在 https://rthsoftware.cn/ 查看您保存的单词表和文本文档。"
 	document.getElementById("About").innerText="关于 RTH 工具箱"
 	break
 	default:
@@ -218,7 +217,6 @@ switch(language){
 	document.getElementById("ChangeEmail").innerText="Change Email"
 	document.getElementById("LogOut").innerText="Log Out"
 	document.getElementById("ClearLocalStorage").innerText="Clear Local Storage"
-	document.getElementById("Introduction").innerText="You can view your saved word lists and text documents at https://rthsoftware.cn/."
 	document.getElementById("About").innerText="About RTH Toolbox"
 }
 newTitle.innerText=document.title

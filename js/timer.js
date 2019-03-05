@@ -55,8 +55,8 @@ function start(){
 	if(document.getElementsByTagName("select")[0].value=="Countdown"){
 		if(Hour==0&&Minute==0&&Second==0){
 			showAlert([
-				"Please set the countdown time",
-				"请设置倒计时时间"
+				"Please set the countdown time.",
+				"请设置倒计时时间。"
 			])
 		}else{
 			document.getElementsByTagName("select")[0].disabled="disabled"

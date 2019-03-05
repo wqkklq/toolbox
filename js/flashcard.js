@@ -90,8 +90,8 @@ function lookUp(word){
 function next(){
 	if(progress>=currentList.length){
 		showAlert([
-			"This is the last word",
-			"这是最后一个单词"
+			"This is the last word.",
+			"这是最后一个单词。"
 		])
 	}else{
 		showingDefinition=false
@@ -104,8 +104,8 @@ function next(){
 function previous(){
 	if(progress<=1){
 		showAlert([
-			"This is the first word",
-			"这是第一个单词"
+			"This is the first word.",
+			"这是第一个单词。"
 		])
 	}else{
 		showingDefinition=false

@@ -139,8 +139,8 @@ function isEmpty(){
 		setText(document.getElementsByTagName("textarea")[0].value.replace(/\/\*\s|\s\*\//g,"").trim())
 		if(!document.getElementsByTagName("textarea")[0].value){
 			showAlert([
-				"The text cannot be empty",
-				"文本不能为空"
+				"The text cannot be empty.",
+				"文本不能为空。"
 			])
 			return true
 		}else{
@@ -252,8 +252,8 @@ function openLText(file){
 		reader.readAsText(file)
 	}else{
 		showAlert([
-			"Unable to open this type of file",
-			"无法打开此类文件"
+			"Unable to open this type of file.",
+			"无法打开此类文件。"
 		])
 	}
 }
@@ -313,8 +313,8 @@ function runJSCode(fromShortcut){
 		if(code.indexOf("switch(language)")==-1){
 			if(/cordova|eval|require/.test(code)){
 				showConfirm([
-					"This code can harm your device",
-					"此代码可能会对您的设备有害"
+					"This code can harm your device.",
+					"此代码可能会对您的设备有害。"
 				],runTrue)
 			}else{
 				runTrue()
@@ -510,8 +510,8 @@ document.getElementById("GetSource").onclick=function(){
 				"error":function(e){
 					if(e.status==403){
 						showAlert([
-							"Access denied",
-							"拒绝访问"
+							"Access denied.",
+							"拒绝访问。"
 						])
 					}else if(e.status==404){
 						showAlert([
@@ -643,8 +643,8 @@ document.getElementById("GenerateQRCode").onclick=function(){
 document.getElementById("GenerateWebPage").onclick=function(){
 	if(document.getElementsByTagName("textarea")[0].value.indexOf("<body")!=-1){
 		showConfirm([
-			"It is recommended to use RTH Virtual Host Manager",
-			"建议使用 RTH 虚拟主机管理器"
+			"It is recommended to use RTH Web Hosting.",
+			"建议使用「热铁云虚拟主机」。"
 		],function(){
 			openWebPage("https://rthsoftware.cn/vhost/",true,true)
 		})
@@ -721,14 +721,14 @@ if($_GET["index"]&&$_GET["username"]){
 				switch(e.error){
 					case 403:
 					showAlert([
-						"This text document has been encrypted",
-						"此文本文档已被加密"
+						"This text document has been encrypted.",
+						"此文本文档已被加密。"
 					])
 					break
 					case 404:
 					showAlert([
-						"This text document has been deleted",
-						"此文本文档已被删除"
+						"This text document has been deleted.",
+						"此文本文档已被删除。"
 					])
 				}
 			}

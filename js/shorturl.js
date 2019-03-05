@@ -60,8 +60,8 @@ function loadMyURL(){
 					],function(e){
 						if(e.indexOf("rthe.cn")!=-1){
 							showAlert([
-								"Short URLs cannot be the original URL",
-								"短网址不能作为原网址"
+								"Short URLs cannot be the original URL.",
+								"短网址不能作为原网址。"
 							])
 						}else{
 							if(e.indexOf("/")==-1){
@@ -119,8 +119,8 @@ function loadMyURL(){
 									load()
 								}else{
 									showAlert([
-										"Unable to delete "+myURL[index].name,
-										"无法删除 "+myURL[index].name
+										"Unable to delete "+myURL[index].name+".",
+										"无法删除 "+myURL[index].name+"。"
 									])
 								}
 							},
@@ -150,8 +150,8 @@ document.getElementsByTagName("button")[0].onclick=function(){
 			value=encodeURIComponent(value.replace(secondary,""))
 			if(originalURL.indexOf("rthe.cn")!=-1){
 				showAlert([
-					"Short URLs cannot be the original URL",
-					"短网址不能作为原网址"
+					"Short URLs cannot be the original URL.",
+					"短网址不能作为原网址。"
 				])
 			}else{
 				if(!value){
@@ -202,8 +202,8 @@ document.getElementsByTagName("button")[0].onclick=function(){
 								}
 							}
 							showAlert([
-								"This short URL has been taken"+extraInfo,
-								"此短网址已被"+extraInfo+"占用"
+								"This short URL has been taken"+extraInfo+".",
+								"此短网址已被"+extraInfo+"占用。"
 							])
 						}
 					},
@@ -212,8 +212,8 @@ document.getElementsByTagName("button")[0].onclick=function(){
 			}
 		}else{
 			showAlert([
-				"The short URL must begin with "+secondary,
-				"短网址必须以 "+secondary+" 开头"
+				"The short URL must begin with "+secondary+".",
+				"短网址必须以 "+secondary+" 开头。"
 			])
 			if(value.indexOf("://")!=-1){
 				value=value.split("://")[1]
@@ -230,8 +230,8 @@ document.getElementsByTagName("button")[0].onclick=function(){
 		}
 	}else{
 		showAlert([
-			"Please enter the original URL",
-			"请输入原网址"
+			"Please enter the original URL.",
+			"请输入原网址。"
 		])
 	}
 }

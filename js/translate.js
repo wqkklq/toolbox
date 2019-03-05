@@ -67,8 +67,8 @@ function translateText(){
 		})
 	}else{
 		showAlert([
-			"Please enter the text you want to translate",
-			"请输入要翻译的文本"
+			"Please enter the text you want to translate.",
+			"请输入要翻译的文本。"
 		])
 	}
 }
